@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- ADD THIS BLOCK HERE --- */
+/* This overrides Tailwind's default light gray border color to fix the white line bug */
+*, ::before, ::after {
+  border-color: theme('colors.slate.800', currentColor);
+}
+/* -------------------------- */
+
+@keyframes pan {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+.blueprint-bg {
+  --grid-color: rgba(34, 211, 238, 0.1); /* Faint cyan */
+  --grid-size: 50px;
+  background-image:
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  animation: pan 60s linear infinite;
+}
+
+/* --- ADDED FOR ACTIVE NAVBAR LINK --- */
+.active-link {
+  color: #22d3ee;  /* This is the same as Tailwind's cyan-400 */
+  position: relative;
+}
+
+.active-link::after {
+  content: '';
+  position: absolute;
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: #22d3ee;
+  bottom: -4px;
+  left: 0;
+}
+
+/* Custom Scrollbar for Webkit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a; /* slate-900 */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #1e293b; /* slate-800 */
+  border-radius: 10px;
+  border: 2px solid #0f172a; /* slate-900 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #06b6d4; /* cyan-500 */
+}
