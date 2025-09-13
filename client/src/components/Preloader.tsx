@@ -84,7 +84,7 @@ const Preloader = () => {
           animate="visible"
         >
           <h1 className="text-2xl font-bold md:text-3xl">Rohit Kumar</h1>
-          <p className="text-lg text-slate-300 md:text-xl">Full-Stack Developer</p>
+          <p className="text-lg text-slate-300 md:text-xl">Software Engineer</p>
         </motion.div>
       </motion.div>
     </motion.div>
