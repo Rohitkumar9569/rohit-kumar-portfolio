@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Link as ScrollLink, scroller } from 'react-scroll'; 
+import { Link as ScrollLink, scroller } from 'react-scroll';
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import Logo from './Logo';
-import axios from 'axios';
+import API from '../api';
 
 interface IExamLink {
   _id: string;
@@ -23,7 +23,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchExamsForNav = async () => {
       try {
-        const response = await axios.get('/api/exams');
+        const response = await API.get('/api/exams');
         setStudyHubExams(response.data);
       } catch (error) {
         console.error("Failed to fetch exams for navbar:", error);
@@ -61,10 +61,10 @@ const Navbar = () => {
     if (location.pathname !== '/') {
       navigate(`/?scrollTo=${section}`);
     } else {
-      scroller.scrollTo(section, { 
-        duration: 800, 
-        delay: 0, 
-        smooth: 'easeInOutQuart', 
+      scroller.scrollTo(section, {
+        duration: 800,
+        delay: 0,
+        smooth: 'easeInOutQuart',
         offset: -70
       });
     }
@@ -104,13 +104,13 @@ const Navbar = () => {
           {navLinks.map((link) => (
             <li key={link.label} className="relative group">
               {link.type === 'scroll' && (
-                <ScrollLink 
-                  to={link.to!} 
-                  spy={true} 
-                  smooth={'easeInOutQuart'} 
-                  offset={-70} 
-                  duration={800} 
-                  className="cursor-pointer font-semibold hover:text-cyan-400 transition-colors relative" 
+                <ScrollLink
+                  to={link.to!}
+                  spy={true}
+                  smooth={'easeInOutQuart'}
+                  offset={-70}
+                  duration={800}
+                  className="cursor-pointer font-semibold hover:text-cyan-400 transition-colors relative"
                   activeClass={location.pathname === '/' ? 'active-link' : ''}
                   onClick={() => handleScrollTo(link.to!)}
                 >
@@ -124,43 +124,42 @@ const Navbar = () => {
                   {/* The clickable/scrollable part is now separate from the dropdown list */}
                   <div
                     onClick={() => handleScrollTo(link.scrollTo!)}
-                    className={`cursor-pointer font-semibold hover:text-cyan-400 transition-colors flex items-center ${
-                      location.pathname.startsWith('/study') ? 'active-link' : ''
-                    }`}
+                    className={`cursor-pointer font-semibold hover:text-cyan-400 transition-colors flex items-center ${location.pathname.startsWith('/study') ? 'active-link' : ''
+                      }`}
                   >
                     <ScrollLink
-                        to={link.scrollTo!}
-                        spy={true}
-                        smooth={'easeInOutQuart'}
-                        offset={-70}
-                        duration={800}
-                        activeClass={location.pathname === '/' ? 'active-link' : ''}
+                      to={link.scrollTo!}
+                      spy={true}
+                      smooth={'easeInOutQuart'}
+                      offset={-70}
+                      duration={800}
+                      activeClass={location.pathname === '/' ? 'active-link' : ''}
                     >
-                        {link.label}
+                      {link.label}
                     </ScrollLink>
                     <ChevronDownIcon className="h-4 w-4 ml-1" />
                   </div>
 
                   {/* The dropdown list is now a sibling, not a child, fixing the error */}
                   {link.items && link.items.length > 0 && (
-                     <ul className="absolute top-full left-0 hidden group-hover:block bg-slate-800 text-white pt-4 pb-2 rounded-b-md shadow-lg min-w-[100px]">
-                     {link.items?.map(item => (
-                       <li key={item.to}>
-                         <Link to={item.to!} className="block px-4 py-2 text-sm hover:bg-slate-700">
-                           {item.label}
-                         </Link>
-                       </li>
-                     ))}
-                   </ul>
+                    <ul className="absolute top-full left-0 hidden group-hover:block bg-slate-800 text-white pt-4 pb-2 rounded-b-md shadow-lg min-w-[100px]">
+                      {link.items?.map(item => (
+                        <li key={item.to}>
+                          <Link to={item.to!} className="block px-4 py-2 text-sm hover:bg-slate-700">
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </>
               )}
               {/* ===== END OF FIX ===== */}
-              
+
             </li>
           ))}
         </ul>
-        
+
         <div className="md:hidden">
           <button onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <XMarkIcon className="h-6 w-6 text-white" /> : <Bars3Icon className="h-6 w-6 text-white" />}
@@ -169,31 +168,31 @@ const Navbar = () => {
       </nav>
 
       {isOpen && (
-         <div className="md:hidden bg-slate-900">
-         <ul className="flex flex-col items-center space-y-4 py-4 text-white">
-           {navLinks.map((link) => (
-             <li key={link.label} className="cursor-pointer">
-               {(link.type === 'scroll') && 
-                 <span onClick={() => handleScrollTo(link.to!)}>{link.label}</span>
-               }
-               {link.type === 'hybrid_dropdown' && (
-                 <div className={`${location.pathname.startsWith('/study') ? 'text-cyan-400' : 'hover:text-cyan-400'}`}>
-                   <span onClick={() => handleScrollTo(link.scrollTo!)} className="font-semibold">{link.label}</span>
-                   {link.items && link.items.length > 0 && (
-                     <ul className="flex flex-col items-center mt-2 space-y-2">
-                     {link.items?.map(item => (
-                       <li key={item.to}>
-                         <Link to={item.to!} onClick={() => setIsOpen(false)}>{item.label}</Link>
-                       </li>
-                     ))}
-                   </ul>
-                   )}
-                 </div>
-               )}
-             </li>
-           ))}
-         </ul>
-       </div>
+        <div className="md:hidden bg-slate-900">
+          <ul className="flex flex-col items-center space-y-4 py-4 text-white">
+            {navLinks.map((link) => (
+              <li key={link.label} className="cursor-pointer">
+                {(link.type === 'scroll') &&
+                  <span onClick={() => handleScrollTo(link.to!)}>{link.label}</span>
+                }
+                {link.type === 'hybrid_dropdown' && (
+                  <div className={`${location.pathname.startsWith('/study') ? 'text-cyan-400' : 'hover:text-cyan-400'}`}>
+                    <span onClick={() => handleScrollTo(link.scrollTo!)} className="font-semibold">{link.label}</span>
+                    {link.items && link.items.length > 0 && (
+                      <ul className="flex flex-col items-center mt-2 space-y-2">
+                        {link.items?.map(item => (
+                          <li key={item.to}>
+                            <Link to={item.to!} onClick={() => setIsOpen(false)}>{item.label}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </header>
   );

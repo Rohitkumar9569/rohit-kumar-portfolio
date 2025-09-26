@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 
 // --- DEFINE TYPESCRIPT INTERFACES ---
 interface IExam {
@@ -49,13 +49,13 @@ const ExamSpecificPage = () => {
       try {
         setLoading(true);
         // Fetch all exams to find the ID of the current one based on the URL slug
-        const examsResponse = await axios.get<IExam[]>('/api/exams');
+        const examsResponse = await API.get<IExam[]>('/api/exams');
         const exam = examsResponse.data.find(e => e.slug === examName);
 
         if (exam) {
           setCurrentExam(exam);
           // Now fetch subjects for the found exam ID
-          const subjectsResponse = await axios.get<ISubject[]>(`/api/subjects/by-exam/${exam._id}`);
+          const subjectsResponse = await API.get<ISubject[]>(`/api/subjects/by-exam/${exam._id}`);
           setSubjects(subjectsResponse.data);
           // Automatically select the first subject
           if (subjectsResponse.data.length > 0) {
@@ -87,7 +87,7 @@ const ExamSpecificPage = () => {
       setLoading(true);
       try {
         // Use the new API endpoint with subjectId
-        const response = await axios.get<IPyq[]>(`/api/pyqs?subjectId=${selectedSubjectId}`);
+        const response = await API.get<IPyq[]>(`/api/pyqs?subjectId=${selectedSubjectId}`);
         setPyqs(response.data);
       } catch (err) {
         console.error('Failed to fetch PYQs:', err);
@@ -112,18 +112,17 @@ const ExamSpecificPage = () => {
       <h1 className="text-4xl font-bold text-center mb-8">
         Previous Year Questions for <span className="text-cyan-400 uppercase">{currentExam?.shortName || examName}</span>
       </h1>
-      
+
       {/* Subject Tabs - Now fully dynamic */}
       <div className="flex justify-center flex-wrap gap-2 md:gap-4 mb-12 bg-slate-800 p-2 rounded-lg">
         {subjects.map(subject => (
           <button
             key={subject._id}
             onClick={() => setSelectedSubjectId(subject._id)}
-            className={`px-3 py-2 text-sm md:px-6 md:py-2 font-semibold rounded-md transition-colors ${
-              selectedSubjectId === subject._id
-                ? 'bg-cyan-600 text-white'
-                : 'bg-transparent text-slate-300 hover:bg-slate-700'
-            }`}
+            className={`px-3 py-2 text-sm md:px-6 md:py-2 font-semibold rounded-md transition-colors ${selectedSubjectId === subject._id
+              ? 'bg-cyan-600 text-white'
+              : 'bg-transparent text-slate-300 hover:bg-slate-700'
+              }`}
           >
             {subject.name}
           </button>

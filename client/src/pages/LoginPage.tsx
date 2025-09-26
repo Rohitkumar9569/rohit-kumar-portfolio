@@ -1,7 +1,7 @@
 // File: client/src/pages/LoginPage.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 import { useAuth } from '../context/AuthContext'; // Import our custom auth hook
 import Logo from '../components/Logo';
 
@@ -23,11 +23,10 @@ const LoginPage: React.FC = () => {
 
     try {
       // Call the login API endpoint we created on the backend
-      const response = await axios.post('/api/auth/login', { email, password });
-      
+      const response = await API.post('/api/auth/login', { email, password });
       // If login is successful, call the login function from the context
       login(response.data.token);
-      
+
       // Redirect the user to the admin dashboard
       navigate('/admin');
 
@@ -44,13 +43,13 @@ const LoginPage: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-slate-900">
       <div className="w-full max-w-md p-8 space-y-8 bg-slate-800 rounded-lg shadow-lg">
         <div className="text-center">
-            <div className='flex justify-center mb-4'>
+          <div className='flex justify-center mb-4'>
             <Logo />
-            </div>
+          </div>
           <h2 className="text-3xl font-bold text-white">Admin Login</h2>
           <p className="mt-2 text-slate-400">Access your dashboard</p>
         </div>
-        
+
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-300">
@@ -87,7 +86,7 @@ const LoginPage: React.FC = () => {
               />
             </div>
           </div>
-          
+
           {error && <p className="text-sm text-red-400 text-center">{error}</p>}
 
           <div>

@@ -1,7 +1,6 @@
 // File: client/src/context/AuthContext.tsx
-import React, { createContext, useState, useContext, useEffect,} from 'react';
-import axios from 'axios';
-
+import React, { createContext, useState, useContext, useEffect, } from 'react';
+import API from '../api';
 // Define the shape of the context state
 interface AuthContextType {
   token: string | null;
@@ -23,11 +22,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // If we have a token, set it in localStorage
       localStorage.setItem('authToken', token);
       // Set the Authorization header for all future axios requests
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
       // If there's no token, remove it from localStorage and the axios header
       localStorage.removeItem('authToken');
-      delete axios.defaults.headers.common['Authorization'];
+      delete API.defaults.headers.common['Authorization'];
     }
   }, [token]);
 

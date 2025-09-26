@@ -1,7 +1,7 @@
 // src/sections/Contact.tsx
 
 import React, { useState } from 'react';
-import axios from 'axios';
+import API from '../api';
 import SectionAnimator from '../components/SectionAnimator';
 
 const Contact = () => {
@@ -28,7 +28,7 @@ const Contact = () => {
 
     try {
       const url = 'http://localhost:5000/api/contact';
-      const response = await axios.post(url, formData);
+      const response = await API.post('/api/contact', formData);
 
       if (response.data.success) {
         setStatus('Message sent successfully!');

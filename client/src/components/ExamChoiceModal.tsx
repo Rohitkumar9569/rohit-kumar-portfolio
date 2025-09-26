@@ -1,7 +1,7 @@
 // File: client/src/components/ExamChoiceModal.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
@@ -24,7 +24,7 @@ const ExamChoiceModal: React.FC<IProps> = ({ isOpen, onClose }) => {
     if (isOpen) {
       const fetchExams = async () => {
         try {
-          const response = await axios.get('/api/exams');
+          const response = await API.get('/api/exams');
           setExams(response.data);
         } catch (error) {
           console.error("Failed to fetch exams for modal:", error);
@@ -52,8 +52,8 @@ const ExamChoiceModal: React.FC<IProps> = ({ isOpen, onClose }) => {
             className="bg-slate-800 border border-slate-700 rounded-xl p-8 w-full max-w-2xl relative"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
           >
-            <button 
-              onClick={onClose} 
+            <button
+              onClick={onClose}
               className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
             >
               <XMarkIcon className="h-6 w-6" />

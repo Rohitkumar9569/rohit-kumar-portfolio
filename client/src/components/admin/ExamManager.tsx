@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import API from '../../api';
 // Define the structure of an Exam object for TypeScript
 interface IExam {
   _id: string;
@@ -31,7 +30,7 @@ const ExamManager: React.FC = () => {
   const fetchExams = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('/api/exams');
+      const response = await API.get('/api/exams');
       setExams(response.data);
       setError(null);
     } catch (err) {
@@ -47,7 +46,7 @@ const ExamManager: React.FC = () => {
     if (!newExamName || !newExamShortName || !newExamSlug) return alert('Please fill all fields.');
     try {
       const newExam = { name: newExamName, shortName: newExamShortName, slug: newExamSlug };
-      await axios.post('/api/exams', newExam);
+      await API.post('/api/exams', newExam);
       setNewExamName('');
       setNewExamShortName('');
       setNewExamSlug('');
@@ -60,7 +59,7 @@ const ExamManager: React.FC = () => {
   const handleDeleteExam = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this exam?')) return;
     try {
-      await axios.delete(`/api/exams/${id}`);
+      await API.delete(`/api/exams/${id}`);
       setExams(exams.filter((exam) => exam._id !== id));
     } catch (err) {
       alert('Failed to delete exam.');
@@ -81,7 +80,7 @@ const ExamManager: React.FC = () => {
     setIsModalOpen(false);
     setEditingExam(null);
   };
-  
+
   // Update the state as user types in the modal's form
   const handleModalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -93,7 +92,8 @@ const ExamManager: React.FC = () => {
     e.preventDefault();
     if (!editingExam) return;
     try {
-      const response = await axios.put(`/api/exams/${editingExam._id}`, updatedData);
+      const response = await API.put(`/api/exams/${editingExam._id}`, updatedData);
+
       // Update the exam in the main list with the new data from the API
       setExams(exams.map(exam => (exam._id === editingExam._id ? response.data : exam)));
       handleCloseModal(); // Close modal on success
@@ -106,7 +106,7 @@ const ExamManager: React.FC = () => {
   return (
     <div className="bg-slate-800 p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-white mb-6">Manage Exams</h2>
-      
+
       {/* --- ADD EXAM FORM (Unchanged) --- */}
       <form onSubmit={handleAddExam} className="mb-8 p-4 bg-slate-700/50 rounded-md">
         <h3 className="text-lg font-semibold text-slate-200 mb-4">Add New Exam</h3>
