@@ -1,0 +1,279 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { Document, Page, pdfjs } from 'react-pdf';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+import { useInView } from 'react-intersection-observer';
+import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+import { Drawer } from 'vaul';
+import ChatInterface from '../components/viewer/ChatInterface';
+import {
+  ArrowLeftIcon,
+  ChatBubbleOvalLeftEllipsisIcon,
+  MagnifyingGlassPlusIcon,
+  MagnifyingGlassMinusIcon,
+  ArrowPathIcon,
+  ArrowsPointingOutIcon
+} from '@heroicons/react/24/solid';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
+
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  return isMobile;
+};
+
+const PdfPage: React.FC<{
+  pageNumber: number; scale: number; rotate: number; onVisible: (page: number) => void; isLastPage: boolean;
+}> = ({ pageNumber, scale, rotate, onVisible, isLastPage }) => {
+  const { ref } = useInView({ threshold: 0.5, onChange: (inView) => { if (inView) onVisible(pageNumber); }, });
+  return (
+    <div ref={ref} className={`shadow-lg flex justify-center ${isLastPage ? '' : 'mb-4'}`}>
+      <Page pageNumber={pageNumber} scale={scale} rotate={rotate} />
+    </div>
+  );
+};
+
+const PdfViewerPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [pyq, setPyq] = useState<any>(null);
+  const [numPages, setNumPages] = useState<number>(0);
+  const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
+
+  const [scale, setScale] = useState(1.0);
+  const [rotation, setRotation] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageInput, setPageInput] = useState("1");
+
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  const autoHideDisabled = useRef(false);
+  const interactionTimeoutRef = useRef<number | null>(null);
+
+  const [unscaledPageWidth, setUnscaledPageWidth] = useState<number | null>(null);
+  const pdfContainerRef = useRef<HTMLDivElement>(null);
+  const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const [showCustomScrollbar, setShowCustomScrollbar] = useState(false);
+  const scrollTimeoutRef = useRef<number | null>(null);
+  const y = useMotionValue(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(1);
+  const snapPoints = [0.6, 1];
+  const smallSnapPoint = snapPoints[0];
+
+  useEffect(() => {
+    const container = pdfContainerRef.current;
+    if (!container || !isMobile) return;
+
+    const handleContainerScroll = () => {
+      if (isDragging) return;
+
+      const track = trackRef.current;
+      if (track) {
+        const thumbHeight = 40;
+        const trackHeight = track.clientHeight;
+        const contentHeight = container.scrollHeight;
+        const visibleHeight = container.clientHeight;
+
+        if (contentHeight > visibleHeight) {
+          const scrollableDist = contentHeight - visibleHeight;
+          const draggableDist = trackHeight - thumbHeight;
+          const progress = container.scrollTop / scrollableDist;
+          y.set(progress * draggableDist);
+        }
+      }
+    };
+
+    const resizeObserver = new ResizeObserver(handleContainerScroll);
+    resizeObserver.observe(container);
+    container.addEventListener('scroll', handleContainerScroll);
+
+    return () => {
+      resizeObserver.disconnect();
+      container.removeEventListener('scroll', handleContainerScroll);
+    };
+  }, [isDragging, isMobile, numPages]);
+
+  useEffect(() => {
+    if (id) setLoading(true);
+    axios.get(`/api/pyqs/${id}`).then(res => setPyq(res.data)).catch(err => console.error(err)).finally(() => setLoading(false));
+  }, [id]);
+
+  const onDocumentLoadSuccess = async (pdf: PDFDocumentProxy) => {
+    setNumPages(pdf.numPages);
+    const firstPage = await pdf.getPage(1);
+    setUnscaledPageWidth(firstPage.getViewport({ scale: 1 }).width);
+    pageRefs.current = Array(pdf.numPages).fill(null);
+  };
+
+  const preventAutoHide = () => {
+    if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
+    autoHideDisabled.current = true;
+    setIsHeaderVisible(true);
+    interactionTimeoutRef.current = window.setTimeout(() => { autoHideDisabled.current = false; }, 2000);
+  };
+
+  const fitWidth = () => {
+    preventAutoHide();
+    if (unscaledPageWidth && pdfContainerRef.current) {
+      setScale(pdfContainerRef.current.clientWidth / unscaledPageWidth);
+    }
+  };
+
+  useEffect(() => {
+    if (unscaledPageWidth) {
+      fitWidth();
+      window.addEventListener('resize', fitWidth);
+      return () => window.removeEventListener('resize', fitWidth);
+    }
+  }, [unscaledPageWidth, isMobile]);
+
+  useEffect(() => { setPageInput(String(currentPage)); }, [currentPage]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    setShowCustomScrollbar(true);
+    scrollTimeoutRef.current = window.setTimeout(() => setShowCustomScrollbar(false), 1500);
+
+    if (isMobile) {
+      if (autoHideDisabled.current) return;
+      const currentScrollY = e.currentTarget.scrollTop;
+      const scrollDelta = currentScrollY - lastScrollY.current;
+
+      if (scrollDelta > 50 && currentScrollY > 150) {
+        setIsHeaderVisible(false);
+      } else if (scrollDelta < -10) {
+        setIsHeaderVisible(true);
+      }
+      lastScrollY.current = currentScrollY;
+    }
+  };
+
+  useEffect(() => {
+    if (!isMobile) {
+      setIsHeaderVisible(true);
+    }
+  }, [isMobile]);
+
+  const handleZoomIn = () => { preventAutoHide(); setScale(prev => prev + 0.1); };
+  const handleZoomOut = () => { preventAutoHide(); setScale(prev => Math.max(0.2, prev - 0.1)); };
+  const handleRotate = () => { preventAutoHide(); setRotation(prev => (prev + 90) % 360); };
+
+  const handleGoToPage = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    preventAutoHide();
+    const pageNum = parseInt(pageInput, 10);
+    if (pageNum >= 1 && pageNum <= numPages) {
+      pageRefs.current[pageNum - 1]?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      setPageInput(String(currentPage));
+    }
+  };
+
+  if (loading) return <div className="text-center py-48 bg-slate-900 text-white min-h-screen">Loading Document...</div>;
+
+  return (
+    <div className="h-screen w-screen bg-slate-800 flex flex-col md:flex-row overflow-hidden">
+      <div className="relative w-full md:w-3/5 h-full">
+        <motion.header
+          animate={{ y: (isMobile && !isHeaderVisible) ? "-100%" : 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="absolute top-0 left-0 right-0 z-30 bg-slate-900/80 backdrop-blur-sm shadow-md"
+        >
+          <div className="py-1 flex justify-between items-center px-2 sm:px-4">
+            <button onClick={() => navigate(-1)} className="p-1 sm:p-2 rounded-full hover:bg-black/20" title="Go Back">
+              <ArrowLeftIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            </button>
+            <span className="font-bold text-cyan-400 text-sm sm:text-base ml-2">{pyq?.year}</span>
+            <div className="flex items-center justify-center gap-1 sm:gap-2 text-white flex-grow">
+              <form onSubmit={handleGoToPage} className="flex items-center gap-1">
+                <input type="number" value={pageInput} onChange={(e) => setPageInput(e.target.value)} onClick={preventAutoHide} onFocus={(e) => e.target.select()} className="w-10 text-center bg-slate-700 rounded border border-slate-600 focus:outline-none focus:ring-1 focus:ring-cyan-500 text-sm py-0.5" />
+                <span className="text-slate-400 text-sm">/ {numPages}</span>
+              </form>
+              <span className="h-5 w-px bg-slate-700 mx-1"></span>
+              <button onClick={handleZoomOut} className="p-1 hover:bg-slate-700 rounded-md" title="Zoom Out"><MagnifyingGlassMinusIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+              <span className="w-12 text-center text-xs sm:text-sm tabular-nums">{`${Math.round(scale * 100)}%`}</span>
+              <button onClick={handleZoomIn} className="p-1 hover:bg-slate-700 rounded-md" title="Zoom In"><MagnifyingGlassPlusIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+              <span className="h-5 w-px bg-slate-700 mx-1"></span>
+              <button onClick={fitWidth} className="p-1 hover:bg-slate-700 rounded-md hidden md:block" title="Fit to Width"><ArrowsPointingOutIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+              <button onClick={handleRotate} className="p-1 hover:bg-slate-700 rounded-md" title="Rotate"><ArrowPathIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+            </div>
+            <div className="w-5 sm:w-6"></div>
+          </div>
+        </motion.header>
+
+        {/* THE FIX 1: Added pt-8.5 to offset the main content below the header */}
+        <main className={`relative h-full flex flex-col bg-slate-700 transition-all duration-300 ${isHeaderVisible ? 'pt-8' : 'pt-0'}`}>
+          {/* THE FIX 2: Replaced 'hide-scrollbar' with 'custom-scrollbar' */}
+          <div ref={pdfContainerRef} onScroll={handleScroll} onClick={() => { if (isMobile && !autoHideDisabled.current) setIsHeaderVisible(prev => !prev); }} className="flex-1 overflow-y-auto custom-scrollbar">
+            {pyq?.fileUrl && (
+              <Document file={pyq.fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} className="py-2 md:py-4">
+                {unscaledPageWidth && Array.from(new Array(numPages), (el, index) => (
+                  <div key={`page_wrapper_${index + 1}`} ref={el => { pageRefs.current[index] = el; }}>
+                    <PdfPage pageNumber={index + 1} scale={scale} rotate={rotation} onVisible={setCurrentPage} isLastPage={index === numPages - 1} />
+                  </div>
+                ))}
+              </Document>
+            )}
+          </div>
+
+          <AnimatePresence>
+            {isMobile && showCustomScrollbar && (
+              <motion.div ref={trackRef} className="absolute top-0 right-0 h-full w-10 z-20 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+                <motion.div
+                  drag="y" dragConstraints={trackRef} dragElastic={0} dragMomentum={false}
+                  onDragStart={() => setIsDragging(true)}
+                  onDragEnd={() => setIsDragging(false)}
+                  onDrag={(event, info) => {
+                    const container = pdfContainerRef.current;
+                    const track = trackRef.current;
+                    if (container && track) {
+                      const thumbHeight = 40;
+                      const progress = info.offset.y / (track.clientHeight - thumbHeight);
+                      container.scrollTop = progress * (container.scrollHeight - container.clientHeight);
+                    }
+                  }}
+                  style={{ y }}
+                  className="w-16 h-10 bg-slate-800/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-xs shadow-lg cursor-grab active:cursor-grabbing pointer-events-auto -ml-3"
+                >
+                  {currentPage} / {numPages}
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
+      </div>
+
+      {isMobile ? (
+        <Drawer.Root modal={false} snapPoints={snapPoints} activeSnapPoint={activeSnapPoint} setActiveSnapPoint={setActiveSnapPoint}>
+          <Drawer.Trigger asChild><button className="fixed bottom-6 right-6 bg-cyan-600 text-white p-4 rounded-full shadow-lg z-20 hover:bg-cyan-700 transition-transform hover:scale-110" title="Chat"><ChatBubbleOvalLeftEllipsisIcon className="h-7 w-7" /></button></Drawer.Trigger>
+          <Drawer.Portal>
+            <Drawer.Content className="fixed top-24 bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-slate-900/80 backdrop-blur-md z-40 border-t border-slate-700">
+              <div className="mx-auto my-3 h-1.ims-center justify-center5 w-12 flex-shrink-0 rounded-full bg-slate-600" />
+              {id && <ChatInterface documentId={id} isMobileLayout={true} activeSnapPoint={activeSnapPoint} smallSnapPoint={smallSnapPoint} />}
+            </Drawer.Content>
+          </Drawer.Portal>
+        </Drawer.Root>
+      ) : (
+        <aside className="w-2/5 h-full">
+          {id && <ChatInterface documentId={id} isMobileLayout={false} />}
+        </aside>
+      )}
+    </div>
+  );
+};
+
+export default PdfViewerPage;

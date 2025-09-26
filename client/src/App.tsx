@@ -1,58 +1,78 @@
-// src/App.tsx
-
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+
+import { AuthProvider } from './context/AuthContext';
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import About from './sections/About';
-import Skills from './sections/Skills';
-import Certifications from './sections/Certifications';
-import Projects from './sections/Projects';
-import Contact from './sections/Contact';
 import CommandPalette from './components/CommandPalette';
 import Preloader from './components/Preloader';
+import ProtectedRoute from './components/ProtectedRoute';
 
-// IMPORTANT: Add the import for your profile photo here.
-// Make sure the path is correct. For example:
+import PortfolioPage from './pages/PortfolioPage';
+import StudyZonePage from './pages/StudyZonePage';
+import ExamSpecificPage from './pages/ExamSpecificPage';
+import AdminPage from './pages/AdminPage';
+import PdfViewerPage from './pages/PdfViewerPage';
+import LoginPage from './pages/LoginPage';
+
 import profilePhoto from './assets/profile-photo.png';
 
-function App() {
+const AppContent = () => {
+  const location = useLocation();
   const [open, setOpen] = useState(false);
+
+  // KEY CHANGE IS HERE: Removed the '/admin' condition
+  const showMainLayout = (
+    location.pathname === '/' || 
+    location.pathname.startsWith('/study')
+  ) && location.pathname !== '/login';
+
+  return (
+    <div className="bg-slate-900 text-white min-h-screen">
+      <CommandPalette open={open} setOpen={setOpen} />
+      {showMainLayout && <Navbar />}
+      <main>
+        <Routes>
+          <Route path="/" element={<PortfolioPage />} />
+          <Route path="/study" element={<StudyZonePage />} />
+          <Route path="/study/:examName" element={<ExamSpecificPage />} />
+          <Route path="/pyq/view/:id" element={<PdfViewerPage />} />
+          <Route path="/login" element={<LoginPage />} />
+
+          <Route 
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminPage />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+      </main>
+      {showMainLayout && <Footer />}
+    </div>
+  );
+};
+
+function App() {
   const [loading, setLoading] = useState(true);
-  const [profilePhotoLoaded, setProfilePhotoLoaded] = useState(false); // NEW: State to track if the photo has loaded.
+  const [profilePhotoLoaded, setProfilePhotoLoaded] = useState(false);
 
-  // This useEffect will check the user's system preference and set the theme
   useEffect(() => {
-    const isSystemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (isSystemDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    document.documentElement.classList.toggle('dark', window.matchMedia?.('(prefers-color-scheme: dark)').matches);
   }, []);
 
-  // NEW: This useEffect handles the photo preloading
   useEffect(() => {
     const img = new Image();
-    img.onload = () => {
-      setProfilePhotoLoaded(true);
-    };
     img.src = profilePhoto;
-
-    // This is a fallback timer. If the image fails to load for any reason,
-    // the preloader will still hide after 5 seconds to prevent a stuck screen.
-    const timer = setTimeout(() => {
-      setProfilePhotoLoaded(true);
-    }, 5000); 
-
-    return () => clearTimeout(timer);
+    img.onload = () => setProfilePhotoLoaded(true);
+    const fallbackTimer = setTimeout(() => setProfilePhotoLoaded(true), 5000);
+    return () => clearTimeout(fallbackTimer);
   }, []);
 
-  // NEW: This useEffect combines the preloader logic
   useEffect(() => {
-    // The preloader now hides only when the photo has loaded AND the initial 2-second timer has passed.
-    // This ensures a minimum show time for your animation.
     if (profilePhotoLoaded) {
       const timer = setTimeout(() => setLoading(false), 2000);
       return () => clearTimeout(timer);
@@ -60,26 +80,15 @@ function App() {
   }, [profilePhotoLoaded]);
 
   return (
-    <>
-      <AnimatePresence>
-        {loading && <Preloader />}
-      </AnimatePresence>
-
-      {!loading && (
-        <div className="bg-slate-900 text-white">
-          <CommandPalette open={open} setOpen={setOpen} />
-          <Navbar />
-          <main>
-            <About />
-            <Skills />
-            <Certifications />
-            <Projects />
-            <Contact />
-          </main>
-          <Footer />
-        </div>
-      )}
-    </>
+    <Router>
+      <AuthProvider>
+        <AnimatePresence>
+          {loading && <Preloader />}
+        </AnimatePresence>
+        
+        {!loading && <AppContent />}
+      </AuthProvider>
+    </Router>
   );
 }
 
