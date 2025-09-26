@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Link as ScrollLink, scroller } from 'react-scroll';
+import { Link as ScrollLink, scroller } from 'react-scroll'; 
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import Logo from './Logo';
 import axios from 'axios';
@@ -56,7 +56,6 @@ const Navbar = () => {
     }
   }, [location.search]);
 
-  // This function is where we make the change
   const handleScrollTo = (section: string) => {
     setIsOpen(false);
     if (location.pathname !== '/') {
@@ -66,7 +65,7 @@ const Navbar = () => {
         duration: 800, 
         delay: 0, 
         smooth: 'easeInOutQuart', 
-        offset: -70 // <-- THE FIX: Changed from -80 to -70
+        offset: -70
       });
     }
   };
@@ -118,37 +117,46 @@ const Navbar = () => {
                   {link.label}
                 </ScrollLink>
               )}
+
+              {/* ===== THE FIX IS HERE ===== */}
               {link.type === 'hybrid_dropdown' && (
-                <div onClick={() => handleScrollTo(link.scrollTo!)}>
-                  <ScrollLink 
-                    to={link.scrollTo!} 
-                    spy={true} 
-                    smooth={'easeInOutQuart'} 
-                    offset={-70} 
-                    duration={800} 
-                    activeClass={location.pathname === '/' ? 'active-link' : ''} 
-                    className="cursor-pointer"
-                  >
-                    <div className={`font-semibold hover:text-cyan-400 transition-colors flex items-center ${
+                <>
+                  {/* The clickable/scrollable part is now separate from the dropdown list */}
+                  <div
+                    onClick={() => handleScrollTo(link.scrollTo!)}
+                    className={`cursor-pointer font-semibold hover:text-cyan-400 transition-colors flex items-center ${
                       location.pathname.startsWith('/study') ? 'active-link' : ''
-                    }`}>
-                      {link.label}
-                      <ChevronDownIcon className="h-4 w-4 ml-1" />
-                    </div>
-                    {link.items && link.items.length > 0 && (
-                       <ul className="absolute top-full left-0 hidden group-hover:block bg-slate-800 text-white pt-4 pb-2 rounded-b-md shadow-lg min-w-[100px]">
-                       {link.items?.map(item => (
-                         <li key={item.to} onClick={(e) => e.stopPropagation()}>
-                           <Link to={item.to!} className="block px-4 py-2 text-sm hover:bg-slate-700">
-                             {item.label}
-                           </Link>
-                         </li>
-                       ))}
-                     </ul>
-                    )}
-                  </ScrollLink>
-                </div>
+                    }`}
+                  >
+                    <ScrollLink
+                        to={link.scrollTo!}
+                        spy={true}
+                        smooth={'easeInOutQuart'}
+                        offset={-70}
+                        duration={800}
+                        activeClass={location.pathname === '/' ? 'active-link' : ''}
+                    >
+                        {link.label}
+                    </ScrollLink>
+                    <ChevronDownIcon className="h-4 w-4 ml-1" />
+                  </div>
+
+                  {/* The dropdown list is now a sibling, not a child, fixing the error */}
+                  {link.items && link.items.length > 0 && (
+                     <ul className="absolute top-full left-0 hidden group-hover:block bg-slate-800 text-white pt-4 pb-2 rounded-b-md shadow-lg min-w-[100px]">
+                     {link.items?.map(item => (
+                       <li key={item.to}>
+                         <Link to={item.to!} className="block px-4 py-2 text-sm hover:bg-slate-700">
+                           {item.label}
+                         </Link>
+                       </li>
+                     ))}
+                   </ul>
+                  )}
+                </>
               )}
+              {/* ===== END OF FIX ===== */}
+              
             </li>
           ))}
         </ul>
