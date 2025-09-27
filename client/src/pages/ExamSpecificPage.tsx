@@ -33,19 +33,15 @@ const ExamSpecificPage = () => {
   const [pyqs, setPyqs] = useState<IPyq[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  // ✅ FIX: State to track if subjects for the current exam have been loaded
   const [areSubjectsLoaded, setAreSubjectsLoaded] = useState<boolean>(false);
 
   // --- DATA FETCHING EFFECTS ---
 
   // Effect 1: Fetches the main exam data and its subjects.
-  // This runs ONLY when the exam changes (e.g., from 'gate' to 'railway').
   useEffect(() => {
     const initializeExamAndSubjects = async () => {
       if (!examName) return;
 
-      // Reset states for the new exam
       setLoading(true);
       setAreSubjectsLoaded(false);
       setSubjects([]);
@@ -59,44 +55,48 @@ const ExamSpecificPage = () => {
           setCurrentExam(exam);
           const subjectsResponse = await API.get<ISubject[]>(`/api/subjects/by-exam/${exam._id}`);
           setSubjects(subjectsResponse.data);
-
+          
           // If no subject is in the URL, set the first subject as the default.
           if (!searchParams.get('subject') && subjectsResponse.data.length > 0) {
             setSearchParams({ subject: subjectsResponse.data[0]._id }, { replace: true });
           }
+          
+          // ✅ FIX: If the exam has NO subjects, we can stop loading now.
+          if (subjectsResponse.data.length === 0) {
+            setLoading(false);
+          }
+
         } else {
           setError(`Exam "${examName}" not found.`);
+          setLoading(false);
         }
       } catch (err) {
         console.error('Error initializing page:', err);
         setError('Failed to load exam data.');
+        setLoading(false);
       } finally {
-        // ✅ FIX: Mark that subjects are now ready for the PYQ fetch effect.
         setAreSubjectsLoaded(true);
       }
     };
 
     initializeExamAndSubjects();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [examName]); // Only re-run when the main exam URL part changes.
+  }, [examName]);
 
   // Effect 2: Fetches PYQs for the selected subject.
-  // This runs AFTER subjects are loaded, and whenever the selected subject changes.
   useEffect(() => {
-    // ✅ FIX: Do not run this effect until the subjects have been loaded by the first effect.
     if (!areSubjectsLoaded) {
       return;
     }
 
     const fetchPyqsForSubject = async () => {
-      // If there's no subject selected (e.g., exam has no subjects), stop loading.
+      // If there's no subject to load, we don't need to do anything.
+      // The loading state is already handled by the first effect.
       if (!selectedSubjectId) {
-        setPyqs([]);
-        setLoading(false);
         return;
       }
 
-      setLoading(true);
+      setLoading(true); // Show loader when switching subjects
       try {
         const response = await API.get<IPyq[]>(`/api/pyqs?subjectId=${selectedSubjectId}`);
         setPyqs(response.data);
@@ -113,7 +113,7 @@ const ExamSpecificPage = () => {
   }, [selectedSubjectId, areSubjectsLoaded]);
 
 
-  // --- RENDER LOGIC (No changes below this line) ---
+  // --- RENDER LOGIC (No changes) ---
 
   if (error) {
     return <div className="text-center text-red-400 py-24">{error}</div>;

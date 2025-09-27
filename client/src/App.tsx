@@ -9,7 +9,7 @@ import Footer from './components/Footer';
 import CommandPalette from './components/CommandPalette';
 import Preloader from './components/Preloader';
 import ProtectedRoute from './components/ProtectedRoute';
-
+import PageLoader from './components/PageLoader';
 import profilePhoto from './assets/profile-photo.png';
 
 // --- Page Components (Lazy Loaded) ---
@@ -37,7 +37,7 @@ const AppContent = () => {
       {showMainLayout && <Navbar />}
       <main>
         {/* Suspense provides a fallback UI while lazy components are being loaded. */}
-        <Suspense fallback={<div className="w-full min-h-screen flex justify-center items-center">Loading Page...</div>}>
+       <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<PortfolioPage />} />
             <Route path="/study" element={<StudyZonePage />} />

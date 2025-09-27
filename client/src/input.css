@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply bg-slate-900; 
+}
+
 /* --- ADD THIS BLOCK HERE --- */
 /* This overrides Tailwind's default light gray border color to fix the white line bug */
 *, ::before, ::after {
