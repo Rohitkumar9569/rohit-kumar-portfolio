@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react'; // Import Suspense
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
@@ -10,22 +10,24 @@ import CommandPalette from './components/CommandPalette';
 import Preloader from './components/Preloader';
 import ProtectedRoute from './components/ProtectedRoute';
 
-import PortfolioPage from './pages/PortfolioPage';
-import StudyZonePage from './pages/StudyZonePage';
-import ExamSpecificPage from './pages/ExamSpecificPage';
-import AdminPage from './pages/AdminPage';
-import PdfViewerPage from './pages/PdfViewerPage';
-import LoginPage from './pages/LoginPage';
-
 import profilePhoto from './assets/profile-photo.png';
+
+// --- Page Components (Lazy Loaded) ---
+// Lazily load pages to split code into smaller chunks. This improves initial load performance.
+const PortfolioPage = React.lazy(() => import('./pages/PortfolioPage'));
+const StudyZonePage = React.lazy(() => import('./pages/StudyZonePage'));
+const ExamSpecificPage = React.lazy(() => import('./pages/ExamSpecificPage'));
+const AdminPage = React.lazy(() => import('./pages/AdminPage'));
+const PdfViewerPage = React.lazy(() => import('./pages/PdfViewerPage'));
+const LoginPage = React.lazy(() => import('./pages/LoginPage'));
+
 
 const AppContent = () => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
 
-  // KEY CHANGE IS HERE: Removed the '/admin' condition
   const showMainLayout = (
-    location.pathname === '/' || 
+    location.pathname === '/' ||
     location.pathname.startsWith('/study')
   ) && location.pathname !== '/login';
 
@@ -34,22 +36,25 @@ const AppContent = () => {
       <CommandPalette open={open} setOpen={setOpen} />
       {showMainLayout && <Navbar />}
       <main>
-        <Routes>
-          <Route path="/" element={<PortfolioPage />} />
-          <Route path="/study" element={<StudyZonePage />} />
-          <Route path="/study/:examName" element={<ExamSpecificPage />} />
-          <Route path="/pyq/view/:id" element={<PdfViewerPage />} />
-          <Route path="/login" element={<LoginPage />} />
+        {/* Suspense provides a fallback UI while lazy components are being loaded. */}
+        <Suspense fallback={<div className="w-full min-h-screen flex justify-center items-center">Loading Page...</div>}>
+          <Routes>
+            <Route path="/" element={<PortfolioPage />} />
+            <Route path="/study" element={<StudyZonePage />} />
+            <Route path="/study/:examName" element={<ExamSpecificPage />} />
+            <Route path="/pyq/view/:id" element={<PdfViewerPage />} />
+            <Route path="/login" element={<LoginPage />} />
 
-          <Route 
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminPage />
-              </ProtectedRoute>
-            } 
-          />
-        </Routes>
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Suspense>
       </main>
       {showMainLayout && <Footer />}
     </div>
