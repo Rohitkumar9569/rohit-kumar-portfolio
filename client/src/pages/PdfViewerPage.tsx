@@ -9,6 +9,8 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import { Drawer } from 'vaul';
 import ChatInterface from '../components/viewer/ChatInterface';
+import PdfViewerSkeleton from '../components/viewer/PdfViewerSkeleton';
+import PdfPageSkeleton from '../components/viewer/PdfPageSkeleton';
 import {
   ArrowLeftIcon,
   ChatBubbleOvalLeftEllipsisIcon,
@@ -183,8 +185,9 @@ const PdfViewerPage = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-48 bg-slate-900 text-white min-h-screen">Loading Document...</div>;
-
+  if (loading) {
+    return <PdfViewerSkeleton />;
+  }
   return (
     <div className="h-screen w-screen bg-slate-800 flex flex-col md:flex-row overflow-hidden">
       <div className="relative w-full md:w-3/5 h-full">
@@ -220,7 +223,7 @@ const PdfViewerPage = () => {
           {/* THE FIX 2: Replaced 'hide-scrollbar' with 'custom-scrollbar' */}
           <div ref={pdfContainerRef} onScroll={handleScroll} onClick={() => { if (isMobile && !autoHideDisabled.current) setIsHeaderVisible(prev => !prev); }} className="flex-1 overflow-y-auto custom-scrollbar">
             {pyq?.fileUrl && (
-              <Document file={pyq.fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} className="py-2 md:py-4">
+              <Document file={pyq.fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} className="py-2 md:py-4" loading={<PdfPageSkeleton />} >
                 {unscaledPageWidth && Array.from(new Array(numPages), (el, index) => (
                   <div key={`page_wrapper_${index + 1}`} ref={el => { pageRefs.current[index] = el; }}>
                     <PdfPage pageNumber={index + 1} scale={scale} rotate={rotation} onVisible={setCurrentPage} isLastPage={index === numPages - 1} />
