@@ -14,7 +14,7 @@ interface IExamLink {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(true); // This will control the hide/show
   const [lastScrollY, setLastScrollY] = useState(0);
   const [studyHubExams, setStudyHubExams] = useState<IExamLink[]>([]);
   const navigate = useNavigate();
@@ -32,14 +32,23 @@ const Navbar = () => {
     fetchExamsForNav();
   }, []);
 
+  // This is the professional scroll detection logic
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setIsScrolled(currentScrollY > 50);
+
+      // Only apply hide/show logic on screens smaller than md (768px)
       if (window.innerWidth < 768) {
-        if (currentScrollY > lastScrollY + 120) setIsVisible(false);
-        else if (currentScrollY < lastScrollY - 10) setIsVisible(true);
+        // Hide if scrolling down significantly
+        if (currentScrollY > lastScrollY + 50) { // Increased threshold for less sensitivity
+          setIsVisible(false);
+        // Show if scrolling up
+        } else if (currentScrollY < lastScrollY) {
+          setIsVisible(true);
+        }
       } else {
+        // Always visible on desktop
         setIsVisible(true);
       }
       setLastScrollY(currentScrollY);
@@ -94,6 +103,7 @@ const Navbar = () => {
   ];
 
   return (
+    // The className is now controlled by the new 'isVisible' state
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-slate-900/80 backdrop-blur-sm border-b border-slate-800' : 'bg-transparent'} ${!isVisible ? '-translate-y-full' : 'translate-y-0'}`}>
       <nav className="container mx-auto px-6 py-3 flex justify-between items-center">
         <div className="cursor-pointer" onClick={handleLogoClick}>
@@ -118,14 +128,10 @@ const Navbar = () => {
                 </ScrollLink>
               )}
 
-              {/* ===== THE FIX IS HERE ===== */}
               {link.type === 'hybrid_dropdown' && (
                 <>
-                  {/* The clickable/scrollable part is now separate from the dropdown list */}
                   <div
-                    onClick={() => handleScrollTo(link.scrollTo!)}
-                    className={`cursor-pointer font-semibold hover:text-cyan-400 transition-colors flex items-center ${location.pathname.startsWith('/study') ? 'active-link' : ''
-                      }`}
+                    className={`cursor-pointer font-semibold hover:text-cyan-400 transition-colors flex items-center ${location.pathname.startsWith('/study') ? 'active-link' : ''}`}
                   >
                     <ScrollLink
                       to={link.scrollTo!}
@@ -134,18 +140,18 @@ const Navbar = () => {
                       offset={-70}
                       duration={800}
                       activeClass={location.pathname === '/' ? 'active-link' : ''}
+                      onClick={() => handleScrollTo(link.scrollTo!)}
                     >
                       {link.label}
                     </ScrollLink>
                     <ChevronDownIcon className="h-4 w-4 ml-1" />
                   </div>
 
-                  {/* The dropdown list is now a sibling, not a child, fixing the error */}
                   {link.items && link.items.length > 0 && (
-                    <ul className="absolute top-full left-0 hidden group-hover:block bg-slate-800 text-white pt-4 pb-2 rounded-b-md shadow-lg min-w-[100px]">
+                    <ul className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:block bg-slate-800 text-white pt-4 pb-2 rounded-b-md shadow-lg min-w-[150px]">
                       {link.items?.map(item => (
                         <li key={item.to}>
-                          <Link to={item.to!} className="block px-4 py-2 text-sm hover:bg-slate-700">
+                          <Link to={item.to!} className="block px-4 py-2 text-sm text-center hover:bg-slate-700">
                             {item.label}
                           </Link>
                         </li>
@@ -154,8 +160,6 @@ const Navbar = () => {
                   )}
                 </>
               )}
-              {/* ===== END OF FIX ===== */}
-
             </li>
           ))}
         </ul>
