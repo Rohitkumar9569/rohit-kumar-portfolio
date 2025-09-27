@@ -10,7 +10,7 @@ import CommandPalette from './components/CommandPalette';
 import Preloader from './components/Preloader';
 import ProtectedRoute from './components/ProtectedRoute';
 import PageLoader from './components/PageLoader';
-import profilePhoto from './assets/profile-photo.png';
+import profilePhoto from './assets/profile-photo.jpeg';
 
 // --- Page Components (Lazy Loaded) ---
 // Lazily load pages to split code into smaller chunks. This improves initial load performance.

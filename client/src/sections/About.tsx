@@ -1,7 +1,7 @@
 // src/sections/About.tsx
 
 import React from 'react';
-import profilePhoto from '../assets/profile-photo.png';
+import profilePhoto from '../assets/profile-photo.jpeg';
 import { HiOutlineArrowDownTray } from 'react-icons/hi2';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useTypewriter, Cursor } from 'react-simple-typewriter';
