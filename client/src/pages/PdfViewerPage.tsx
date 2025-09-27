@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 import { Document, Page, pdfjs } from 'react-pdf';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { useInView } from 'react-intersection-observer';
@@ -109,7 +109,7 @@ const PdfViewerPage = () => {
 
   useEffect(() => {
     if (id) setLoading(true);
-    axios.get(`/api/pyqs/${id}`).then(res => setPyq(res.data)).catch(err => console.error(err)).finally(() => setLoading(false));
+    API.get(`/api/pyqs/${id}`).then(res => setPyq(res.data)).catch(err => console.error(err)).finally(() => setLoading(false));
   }, [id]);
 
   const onDocumentLoadSuccess = async (pdf: PDFDocumentProxy) => {

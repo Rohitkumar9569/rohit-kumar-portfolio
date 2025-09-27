@@ -41,7 +41,9 @@ const SharedChatUI: React.FC<{ documentId: string, isMobile: boolean, activeSnap
     setInput('');
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/pyqs/chat/${documentId}/stream`, {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+
+      const response = await fetch(`${baseUrl}/api/pyqs/chat/${documentId}/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: text }),
