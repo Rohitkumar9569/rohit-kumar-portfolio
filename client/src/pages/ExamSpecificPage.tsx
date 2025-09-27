@@ -1,67 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import API from '../api';
+import PyqCardSkeleton from '../components/PyqCardSkeleton';
 
-// --- DEFINE TYPESCRIPT INTERFACES ---
+// --- INTERFACES (No changes) ---
 interface IExam {
   _id: string;
   name: string;
   shortName: string;
   slug: string;
 }
-
 interface ISubject {
   _id: string;
   name: string;
   examId: string;
 }
-
 interface IPyq {
   _id: string;
   year: number;
   title: string;
-  subject: string; // This can stay as is for display purposes
+  subject: string;
   fileUrl: string;
 }
 
-/**
- * Renders a fully dynamic page for a specific exam.
- * Fetches exams, subjects, and PYQs from the API.
- */
 const ExamSpecificPage = () => {
-  const { examName } = useParams<{ examName: string }>(); // e.g., "gate"
+  const { examName } = useParams<{ examName: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedSubjectId = searchParams.get('subject');
 
-  // --- STATE MANAGEMENT ---
   const [currentExam, setCurrentExam] = useState<IExam | null>(null);
   const [subjects, setSubjects] = useState<ISubject[]>([]);
-  const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(null);
   const [pyqs, setPyqs] = useState<IPyq[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // ✅ FIX: State to track if subjects for the current exam have been loaded
+  const [areSubjectsLoaded, setAreSubjectsLoaded] = useState<boolean>(false);
+
   // --- DATA FETCHING EFFECTS ---
 
-  // 1. Fetch all exams, find the current one by slug, then fetch its subjects
+  // Effect 1: Fetches the main exam data and its subjects.
+  // This runs ONLY when the exam changes (e.g., from 'gate' to 'railway').
   useEffect(() => {
-    const initializePage = async () => {
+    const initializeExamAndSubjects = async () => {
       if (!examName) return;
 
+      // Reset states for the new exam
+      setLoading(true);
+      setAreSubjectsLoaded(false);
+      setSubjects([]);
+      setPyqs([]);
+      
       try {
-        setLoading(true);
-        // Fetch all exams to find the ID of the current one based on the URL slug
         const examsResponse = await API.get<IExam[]>('/api/exams');
         const exam = examsResponse.data.find(e => e.slug === examName);
 
         if (exam) {
           setCurrentExam(exam);
-          // Now fetch subjects for the found exam ID
           const subjectsResponse = await API.get<ISubject[]>(`/api/subjects/by-exam/${exam._id}`);
           setSubjects(subjectsResponse.data);
-          // Automatically select the first subject
-          if (subjectsResponse.data.length > 0) {
-            setSelectedSubjectId(subjectsResponse.data[0]._id);
-          } else {
-            setSelectedSubjectId(null); // No subjects available
+
+          // If no subject is in the URL, set the first subject as the default.
+          if (!searchParams.get('subject') && subjectsResponse.data.length > 0) {
+            setSearchParams({ subject: subjectsResponse.data[0]._id }, { replace: true });
           }
         } else {
           setError(`Exam "${examName}" not found.`);
@@ -69,15 +70,26 @@ const ExamSpecificPage = () => {
       } catch (err) {
         console.error('Error initializing page:', err);
         setError('Failed to load exam data.');
+      } finally {
+        // ✅ FIX: Mark that subjects are now ready for the PYQ fetch effect.
+        setAreSubjectsLoaded(true);
       }
     };
 
-    initializePage();
-  }, [examName]); // This effect runs only when the exam in the URL changes
+    initializeExamAndSubjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [examName]); // Only re-run when the main exam URL part changes.
 
-  // 2. Fetch PYQs whenever the selected subject changes
+  // Effect 2: Fetches PYQs for the selected subject.
+  // This runs AFTER subjects are loaded, and whenever the selected subject changes.
   useEffect(() => {
-    const fetchPyqs = async () => {
+    // ✅ FIX: Do not run this effect until the subjects have been loaded by the first effect.
+    if (!areSubjectsLoaded) {
+      return;
+    }
+
+    const fetchPyqsForSubject = async () => {
+      // If there's no subject selected (e.g., exam has no subjects), stop loading.
       if (!selectedSubjectId) {
         setPyqs([]);
         setLoading(false);
@@ -86,7 +98,6 @@ const ExamSpecificPage = () => {
 
       setLoading(true);
       try {
-        // Use the new API endpoint with subjectId
         const response = await API.get<IPyq[]>(`/api/pyqs?subjectId=${selectedSubjectId}`);
         setPyqs(response.data);
       } catch (err) {
@@ -98,10 +109,11 @@ const ExamSpecificPage = () => {
       }
     };
 
-    fetchPyqs();
-  }, [selectedSubjectId]); // This effect runs only when the user clicks a new subject
+    fetchPyqsForSubject();
+  }, [selectedSubjectId, areSubjectsLoaded]);
 
-  // --- RENDER LOGIC ---
+
+  // --- RENDER LOGIC (No changes below this line) ---
 
   if (error) {
     return <div className="text-center text-red-400 py-24">{error}</div>;
@@ -113,12 +125,11 @@ const ExamSpecificPage = () => {
         Previous Year Questions for <span className="text-cyan-400 uppercase">{currentExam?.shortName || examName}</span>
       </h1>
 
-      {/* Subject Tabs - Now fully dynamic */}
       <div className="flex justify-center flex-wrap gap-2 md:gap-4 mb-12 bg-slate-800 p-2 rounded-lg">
         {subjects.map(subject => (
           <button
             key={subject._id}
-            onClick={() => setSelectedSubjectId(subject._id)}
+            onClick={() => setSearchParams({ subject: subject._id })}
             className={`px-3 py-2 text-sm md:px-6 md:py-2 font-semibold rounded-md transition-colors ${selectedSubjectId === subject._id
               ? 'bg-cyan-600 text-white'
               : 'bg-transparent text-slate-300 hover:bg-slate-700'
@@ -129,9 +140,12 @@ const ExamSpecificPage = () => {
         ))}
       </div>
 
-      {/* PYQ Cards */}
       {loading ? (
-        <div className="text-center text-slate-400">Loading Papers...</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <PyqCardSkeleton key={index} />
+          ))}
+        </div>
       ) : pyqs.length === 0 ? (
         <p className="text-center text-slate-400 mt-16">No PYQs found for this subject yet.</p>
       ) : (
