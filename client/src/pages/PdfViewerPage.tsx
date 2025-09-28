@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Virtuoso } from 'react-virtuoso'; // CHANGE 1: Virtuoso ko import kiya
 import API from '../api';
 import { Document, Page, pdfjs } from 'react-pdf';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
-import { useInView } from 'react-intersection-observer';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -32,16 +32,7 @@ const useIsMobile = () => {
   return isMobile;
 };
 
-const PdfPage: React.FC<{
-  pageNumber: number; scale: number; rotate: number; onVisible: (page: number) => void; isLastPage: boolean;
-}> = ({ pageNumber, scale, rotate, onVisible, isLastPage }) => {
-  const { ref } = useInView({ threshold: 0.5, onChange: (inView) => { if (inView) onVisible(pageNumber); }, });
-  return (
-    <div ref={ref} className={`shadow-lg flex justify-center ${isLastPage ? '' : 'mb-4'}`}>
-      <Page pageNumber={pageNumber} scale={scale} rotate={rotate} />
-    </div>
-  );
-};
+// CHANGE 2: Alag se PdfPage component ki zaroorat nahi, logic ko merge kar diya.
 
 const PdfViewerPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -64,7 +55,7 @@ const PdfViewerPage = () => {
 
   const [unscaledPageWidth, setUnscaledPageWidth] = useState<number | null>(null);
   const pdfContainerRef = useRef<HTMLDivElement>(null);
-  const pageRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const virtuosoRef = useRef<any>(null); // CHANGE 3: Page refs ki jagah Virtuoso ka ref
 
   const [showCustomScrollbar, setShowCustomScrollbar] = useState(false);
   const scrollTimeoutRef = useRef<number | null>(null);
@@ -82,14 +73,12 @@ const PdfViewerPage = () => {
 
     const handleContainerScroll = () => {
       if (isDragging) return;
-
       const track = trackRef.current;
       if (track) {
         const thumbHeight = 40;
         const trackHeight = track.clientHeight;
         const contentHeight = container.scrollHeight;
         const visibleHeight = container.clientHeight;
-
         if (contentHeight > visibleHeight) {
           const scrollableDist = contentHeight - visibleHeight;
           const draggableDist = trackHeight - thumbHeight;
@@ -102,7 +91,6 @@ const PdfViewerPage = () => {
     const resizeObserver = new ResizeObserver(handleContainerScroll);
     resizeObserver.observe(container);
     container.addEventListener('scroll', handleContainerScroll);
-
     return () => {
       resizeObserver.disconnect();
       container.removeEventListener('scroll', handleContainerScroll);
@@ -118,7 +106,6 @@ const PdfViewerPage = () => {
     setNumPages(pdf.numPages);
     const firstPage = await pdf.getPage(1);
     setUnscaledPageWidth(firstPage.getViewport({ scale: 1 }).width);
-    pageRefs.current = Array(pdf.numPages).fill(null);
   };
 
   const preventAutoHide = () => {
@@ -154,7 +141,6 @@ const PdfViewerPage = () => {
       if (autoHideDisabled.current) return;
       const currentScrollY = e.currentTarget.scrollTop;
       const scrollDelta = currentScrollY - lastScrollY.current;
-
       if (scrollDelta > 50 && currentScrollY > 150) {
         setIsHeaderVisible(false);
       } else if (scrollDelta < -10) {
@@ -164,22 +150,19 @@ const PdfViewerPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (!isMobile) {
-      setIsHeaderVisible(true);
-    }
-  }, [isMobile]);
+  useEffect(() => { if (!isMobile) setIsHeaderVisible(true); }, [isMobile]);
 
   const handleZoomIn = () => { preventAutoHide(); setScale(prev => prev + 0.1); };
   const handleZoomOut = () => { preventAutoHide(); setScale(prev => Math.max(0.2, prev - 0.1)); };
   const handleRotate = () => { preventAutoHide(); setRotation(prev => (prev + 90) % 360); };
 
+  // CHANGE 4: handleGoToPage ko Virtuoso ke liye update kiya
   const handleGoToPage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     preventAutoHide();
     const pageNum = parseInt(pageInput, 10);
-    if (pageNum >= 1 && pageNum <= numPages) {
-      pageRefs.current[pageNum - 1]?.scrollIntoView({ behavior: 'smooth' });
+    if (virtuosoRef.current && pageNum >= 1 && pageNum <= numPages) {
+      virtuosoRef.current.scrollToIndex({ index: pageNum - 1, align: 'start', behavior: 'smooth' });
     } else {
       setPageInput(String(currentPage));
     }
@@ -196,6 +179,7 @@ const PdfViewerPage = () => {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="absolute top-0 left-0 right-0 z-30 bg-slate-900/80 backdrop-blur-sm shadow-md"
         >
+          {/* Header ka JSX (koi change nahi) */}
           <div className="py-1 flex justify-between items-center px-2 sm:px-4">
             <button onClick={() => navigate(-1)} className="p-1 sm:p-2 rounded-full hover:bg-black/20" title="Go Back">
               <ArrowLeftIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
@@ -218,46 +202,74 @@ const PdfViewerPage = () => {
           </div>
         </motion.header>
 
-        {/* THE FIX 1: Added pt-8.5 to offset the main content below the header */}
-        <main className={`relative h-full flex flex-col bg-slate-700 transition-all duration-300 ${isHeaderVisible ? 'pt-8' : 'pt-0'}`}>
-          {/* THE FIX 2: Replaced 'hide-scrollbar' with 'custom-scrollbar' */}
-          <div ref={pdfContainerRef} onScroll={handleScroll} onClick={() => { if (isMobile && !autoHideDisabled.current) setIsHeaderVisible(prev => !prev); }} className="flex-1 overflow-y-auto custom-scrollbar">
-            {pyq?.fileUrl && (
-              <Document file={pyq.fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} className="py-2 md:py-4" loading={<PdfPageSkeleton />} >
-                {unscaledPageWidth && Array.from(new Array(numPages), (el, index) => (
-                  <div key={`page_wrapper_${index + 1}`} ref={el => { pageRefs.current[index] = el; }}>
-                    <PdfPage pageNumber={index + 1} scale={scale} rotate={rotation} onVisible={setCurrentPage} isLastPage={index === numPages - 1} />
-                  </div>
-                ))}
-              </Document>
+        <main className={`relative h-full flex flex-col bg-slate-700 transition-all duration-300 ${isHeaderVisible ? 'pt-10' : 'pt-0'}`}>
+          {/* CHANGE 5: Main PDF rendering area ko Virtuoso se replace kiya */}
+          <Document
+            file={pyq?.fileUrl}
+            onLoadSuccess={onDocumentLoadSuccess}
+            onLoadError={console.error}
+            loading={<PdfPageSkeleton />}
+            className="flex-1 overflow-hidden" // Document ko container banaya
+          >
+            {numPages > 0 && (
+              <Virtuoso
+                ref={virtuosoRef}
+                totalCount={numPages}
+                scrollerRef={(ref) => {
+                  // Virtuoso ke scroller ko hamare main container se joda
+                  if (ref) {
+                    (pdfContainerRef as React.MutableRefObject<HTMLDivElement | null>).current = ref as HTMLDivElement;
+                  }
+                }}
+                className="custom-scrollbar"
+                // rangeChanged se current page update kiya
+                rangeChanged={range => setCurrentPage(range.startIndex + 1)}
+                itemContent={index => {
+                  const pageNumber = index + 1;
+                  return (
+                    <div className="flex justify-center py-2 md:py-4">
+                      <div className="shadow-lg">
+                        <Page
+                          pageNumber={pageNumber}
+                          scale={scale}
+                          rotate={rotation}
+                          // Page skeleton ko yahan bhi rakha for better UX
+                          loading={<div style={{ width: 595 * scale, height: 842 * scale }} className="bg-slate-600 animate-pulse rounded-md" />}
+                        />
+                      </div>
+                    </div>
+                  );
+                }}
+              />
             )}
-          </div>
-
-          <AnimatePresence>
-            {isMobile && showCustomScrollbar && (
-              <motion.div ref={trackRef} className="absolute top-0 right-0 h-full w-10 z-20 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-                <motion.div
-                  drag="y" dragConstraints={trackRef} dragElastic={0} dragMomentum={false}
-                  onDragStart={() => setIsDragging(true)}
-                  onDragEnd={() => setIsDragging(false)}
-                  onDrag={(event, info) => {
-                    const container = pdfContainerRef.current;
-                    const track = trackRef.current;
-                    if (container && track) {
-                      const thumbHeight = 40;
-                      const progress = info.offset.y / (track.clientHeight - thumbHeight);
-                      container.scrollTop = progress * (container.scrollHeight - container.clientHeight);
-                    }
-                  }}
-                  style={{ y }}
-                  className="w-16 h-10 bg-slate-800/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-xs shadow-lg cursor-grab active:cursor-grabbing pointer-events-auto -ml-3"
-                >
-                  {currentPage} / {numPages}
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          </Document>
         </main>
+
+        <AnimatePresence>
+          {/* Custom Scrollbar ka JSX (koi change nahi) */}
+          {isMobile && showCustomScrollbar && (
+            <motion.div ref={trackRef} className="absolute top-0 right-0 h-full w-10 z-20 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+              <motion.div
+                drag="y" dragConstraints={trackRef} dragElastic={0} dragMomentum={false}
+                onDragStart={() => setIsDragging(true)}
+                onDragEnd={() => setIsDragging(false)}
+                onDrag={(event, info) => {
+                  const container = pdfContainerRef.current;
+                  const track = trackRef.current;
+                  if (container && track) {
+                    const thumbHeight = 40;
+                    const progress = info.offset.y / (track.clientHeight - thumbHeight);
+                    container.scrollTop = progress * (container.scrollHeight - container.clientHeight);
+                  }
+                }}
+                style={{ y }}
+                className="w-16 h-10 bg-slate-800/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-xs shadow-lg cursor-grab active:cursor-grabbing pointer-events-auto -ml-3"
+              >
+                {currentPage} / {numPages}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {isMobile ? (
@@ -265,7 +277,7 @@ const PdfViewerPage = () => {
           <Drawer.Trigger asChild><button className="fixed bottom-6 right-6 bg-cyan-600 text-white p-4 rounded-full shadow-lg z-20 hover:bg-cyan-700 transition-transform hover:scale-110" title="Chat"><ChatBubbleOvalLeftEllipsisIcon className="h-7 w-7" /></button></Drawer.Trigger>
           <Drawer.Portal>
             <Drawer.Content className="fixed top-24 bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-slate-900/80 backdrop-blur-md z-40 border-t border-slate-700">
-              <div className="mx-auto my-3 h-1.ims-center justify-center5 w-12 flex-shrink-0 rounded-full bg-slate-600" />
+              <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-slate-600" />
               {id && <ChatInterface documentId={id} isMobileLayout={true} activeSnapPoint={activeSnapPoint} smallSnapPoint={smallSnapPoint} />}
             </Drawer.Content>
           </Drawer.Portal>

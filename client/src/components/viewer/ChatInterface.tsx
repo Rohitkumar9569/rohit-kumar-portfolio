@@ -1,13 +1,12 @@
 // src/components/viewer/ChatInterface.tsx
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Drawer } from 'vaul';
 import { PaperAirplaneIcon, XMarkIcon, ClipboardDocumentIcon, CheckIcon } from '@heroicons/react/24/solid';
 import TextareaAutosize from 'react-textarea-autosize';
 import Logo from '../Logo';
-import ReactMarkdown from 'react-markdown';
-
+const LazyReactMarkdown = lazy(() => import('react-markdown'));
 interface Message {
   sender: 'user' | 'ai';
   text: string;
@@ -101,7 +100,7 @@ const SharedChatUI: React.FC<{ documentId: string, isMobile: boolean, activeSnap
   const suggestedQuestions = ["Explain recursion in simple terms", "Suggest a study plan for GATE CSE", "Who created you?"];
 
   return (
-    <div className={`relative flex-1 grid grid-rows-[auto_1fr_auto] bg-transparent min-h-0`}>
+    <div className={`relative flex-1 h-full grid grid-rows-[auto_1fr_auto] bg-transparent min-h-0`}>
 
       {/* FIX: Redesigned header for a slimmer look with an integrated drag handle. */}
       <header
@@ -115,7 +114,6 @@ const SharedChatUI: React.FC<{ documentId: string, isMobile: boolean, activeSnap
         {/* Center: Draggable Handle for Mobile */}
         {isMobile && (
           <div className="absolute left-1/2 -translate-x-1/2">
-            <div className="h-1.5 w-12 rounded-full bg-slate-600" />
           </div>
         )}
 
@@ -164,7 +162,9 @@ const SharedChatUI: React.FC<{ documentId: string, isMobile: boolean, activeSnap
               </div>
               <div className={`group relative p-3 rounded-xl max-w-md text-white ${msg.sender === 'user' ? 'bg-cyan-700 rounded-br-none' : 'bg-slate-800 rounded-bl-none'}`}>
                 <div className="prose prose-invert prose-p:my-2 prose-headings:my-2 prose-ul:my-2">
-                  <ReactMarkdown>{msg.text}</ReactMarkdown>
+                  <Suspense fallback={<p>{msg.text}</p>}>
+                    <LazyReactMarkdown>{msg.text}</LazyReactMarkdown>
+                  </Suspense>
                 </div>
                 {msg.sender === 'ai' && !isLoading && (
                   <button onClick={() => handleCopy(msg.text, index)} className="absolute -top-2 -right-2 bg-slate-600 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
