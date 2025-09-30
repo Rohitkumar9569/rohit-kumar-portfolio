@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import About from '../sections/About';
-import Skills from '../sections/Skills';
-import Certifications from '../sections/Certifications';
-import Projects from '../sections/Projects';
-import StudyHubCTA from '../sections/StudyHubCTA'; 
-import Contact from '../sections/Contact';
+import PageLoader from '../components/PageLoader';
+const Skills = React.lazy(() => import('../sections/Skills'));
+const Certifications = React.lazy(() => import('../sections/Certifications'));
+const Projects = React.lazy(() => import('../sections/Projects'));
+const StudyHubCTA = React.lazy(() => import('../sections/StudyHubCTA'));
+const Contact = React.lazy(() => import('../sections/Contact'));
 
 const PortfolioPage = () => {
   return (
     <>
       <About />
+       <Suspense fallback={<PageLoader />}>
       <Skills />
       <Certifications />
       <Projects />
       <StudyHubCTA /> 
       <Contact />
+      </Suspense>
     </>
   );
 };

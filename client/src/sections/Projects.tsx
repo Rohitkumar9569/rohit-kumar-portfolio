@@ -7,9 +7,9 @@ import { FaGithub } from 'react-icons/fa';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 
 // Import your project images
-import roomRadarPreview from '../assets/roomradar-preview.jpeg';
-import pending from '../assets/pending.png';
-import pending1 from '../assets/pending1.png';
+import roomRadarPreview from '../assets/roomradar-preview.webp';
+import pending from '../assets/pending.webp';
+import pending1 from '../assets/pending1.webp';
 // import projectTwoPreview from '../assets/project-2.png'; // Example for next project
 // import projectThreePreview from '../assets/project-3.png'; // Example for next project
 

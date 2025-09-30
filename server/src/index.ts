@@ -61,6 +61,11 @@ app.use('/api/exams', examRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/auth', authRoutes);
 
+// ✅ NEW: Health check route for Uptime Robot
+app.get('/api/health', (req: Request, res: Response) => {
+  res.status(200).send('Server is awake and healthy!');
+});
+
 app.listen(port, () => {
   console.log(`[server]: Server is running on port ${port}`);
 });

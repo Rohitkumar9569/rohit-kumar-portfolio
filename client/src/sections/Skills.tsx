@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react'; // <-- Import useState
 import { motion } from 'framer-motion';
-import ArchitectCanvas from '../components/ArchitectCanvas';
+import PageLoader from '../components/PageLoader';
+const ArchitectCanvas = React.lazy(() => import('../components/ArchitectCanvas'));
 import CubeModal from '../components/CubeModal'; // <-- Import the new modal
 import {
   FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaGitAlt, FaGithub, FaJsSquare, FaCode
