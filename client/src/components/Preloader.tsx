@@ -14,7 +14,7 @@ const svgVariants = {
     opacity: 1,
     scale: 1,
     pathLength: 1, // Draw the outline first
-    fill: "rgba(34, 211, 238, 1)", // Then fill it with color
+    fill: "rgba(255, 255, 255, 1)",
     transition: {
       pathLength: { duration: 1.5, ease: "easeInOut" }, // Draw duration
       fill: { delay: 1.5, duration: 0.5, ease: "easeOut" }, // Fill delay after draw
