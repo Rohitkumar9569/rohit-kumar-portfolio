@@ -84,7 +84,7 @@ function App() {
   useEffect(() => {
     const animationTimer = setTimeout(() => {
       setAnimationFinished(true);
-    }, 2500); // Minimum animation time: 2.5 seconds
+    }, 1800); // Minimum animation time: 1.8 seconds
 
     return () => clearTimeout(animationTimer);
   }, []);
