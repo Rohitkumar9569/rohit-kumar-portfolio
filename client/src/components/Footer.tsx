@@ -35,10 +35,10 @@ const Footer = () => {
 
         {/* Social Media Links with enhanced hover effect */}
         <div className="flex space-x-6">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-all duration-300 transform hover:scale-110">
+          <a href="https://github.com" aria-label="GitHub Profile" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-all duration-300 transform hover:scale-110">
             <FaGithub size={24} />
           </a>
-          <a href="https://www.linkedin.com/feed/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-all duration-300 transform hover:scale-110">
+          <a href="https://www.linkedin.com/feed/" aria-label="LinkedIn Profile" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-all duration-300 transform hover:scale-110">
             <FaLinkedin size={24} />
           </a>
           <a href="https://x.com/home" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-all duration-300 transform hover:scale-110">

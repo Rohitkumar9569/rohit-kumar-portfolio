@@ -66,7 +66,12 @@ const About = () => {
         <motion.div variants={itemVariant} className="relative flex justify-center items-center lg:order-2">
           <div className="absolute w-72 h-72 sm:w-96 sm:h-96 bg-violet-500/20 rounded-full blur-3xl animate-pulse"></div>
           <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-slate-800">
-            <img src={profilePhoto} alt="Rohit Kumar" className="w-full h-full object-cover" />
+            <img
+              src={profilePhoto}
+              alt="Rohit Kumar"
+              className="w-full h-full object-cover"
+              fetchPriority="high"
+            />
           </div>
         </motion.div>
 
@@ -102,8 +107,8 @@ const About = () => {
               Download Resume <HiOutlineArrowDownTray className="h-5 w-5" />
             </a>
             <div className="flex items-center gap-6">
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors"><FaGithub size={32} /></a>
-              <a href="https://www.linkedin.com/in/rohit-kumar-bba12b25b/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors"><FaLinkedin size={32} /></a>
+              <a href="https://github.com" aria-label="GitHub Profile" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors"><FaGithub size={32} /></a>
+              <a href="https://www.linkedin.com/in/rohit-kumar-bba12b25b/" aria-label="LinkedIn Profile" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors"><FaLinkedin size={32} /></a>
             </div>
           </div>
         </motion.div>

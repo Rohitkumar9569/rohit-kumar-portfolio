@@ -111,7 +111,7 @@ const Navbar = () => {
               onMouseEnter={link.type === 'hybrid_dropdown' ? handleStudyHubHover : undefined}
             >
               {link.type === 'scroll' && (
-                <ScrollLink to={link.to!} spy={true} smooth={'easeInOutQuart'} offset={-70} duration={800} className="cursor-pointer font-semibold hover:text-cyan-400 transition-colors relative" activeClass={location.pathname === '/' ? 'active-link' : ''} onClick={() => handleScrollTo(link.to!)}>
+                <ScrollLink to={link.to!} href={`#${link.to!}`} spy={true} smooth={'easeInOutQuart'} offset={-70} duration={800} className="cursor-pointer font-semibold hover:text-cyan-400 transition-colors relative" activeClass={location.pathname === '/' ? 'active-link' : ''} onClick={() => handleScrollTo(link.to!)}>
                   {link.label}
                 </ScrollLink>
               )}

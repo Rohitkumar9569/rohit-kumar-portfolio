@@ -1,0 +1,5 @@
+# Allow all crawlers to access all content
+User-agent: *
+Allow: /
+
+Sitemap: https://rohitkumar-portfolio.vercel.app/sitemap.xml
