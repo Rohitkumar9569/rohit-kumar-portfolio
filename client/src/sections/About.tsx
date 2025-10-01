@@ -70,7 +70,8 @@ const About = () => {
               src={profilePhoto}
               alt="Rohit Kumar"
               className="w-full h-full object-cover"
-              fetchPriority="high"
+              // @ts-ignore 
+              fetchpriority="high"
             />
           </div>
         </motion.div>
@@ -94,7 +95,7 @@ const About = () => {
               <div key={index} className="mb-8 relative group">
                 <div className="absolute -left-[41px] top-1 w-4 h-4 bg-slate-800 rounded-full border-4 border-cyan-500"></div>
                 <p className="text-sm text-slate-400 mb-1">{item.date}</p>
-                <h4 className="text-lg font-bold">{item.title}</h4>
+                <h3 className="text-lg font-bold">{item.title}</h3>
                 <p className="text-cyan-400 text-sm">{item.institution}</p>
               </div>
             ))}
@@ -102,7 +103,7 @@ const About = () => {
 
           <div className="flex flex-col sm:flex-row items-center gap-6 mt-8 justify-center lg:justify-start">
             <a href="/Rohit-Kumar-Resume.pdf" download
-              className="inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 cursor-pointer w-full sm:w-auto"
+              className="inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 cursor-pointer w-full sm:w-auto"
             >
               Download Resume <HiOutlineArrowDownTray className="h-5 w-5" />
             </a>

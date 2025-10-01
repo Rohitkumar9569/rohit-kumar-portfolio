@@ -1,9 +1,10 @@
-// src/components/CubeModal.tsx
-
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ArchitectCanvas from './ArchitectCanvas';
 import { XMarkIcon } from '@heroicons/react/24/solid';
+import PageLoader from './PageLoader';
+
+// Lazy-load the heavy 3D component
+const ArchitectCanvas = lazy(() => import('./ArchitectCanvas'));
 
 interface CubeModalProps {
   isOpen: boolean;
@@ -25,8 +26,8 @@ const CubeModal: React.FC<CubeModalProps> = ({ isOpen, onClose }) => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="relative w-full h-full max-w-3xl max-h-[90vh] bg-slate-800/50 rounded-lg shadow-2xl border border-slate-700"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+            className="relative w-full h-full max-w-3xl max-h-[90vh] bg-slate-800/50 rounded-lg shadow-2xl border border-slate-700 flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={onClose}
@@ -35,7 +36,10 @@ const CubeModal: React.FC<CubeModalProps> = ({ isOpen, onClose }) => {
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
-            <ArchitectCanvas />
+            
+            <Suspense fallback={<PageLoader />}>
+              <ArchitectCanvas />
+            </Suspense>
           </motion.div>
         </motion.div>
       )}

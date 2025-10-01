@@ -2,14 +2,17 @@ import React, { useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text } from '@react-three/drei';
-import { scroller } from 'react-scroll';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom'; // 1. Import useNavigate
+import { useNavigate } from 'react-router-dom';
+import { useSectionNavigation } from '../hooks/useSectionNavigation';
 
 const InteractiveCube = () => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [hovered, setHovered] = useState(false);
-  const navigate = useNavigate(); // 2. Initialize the navigate function
+  
+  // Hooks for both routing and section-scrolling
+  const navigate = useNavigate(); 
+  const navigateToSection = useSectionNavigation();
 
   useFrame((state, delta) => {
     if (meshRef.current) {
@@ -22,33 +25,19 @@ const InteractiveCube = () => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto';
   }, [hovered]);
 
-  // 3. Updated click handler for smarter navigation
   const handleFaceClick = (event: any) => {
     event.stopPropagation();
     const faceIndex = Math.floor(event.face.materialIndex);
     
-    // Use a switch statement for clear, reliable navigation
+    // Use the appropriate navigation function for each face
     switch (faceIndex) {
-      case 0: // Right face
-        scroller.scrollTo('about', { duration: 500, smooth: 'easeInOutQuad' });
-        break;
-      case 1: // Left face
-        scroller.scrollTo('skills', { duration: 500, smooth: 'easeInOutQuad' });
-        break;
-      case 2: // Top face
-        scroller.scrollTo('projects', { duration: 500, smooth: 'easeInOutQuad' });
-        break;
-      case 3: // Bottom face
-        scroller.scrollTo('contact', { duration: 500, smooth: 'easeInOutQuad' });
-        break;
-      case 4: // Front face - now navigates to the Study Hub
-        navigate('/study/gate');
-        break;
-      case 5: // Back face
-        scroller.scrollTo('certifications', { duration: 500, smooth: 'easeInOutQuad' });
-        break;
-      default:
-        break;
+      case 0: navigateToSection('about'); break;
+      case 1: navigateToSection('skills'); break;
+      case 2: navigateToSection('projects'); break;
+      case 3: navigateToSection('contact'); break;
+      case 4: navigate('/study'); break; // Navigate to the Study Hub route
+      case 5: navigateToSection('certifications'); break;
+      default: break;
     }
   };
 
@@ -65,7 +54,6 @@ const InteractiveCube = () => {
         whileTap={{ scale: 0.95 }}
       >
         <boxGeometry args={[boxSize, boxSize, boxSize]} />
-        {/* Material colors remain the same, faceIndex maps to these */}
         <meshPhysicalMaterial attach="material-0" color="#22d3ee" roughness={0.5} metalness={0.7} />
         <meshPhysicalMaterial attach="material-1" color="#f87171" roughness={0.5} metalness={0.7} />
         <meshPhysicalMaterial attach="material-2" color="#4ade80" roughness={0.5} metalness={0.7} />
@@ -78,7 +66,6 @@ const InteractiveCube = () => {
         animate={{ scale: hovered ? 1.1 : 1 }}
         whileTap={{ scale: 0.95 }}
       >
-        {/* 4. Updated Text Labels */}
         <Text position={[textOffset, 0, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.4} color="white">About</Text>
         <Text position={[-textOffset, 0, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.4} color="white">Skills</Text>
         <Text position={[0, textOffset, 0]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.4} color="white">Projects</Text>

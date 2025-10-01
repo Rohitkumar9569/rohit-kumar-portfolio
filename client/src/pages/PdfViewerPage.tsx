@@ -62,6 +62,7 @@ const PdfViewerPage = () => {
   const y = useMotionValue(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [overscanValue, setOverscanValue] = useState(500);
 
   const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(1);
   const snapPoints = [0.6, 1];
@@ -150,7 +151,25 @@ const PdfViewerPage = () => {
     }
   };
 
-  useEffect(() => { if (!isMobile) setIsHeaderVisible(true); }, [isMobile]);
+useEffect(() => {
+  const timer = setTimeout(() => {
+    let finalOverscan = 15000; 
+
+    if (isMobile) {
+      const deviceRam = (navigator as any).deviceMemory;
+
+      if (deviceRam && deviceRam >= 6) {
+        finalOverscan = 15000; 
+      } else {
+        finalOverscan = 5000; 
+      }
+    }
+    
+    setOverscanValue(finalOverscan);
+  }, 1000);
+
+  return () => clearTimeout(timer);
+}, [isMobile]);
 
   const handleZoomIn = () => { preventAutoHide(); setScale(prev => prev + 0.1); };
   const handleZoomOut = () => { preventAutoHide(); setScale(prev => Math.max(0.2, prev - 0.1)); };
@@ -214,15 +233,14 @@ const PdfViewerPage = () => {
             {numPages > 0 && (
               <Virtuoso
                 ref={virtuosoRef}
+                 overscan={overscanValue}
                 totalCount={numPages}
                 scrollerRef={(ref) => {
-                  // Virtuoso ke scroller ko hamare main container se joda
                   if (ref) {
                     (pdfContainerRef as React.MutableRefObject<HTMLDivElement | null>).current = ref as HTMLDivElement;
                   }
                 }}
                 className="custom-scrollbar"
-                // rangeChanged se current page update kiya
                 rangeChanged={range => setCurrentPage(range.startIndex + 1)}
                 itemContent={index => {
                   const pageNumber = index + 1;
