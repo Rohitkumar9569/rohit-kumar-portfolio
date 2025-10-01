@@ -63,6 +63,8 @@ const PdfViewerPage = () => {
   const trackRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [overscanValue, setOverscanValue] = useState(500);
+  const [loadProgress, setLoadProgress] = useState<number | null>(null);
+
 
   const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(1);
   const snapPoints = [0.6, 1];
@@ -102,8 +104,12 @@ const PdfViewerPage = () => {
     if (id) setLoading(true);
     API.get(`/api/pyqs/${id}`).then(res => setPyq(res.data)).catch(err => console.error(err)).finally(() => setLoading(false));
   }, [id]);
+  const handleLoadProgress = ({ loaded, total }: { loaded: number; total: number }) => {
+  setLoadProgress((loaded / total) * 100);
+};
 
   const onDocumentLoadSuccess = async (pdf: PDFDocumentProxy) => {
+  setLoadProgress(null);
     setNumPages(pdf.numPages);
     const firstPage = await pdf.getPage(1);
     setUnscaledPageWidth(firstPage.getViewport({ scale: 1 }).width);
@@ -153,15 +159,15 @@ const PdfViewerPage = () => {
 
 useEffect(() => {
   const timer = setTimeout(() => {
-    let finalOverscan = 15000; 
+    let finalOverscan = 800; 
 
     if (isMobile) {
       const deviceRam = (navigator as any).deviceMemory;
 
       if (deviceRam && deviceRam >= 6) {
-        finalOverscan = 15000; 
+        finalOverscan = 2000; 
       } else {
-        finalOverscan = 5000; 
+        finalOverscan =800; 
       }
     }
     
@@ -192,6 +198,18 @@ useEffect(() => {
   }
   return (
     <div className="h-screen w-screen bg-slate-800 flex flex-col md:flex-row overflow-hidden">
+      {loadProgress !== null && (
+      <div className="absolute top-0 left-0 w-full h-1 bg-slate-600 z-50">
+        <div
+          className="h-1 bg-cyan-400"
+          style={{
+            width: `${loadProgress}%`,
+            transition: 'width 0.2s ease-out',
+          }}
+        />
+      </div>
+    )}
+
       <div className="relative w-full md:w-3/5 h-full">
         <motion.header
           animate={{ y: (isMobile && !isHeaderVisible) ? "-100%" : 0 }}
@@ -226,6 +244,7 @@ useEffect(() => {
           <Document
             file={pyq?.fileUrl}
             onLoadSuccess={onDocumentLoadSuccess}
+            onLoadProgress={handleLoadProgress}
             onLoadError={console.error}
             loading={<PdfPageSkeleton />}
             className="flex-1 overflow-hidden" // Document ko container banaya

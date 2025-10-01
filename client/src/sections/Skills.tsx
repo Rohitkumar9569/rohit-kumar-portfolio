@@ -1,6 +1,5 @@
 // src/sections/Skills.tsx
-
-import React, { useState } from 'react'; // <-- Import useState
+import React, { Suspense, useState } from 'react';
 import { motion } from 'framer-motion';
 import PageLoader from '../components/PageLoader';
 const ArchitectCanvas = React.lazy(() => import('../components/ArchitectCanvas'));
@@ -124,7 +123,9 @@ const Skills = () => {
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          <ArchitectCanvas />
+          <Suspense fallback={null}>
+    <ArchitectCanvas />
+  </Suspense>
         </motion.div>
       </section>
 

@@ -12,10 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PageLoader from './components/PageLoader';
 import profilePhoto from './assets/profile-photo.jpeg';
 
-// --- Page Components (Lazy Loaded with Prefetch for the main page) ---
-const PortfolioPage = React.lazy(() => 
-  import(/* @vite-ignore */ /* webpackPrefetch: true */ './pages/PortfolioPage')
-);
+import PortfolioPage from './pages/PortfolioPage';
 const StudyZonePage = React.lazy(() => import('./pages/StudyZonePage'));
 const ExamSpecificPage = React.lazy(() => import('./pages/ExamSpecificPage'));
 const AdminPage = React.lazy(() => import('./pages/AdminPage'));

@@ -57,7 +57,7 @@ const Projects = () => {
               transition={{ delay: index * 0.2 }}
             >
               <div className="overflow-hidden">
-                <img src={project.image} alt={project.title} className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110" />
+                <img src={project.image} alt={project.title} className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy"/>
               </div>
               <div className="p-6">
                 <div className="flex flex-wrap gap-2 mb-4">

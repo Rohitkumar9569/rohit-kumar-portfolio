@@ -1,15 +1,29 @@
+// src/sections/Certifications.tsx
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 
-// Import your logos
+// आपके लोगो इम्पोर्ट्स वैसे ही रहेंगे
 import googleLogo from '../assets/google-logo.svg';
 import microsoftLogo from '../assets/microsoft-logo.svg';
 import ibmLogo from '../assets/ibm-logo.svg';
 import deeplearningaiLogo from '../assets/deeplearning-ai-logo.svg';
 import umichLogo from '../assets/umich-logo.svg';
 
+// ✨ ADDED: Staggering animation for the main container
+const containerVariant = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1, // This will make each child animate one after the other
+    },
+  },
+};
+
+// Item variant remains the same
 const itemVariant = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
@@ -17,7 +31,7 @@ const itemVariant = {
 };
 
 const Certifications = () => {
-  // Your full list of certificates remains unchanged
+  // आपका पूरा सर्टिफिकेट डेटा वैसा ही रहेगा
   const allCertificates = [
     { title: 'Foundations of Coding Full-Stack', provider: 'Microsoft', logo: microsoftLogo, link: 'https://www.coursera.org/account/accomplishments/verify/5T4R9FNCJJNX?utm_source%3Dandroid%26utm_medium%3Dcertificate%26utm_content%3Dcert_image%26utm_campaign%3Dsharing_cta%26utm_product%3Dcourse', category: 'Full-Stack' },
     { title: 'Full-Stack Integration', provider: 'Microsoft', logo: microsoftLogo, link: 'https://www.coursera.org/account/accomplishments/verify/T7LJHFMK5XYR?utm_source%3Dandroid%26utm_medium%3Dcertificate%26utm_content%3Dcert_image%26utm_campaign%3Dsharing_cta%26utm_product%3Dcourse', category: 'Full-Stack' },
@@ -47,17 +61,13 @@ const Certifications = () => {
   
   const categories = ['All', 'Full-Stack', 'Cybersecurity', 'Core CS', 'AI & ML', 'Other'];
   const [activeFilter, setActiveFilter] = useState('All');
-  
-  // --- NEW: State to manage the expanded view ---
   const [isExpanded, setIsExpanded] = useState(false);
   const INITIAL_VISIBLE_COUNT = 6;
 
-  // Reset the expanded view whenever the filter changes for better UX
   useEffect(() => {
     setIsExpanded(false);
   }, [activeFilter]);
 
-  // Determine which certificates to show based on filter and expansion state
   const filteredCertificates = activeFilter === 'All'
     ? allCertificates
     : allCertificates.filter(cert => cert.category === activeFilter);
@@ -94,29 +104,29 @@ const Certifications = () => {
             </button>
           ))}
         </div>
-
-        {/* --- UPDATED: Grid and animation container --- */}
+        
         <div className="relative">
+          {/* ✅ CHANGED: The grid container now controls the animation */}
           <motion.div 
-            key={activeFilter} // Re-triggers animation when filter changes
+            key={activeFilter} // This still re-triggers animation on filter change
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            variants={containerVariant}
+            initial="hidden"
+            whileInView="visible" // Animation starts only when it's in view
+            viewport={{ once: true, amount: 0.1 }} // Runs once when 10% is visible
           >
             <AnimatePresence>
-              {certificatesToShow.map((cert, index) => (
+              {certificatesToShow.map((cert) => (
+                // ✅ CHANGED: The child now only needs the item variant
                 <motion.div 
                   key={cert.title} 
                   variants={itemVariant}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  layout // This animates the layout change smoothly
+                  // ❌ REMOVED: initial, animate, and exit are now handled by the parent and AnimatePresence
+                  layout 
                 >
                   <a href={cert.link} target="_blank" rel="noopener noreferrer" className="block bg-slate-800 p-6 rounded-lg shadow-lg hover:shadow-cyan-500/20 hover:-translate-y-2 transition-all duration-300 h-full">
                     <div className="flex justify-between items-start mb-4">
-                      <img src={cert.logo} alt={`${cert.provider} Logo`} className="h-8" />
+                      <img src={cert.logo} alt={`${cert.provider} Logo`} className="h-8" loading="lazy" /> {/* ✨ ADDED: lazy loading for logos */}
                       <HiOutlineExternalLink className="h-6 w-6 text-slate-400" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">{cert.title}</h3>
@@ -127,13 +137,11 @@ const Certifications = () => {
             </AnimatePresence>
           </motion.div>
 
-          {/* --- NEW: Gradient fade-out effect --- */}
           {!isExpanded && filteredCertificates.length > INITIAL_VISIBLE_COUNT && (
             <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-slate-900 to-transparent pointer-events-none"></div>
           )}
         </div>
 
-        {/* --- NEW: Show More / Show Less Button --- */}
         {filteredCertificates.length > INITIAL_VISIBLE_COUNT && (
           <div className="text-center mt-12">
             <button 
