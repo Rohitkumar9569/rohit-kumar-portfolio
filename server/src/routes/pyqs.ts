@@ -34,7 +34,7 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
       examId: subject.examId,
       fileUrl: result.secure_url,
       cloudinaryPublicId: result.public_id,
-      // uploader: req.user.id, // TODO: Get user from 'protect' middleware
+     uploader: (req as any).user.id,
     });
     await newPyq.save();
     res.status(201).json(newPyq);
