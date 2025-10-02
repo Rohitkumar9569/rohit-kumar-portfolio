@@ -1,4 +1,5 @@
 import React, { Suspense, useState, useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
@@ -92,6 +93,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
+         <Toaster position="top-center" /> 
         <AnimatePresence>
           {!showApp && <Preloader />}
         </AnimatePresence>

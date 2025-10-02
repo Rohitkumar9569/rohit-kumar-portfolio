@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import API from '../../api';
 
 // Define TypeScript interfaces
@@ -73,9 +74,13 @@ const PyqManager: React.FC = () => {
   }, [selectedSubjectId]);
 
   // --- CRUD HANDLERS ---
-  const handleUpload = async (e: React.FormEvent) => {
+ const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !title || !year || !selectedSubjectId) return alert('Please fill all fields and select a file.');
+    // Alert ki jagah ab toast.error aayega
+    if (!file || !title || !year || !selectedSubjectId) {
+        return toast.error('Please fill all fields and select a file.');
+    }
+    
     setIsUploading(true);
     const formData = new FormData();
     formData.append('title', title);
@@ -83,19 +88,35 @@ const PyqManager: React.FC = () => {
     formData.append('subjectId', selectedSubjectId);
     formData.append('file', file);
 
-    try {
-      await API.post('/api/pyqs/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-      setTitle('');
-      setYear('');
-      setFile(null);
-      (document.getElementById('file-input') as HTMLInputElement).value = '';
-      fetchPyqsForSelectedSubject(); // Refetch
-    } catch (err) {
-      alert('Upload failed.');
-    } finally {
-      setIsUploading(false);
-    }
-  };
+    // API call ko ek alag variable me rakhenge
+    const uploadPromise = API.post('/api/pyqs/upload', formData, { 
+        headers: { 'Content-Type': 'multipart/form-data' } 
+    });
+
+    // try...catch ki jagah ab toast.promise ka istemal karenge
+    toast.promise(
+        uploadPromise,
+        {
+            loading: 'Uploading file...',              // Jab upload ho raha ho
+            success: 'File uploaded successfully!',    // Jab safal ho jaaye
+            error: 'Upload failed. Please try again.', // Jab fail ho jaaye
+        }
+    )
+    .then(() => {
+        // Sirf success hone par hi form clear hoga aur list refresh hogi
+        setTitle('');
+        setYear('');
+        setFile(null);
+        (document.getElementById('file-input') as HTMLInputElement).value = '';
+        fetchPyqsForSelectedSubject();
+    })
+    .catch((err) => {
+        console.error("Upload failed in detail:", err);
+    })
+    .finally(() => {
+        setIsUploading(false);
+    });
+};
 
   const handleDelete = async (pyqId: string) => {
     if (!window.confirm('Are you sure you want to delete this PYQ?')) return;
