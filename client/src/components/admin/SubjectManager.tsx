@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../../api';
 
 // Define TypeScript interfaces for our data structures
 interface IExam {
@@ -33,7 +33,7 @@ const SubjectManager: React.FC = () => {
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        const response = await axios.get('/api/exams');
+        const response = await API.get('/api/exams');
         setExams(response.data);
       } catch (err) {
         setError('Could not fetch exams.');
@@ -56,7 +56,7 @@ const SubjectManager: React.FC = () => {
     if (!selectedExamId) return;
     try {
       setIsLoadingSubjects(true);
-      const response = await axios.get(`/api/subjects/by-exam/${selectedExamId}`);
+      const response = await API.get(`/api/subjects/by-exam/${selectedExamId}`);
       setSubjects(response.data);
     } catch (err) {
       setError('Could not fetch subjects for this exam.');
@@ -70,7 +70,7 @@ const SubjectManager: React.FC = () => {
     e.preventDefault();
     if (!newSubjectName.trim() || !selectedExamId) return alert('Please select an exam and enter a subject name.');
     try {
-      await axios.post('/api/subjects', { name: newSubjectName, examId: selectedExamId });
+      await API.post('/api/subjects', { name: newSubjectName, examId: selectedExamId });
       setNewSubjectName('');
       fetchSubjectsForSelectedExam(); // Refetch subjects
     } catch (err) {
@@ -81,7 +81,7 @@ const SubjectManager: React.FC = () => {
   const handleDeleteSubject = async (subjectId: string) => {
     if (!window.confirm('Are you sure you want to delete this subject?')) return;
     try {
-      await axios.delete(`/api/subjects/${subjectId}`);
+      await API.delete(`/api/subjects/${subjectId}`);
       setSubjects(subjects.filter(s => s._id !== subjectId));
     } catch (err) {
       alert('Failed to delete subject.');
@@ -104,7 +104,7 @@ const SubjectManager: React.FC = () => {
     e.preventDefault();
     if (!editingSubject || !updatedSubjectName.trim()) return;
     try {
-      const response = await axios.put(`/api/subjects/${editingSubject._id}`, { name: updatedSubjectName });
+      const response = await API.put(`/api/subjects/${editingSubject._id}`, { name: updatedSubjectName });
       setSubjects(subjects.map(s => (s._id === editingSubject._id ? response.data : s)));
       handleCloseModal();
     } catch (err) {

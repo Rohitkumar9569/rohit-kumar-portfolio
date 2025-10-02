@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../../api';
 
 // Define TypeScript interfaces
 interface IExam { _id: string; name: string; }
@@ -29,7 +29,7 @@ const PyqManager: React.FC = () => {
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        const response = await axios.get('/api/exams');
+        const response = await API.get('/api/exams');
         setExams(response.data);
       } catch (err) { setError('Failed to load exams.'); }
     };
@@ -44,7 +44,7 @@ const PyqManager: React.FC = () => {
     }
     const fetchSubjects = async () => {
       try {
-        const response = await axios.get(`/api/subjects/by-exam/${selectedExamId}`);
+        const response = await API.get(`/api/subjects/by-exam/${selectedExamId}`);
         setSubjects(response.data);
       } catch (err) { setError('Failed to load subjects.'); }
     };
@@ -55,7 +55,7 @@ const PyqManager: React.FC = () => {
     if (!selectedSubjectId) return;
     try {
       setIsLoading(true);
-      const response = await axios.get(`/api/pyqs?subjectId=${selectedSubjectId}`);
+      const response = await API.get(`/api/pyqs?subjectId=${selectedSubjectId}`);
       setPyqs(response.data);
     } catch (err) {
       setError('Failed to load PYQs.');
@@ -84,7 +84,7 @@ const PyqManager: React.FC = () => {
     formData.append('file', file);
 
     try {
-      await axios.post('/api/pyqs/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      await API.post('/api/pyqs/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       setTitle('');
       setYear('');
       setFile(null);
@@ -100,7 +100,7 @@ const PyqManager: React.FC = () => {
   const handleDelete = async (pyqId: string) => {
     if (!window.confirm('Are you sure you want to delete this PYQ?')) return;
     try {
-      await axios.delete(`/api/pyqs/${pyqId}`);
+      await API.delete(`/api/pyqs/${pyqId}`);
       setPyqs(pyqs.filter(p => p._id !== pyqId));
     } catch (err) {
       alert('Deletion failed.');
@@ -128,7 +128,7 @@ const PyqManager: React.FC = () => {
     e.preventDefault();
     if (!editingPyq) return;
     try {
-      const response = await axios.put(`/api/pyqs/${editingPyq._id}`, updatedPyqData);
+      const response = await API.put(`/api/pyqs/${editingPyq._id}`, updatedPyqData);
       setPyqs(pyqs.map(p => (p._id === editingPyq._id ? response.data : p)));
       handleCloseModal();
     } catch (err) {

@@ -1,7 +1,7 @@
 // src/hooks/useCachedData.ts
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api';
 
 export function useCachedData<T>(cacheKey: string, apiUrl: string) {
   const [data, setData] = useState<T | null>(null);
@@ -16,7 +16,7 @@ export function useCachedData<T>(cacheKey: string, apiUrl: string) {
 
       // 2. In the background, fetch the latest data from the server
       try {
-        const response = await axios.get(apiUrl);
+        const response = await API.get(apiUrl);
         const freshData = response.data;
 
         // 3. Save the fresh data to the cache for next time
