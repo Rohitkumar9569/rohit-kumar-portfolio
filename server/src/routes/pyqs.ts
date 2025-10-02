@@ -2,7 +2,7 @@ import express from 'express';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import PyqDocument from '../models/PyqDocument';
 import Subject from '../models/Subject';
-import cloudinary from '../config/cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 import upload from '../middleware/multer';
 import { protect } from '../middleware/auth';
 
@@ -26,7 +26,20 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
     if (!subject) {
       return res.status(404).json({ message: 'Subject not found.' });
     }
-    const result = await cloudinary.uploader.upload(req.file.path, { resource_type: 'auto', folder: 'pyqs' });
+    const uploadToCloudinary = () => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: 'auto', folder: 'pyqs' },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end((req as any).file.buffer);
+      });
+    };
+
+    const result: any = await uploadToCloudinary();
     const newPyq = new PyqDocument({
       title,
       year,
@@ -34,7 +47,7 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
       examId: subject.examId,
       fileUrl: result.secure_url,
       cloudinaryPublicId: result.public_id,
-     uploader: (req as any).user.id,
+      uploader: (req as any).user.id,
     });
     await newPyq.save();
     res.status(201).json(newPyq);
@@ -62,13 +75,13 @@ router.put('/:id', protect, async (req, res) => {
 });
 
 router.delete('/:id', protect, async (req, res) => {
-    try {
+  try {
     const pyq = await PyqDocument.findById(req.params.id);
     if (!pyq) {
       return res.status(404).json({ message: 'PYQ document not found.' });
     }
     if (pyq.cloudinaryPublicId) {
-        await cloudinary.uploader.destroy(pyq.cloudinaryPublicId);
+      await cloudinary.uploader.destroy(pyq.cloudinaryPublicId);
     }
     await pyq.deleteOne();
     res.status(200).json({ message: 'PYQ deleted successfully.' });
@@ -79,27 +92,27 @@ router.delete('/:id', protect, async (req, res) => {
 
 // --- PUBLIC ROUTES ---
 router.get('/', async (req, res) => {
-    try {
-        const { subjectId } = req.query;
-        const query = subjectId ? { subjectId: subjectId as string } : {};
-        const pyqs = await PyqDocument.find(query).select('-chunks').sort({ year: -1 });
-        res.json(pyqs);
-    } catch (error) {
-        res.status(500).send('Server Error');
-    }
+  try {
+    const { subjectId } = req.query;
+    const query = subjectId ? { subjectId: subjectId as string } : {};
+    const pyqs = await PyqDocument.find(query).select('-chunks').sort({ year: -1 });
+    res.json(pyqs);
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
 });
 
 // ✅ FIX 1: Get a single document by its ID
 router.get('/:id', async (req, res) => {
-    try {
-        const pyq = await PyqDocument.findById(req.params.id).select('-chunks');
-        if (!pyq) {
-            return res.status(404).json({ msg: 'PYQ document not found' });
-        }
-        res.json(pyq);
-    } catch (error){
-        res.status(500).send('Server Error');
+  try {
+    const pyq = await PyqDocument.findById(req.params.id).select('-chunks');
+    if (!pyq) {
+      return res.status(404).json({ msg: 'PYQ document not found' });
     }
+    res.json(pyq);
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
 });
 
 // ✅ FIX 2: Corrected chat route to match the frontend call
@@ -110,7 +123,7 @@ router.post('/chat/:documentId/stream', async (req, res) => {
       return res.status(400).json({ msg: 'Question is required.' });
     }
 
-   const systemPrompt = `
+    const systemPrompt = `
 You are a highly knowledgeable and professional AI assistant integrated into Rohit Kumar's portfolio website. Your main tasks:
 
 1. Provide complete, professional, and accurate answers about Rohit Kumar.
@@ -186,7 +199,7 @@ User Question:
     for await (const chunk of result.stream) {
       res.write(`data: ${JSON.stringify({ chunk: chunk.text() })}\n\n`);
     }
-    
+
     res.end();
 
   } catch (error) {

@@ -1,37 +1,28 @@
+// File: server/src/middleware/multer.ts
+
 import multer from 'multer';
 import path from 'path';
 import { Request } from 'express';
 
-// Configure multer disk storage engine
-const storage = multer.diskStorage({
-  destination: (req: Request, file: Express.Multer.File, cb: Function) => {
-    // Files will be saved in the 'public/uploads' directory
-    cb(null, 'public/uploads/');
-  },
-  filename: (req: Request, file: Express.Multer.File, cb: Function) => {
-    // Generate a unique filename to prevent overwrites
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  },
-});
+// Use memory storage to process files directly in RAM
+const storage = multer.memoryStorage();
 
-// File type validation filter
+// Filter to allow only PDF files
 const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-  const allowedTypes = /pdf/; // Allow only PDF files for now
-  const mimetype = allowedTypes.test(file.mimetype);
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const allowedTypes = /pdf/;
+  const isPdf = allowedTypes.test(file.mimetype) && allowedTypes.test(path.extname(file.originalname).toLowerCase());
 
-  if (mimetype && extname) {
-    return cb(null, true);
+  if (isPdf) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only PDF files are allowed.'));
   }
-  
-  cb(new Error('File type not allowed. Only PDF files are accepted.'));
 };
 
-// Initialize multer with the defined storage, limits, and file filter
+// Initialize multer with memory storage and file filter
 const upload = multer({
   storage,
-  limits: { fileSize: 15 * 1024 * 1024 }, // Set file size limit to 15MB
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB file size limit
   fileFilter,
 });
 
