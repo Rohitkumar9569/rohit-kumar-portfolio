@@ -259,7 +259,7 @@ const PdfViewerPage = () => {
                     (pdfContainerRef as React.MutableRefObject<HTMLDivElement | null>).current = ref as HTMLDivElement;
                   }
                 }}
-                className="custom-scrollbar bg-white"
+                className="custom-scrollbar"
                 rangeChanged={range => setCurrentPage(range.startIndex + 1)}
                 itemContent={index => {
                   const pageNumber = index + 1;
