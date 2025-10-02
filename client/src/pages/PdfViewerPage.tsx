@@ -165,9 +165,9 @@ const PdfViewerPage = () => {
         const deviceRam = (navigator as any).deviceMemory;
 
         if (deviceRam && deviceRam >= 6) {
-          finalOverscan = 12000;
+          finalOverscan = 20000;
         } else {
-          finalOverscan = 5000;
+          finalOverscan = 8000;
         }
       }
 
@@ -239,7 +239,7 @@ const PdfViewerPage = () => {
           </div>
         </motion.header>
 
-        <main className={`relative h-full flex flex-col bg-slate-700 transition-all duration-300 ${isHeaderVisible ? 'pt-10' : 'pt-0'}`}>
+        <main className={`relative h-full flex flex-col bg-slate-100 transition-all duration-300 ${isHeaderVisible ? 'pt-10' : 'pt-0'}`}>
           {/* CHANGE 5: Main PDF rendering area ko Virtuoso se replace kiya */}
           <Document
             file={pyq?.fileUrl}
@@ -259,19 +259,22 @@ const PdfViewerPage = () => {
                     (pdfContainerRef as React.MutableRefObject<HTMLDivElement | null>).current = ref as HTMLDivElement;
                   }
                 }}
-                className="custom-scrollbar"
+                className="custom-scrollbar bg-white"
                 rangeChanged={range => setCurrentPage(range.startIndex + 1)}
                 itemContent={index => {
                   const pageNumber = index + 1;
                   return (
                     <div className="flex justify-center py-2 md:py-4">
-                      <div className="shadow-lg">
+                      <div
+                        className="shadow-lg bg-white" // Page ka background color
+                        style={{ width: 595 * scale, height: 842 * scale }} // Exact dimensions
+                      >
                         <Page
                           pageNumber={pageNumber}
                           scale={scale}
                           rotate={rotation}
                           // Page skeleton ko yahan bhi rakha for better UX
-                          loading={<div style={{ width: 595 * scale, height: 842 * scale }} className="bg-slate-600 animate-pulse rounded-md" />}
+                          loading={<div style={{ width: 595 * scale, height: 842 * scale }} className="bg-slate-200 animate-pulse rounded-md" />}
                         />
                       </div>
                     </div>
