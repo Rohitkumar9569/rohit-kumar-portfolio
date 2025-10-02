@@ -2,7 +2,7 @@ import express from 'express';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import PyqDocument from '../models/PyqDocument';
 import Subject from '../models/Subject';
-import { v2 as cloudinary } from 'cloudinary';
+import cloudinary from '../config/cloudinary';
 import upload from '../middleware/multer';
 import { protect } from '../middleware/auth';
 
