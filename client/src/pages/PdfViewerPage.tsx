@@ -1,3 +1,4 @@
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Virtuoso } from 'react-virtuoso'; // CHANGE 1: Virtuoso ko import kiya
@@ -377,6 +378,12 @@ const PdfViewerPage = () => {
           <Drawer.Portal>
             <Drawer.Content className="fixed top-24 bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-slate-900/80 backdrop-blur-md z-40 border-t border-slate-700">
               <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-slate-600" />
+               <VisuallyHidden>
+                <Drawer.Title>AI Assistant Chat</Drawer.Title>
+                <Drawer.Description>
+                  Chat with the AI assistant to ask questions about the document.
+                </Drawer.Description>
+              </VisuallyHidden>
               {id && <ChatInterface
                 documentId={id}
                 isMobileLayout={true}
