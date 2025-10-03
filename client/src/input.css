@@ -53,3 +53,23 @@ body {
   -ms-overflow-style: none; /* IE aur Edge ke liye */
   scrollbar-width: none;    /* Firefox ke liye */
 }
+
+
+
+/* Add this to your main CSS file */
+
+.blinking-cursor::after {
+  content: '|'; 
+  font-weight: 200;
+  animation: blink-smooth 1.2s ease-in-out infinite; 
+  margin-left: 3px;
+}
+
+@keyframes blink-smooth {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}

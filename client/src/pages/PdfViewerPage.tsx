@@ -32,11 +32,70 @@ const useIsMobile = () => {
   return isMobile;
 };
 
+interface Message {
+  sender: 'user' | 'ai';
+  text: string;
+}
 // CHANGE 2: Alag se PdfPage component ki zaroorat nahi, logic ko merge kar diya.
 
 const PdfViewerPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isAiLoading, setIsAiLoading] = useState(false); // AI ke liye alag loading state
+
+  const handleSendMessage = async (text: string) => {
+    if (!text.trim() || isAiLoading) return;
+
+    const userMessage: Message = { sender: 'user', text };
+    setMessages(prev => [...prev, userMessage, { sender: 'ai', text: '' }]);
+    setIsAiLoading(true);
+
+    try {
+      const historyForApi = [...messages, userMessage];
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+      const response = await fetch(`${baseUrl}/api/pyqs/chat/stream`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ history: historyForApi, question: text }),
+      });
+      if (!response.ok || !response.body) throw new Error(`Request failed`);
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n\n').filter(line => line.trim().startsWith('data:'));
+        for (const line of lines) {
+          try {
+            const dataStr = line.replace(/^data: /, '');
+            const data = JSON.parse(dataStr);
+            if (data.chunk) {
+              setMessages(prev => {
+                if (prev.length === 0) return [];
+                const lastMessage = prev[prev.length - 1];
+                const updatedLastMessage = { ...lastMessage, text: lastMessage.text + data.chunk };
+                return [...prev.slice(0, -1), updatedLastMessage];
+              });
+            }
+          } catch (e) { /* Ignore parsing errors */ }
+        }
+      }
+    } catch (error) {
+      console.error("Streaming failed:", error);
+      setMessages(prev => {
+        const updated = [...prev];
+        if (updated.length > 0 && updated[updated.length - 1].text === '') {
+          updated[updated.length - 1].text = "Sorry, I'm having trouble connecting.";
+        }
+        return updated;
+      });
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
   const [pyq, setPyq] = useState<any>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const [loading, setLoading] = useState(true);
@@ -318,13 +377,26 @@ const PdfViewerPage = () => {
           <Drawer.Portal>
             <Drawer.Content className="fixed top-24 bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-slate-900/80 backdrop-blur-md z-40 border-t border-slate-700">
               <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-slate-600" />
-              {id && <ChatInterface documentId={id} isMobileLayout={true} activeSnapPoint={activeSnapPoint} smallSnapPoint={smallSnapPoint} />}
-            </Drawer.Content>
+              {id && <ChatInterface
+                documentId={id}
+                isMobileLayout={true}
+                messages={messages}
+                isLoading={isAiLoading}
+                onSendMessage={handleSendMessage}
+                activeSnapPoint={activeSnapPoint}
+                smallSnapPoint={smallSnapPoint}
+              />}            </Drawer.Content>
           </Drawer.Portal>
         </Drawer.Root>
       ) : (
-        <aside className="w-2/5 h-full">
-          {id && <ChatInterface documentId={id} isMobileLayout={false} />}
+        <aside className="w-2/5 h-full bg-slate-800">
+          {id && <ChatInterface
+            documentId={id}
+            isMobileLayout={false}
+            messages={messages}
+            isLoading={isAiLoading}
+            onSendMessage={handleSendMessage}
+          />}
         </aside>
       )}
     </div>

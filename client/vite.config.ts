@@ -1,18 +1,28 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+// File: client/vite.config.ts
 
-// https://vite.dev/config/
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path'; // ADDED: Import 'path' module
+
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // Add the server proxy configuration here
+  
+  // This section creates the '@' alias for simpler import paths.
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+
+  // our existing server proxy configuration remains unchanged.
   server: {
     proxy: {
-      // This will proxy any request starting with /api to the backend server
       '/api': {
-        target: 'http://localhost:5000', // Your backend server address
-        changeOrigin: true, // Recommended for virtual hosted sites
-        secure: false,      // Can be false for http target
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
       },
     }
   }
-})
+});

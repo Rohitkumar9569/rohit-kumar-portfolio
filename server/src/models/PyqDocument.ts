@@ -4,10 +4,7 @@ import { Schema, model, Document, Types } from 'mongoose';
  * @interface ITextChunk
  * Represents a single piece of text with its corresponding vector embedding.
  */
-export interface ITextChunk {
-  text: string;
-  vector: number[];
-}
+
 
 /**
  * @interface IPyqDocument
@@ -22,16 +19,8 @@ export interface IPyqDocument extends Document {
   subjectId: Types.ObjectId; // Reference to the Subject model
   uploader: Types.ObjectId;
   tags?: string[];
-  chunks: ITextChunk[];
 }
 
-const TextChunkSchema = new Schema<ITextChunk>(
-  {
-    text: { type: String, required: true },
-    vector: { type: [Number], required: true },
-  },
-  { _id: false }
-);
 
 const PyqDocumentSchema = new Schema<IPyqDocument>(
   {
@@ -54,7 +43,6 @@ const PyqDocumentSchema = new Schema<IPyqDocument>(
     },
     uploader: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     tags: { type: [String], default: [] },
-    chunks: [TextChunkSchema],
   },
   {
     timestamps: true,
