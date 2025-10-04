@@ -46,7 +46,7 @@ export const fetchDailyJourney = async (): Promise<JourneyApiResponse> => {
 // --- NEW FUNCTION ADDED ---
 /**
  * Fetches a historical learning journey for a specific date.
- * @param date - The date in YYYY-MM-DD format.
+ * @param date - The date in DD MMM YYYY format.
  */
 export const fetchJourneyByDate = async (date: string): Promise<Suggestion[]> => {
   // This endpoint returns a flat array of Suggestion objects.

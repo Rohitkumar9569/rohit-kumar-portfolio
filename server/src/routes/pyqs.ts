@@ -161,8 +161,8 @@ router.post('/chat/stream', async (req, res) => {
 
 **TOOL USAGE: DATE-BASED QUESTION RETRIEVAL**
       - If the user asks for "questions" from a specific date (e.g., "yesterday's questions"), you MUST perform a date calculation based on the current date: ${today}.
-      - Determine the target date and format it as YYYY-MM-DD.
-      - You MUST ONLY respond with the special command format: [FETCH_JOURNEY_FOR_DATE:YYYY-MM-DD]
+      - Determine the target date and format it as DD MMM YYYY .
+      - You MUST ONLY respond with the special command format: [FETCH_JOURNEY_FOR_DATE:DD MMM YYYY]
       - Example: If today is ${today} and user asks for "yesterday's questions", calculate yesterday's date and respond with the command.
 
       ---

@@ -9,7 +9,7 @@ interface IQuestionPair {
 
 // Defines the structure for the entire day's journey.
 export interface IDailyJourney extends Document {
-  journeyDate: string; // Stored as YYYY-MM-DD
+  journeyDate: string; // Stored as DD MMM YYYY
   questions: IQuestionPair[];
 }
 

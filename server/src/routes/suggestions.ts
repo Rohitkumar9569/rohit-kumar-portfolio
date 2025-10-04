@@ -42,10 +42,10 @@ router.get('/today', async (req, res) => {
  */
 router.get('/by-date', async (req, res) => {
   try {
-    const { date } = req.query; // Expects date in 'YYYY-MM-DD' format
+    const { date } = req.query; // Expects date in 'DD MMM YYYY' format
 
     if (!date || typeof date !== 'string') {
-      return res.status(400).json({ message: 'A date query parameter in YYYY-MM-DD format is required.' });
+      return res.status(400).json({ message: 'A date query parameter in DD MMM YYYY format is required.' });
     }
 
     const journey = await DailyJourney.findOne({ journeyDate: date });
