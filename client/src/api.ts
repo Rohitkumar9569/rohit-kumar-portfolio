@@ -4,10 +4,10 @@ import axios from 'axios';
 
 // Defines the shape of a single question for the frontend.
 export interface Suggestion {
-  _id: string; // The question text itself will be the ID.
+  _id: string; 
   questionText: string;
-  originalIndex: number; // To display the number 1-10.
-  isPYQ: boolean; // To identify if the question is a PYQ or CA.
+  originalIndex: number; 
+  isPYQ: boolean; 
 }
 
 // The shape of a pair from the backend.
@@ -16,7 +16,7 @@ export interface QuestionPair {
   related_pyq: string;
 }
 
-// The shape of the API response.
+// The shape of the API response for the daily journey.
 export interface JourneyApiResponse {
   journey?: QuestionPair[];
   isExhausted: boolean;
@@ -29,7 +29,6 @@ const API = axios.create({
 
 /**
  * Fetches the daily learning journey from the backend.
- * It's a simple GET request with no parameters.
  */
 export const fetchDailyJourney = async (): Promise<JourneyApiResponse> => {
   try {
@@ -43,5 +42,17 @@ export const fetchDailyJourney = async (): Promise<JourneyApiResponse> => {
     };
   }
 };
+
+// --- NEW FUNCTION ADDED ---
+/**
+ * Fetches a historical learning journey for a specific date.
+ * @param date - The date in YYYY-MM-DD format.
+ */
+export const fetchJourneyByDate = async (date: string): Promise<Suggestion[]> => {
+  // This endpoint returns a flat array of Suggestion objects.
+  const { data } = await API.get(`/api/suggestions/by-date?date=${date}`);
+  return data;
+};
+
 
 export default API;

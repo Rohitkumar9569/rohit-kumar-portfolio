@@ -61,7 +61,7 @@ body {
 .blinking-cursor::after {
   content: '|'; 
   font-weight: 200;
-  animation: blink-smooth 1.2s ease-in-out infinite; 
+  animation: blink-smooth 4s ease-in-out infinite; 
   margin-left: 3px;
 }
 
@@ -72,4 +72,68 @@ body {
   50% {
     opacity: 0;
   }
+}
+
+
+
+
+
+/* --- AI Assistant Header Gradient and Pulse Animation (FINAL MULTI-COLOR FLASH) --- */
+
+/* 1. Keyframes for the FAST, multiple color shift (0% to 100% position shift) */
+@keyframes fast-gradient-shift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* 2. Keyframes for the subtle lighting pulse (used only when loading) */
+@keyframes text-pulse {
+    0%, 100% {
+        filter: brightness(1.0); /* Default brightness */
+    }
+    50% {
+        filter: brightness(1.75); /* Stronger flash for visibility */
+    }
+}
+
+/* 3. PERMANENT GRADIENT CLASS (Used always on the H2) */
+.ai-default-gradient {
+    /* Base Gradient Properties for the text */
+    background: linear-gradient(
+        90deg, 
+        theme('colors.cyan.400'), 
+        theme('colors.blue.500'),
+        theme('colors.fuchsia.500'), /* Added a third color for dynamic feel */
+        theme('colors.cyan.400')
+    );
+    /* Make the background area huge (400%) so shifting it creates color changes */
+    background-size: 400% 100%;
+    
+    /* Clip text and make text transparent */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    /* Subtle, permanent color shift animation (even when idle) */
+    animation: gradient-shift 12s linear infinite; 
+}
+
+/* 4. ACTIVE/PULSE CLASS (Used only when loading/streaming) */
+.ai-pulse {
+    /* Overrides the slower permanent animation with a fast flash */
+    animation: 
+        text-pulse 0.5s ease-out infinite alternate, /* Rapidly pulses brightness */
+        fast-gradient-shift 1.5s linear infinite;    /* Fast color shifting */
+}
+
+
+/* Ensure the blinking cursor is also included in the main CSS file for streaming text */
+.blinking-cursor {
+    animation: blink-caret .75s step-end infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+@keyframes blink-caret {
+    from, to { color: transparent }
+    50% { color: white }
 }
