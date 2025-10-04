@@ -6,9 +6,10 @@ dotenv.config();
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import cron from 'node-cron'; // <-- Import node-cron
-import { exec } from 'child_process'; // <-- Import exec for running scripts
-import path from 'path'; // <-- Import path for resolving file paths
+import cron from 'node-cron';
+
+// Import the function directly instead of using exec.
+import { generateDailyJourney } from './scripts/generateDailyJourney'; 
 
 import contactRoute from './routes/contact';
 import pyqRoutes from './routes/pyqs';
@@ -72,31 +73,16 @@ app.get('/api/health', (req: Request, res: Response) => {
 });
 
 
-// --- CRON JOB SETUP ---
-// This will run the script every day at 1:00 AM India Standard Time.
-cron.schedule('0 1 * * *', () => {
+// --- UPDATED AND RELIABLE CRON JOB SETUP ---
+cron.schedule('0 5 * * *', async () => {
   console.log('⏰ Running daily suggestion generator cron job...');
-  
-  // Resolve the path to the script relative to the compiled JS output directory
-  const scriptPath = path.resolve(__dirname, 'scripts', 'generateDailySuggestions.js');
-  
-  // NOTE: In production, you run the compiled .js file, not the .ts file.
-  // We use `node` to execute it. For development with ts-node, you'd use `ts-node`.
-  const command = process.env.NODE_ENV === 'production' 
-    ? `node ${scriptPath}` 
-    : `ts-node ${path.resolve(__dirname, 'scripts', 'generateDailySuggestions.ts')}`;
-
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`❌ Cron Job Error: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`❌ Cron Job Stderr: ${stderr}`);
-      return;
-    }
-    console.log(`✅ Cron Job Output: ${stdout}`);
-  });
+  try {
+    // Call the imported function directly. This is much safer.
+    await generateDailyJourney();
+    console.log('✅ Cron job finished successfully.');
+  } catch (error) {
+    console.error('❌ Cron job failed:', error);
+  }
 }, {
   timezone: "Asia/Kolkata"
 });
