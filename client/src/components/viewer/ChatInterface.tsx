@@ -244,7 +244,7 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
               <div className="bg-slate-800 rounded-xl rounded-tl-none p-3 max-w-full flex-grow">
                 <p className="font-semibold  bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400  text-base ">Welcome! </p>
                 <p className="font-semibold  bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400  text-base">Hint: Ask me anything about Rohit's profile or general knowledge</p>
-                <p className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 text-base">Hint: Ask "ques 3 oct 2025" - today any date  </p>
+                <p className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 text-base">Hint: Ask "ques 5 oct 2025" - today any date  </p>
 
               </div>
             </div>
