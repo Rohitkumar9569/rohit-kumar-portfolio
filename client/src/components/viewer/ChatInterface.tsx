@@ -44,6 +44,8 @@ interface ChatInterfaceProps {
   chatScrollRef: React.RefObject<HTMLDivElement>;
   activeSnapPoint?: number | string | null;
   smallSnapPoint?: number | string | null;
+  // FIX: Add handleCloseDrawer prop
+  handleCloseDrawer: () => void;
 }
 
 interface SharedChatUIProps extends ChatInterfaceProps {
@@ -57,7 +59,9 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
     isCompleted, setIsCompleted, answeredIds, setAnsweredIds,
     initialLoading,
     setScrollToIndex,
-    chatScrollRef
+    chatScrollRef,
+    // FIX: Destructure handleCloseDrawer
+    handleCloseDrawer
   } = props;
 
   const [input, setInput] = useState('');
@@ -229,7 +233,8 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
           </div>
         )}
 
-        {isMobile && (<Drawer.Close asChild className='ml-auto'><button aria-label="Close chat" className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-700"><XMarkIcon className="h-5 w-5" /></button></Drawer.Close>)}
+        {/* FIX: Use custom handler for closing the drawer */}
+        {isMobile && (<button onClick={handleCloseDrawer} aria-label="Close chat" className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-700 ml-auto"><XMarkIcon className="h-5 w-5" /></button>)}
       </header>
 
       {/* 3. MAIN AREA FIX: h-0 is the key for shrinkability. */}
