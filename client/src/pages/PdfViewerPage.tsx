@@ -89,9 +89,12 @@ const PdfViewerPage = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [overscanValue, setOverscanValue] = useState(500);
   const [loadProgress, setLoadProgress] = useState<number | null>(null);
-  const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(1);
-  const snapPoints = [0.6, 1];
-  const smallSnapPoint = snapPoints[0];
+  
+  // FIX: Set activeSnapPoint to 0.9 for a larger default size
+  const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(0.9);
+  
+  const snapPoints = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
+  const smallSnapPoint = snapPoints[5];
 
   // Fetch the initial "Today's Journey".
   const { data: todayJourneyData, isLoading: queryLoading } = useQuery<JourneyApiResponse>({
@@ -429,7 +432,8 @@ const PdfViewerPage = () => {
         <Drawer.Root modal={false} snapPoints={snapPoints} activeSnapPoint={activeSnapPoint} setActiveSnapPoint={setActiveSnapPoint}>
           <Drawer.Trigger asChild><button className="fixed bottom-6 right-6 bg-cyan-600 text-white p-4 rounded-full shadow-lg z-20 hover:bg-cyan-700 transition-transform hover:scale-110" title="Chat"><ChatBubbleOvalLeftEllipsisIcon className="h-7 w-7" /></button></Drawer.Trigger>
           <Drawer.Portal>
-            <Drawer.Content className="fixed top-24 left-0 right-0 flex flex-col rounded-t-2xl bg-slate-900/80 backdrop-blur-md z-40 border-t border-slate-700 h-[calc(100dvh-6rem)]">
+            {/* FIX: h-full ensures the drawer takes the full space dictated by the activeSnapPoint */}
+            <Drawer.Content className="fixed bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-slate-900/80 backdrop-blur-md z-40 border-t border-slate-700 h-full">
               <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-slate-600" />
               <VisuallyHidden>
                 <Drawer.Title>AI Assistant Chat</Drawer.Title>

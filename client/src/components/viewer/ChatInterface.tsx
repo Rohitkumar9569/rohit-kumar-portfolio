@@ -170,7 +170,8 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
     // Show fallback suggestions if the journey is completed
     if (isCompleted) {
       return (
-        <div className='w-full'>
+        // Fix for Suggestions shrinking - Case 1: Completed State
+        <div className='w-full flex-shrink-0'>
           <p className="text-slate-300 text-sm mb-2">{CONGRATULATIONS_STATE.message}</p>
           <div className="flex flex-wrap gap-2">
             {CONGRATULATIONS_STATE.suggestions.map((q) => (
@@ -182,7 +183,8 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
     }
 
     return (
-      <div className="w-full">
+      // Fix for Suggestions shrinking - Case 2: Active Journey State
+      <div className="w-full flex-shrink-0">
         <div className="flex flex-col gap-2">
           {activeQuestions.map((q) => {
             const isAnswered = answeredIds.has(q._id);
@@ -209,8 +211,11 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
   };
 
   return (
-    <div className={`relative flex-1 h-full grid grid-rows-[auto_1fr_auto] bg-transparent min-h-0`}>
-      <header className={`sticky top-0 z-20 border-b border-slate-700 flex items-center justify-between px-4 py-3 bg-slate-900`}>
+    // 1. OUTER CONTAINER FIX: Use Flex Column and h-full (h-full is inherited from Drawer.Content)
+    <div className={`relative flex-1 h-full flex flex-col bg-transparent`}>
+      
+      {/* 2. HEADER FIX: Use flex-shrink-0 to ensure it never shrinks */}
+      <header className={`sticky top-0 z-20 border-b border-slate-700 flex items-center justify-between px-4 py-3 bg-slate-900 flex-shrink-0`}>
         {/* AI Assistant Header with Permanent Gradient and Conditional Pulse */}
         <h2 className={`text-base font-semibold flex-shrink-0 ai-default-gradient 
             ${isLoading || initialLoading ? 'ai-pulse' : ''}`}
@@ -227,9 +232,11 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
         {isMobile && (<Drawer.Close asChild className='ml-auto'><button aria-label="Close chat" className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-700"><XMarkIcon className="h-5 w-5" /></button></Drawer.Close>)}
       </header>
 
-      <main ref={chatScrollRef} className={`overflow-y-auto space-y-6 min-h-0 p-4 custom-scroll-smooth`}>
+      {/* 3. MAIN AREA FIX: h-0 is the key for shrinkability. */}
+      <main ref={chatScrollRef} className={`flex-grow h-0 overflow-y-auto space-y-6 p-4 custom-scroll-smooth`}>
         {messages.length === 0 ? (
-          <div className='relative'>
+          // Welcome Block must have flex-shrink-0 to allow main to shrink
+          <div className='relative flex-shrink-0'> 
             <div className="flex items-start mb-4 chat-message-container">
               <div className="flex-shrink-0 mr-3">
                 <div className="bg-slate-800 p-2 rounded-full relative">
@@ -258,8 +265,9 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
               const isUser = msg.sender === 'user';
 
               return (
-                <div key={index} className={`chat-message-container ${isUser ? 'flex justify-end' : 'flex justify-start'}`}>
-                  <div className={`flex flex-col max-w-full`}>
+                // FIX: Ensure every chat message block is shrinkable
+                <div key={index} className={`chat-message-container min-h-0 flex-shrink ${isUser ? 'flex justify-end' : 'flex justify-start'}`}>
+                  <div className={`flex flex-col max-w-full min-h-0 flex-shrink`}>
                     {/* 1. Profile/Icon Row (Top) */}
                     <div className={`flex items-center mb-1 ${isUser ? 'justify-end' : 'justify-start'}`}>
                       <div className={`p-2 rounded-full flex-shrink-0 ${isUser ? 'bg-cyan-600' : 'bg-slate-700'} ${isUser ? 'order-2 ml-2' : 'order-1 mr-2'}`}>
@@ -296,13 +304,15 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
                 </div>
               );
             })}
-            {!isLoading && activeJourneyId && <div className="pt-4">{renderSuggestions()}</div>}
+            {/* Suggestions Wrapper Fix */}
+            {!isLoading && activeJourneyId && <div className="pt-4 flex-shrink-0">{renderSuggestions()}</div>}
           </>
         )}
         <div ref={messagesEndRef} />
       </main>
 
-      <footer className="p-2">
+      {/* 4. FOOTER FIX: Use flex-shrink-0 to ensure it never shrinks */}
+      <footer className="p-2 flex-shrink-0">
         <form onSubmit={handleFormSubmit} className="flex items-start gap-2 border border-slate-700 bg-slate-800 rounded-xl p-2 focus-within:ring-2 focus-within:ring-cyan-500">
           <TextareaAutosize value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleFormSubmit(e); } }} placeholder="Ask me anything..." className="flex-1 bg-transparent resize-none text-white max-h-40 focus:outline-none" maxRows={6} />
           <button type="submit" className="bg-cyan-600 hover:bg-cyan-700 p-2 rounded-full disabled:bg-slate-600" disabled={isLoading || !input.trim()}><PaperAirplaneIcon className="h-5 w-5 text-white" /></button>
