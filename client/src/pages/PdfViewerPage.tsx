@@ -91,7 +91,7 @@ const PdfViewerPage = () => {
   const [loadProgress, setLoadProgress] = useState<number | null>(null);
   
   // FIX 1: Set activeSnapPoint to 1 (100%) for maximum default size
-  const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(1);
+  const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(null);
   
   const snapPoints = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
   const smallSnapPoint = snapPoints[5];
