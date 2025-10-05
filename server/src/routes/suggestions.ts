@@ -1,4 +1,4 @@
-// File: server/src/routes/suggestions.ts
+// File: server/src/routes/suggestions.ts (UPDATED & CORRECTED)
 
 import express from 'express';
 import DailyJourney from '../models/DailyJourney';
@@ -13,10 +13,12 @@ const router = express.Router();
 router.get('/today', async (req, res) => {
   try {
     const now = new Date();
+    // This correctly creates the DD-MM-YYYY format for today's date.
     const year = now.toLocaleString('en-US', { year: 'numeric', timeZone: 'Asia/Kolkata' });
     const month = now.toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Kolkata' });
     const day = now.toLocaleString('en-US', { day: '2-digit', timeZone: 'Asia/Kolkata' });
-    const todayQueryString = `${day}-${month}-${year}`; // Format: DD-MM-YYYY
+    const todayQueryString = `${day}-${month}-${year}`; 
+
     const journey = await DailyJourney.findOne({ journeyDate: todayQueryString });
 
     if (!journey || journey.questions.length === 0) {
@@ -38,7 +40,7 @@ router.get('/today', async (req, res) => {
   }
 });
 
-// --- NEW ROUTE ADDED ---
+
 /**
  * @route   GET /api/suggestions/by-date
  * @desc    Fetch the learning journey for a specific date.
@@ -46,13 +48,22 @@ router.get('/today', async (req, res) => {
  */
 router.get('/by-date', async (req, res) => {
   try {
-    const { date } = req.query; // Expects date in 'DD MMM YYYY' format
+    const { date } = req.query; // Receives date in 'DD MMM YYYY' format
 
     if (!date || typeof date !== 'string') {
       return res.status(400).json({ message: 'A date query parameter in DD MMM YYYY format is required.' });
     }
 
-    const journey = await DailyJourney.findOne({ journeyDate: date });
+    // --- FIX APPLIED HERE ---
+    // Convert the incoming date string ('DD MMM YYYY') to the format stored in the DB ('DD-MM-YYYY').
+    const dateObj = new Date(date);
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
+    const year = dateObj.getFullYear();
+    const formattedDateForDB = `${day}-${month}-${year}`; // e.g., "05-10-2025"
+
+    // Use the correctly formatted date for the database query.
+    const journey = await DailyJourney.findOne({ journeyDate: formattedDateForDB });
 
     if (!journey || journey.questions.length === 0) {
       return res.status(404).json({ message: `No learning journey found for the date: ${date}` });

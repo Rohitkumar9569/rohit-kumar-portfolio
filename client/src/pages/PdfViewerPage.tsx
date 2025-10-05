@@ -361,7 +361,7 @@ const PdfViewerPage = () => {
               <span className="w-12 text-center text-xs sm:text-sm tabular-nums">{`${Math.round(scale * 100)}%`}</span>
               <button onClick={handleZoomIn} className="p-1 hover:bg-slate-700 rounded-md" title="Zoom In"><MagnifyingGlassPlusIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
               <span className="h-5 w-px bg-slate-700 mx-1"></span>
-              <button onClick={fitWidth} className="p-1 hover:bg-slate-700 rounded-md hidden md:block" title="Fit to Width"><ArrowsPointingOutIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+              <button onClick={fitWidth}   className="p-1 hover:bg-slate-700 rounded-md"  title="Fit to Width"><ArrowsPointingOutIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
               <button onClick={handleRotate} className="p-1 hover:bg-slate-700 rounded-md" title="Rotate"><ArrowPathIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
             </div>
             <div className="w-5 sm:w-6"></div>

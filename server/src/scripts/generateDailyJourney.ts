@@ -18,11 +18,11 @@ export const generateDailyJourney = async () => {
       You are an elite AI mentor for UPSC CSE aspirants. Your task is to create a "Daily Learning Journey" for today, ${date}.
     This journey consists of exactly 5 pairs of questions. Each pair MUST contain:
 
-    1.  'ca_question': A highly analytical question based on a major national or international news event that has been a headline in 'The Hindu' or 'Indian Express' within the last 48 hours. The question MUST be framed in an editorial style and end with a source and date tag, for example, "(The Hindu, 4 Oct 2025)".
+    1.  'ca_question': A highly analytical question based on a major national or international news event that has been a headline in 'The Hindu' or 'Indian Express' within the last 24 hours. The question MUST be framed in an editorial style and end with a source and date tag, for example, "(The Hindu, 4 Oct 2025)".
     2.  'related_pyq': A REAL UPSC CSE Mains Previous Year Question (from GS Paper 1, 2, 3, or 4) that is conceptually linked to the 'ca_question'. The question MUST end with the paper and year, for example, "(UPSC GS-2, 2019)".
 
     The goal is to bridge the gap between dynamic current affairs and the static syllabus.
-        CRITICAL INSTRUCTION: THE CURRENT YEAR IS ${year}. All 'ca_question' must be from a significant news event within the last 48 hours of THIS YEAR (${year}). Ignore the year in the date '${date}' if it is not ${year}.
+        CRITICAL INSTRUCTION: THE CURRENT YEAR IS ${year}. All 'ca_question' must be from a significant news event within the last 24 hours of THIS YEAR (${year}). Ignore the year in the date '${date}' if it is not ${year}.
        IMPORTANT: The 'related_pyq' MUST be an actual question asked in a previous UPSC CSE Mains exam. Fabricated or modified questions are NOT allowed.
 
     IMPORTANT INSTRUCTIONS:
