@@ -429,7 +429,7 @@ const PdfViewerPage = () => {
         <Drawer.Root modal={false} snapPoints={snapPoints} activeSnapPoint={activeSnapPoint} setActiveSnapPoint={setActiveSnapPoint}>
           <Drawer.Trigger asChild><button className="fixed bottom-6 right-6 bg-cyan-600 text-white p-4 rounded-full shadow-lg z-20 hover:bg-cyan-700 transition-transform hover:scale-110" title="Chat"><ChatBubbleOvalLeftEllipsisIcon className="h-7 w-7" /></button></Drawer.Trigger>
           <Drawer.Portal>
-            <Drawer.Content className="fixed top-24 bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-slate-900/80 backdrop-blur-md z-40 border-t border-slate-700">
+            <Drawer.Content className="fixed top-24 left-0 right-0 flex flex-col rounded-t-2xl bg-slate-900/80 backdrop-blur-md z-40 border-t border-slate-700 h-[calc(100dvh-6rem)]">
               <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-slate-600" />
               <VisuallyHidden>
                 <Drawer.Title>AI Assistant Chat</Drawer.Title>
