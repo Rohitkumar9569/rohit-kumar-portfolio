@@ -18,25 +18,26 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [studyHubExams, setStudyHubExams] = useState<IExamLink[]>([]);
-  const [examsFetched, setExamsFetched] = useState(false);
+  // ✅ 'examsFetched' स्टेट की अब ज़रूरत नहीं है, इसे हटा दिया गया है
   const [isStudyHubMobileOpen, setStudyHubMobileOpen] = useState(false);
 
   // --- Hooks ---
   const navigate = useNavigate();
   const location = useLocation();
 
-  // --- Data Fetching ---
-  const fetchExamsIfNeeded = async () => {
-    if (!examsFetched) {
+
+  useEffect(() => {
+    const fetchExams = async () => {
       try {
         const response = await API.get('/api/exams');
         setStudyHubExams(response.data);
-        setExamsFetched(true);
       } catch (error) {
         console.error("Failed to fetch exams for navbar:", error);
       }
-    }
-  };
+    };
+
+    fetchExams();
+  }, []); 
 
   // --- Side Effects for scroll behavior ---
   useEffect(() => {
@@ -44,7 +45,7 @@ const Navbar = () => {
       const currentScrollY = window.scrollY;
       setIsScrolled(currentScrollY > 50);
       if (window.innerWidth < 768) {
-        if (currentScrollY > lastScrollY + 50) setIsVisible(false);
+        if (currentScrollY > lastScrollY + 120) setIsVisible(false);
         else if (currentScrollY < lastScrollY) setIsVisible(true);
       } else {
         setIsVisible(true);
@@ -62,7 +63,7 @@ const Navbar = () => {
       scroller.scrollTo(sectionToScroll, { duration: 800, delay: 100, smooth: 'easeInOutQuart', offset: -70 });
     }
   }, [location.search]);
-  
+
   // --- Handlers ---
   const handleScrollTo = (section: string) => {
     setIsOpen(false);
@@ -82,12 +83,10 @@ const Navbar = () => {
   };
 
   const toggleMobileMenu = () => {
-    if (!isOpen) fetchExamsIfNeeded();
     setIsOpen(!isOpen);
     setStudyHubMobileOpen(false);
   };
 
-  // --- UI Structure ---
   const navLinks = [
     { type: 'scroll', to: 'about', label: 'About' },
     { type: 'scroll', to: 'skills', label: 'Skills' },
@@ -97,7 +96,6 @@ const Navbar = () => {
     { type: 'scroll', to: 'contact', label: 'Contact' },
   ];
 
-  // Dynamically create dropdown items and check for active state
   const studyHubDropdownItems = studyHubExams.map(exam => ({
     to: `/study/${exam.slug}`,
     label: exam.shortName,
@@ -111,11 +109,7 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <ul className="hidden md:flex items-center space-x-8 text-slate-300">
           {navLinks.map((link) => (
-            <li 
-              key={link.label} 
-              className="relative group"
-              onMouseEnter={link.type === 'hybrid_dropdown' ? fetchExamsIfNeeded : undefined}
-            >
+            <li key={link.label} className="relative group">
               {link.type === 'scroll' && (
                 <ScrollLink to={link.to!} href={`#${link.to!}`} spy={true} smooth={'easeInOutQuart'} offset={-70} duration={800} className="cursor-pointer font-semibold hover:text-cyan-400 transition-colors relative" activeClass={location.pathname === '/' ? 'active-link' : ''} onClick={() => handleScrollTo(link.to!)}>
                   {link.label}
@@ -133,7 +127,6 @@ const Navbar = () => {
                     <ul className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:block bg-slate-800 text-white pt-4 pb-2 rounded-b-md shadow-lg min-w-[150px]">
                       {studyHubDropdownItems.map(item => (
                         <li key={item.to}>
-                          {/* CHANGE 2.1: Added active state class for desktop */}
                           <Link to={item.to} className={`block px-4 py-2 text-sm text-center hover:bg-slate-700 ${location.pathname === item.to ? 'text-cyan-400 font-semibold' : ''}`}>
                             {item.label}
                           </Link>
@@ -146,8 +139,8 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        
-        {/* Mobile Menu Button */}
+
+        {/* ... Mobile menu code ... */}
         <div className="md:hidden">
           <button aria-label="Toggle navigation menu" onClick={toggleMobileMenu}>
             {isOpen ? <XMarkIcon className="h-6 w-6 text-white" /> : <Bars3Icon className="h-6 w-6 text-white" />}
@@ -155,7 +148,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Navigation Menu */}
+      {/* ... Mobile Navigation Menu code  ... */}
       {isOpen && (
         <div className="md:hidden bg-slate-900">
           <ul className="flex flex-col items-center space-y-4 py-4 text-white">
@@ -164,19 +157,14 @@ const Navbar = () => {
                 {link.type === 'scroll' && <span onClick={() => handleScrollTo(link.to!)}>{link.label}</span>}
                 {link.type === 'hybrid_dropdown' && (
                   <div>
-                    <div 
-                      onClick={() => setStudyHubMobileOpen(!isStudyHubMobileOpen)} 
-                      className={`font-semibold flex items-center justify-center py-2 ${location.pathname.startsWith('/study') ? 'text-cyan-400' : ''}`}
-                    >
+                    <div onClick={() => setStudyHubMobileOpen(!isStudyHubMobileOpen)} className={`font-semibold flex items-center justify-center py-2 ${location.pathname.startsWith('/study') ? 'text-cyan-400' : ''}`}>
                       <span>{link.label}</span>
                       <ChevronRightIcon className={`h-4 w-4 ml-2 transition-transform ${isStudyHubMobileOpen ? 'rotate-90' : ''}`} />
                     </div>
                     {isStudyHubMobileOpen && studyHubDropdownItems.length > 0 && (
                       <ul className="flex flex-col items-center mt-2 space-y-3 bg-slate-800/50 w-full py-3">
-                        {/* CHANGE 1: "Study Hub Home" link is removed */}
                         {studyHubDropdownItems.map(exam => (
                           <li key={exam.to}>
-                            {/* CHANGE 2.2: Added active state class for mobile */}
                             <Link to={exam.to} onClick={() => setIsOpen(false)} className={`${location.pathname === exam.to ? 'text-cyan-400 font-semibold' : ''}`}>
                               {exam.label}
                             </Link>

@@ -102,7 +102,7 @@ router.get('/', async (req, res) => {
 });
 router.get('/:id', async (req, res) => {
   try {
-   const pyq = await PyqDocument.findById(req.params.id);
+    const pyq = await PyqDocument.findById(req.params.id);
     if (!pyq) {
       return res.status(404).json({ msg: 'PYQ document not found' });
     }
@@ -121,7 +121,15 @@ router.post('/chat/stream', async (req, res) => {
     }
 
     // FIX: Get the current date dynamically on every request.
-    const today = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+    const nowUTC = new Date();
+    const istOffset = (5 * 60 + 30) * 60 * 1000; // 5.5 hours in milliseconds
+    const istDate = new Date(nowUTC.getTime() + istOffset);
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const day = istDate.getUTCDate();
+    const monthName = monthNames[istDate.getUTCMonth()];
+    const year = istDate.getUTCFullYear();
+    const today = `${day} ${monthName} ${year}`;
+
 
     // FIX: Define the system prompt dynamically inside the handler.
     const systemPrompt = `
