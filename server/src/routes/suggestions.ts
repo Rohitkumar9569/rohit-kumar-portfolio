@@ -12,7 +12,11 @@ const router = express.Router();
  */
 router.get('/today', async (req, res) => {
   try {
-    const todayQueryString = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const year = now.toLocaleString('en-US', { year: 'numeric', timeZone: 'Asia/Kolkata' });
+    const month = now.toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Kolkata' });
+    const day = now.toLocaleString('en-US', { day: '2-digit', timeZone: 'Asia/Kolkata' });
+    const todayQueryString = `${day}-${month}-${year}`; // Format: DD-MM-YYYY
     const journey = await DailyJourney.findOne({ journeyDate: todayQueryString });
 
     if (!journey || journey.questions.length === 0) {
