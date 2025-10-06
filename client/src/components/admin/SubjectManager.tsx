@@ -64,7 +64,7 @@ const SubjectManager: React.FC = () => {
       setIsLoadingSubjects(false);
     }
   };
-  
+
   // --- CRUD HANDLERS ---
   const handleAddSubject = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,7 +130,7 @@ const SubjectManager: React.FC = () => {
           {/* Form to add a new subject */}
           <form onSubmit={handleAddSubject} className="mb-8 p-4 bg-slate-700/50 rounded-md">
             <h3 className="text-lg font-semibold text-slate-200 mb-4">Add New Subject</h3>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
               <input type="text" placeholder="Subject Name (e.g., Computer Science)" value={newSubjectName} onChange={(e) => setNewSubjectName(e.target.value)} className="flex-grow bg-slate-700 border border-slate-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white" required />
               <button type="submit" className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Add Subject</button>
             </div>
