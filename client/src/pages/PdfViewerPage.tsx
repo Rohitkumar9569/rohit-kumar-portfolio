@@ -1,4 +1,3 @@
-// File: src/pages/PdfViewerPage.tsx
 
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import React, { useState, useEffect, useRef } from 'react';
@@ -6,20 +5,29 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Virtuoso } from 'react-virtuoso';
 import API, { fetchDailyJourney, fetchJourneyByDate } from '../api';
 import type { JourneyApiResponse, Suggestion } from '../api';
-import { Document, Page, pdfjs } from 'react-pdf';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
 import { Drawer } from 'vaul';
 import ChatInterface from '../components/viewer/ChatInterface';
 import PdfViewerSkeleton from '../components/viewer/PdfViewerSkeleton';
 import PdfPageSkeleton from '../components/viewer/PdfPageSkeleton';
 import { ArrowLeftIcon, ChatBubbleOvalLeftEllipsisIcon, MagnifyingGlassPlusIcon, MagnifyingGlassMinusIcon, ArrowPathIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
+// ==================== 🔽 यहाँ बदलाव किया गया है 🔽 ====================
+
+// 1. react-pdf से जरूरी चीजें इम्पोर्ट करें
+import { Document, Page, pdfjs } from 'react-pdf';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
+
+// 2. react-pdf के लिए जरूरी CSS इम्पोर्ट करें
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+
+// 3. वर्कर का रास्ता बताएं (यह public फोल्डर वाली फाइल है)
+pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
+
+// ==================== 🔼 यहाँ तक 🔼 ====================
+
 
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -327,7 +335,7 @@ const PdfViewerPage = () => {
     return <PdfViewerSkeleton />;
   }
   return (
-    <div className="h-screen w-screen bg-slate-800 flex flex-col md:flex-row overflow-hidden">
+<div className="h-screen w-full bg-slate-800 flex flex-col md:flex-row overflow-hidden">
       {loadProgress !== null && (
         <div className="absolute top-0 left-0 w-full h-1 bg-slate-600 z-50">
           <div
@@ -357,12 +365,12 @@ const PdfViewerPage = () => {
                 <span className="text-slate-400 text-sm">/ {numPages}</span>
               </form>
               <span className="h-5 w-px bg-slate-700 mx-1"></span>
-              <button onClick={handleZoomOut} className="p-1 hover:bg-slate-700 rounded-md" title="Zoom Out"><MagnifyingGlassMinusIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+              <button onClick={handleZoomOut} className="p-2 hover:bg-slate-700 rounded-md" title="Zoom Out"><MagnifyingGlassMinusIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
               <span className="w-12 text-center text-xs sm:text-sm tabular-nums">{`${Math.round(scale * 100)}%`}</span>
-              <button onClick={handleZoomIn} className="p-1 hover:bg-slate-700 rounded-md" title="Zoom In"><MagnifyingGlassPlusIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+              <button onClick={handleZoomIn} className="p-2 hover:bg-slate-700 rounded-md" title="Zoom In"><MagnifyingGlassPlusIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
               <span className="h-5 w-px bg-slate-700 mx-1"></span>
-              <button onClick={fitWidth}   className="p-1 hover:bg-slate-700 rounded-md"  title="Fit to Width"><ArrowsPointingOutIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
-              <button onClick={handleRotate} className="p-1 hover:bg-slate-700 rounded-md" title="Rotate"><ArrowPathIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+              <button onClick={fitWidth}   className="p-2 hover:bg-slate-700 rounded-md"  title="Fit to Width"><ArrowsPointingOutIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+              <button onClick={handleRotate} className="p-2 hover:bg-slate-700 rounded-md" title="Rotate"><ArrowPathIcon className="h-4 w-4 sm:h-5 sm:w-5" /></button>
             </div>
             <div className="w-5 sm:w-6"></div>
           </div>
