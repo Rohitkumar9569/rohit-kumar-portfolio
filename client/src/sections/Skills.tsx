@@ -1,18 +1,24 @@
-// src/sections/Skills.tsx
 import React, { Suspense, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import PageLoader from '../components/PageLoader';
 const ArchitectCanvas = React.lazy(() => import('../components/ArchitectCanvas'));
-import CubeModal from '../components/CubeModal'; // <-- Import the new modal
+import CubeModal from '../components/CubeModal';
 import {
   FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaGitAlt, FaGithub, FaJsSquare, FaCode
 } from 'react-icons/fa';
 import {
   SiTypescript, SiMongodb, SiExpress, SiTailwindcss, SiVite, SiVercel, SiPostman, SiRedux, SiMongoose
 } from 'react-icons/si';
-import { HiCubeTransparent } from 'react-icons/hi2'; // <-- Icon for our new button
+import { HiCubeTransparent } from 'react-icons/hi2';
 
-// Staggering animation variants
+// Define the shape of a single skill object for TypeScript
+interface Skill {
+  name: string;
+  icon: React.ReactElement;
+  description: string;
+}
+
+// Animation variants
 const containerVariant = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
@@ -23,53 +29,55 @@ const itemVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
+// Data with professional English descriptions
 const skillsData = [
-  {
+    {
     category: 'Languages',
     items: [
-      { name: 'TypeScript', icon: <SiTypescript size={32} /> },
-      { name: 'JavaScript', icon: <FaJsSquare size={32} /> },
-      { name: 'C#', icon: <FaCode size={32} /> },
-      { name: 'HTML5', icon: <FaHtml5 size={32} /> },
-      { name: 'CSS3', icon: <FaCss3Alt size={32} /> },
+      { name: 'TypeScript', icon: <SiTypescript size={32} />, description: 'A superset of JavaScript that adds static types, improving code quality and maintainability in large-scale applications.' },
+      { name: 'JavaScript', icon: <FaJsSquare size={32} />, description: 'The core language of the web, enabling dynamic and interactive user experiences on both the client and server side.' },
+      { name: 'C#', icon: <FaCode size={32} />, description: 'A modern, object-oriented language from Microsoft, used to build robust web APIs, desktop apps, and games with the .NET framework.' },
+      { name: 'HTML5', icon: <FaHtml5 size={32} />, description: 'The standard markup language for creating the structure and content of web pages with semantic meaning.' },
+      { name: 'CSS3', icon: <FaCss3Alt size={32} />, description: 'The language for styling web pages, used to create visually engaging designs, responsive layouts, and animations.' },
     ]
   },
   {
     category: 'Frontend',
     items: [
-      { name: 'React', icon: <FaReact size={32} /> },
-      { name: 'Redux', icon: <SiRedux size={32} /> },
-      { name: 'Tailwind CSS', icon: <SiTailwindcss size={32} /> },
+      { name: 'React', icon: <FaReact size={32} />, description: 'A powerful JavaScript library for building complex user interfaces with a reusable, component-based architecture.' },
+      { name: 'Redux', icon: <SiRedux size={32} />, description: 'A predictable state container for JavaScript apps, essential for managing complex application-wide state in a centralized way.' },
+      { name: 'Tailwind CSS', icon: <SiTailwindcss size={32} />, description: 'A utility-first CSS framework that allows for rapid, custom UI development directly within the HTML markup.' },
     ]
   },
   {
     category: 'Backend',
     items: [
-      { name: 'Node.js', icon: <FaNodeJs size={32} /> },
-      { name: 'Express.js', icon: <SiExpress size={32} /> },
+      { name: 'Node.js', icon: <FaNodeJs size={32} />, description: 'A JavaScript runtime that allows for building fast, scalable, and high-performance server-side applications.' },
+      { name: 'Express.js', icon: <SiExpress size={32} />, description: 'A minimal and flexible Node.js web framework that simplifies the process of building robust APIs and web applications.' },
     ]
   },
   {
     category: 'Database',
     items: [
-      { name: 'MongoDB', icon: <SiMongodb size={32} /> },
-      { name: 'Mongoose', icon: <SiMongoose size={32} /> },
+      { name: 'MongoDB', icon: <SiMongodb size={32} />, description: 'A popular NoSQL document database that offers flexibility and scalability for modern, data-intensive applications.' },
+      { name: 'Mongoose', icon: <SiMongoose size={32} />, description: 'An Object Data Modeling (ODM) library for MongoDB and Node.js that provides schema validation and simplifies database interactions.' },
     ]
   },
   {
     category: 'Tools & Platforms',
     items: [
-      { name: 'Git', icon: <FaGitAlt size={32} /> },
-      { name: 'GitHub', icon: <FaGithub size={32} /> },
-      { name: 'Vite', icon: <SiVite size={32} /> },
-      { name: 'Postman', icon: <SiPostman size={32} /> },
-      { name: 'Vercel', icon: <SiVercel size={32} /> },
+      { name: 'Git', icon: <FaGitAlt size={32} />, description: 'An essential distributed version control system for tracking code changes, managing project history, and collaborating with teams.' },
+      { name: 'GitHub', icon: <FaGithub size={32} />, description: 'The leading web-based platform for Git repository hosting, facilitating code collaboration, review, and project management.' },
+      { name: 'Vite', icon: <SiVite size={32} />, description: 'A next-generation frontend build tool that provides an extremely fast development experience and optimized production builds.' },
+      { name: 'Postman', icon: <SiPostman size={32} />, description: 'A comprehensive platform for the API lifecycle, used for designing, testing, documenting, and monitoring APIs.' },
+      { name: 'Vercel', icon: <SiVercel size={32} />, description: 'A cloud platform optimized for frontend developers, offering seamless deployment, scalability, and performance for modern web applications.' },
     ]
   },
 ];
 
 const Skills = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // <-- Add state for the modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
 
   return (
     <>
@@ -91,17 +99,20 @@ const Skills = () => {
                   <h3 className="text-xl font-semibold text-cyan-400 mb-4">{category.category}</h3>
                   <div className="flex flex-wrap gap-4">
                     {category.items.map((skill) => (
-                      <div key={skill.name} className="flex items-center gap-3 bg-slate-700/50 py-2 px-4 rounded-lg">
+                      <button 
+                        key={skill.name} 
+                        onClick={() => setSelectedSkill(skill)}
+                        className="flex items-center text-left gap-3 bg-slate-700/50 py-2 px-4 rounded-lg transition-transform hover:scale-105"
+                      >
                         <div className="text-cyan-400">{skill.icon}</div>
                         <p className="font-semibold text-white">{skill.name}</p>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
               ))}
             </motion.div>
 
-            {/* --- NEW BUTTON FOR MOBILE --- */}
             <motion.div variants={itemVariant} className="mt-12 text-center lg:hidden">
               <button
                 onClick={() => setIsModalOpen(true)}
@@ -115,7 +126,6 @@ const Skills = () => {
           </motion.div>
         </div>
 
-        {/* Floating cube for DESKTOP (unchanged) */}
         <motion.div
           className="absolute top-1/4 -translate-y-1/2 right-8 w-2/5 h-[500px] hidden lg:block"
           initial={{ opacity: 0, x: 100 }}
@@ -124,13 +134,48 @@ const Skills = () => {
           transition={{ duration: 1, delay: 0.5 }}
         >
           <Suspense fallback={null}>
-    <ArchitectCanvas />
-  </Suspense>
+            <ArchitectCanvas />
+          </Suspense>
         </motion.div>
       </section>
 
-      {/* The Modal component itself, which is hidden by default */}
       <CubeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      
+      {/* --- Popup UI Updated to match the "About" section's style --- */}
+      <AnimatePresence>
+        {selectedSkill && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.2 } }}
+            onClick={() => setSelectedSkill(null)}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[1000] p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0, y: 30 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0, y: 30, transition: { duration: 0.2 } }}
+              transition={{ type: "spring", stiffness: 250, damping: 25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative bg-gradient-to-br from-slate-900 to-slate-800 border border-cyan-700/50 rounded-2xl p-8 shadow-2xl shadow-cyan-500/10 max-w-md w-full transform-gpu"
+            >
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4 bg-slate-700/50 p-4 rounded-full text-cyan-400">
+                  {React.cloneElement(selectedSkill.icon, { size: 48 })}
+                </div>
+                <h3 className="text-3xl font-extrabold text-white tracking-tight">{selectedSkill.name}</h3>
+                <p className="text-slate-300 leading-relaxed mt-4 text-lg">{selectedSkill.description}</p>
+                <button 
+                  onClick={() => setSelectedSkill(null)}
+                  className="mt-8 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/30"
+                >
+                  Got it!
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
