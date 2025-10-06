@@ -13,20 +13,15 @@ import PdfPageSkeleton from '../components/viewer/PdfPageSkeleton';
 import { ArrowLeftIcon, ChatBubbleOvalLeftEllipsisIcon, MagnifyingGlassPlusIcon, MagnifyingGlassMinusIcon, ArrowPathIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
 
-// ==================== 🔽 यहाँ बदलाव किया गया है 🔽 ====================
 
-// 1. react-pdf से जरूरी चीजें इम्पोर्ट करें
+// 1. react-pdf
 import { Document, Page, pdfjs } from 'react-pdf';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 
-// 2. react-pdf के लिए जरूरी CSS इम्पोर्ट करें
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-// 3. वर्कर का रास्ता बताएं (यह public फोल्डर वाली फाइल है)
 pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
-
-// ==================== 🔼 यहाँ तक 🔼 ====================
 
 
 const useIsMobile = () => {
@@ -106,12 +101,10 @@ const PdfViewerPage = () => {
 
   // FIX 2: Custom handlers to control opening and closing state forcefully
   const handleOpenDrawer = () => {
-      // जब ओपन बटन दबाया जाए, तो हमेशा 1 पर सेट करें
       setActiveSnapPoint(1); 
   };
   
   const handleCloseDrawer = () => {
-      // Drawer को बंद करें, लेकिन अगली बार खुलने के लिए activeSnapPoint को 1 पर ही रहने दें
       setActiveSnapPoint(null);
   };
   // Fetch the initial "Today's Journey".
@@ -302,10 +295,11 @@ const PdfViewerPage = () => {
   const fitWidth = () => {
     preventAutoHide();
     if (unscaledPageWidth && pdfContainerRef.current) {
-      setScale(pdfContainerRef.current.clientWidth / unscaledPageWidth);
+        // Calculate the perfect scale and then reduce it by 0.001%
+        const perfectScale = pdfContainerRef.current.clientWidth / unscaledPageWidth;
+        setScale(perfectScale * 0.98); 
     }
-  };
-
+};
   useEffect(() => {
     if (unscaledPageWidth) {
       fitWidth();
