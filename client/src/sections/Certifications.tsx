@@ -61,10 +61,11 @@ const Certifications = () => {
     : filteredCertificates.slice(0, INITIAL_VISIBLE_COUNT);
 
   return (
-    <section id="certifications" className="py-20 px-6">
+    // --- FIX 1: Use the main page background for the section ---
+    <section id="certifications" className="bg-background dark:bg-slate-900 py-20 px-6">
       <div className="container mx-auto">
         <motion.h2 
-          className="text-4xl font-bold text-center mb-8"
+          className="text-4xl font-bold text-center mb-12 text-foreground"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -80,8 +81,8 @@ const Certifications = () => {
               onClick={() => setActiveFilter(category)}
               className={`py-2 px-5 rounded-full text-sm font-semibold transition-colors duration-300 ${
                 activeFilter === category 
-                ? 'bg-cyan-500 text-white' 
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                ? 'bg-[hsl(var(--accent))] text-background dark:bg-cyan-500 dark:text-white' 
+                : 'bg-primary text-foreground/70 hover:bg-foreground/10 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
               }`}
             >
               {category}
@@ -90,11 +91,9 @@ const Certifications = () => {
         </div>
         
         <div className="relative">
-          {/* The grid container is now a regular div */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatePresence>
               {certificatesToShow.map((cert) => (
-                // Animation controls are now on each individual item
                 <motion.div 
                   key={cert.title} 
                   variants={itemVariant}
@@ -103,13 +102,14 @@ const Certifications = () => {
                   exit="exit"
                   layout 
                 >
-                  <a href={cert.link} target="_blank" rel="noopener noreferrer" className="block bg-slate-800 p-6 rounded-lg shadow-lg hover:shadow-cyan-500/20 hover:-translate-y-2 transition-all duration-300 h-full">
+                  {/* --- FIX 2: Use the secondary background for the cards --- */}
+                  <a href={cert.link} target="_blank" rel="noopener noreferrer" className="block bg-primary dark:bg-slate-800 p-6 rounded-lg shadow-lg hover:shadow-[hsl(var(--accent))/0.2] dark:hover:shadow-cyan-500/20 hover:-translate-y-2 transition-all duration-300 h-full">
                     <div className="flex justify-between items-start mb-4">
                       <img src={cert.logo} alt={`${cert.provider} Logo`} className="h-8" loading="lazy" />
-                      <HiOutlineExternalLink className="h-6 w-6 text-slate-400" />
+                      <HiOutlineExternalLink className="h-6 w-6 text-foreground/60 dark:text-slate-400" />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-2">{cert.title}</h3>
-                    <p className="text-slate-400">Provided by {cert.provider} via Coursera</p>
+                    <h3 className="text-xl font-bold text-foreground dark:text-white mb-2">{cert.title}</h3>
+                    <p className="text-foreground/80 dark:text-slate-400">Provided by {cert.provider}</p>
                   </a>
                 </motion.div>
               ))}
@@ -117,7 +117,7 @@ const Certifications = () => {
           </div>
 
           {!isExpanded && filteredCertificates.length > INITIAL_VISIBLE_COUNT && (
-            <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-slate-900 to-transparent pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-background dark:from-slate-900 to-transparent pointer-events-none"></div>
           )}
         </div>
 
@@ -125,7 +125,7 @@ const Certifications = () => {
           <div className="text-center mt-12">
             <button 
               onClick={() => setIsExpanded(!isExpanded)}
-              className="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-cyan-400 font-semibold py-3 px-8 rounded-full transition-colors duration-300 flex items-center mx-auto"
+              className="inline-flex items-center mx-auto gap-3 border font-semibold py-3 px-8 rounded-full transition-colors duration-300 bg-primary text-[hsl(var(--accent))] border-foreground/20 hover:bg-foreground/10 dark:bg-slate-800 dark:text-cyan-400 dark:border-slate-600 dark:hover:bg-slate-700"
             >
               {isExpanded ? 'Show Less' : 'Show More'}
               {isExpanded 

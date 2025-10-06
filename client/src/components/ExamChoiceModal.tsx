@@ -6,14 +6,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import * as Dialog from '@radix-ui/react-dialog';
 
-// Defines the shape of the exam data.
 interface IExamLink {
   _id: string;
   shortName: string;
   slug: string;
 }
 
-// Defines the component's props.
 interface IProps {
   isOpen: boolean;
   onClose: () => void;
@@ -23,12 +21,14 @@ const ExamChoiceModal: React.FC<IProps> = ({ isOpen, onClose }) => {
   const [exams, setExams] = useState<IExamLink[]>([]);
 
   useEffect(() => {
-    // Fetch exams only once when the modal is opened for the first time.
     if (isOpen && exams.length === 0) {
       const fetchExams = async () => {
         try {
           const response = await API.get('/api/exams');
-          setExams(response.data);
+          const sortedExams = response.data.sort((a: IExamLink, b: IExamLink) => 
+            a.shortName.localeCompare(b.shortName)
+          );
+          setExams(sortedExams);
         } catch (error) {
           console.error("Failed to fetch exams for modal:", error);
         }
@@ -42,32 +42,30 @@ const ExamChoiceModal: React.FC<IProps> = ({ isOpen, onClose }) => {
       <AnimatePresence>
         {isOpen && (
           <Dialog.Portal forceMount>
-            {/* Modal Overlay: Dims the background content. */}
             <Dialog.Overlay asChild>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 bg-black/70"
+                className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
               />
             </Dialog.Overlay>
 
-            {/* Centering Container: This new div uses Flexbox to perfectly center the modal. */}
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
               <Dialog.Content asChild>
                 <motion.div
-                  initial={{ y: -30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: 30, opacity: 0 }}
+                  initial={{ y: -30, opacity: 0, scale: 0.95 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  exit={{ y: 30, opacity: 0, scale: 0.95 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  className="relative bg-slate-800 border border-slate-700 rounded-xl p-8 w-full max-w-2xl"
+                  className="relative bg-card border border-foreground/10 rounded-2xl p-8 w-full max-w-2xl shadow-2xl shadow-black/10 dark:shadow-lg dark:shadow-[hsl(var(--accent))/0.1]"
                 >
-                  <Dialog.Title className="text-3xl font-bold text-center text-white mb-8">
+                  <Dialog.Title className="text-3xl font-bold text-center text-card-foreground mb-8 tracking-tight">
                     Choose Your Exam
                   </Dialog.Title>
 
                   <Dialog.Close asChild>
-                    <button className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors" aria-label="Close">
+                    <button className="absolute top-4 right-4 text-card-foreground/60 hover:text-card-foreground transition-colors" aria-label="Close">
                       <XMarkIcon className="h-6 w-6" />
                     </button>
                   </Dialog.Close>
@@ -78,12 +76,13 @@ const ExamChoiceModal: React.FC<IProps> = ({ isOpen, onClose }) => {
                         key={exam._id}
                         to={`/study/${exam.slug}`}
                         onClick={onClose}
-                        className="bg-slate-700 p-4 rounded-lg text-center font-semibold text-white hover:bg-cyan-600 hover:scale-105 transition-all duration-300"
+                        // --- UPDATED: Added hover background and text color change ---
+                        className="border border-foreground/10 p-4 rounded-lg text-center font-semibold text-foreground transition-all duration-300 hover:bg-[hsl(var(--accent))] hover:border-[hsl(var(--accent))] hover:text-background hover:-translate-y-1"
                       >
                         {exam.shortName}
                       </Link>
                     )) : (
-                      <p className="col-span-full text-center text-slate-400">Loading exams...</p>
+                      <p className="col-span-full text-center text-foreground/60">Loading exams...</p>
                     )}
                   </div>
                 </motion.div>

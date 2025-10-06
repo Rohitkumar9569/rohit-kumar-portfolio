@@ -346,7 +346,7 @@ const PdfViewerPage = () => {
         <motion.header
           animate={{ y: (isMobile && !isHeaderVisible) ? "-100%" : 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="absolute top-0 left-0 right-0 z-30 bg-slate-900/80 backdrop-blur-sm shadow-md"
+          className="absolute top-0 left-0 right-0 z-30 bg-neutral-950/80 backdrop-blur-sm shadow-md"
         >
           <div className="py-1 flex justify-between items-center px-2 sm:px-4">
             <button onClick={() => navigate(-1)} className="p-1 sm:p-2 rounded-full hover:bg-black/20" title="Go Back">
@@ -450,7 +450,7 @@ const PdfViewerPage = () => {
           
           <Drawer.Portal>
             {/* FIX 4: Remove h-full to let Vaul control height based on activeSnapPoint=1 */}
-            <Drawer.Content className="fixed bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-slate-900/80 backdrop-blur-md z-40 border-t border-slate-700 h-full">
+            <Drawer.Content className="fixed bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-neutral-950/80 backdrop-blur-md z-40 border-t border-slate-700 h-full">
               <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-slate-600" />
               <VisuallyHidden>
                 <Drawer.Title>AI Assistant Chat</Drawer.Title>

@@ -1,23 +1,23 @@
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import React, { useEffect } from 'react'; // <-- Import useEffect
-import axios from 'axios'; // <-- Import axios
+import React, { useEffect } from 'react';
+import axios from 'axios';
 
-// Animation variants for the SVG logo
+// Animation variants now use CSS variables to be theme-aware
 const svgVariants = {
   hidden: {
     opacity: 0,
     scale: 0.5,
     pathLength: 0,
-    fill: "rgba(34, 211, 238, 0)" // Transparent fill initially
+    fill: "hsla(var(--foreground), 0)" // Initially transparent foreground
   },
   visible: {
     opacity: 1,
     scale: 1,
-    pathLength: 1, // Draw the outline first
-    fill: "rgba(255, 255, 255, 1)",
+    pathLength: 1,
+    fill: "hsl(var(--foreground))", // Fill with the theme's main text color
     transition: {
-      pathLength: { duration: 1.5, ease: "easeInOut" }, // Draw duration
-      fill: { delay: 1.5, duration: 0.5, ease: "easeOut" }, // Fill delay after draw
+      pathLength: { duration: 1.5, ease: "easeInOut" },
+      fill: { delay: 1.5, duration: 0.5, ease: "easeOut" },
     }
   }
 };
@@ -32,19 +32,22 @@ const textVariants = {
 };
 
 const Preloader = () => {
-  // --- ADDED WAKE-UP LOGIC ---
+  // Server wake-up call, now improved to run only once per session
   useEffect(() => {
     const wakeUpServer = async () => {
       try {
         await axios.get(import.meta.env.VITE_API_URL);
         console.log('Server wake-up call sent successfully.');
+        sessionStorage.setItem('server_woken', 'true'); // Mark as woken for this session
       } catch (error) {
         console.error('Server wake-up call failed:', error);
       }
     };
-    wakeUpServer();
-  }, []); // The empty array ensures this runs only once
-  // -------------------------
+
+    if (!sessionStorage.getItem('server_woken')) {
+      wakeUpServer();
+    }
+  }, []);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -64,7 +67,8 @@ const Preloader = () => {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-900 blueprint-bg"
+      // Use theme-aware background color
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background blueprint-bg"
       key="preloader"
       exit={{ opacity: 0, transition: { duration: 0.5, ease: 'easeOut' } }}
     >
@@ -84,7 +88,7 @@ const Preloader = () => {
             variants={svgVariants}
             initial="hidden"
             animate="visible"
-            stroke="#22d3ee"
+            stroke="#22d3ee" // Cyan stroke looks good on both themes
             strokeWidth="5"
             strokeLinejoin="round"
             strokeLinecap="round"
@@ -92,13 +96,15 @@ const Preloader = () => {
         </motion.svg>
         
         <motion.div 
-          className="text-center text-white mt-4"
+          // Removed hardcoded text-white
+          className="text-center mt-4"
           variants={textVariants}
           initial="hidden"
           animate="visible"
         >
-          <h1 className="text-2xl font-bold md:text-3xl">Rohit Kumar</h1>
-          <p className="text-lg text-slate-300 md:text-xl">Full-Stack Developer</p>
+          {/* Use theme-aware text colors */}
+          <h1 className="text-2xl font-bold md:text-3xl text-foreground">Rohit Kumar</h1>
+          <p className="text-lg text-primary-foreground md:text-xl">Full-Stack Developer</p>
         </motion.div>
       </motion.div>
     </motion.div>

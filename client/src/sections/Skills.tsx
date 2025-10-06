@@ -1,8 +1,9 @@
 import React, { Suspense, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import PageLoader from '../components/PageLoader';
+// CubeModal import is commented out as it is not used in this specific version of the code
+// import CubeModal from '../components/CubeModal'; 
 const ArchitectCanvas = React.lazy(() => import('../components/ArchitectCanvas'));
-import CubeModal from '../components/CubeModal';
+
 import {
   FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaGitAlt, FaGithub, FaJsSquare, FaCode
 } from 'react-icons/fa';
@@ -11,14 +12,12 @@ import {
 } from 'react-icons/si';
 import { HiCubeTransparent } from 'react-icons/hi2';
 
-// Define the shape of a single skill object for TypeScript
 interface Skill {
   name: string;
   icon: React.ReactElement;
   description: string;
 }
 
-// Animation variants
 const containerVariant = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
@@ -29,7 +28,6 @@ const itemVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-// Data with professional English descriptions
 const skillsData = [
     {
     category: 'Languages',
@@ -81,7 +79,7 @@ const Skills = () => {
 
   return (
     <>
-      <section id="skills" className="py-20 px-6 overflow-hidden relative">
+      <section id="skills" className="bg-white dark:bg-slate-900 py-20 px-6 overflow-hidden relative text-gray-800 dark:text-white">
         <div className="container mx-auto">
           <motion.div
             variants={containerVariant}
@@ -89,23 +87,23 @@ const Skills = () => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
           >
-            <motion.h2 variants={itemVariant} className="text-4xl font-bold text-center mb-16">
+            <motion.h2 variants={itemVariant} className="text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white">
               Skills & Technologies
             </motion.h2>
 
             <motion.div variants={itemVariant} className="lg:w-3/5 space-y-8">
               {skillsData.map((category) => (
                 <div key={category.category}>
-                  <h3 className="text-xl font-semibold text-cyan-400 mb-4">{category.category}</h3>
+                  <h3 className="text-xl font-semibold text-cyan-600 dark:text-cyan-400 mb-4">{category.category}</h3>
                   <div className="flex flex-wrap gap-4">
                     {category.items.map((skill) => (
                       <button 
                         key={skill.name} 
                         onClick={() => setSelectedSkill(skill)}
-                        className="flex items-center text-left gap-3 bg-slate-700/50 py-2 px-4 rounded-lg transition-transform hover:scale-105"
+                        className="flex items-center text-left gap-3 bg-gray-100/80 dark:bg-slate-700/50 py-2 px-4 rounded-lg transition-transform hover:scale-105 shadow-sm dark:shadow-none"
                       >
-                        <div className="text-cyan-400">{skill.icon}</div>
-                        <p className="font-semibold text-white">{skill.name}</p>
+                        <div className="text-cyan-600 dark:text-cyan-400">{skill.icon}</div>
+                        <p className="font-semibold text-gray-700 dark:text-white">{skill.name}</p>
                       </button>
                     ))}
                   </div>
@@ -116,7 +114,7 @@ const Skills = () => {
             <motion.div variants={itemVariant} className="mt-12 text-center lg:hidden">
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="inline-flex items-center gap-3 bg-slate-700 hover:bg-cyan-500 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300"
+                className="inline-flex items-center gap-3 bg-gray-200 dark:bg-slate-700 hover:bg-cyan-500 text-gray-800 dark:text-white font-bold py-3 px-6 rounded-lg transition-all duration-300"
               >
                 <HiCubeTransparent className="h-6 w-6" />
                 View 3D Skill Cube
@@ -139,9 +137,8 @@ const Skills = () => {
         </motion.div>
       </section>
 
-      <CubeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* <CubeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} /> */}
       
-      {/* --- Popup UI Updated to match the "About" section's style --- */}
       <AnimatePresence>
         {selectedSkill && (
           <motion.div
@@ -149,7 +146,7 @@ const Skills = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.2 } }}
             onClick={() => setSelectedSkill(null)}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[1000] p-4"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[1000] p-4"
           >
             <motion.div
               initial={{ scale: 0.8, opacity: 0, y: 30 }}
@@ -157,17 +154,18 @@ const Skills = () => {
               exit={{ scale: 0.8, opacity: 0, y: 30, transition: { duration: 0.2 } }}
               transition={{ type: "spring", stiffness: 250, damping: 25 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative bg-gradient-to-br from-slate-900 to-slate-800 border border-cyan-700/50 rounded-2xl p-8 shadow-2xl shadow-cyan-500/10 max-w-md w-full transform-gpu"
+              // --- FIX: Correctly apply gradient only in dark mode ---
+              className="relative bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-800 border border-cyan-400/50 dark:border-cyan-700/50 rounded-2xl p-8 shadow-xl dark:shadow-2xl shadow-cyan-300/30 dark:shadow-cyan-500/10 max-w-md w-full"
             >
               <div className="flex flex-col items-center text-center">
-                <div className="mb-4 bg-slate-700/50 p-4 rounded-full text-cyan-400">
+                <div className="mb-4 bg-cyan-100/50 dark:bg-slate-700/50 p-4 rounded-full text-cyan-600 dark:text-cyan-400">
                   {React.cloneElement(selectedSkill.icon, { size: 48 })}
                 </div>
-                <h3 className="text-3xl font-extrabold text-white tracking-tight">{selectedSkill.name}</h3>
-                <p className="text-slate-300 leading-relaxed mt-4 text-lg">{selectedSkill.description}</p>
+                <h3 className="text-3xl font-extrabold text-gray-800 dark:text-white tracking-tight">{selectedSkill.name}</h3>
+                <p className="text-gray-600 dark:text-slate-300 leading-relaxed mt-4 text-lg">{selectedSkill.description}</p>
                 <button 
                   onClick={() => setSelectedSkill(null)}
-                  className="mt-8 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/30"
+                  className="mt-8 bg-cyan-500 hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-md shadow-cyan-300/50 dark:shadow-lg dark:hover:shadow-cyan-500/30"
                 >
                   Got it!
                 </button>

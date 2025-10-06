@@ -2,24 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-slate-900; 
-}
+/* --- THEME VARIABLES UPDATED TO NEW "TECH" THEME --- */
+@layer base {
+  :root {
+    /* Light mode colors (Tech Theme) */
+    --background: 210 40% 98%;      /* Light Gray */
+    --foreground: 222 47% 11%;      /* Navy Blue */
+    --card: 0 0% 100%;           /* White */
+    --card-foreground: 222 47% 11%;
+    --primary: 0 0% 100%;           /* White */
+    --primary-foreground: 215 20% 65%; /* Muted gray (slate-500) */
+    --border: 214 32% 91%;       /* Subtle gray border (slate-200) */
+    
+    /* ACCENT COLOR (Tailwind's cyan-400) */
+    --accent: 187 82% 53%;         
+  }
 
-/* --- ADD THIS BLOCK HERE --- */
-/* This overrides Tailwind's default light gray border color to fix the white line bug */
+  .dark {
+    /* Dark mode colors (Tech Theme) */
+    --background: 222 47% 11%;      /* Deep Navy Blue (#0a192f) */
+    --foreground: 210 40% 96%;      /* Light Gray Text (#e6f1ff) */
+    --card: 223 39% 18%;           /* Lighter Navy/Slate (#112240) */
+    --card-foreground: 210 40% 96%;
+    --primary: 223 39% 18%;           /* Lighter Navy/Slate */
+    --primary-foreground: 215 20% 65%; /* Muted light gray (slate-500) */
+    --border: 217 33% 27%;       /* Subtle dark border (slate-700) */
+
+    /* ACCENT COLOR (Tailwind's cyan-400) */
+    --accent: 187 82% 53%;         
+  }
+
+  html,body {
+    /* Applying the theme variables */
+    @apply bg-background text-foreground;
+  }
+}
+/* ---------------------------------- */
+
+
+/* This should not need changes as it uses a generic color */
 *, ::before, ::after {
   border-color: theme('colors.slate.800', currentColor);
 }
-/* -------------------------- */
 
 @keyframes pan {
   0% { background-position: 0% 0%; }
   100% { background-position: 100% 100%; }
 }
 
+/* This will now automatically use the new cyan accent color */
 .blueprint-bg {
-  --grid-color: rgba(34, 211, 238, 0.1); /* Faint cyan */
+  --grid-color: hsl(var(--accent) / 0.1); 
   --grid-size: 50px;
   background-image:
     linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
@@ -28,9 +61,9 @@ body {
   animation: pan 60s linear infinite;
 }
 
-/* --- ADDED FOR ACTIVE NAVBAR LINK --- */
+/* This will now automatically use the new cyan accent color */
 .active-link {
-  color: #22d3ee;  /* This is the same as Tailwind's cyan-400 */
+  color: hsl(var(--accent));
   position: relative;
 }
 
@@ -40,28 +73,23 @@ body {
   display: block;
   height: 2px;
   width: 100%;
-  background-color: #22d3ee;
+  background-color: hsl(var(--accent));
   bottom: -4px;
   left: 0;
 }
 
-/* Yeh code src/index.css mein add karein */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .hide-scrollbar {
-  -ms-overflow-style: none; /* IE aur Edge ke liye */
-  scrollbar-width: none;    /* Firefox ke liye */
+  -ms-overflow-style: none; /* For IE and Edge */
+  scrollbar-width: none;    /* For Firefox */
 }
 
-
-
-/* Add this to your main CSS file */
-
 .blinking-cursor::after {
-  content: '|'; 
+  content: '|';
   font-weight: 200;
-  animation: blink-smooth 4s ease-in-out infinite; 
+  animation: blink-smooth 4s ease-in-out infinite;
   margin-left: 3px;
 }
 
@@ -74,60 +102,42 @@ body {
   }
 }
 
-
-
-
-
-/* --- AI Assistant Header Gradient and Pulse Animation (FINAL MULTI-COLOR FLASH) --- */
-
-/* 1. Keyframes for the FAST, multiple color shift (0% to 100% position shift) */
 @keyframes fast-gradient-shift {
     0% { background-position: 0% 50%; }
     100% { background-position: 100% 50%; }
 }
 
-/* 2. Keyframes for the subtle lighting pulse (used only when loading) */
 @keyframes text-pulse {
     0%, 100% {
-        filter: brightness(1.0); /* Default brightness */
+        filter: brightness(1.0);
     }
     50% {
-        filter: brightness(1.75); /* Stronger flash for visibility */
+        filter: brightness(1.75);
     }
 }
 
-/* 3. PERMANENT GRADIENT CLASS (Used always on the H2) */
+/* Note: The gradient below uses Tailwind's colors. You might want to adjust these to match your new theme if needed. */
 .ai-default-gradient {
-    /* Base Gradient Properties for the text */
     background: linear-gradient(
-        90deg, 
-        theme('colors.cyan.400'), 
+        90deg,
+        theme('colors.cyan.400'),
         theme('colors.blue.500'),
-        theme('colors.fuchsia.500'), /* Added a third color for dynamic feel */
+        theme('colors.fuchsia.500'),
         theme('colors.cyan.400')
     );
-    /* Make the background area huge (400%) so shifting it creates color changes */
     background-size: 400% 100%;
-    
-    /* Clip text and make text transparent */
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-
-    /* Subtle, permanent color shift animation (even when idle) */
-    animation: gradient-shift 12s linear infinite; 
+    animation: gradient-shift 12s linear infinite;
 }
 
-/* 4. ACTIVE/PULSE CLASS (Used only when loading/streaming) */
 .ai-pulse {
-    /* Overrides the slower permanent animation with a fast flash */
-    animation: 
-        text-pulse 0.5s ease-out infinite alternate, /* Rapidly pulses brightness */
-        fast-gradient-shift 1.5s linear infinite;    /* Fast color shifting */
+    animation:
+        text-pulse 0.5s ease-out infinite alternate,
+        fast-gradient-shift 1.5s linear infinite;
 }
 
-
-/* Ensure the blinking cursor is also included in the main CSS file for streaming text */
 .blinking-cursor {
     animation: blink-caret .75s step-end infinite;
     display: inline-block;

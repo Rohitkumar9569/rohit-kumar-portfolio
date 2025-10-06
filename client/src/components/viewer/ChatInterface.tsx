@@ -219,7 +219,7 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
     <div className={`relative flex-1 h-full flex flex-col bg-transparent`}>
       
       {/* 2. HEADER FIX: Use flex-shrink-0 to ensure it never shrinks */}
-      <header className={`sticky top-0 z-20 border-b border-slate-700 flex items-center justify-between px-4 py-3 bg-slate-900 flex-shrink-0`}>
+      <header className={`sticky top-0 z-20 border-b border-slate-700 flex items-center justify-between px-4 py-3 bg-neutral-950 flex-shrink-0`}>
         {/* AI Assistant Header with Permanent Gradient and Conditional Pulse */}
         <h2 className={`text-base font-semibold flex-shrink-0 ai-default-gradient 
             ${isLoading || initialLoading ? 'ai-pulse' : ''}`}

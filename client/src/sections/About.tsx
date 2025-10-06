@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import googleLogo from '../assets/google-logo.svg';
 import ibmLogo from '../assets/ibm-logo.svg';
 import microsoftLogo from '../assets/microsoft-logo.svg';
-import gkvLogo from '../assets/gkv-logo.webp'; // Make sure you have this logo
+import gkvLogo from '../assets/gkv-logo.webp';
 
 // Define TypeScript interfaces for our data
 interface Organization {
@@ -92,19 +92,36 @@ const About = () => {
     loop: true, typeSpeed: 80, deleteSpeed: 50, delaySpeed: 2000,
   });
 
-  // State for the organization popup
   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
+
+  // Custom Color Variables (Using the palette provided)
+  const mainTextLight = 'text-[#0A192F]';
+  const mainTextDark = 'dark:text-[#E6F1FF]';
+  const accentColor = 'text-[#00F5D4]'; // Bright Cyan
+  const accentHoverLight = 'hover:text-[#06B6D4]'; // Darker Cyan on Light Mode
+  const accentHoverDark = 'dark:hover:text-[#00F5D4]'; // Bright Cyan on Dark Mode
+
+  // Certification Button Colors 
+  const certButtonBgLight = 'bg-[#E0F7FA]'; // Light Mode: Very light cyan/blue
+  const certButtonHoverLight = 'hover:bg-[#B2EBF2]';
+
+  // FIX: Dark Mode: No Border, Card BG (#112240) as button BG, Bright Text, Accent Hover
+  const certButtonBgDark = 'dark:bg-[#112240]'; // Card Background
+  const certButtonTextDark = 'dark:text-cyan-400'; // Bright Cyan text
+  const certButtonHoverDarkBg = 'dark:hover:bg-[#00F5D4]'; // Hover on Accent Color
+  const certButtonHoverDarkText = 'dark:hover:text-[#0A192F]'; // Hover Text to Navy Blue for contrast
+
 
   return (
     <>
-      <section id="about" className="relative min-h-screen flex items-center px-6 pt-28 pb-16 overflow-hidden">
+      <section id="about" className="relative bg-background min-h-screen flex items-center px-6 pt-28 pb-16 overflow-hidden">
         <motion.div
           className="container mx-auto z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
           variants={containerVariant} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }}
         >
           <motion.div variants={itemVariant} className="relative flex justify-center items-center lg:order-2">
             <div className="absolute w-72 h-72 sm:w-96 sm:h-96 bg-violet-500/20 rounded-full blur-3xl animate-pulse"></div>
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-slate-800">
+            <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden shadow-2xl border-4 border-primary">
               <img
                 src={profilePhoto}
                 alt="Rohit Kumar"
@@ -115,29 +132,34 @@ const About = () => {
           </motion.div>
 
           <motion.div variants={itemVariant} className="lg:order-1">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight text-center lg:text-left">
+            <h1 className={`text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-center lg:text-left text-foreground ${mainTextLight} ${mainTextDark}`}>
               Hi, I'm <span className="bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-transparent">Rohit Kumar</span>
             </h1>
-            <h2 className="text-2xl sm:text-3xl font-semibold my-4 text-slate-300 h-10 text-center lg:text-left">
+            <h2 className="text-2xl sm:text-3xl font-semibold my-4 text-primary-foreground h-10 text-center lg:text-left">
               <span className="whitespace-nowrap bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-transparent">{text}</span>
               <Cursor cursorColor="#06B6D4" />
             </h2>
-            <p className="text-lg text-slate-400 mb-8 max-w-xl leading-relaxed mx-auto lg:mx-0 text-center lg:text-left">
+            <p className={`text-lg mb-8 max-w-xl leading-relaxed mx-auto lg:mx-0 text-center lg:text-left text-primary-foreground text-gray-700 dark:text-slate-300`}>
               A passionate Computer Science student specializing in building beautiful, functional, and user-centric web applications.
             </p>
 
-            <div className="relative border-l-2 border-slate-700 pl-8 mt-8">
+            <div className="relative border-l-2 border-primary pl-8 mt-8">
               {timelineItems.map((item, index) => (
                 <div key={index} className="mb-8 relative group">
-                  <div className="absolute -left-[41px] top-1 w-4 h-4 bg-slate-800 rounded-full border-4 border-cyan-500"></div>
-                  <p className="text-sm text-slate-400 mb-1">{item.date}</p>
-                  <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+                  {/* Accent Border Point */}
+                  <div className="absolute -left-[41px] top-1 w-4 h-4 bg-primary rounded-full border-4 border-cyan-500 dark:border-[#00F5D4]"></div>
+                  <p className="text-sm mb-1 text-gray-600 dark:text-gray-400">{item.date}</p>
+                  <h3 className={`text-lg font-bold mb-2 ${mainTextLight} ${mainTextDark}`}>{item.title}</h3>
                   <div className="flex flex-wrap gap-2">
                     {item.institutions.map(org => (
-                      <button 
+                      <button
                         key={org.name}
                         onClick={() => setSelectedOrg(org)}
-                        className="bg-slate-700/50 text-cyan-400 text-xs font-semibold py-1 px-3 rounded-full transition-colors hover:bg-slate-700"
+                        // FINAL FIX: Removed dark:border and used dark:bg-[#112240] for a clean look
+                        className={`
+                            ${certButtonBgLight} ${certButtonHoverLight} ${mainTextLight}
+                            ${certButtonBgDark} ${certButtonTextDark} ${certButtonHoverDarkBg} ${certButtonHoverDarkText} 
+                            text-xs font-semibold py-1 px-3 rounded-full transition-colors`}
                       >
                         {org.name}
                       </button>
@@ -152,8 +174,26 @@ const About = () => {
                 Download Resume <HiOutlineArrowDownTray className="h-5 w-5" />
               </a>
               <div className="flex items-center gap-6">
-                <a href="https://github.com/Rohitkumar9569" aria-label="GitHub Profile" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors"><FaGithub size={32} /></a>
-                <a href="https://www.linkedin.com/in/rohit-kumar-bba12b25b/" aria-label="LinkedIn Profile" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors"><FaLinkedin size={32} /></a>
+                {/* Social Icons with high contrast */}
+                <a
+                  href="https://github.com/Rohitkumar9569"
+                  aria-label="GitHub Profile"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`text-inherit ${mainTextLight} ${mainTextDark} ${accentHoverLight} ${accentHoverDark} transition-colors`}
+                >
+                  <FaGithub size={32} />
+                </a>
+                {/* Social Icons with high contrast */}
+                <a
+                  href="https://www.linkedin.com/in/rohit-kumar-bba12b25b/"
+                  aria-label="LinkedIn Profile"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`text-inherit ${mainTextLight} ${mainTextDark} ${accentHoverLight} ${accentHoverDark} transition-colors`}
+                >
+                  <FaLinkedin size={32} />
+                </a>
               </div>
             </div>
           </motion.div>
@@ -167,7 +207,7 @@ const About = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.2 } }}
             onClick={() => setSelectedOrg(null)}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[1000] p-4"
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-[1000] p-4"
           >
             <motion.div
               initial={{ scale: 0.8, opacity: 0, y: 30 }}
@@ -175,17 +215,20 @@ const About = () => {
               exit={{ scale: 0.8, opacity: 0, y: 30, transition: { duration: 0.2 } }}
               transition={{ type: "spring", stiffness: 250, damping: 25 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative bg-gradient-to-br from-slate-900 to-slate-800 border border-cyan-700/50 rounded-2xl p-8 shadow-2xl shadow-cyan-500/10 max-w-lg w-full transform-gpu"
+              className={`relative bg-white dark:bg-[#112240] 
+                         border border-gray-200 dark:border-cyan-700/50 rounded-2xl p-8 
+                         shadow-2xl shadow-cyan-500/10 max-w-lg w-full transform-gpu
+                         ${mainTextLight} ${mainTextDark}`}
             >
               <div className="flex flex-col items-center text-center">
                 {selectedOrg.logo && (
-                  <div className="mb-4 bg-slate-700/50 p-3 rounded-full">
+                  <div className="mb-4 bg-gray-200 dark:bg-slate-700 p-3 rounded-full">
                     <img src={selectedOrg.logo} alt={`${selectedOrg.name} Logo`} className="h-12 w-12" />
                   </div>
                 )}
-                <h3 className="text-3xl font-extrabold text-white tracking-tight">{selectedOrg.name}</h3>
-                <p className="text-slate-300 leading-relaxed mt-4 text-lg">{selectedOrg.description}</p>
-                <button 
+                <h3 className="text-3xl font-extrabold tracking-tight text-inherit">{selectedOrg.name}</h3>
+                <p className="text-gray-600 dark:text-slate-300 leading-relaxed mt-4 text-lg">{selectedOrg.description}</p>
+                <button
                   onClick={() => setSelectedOrg(null)}
                   className="mt-8 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/30"
                 >

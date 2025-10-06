@@ -1,12 +1,9 @@
-// src/components/Footer.tsx
-
 import React from 'react';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { animateScroll as scroll } from 'react-scroll';
-import Logo from './Logo'; // Import your Logo component
+import Logo from './Logo';
 
 const Footer = () => {
-
   // This function will smoothly scroll the page to the top
   const scrollToTop = () => {
     scroll.scrollToTop({
@@ -16,32 +13,30 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-slate-900 border-t border-slate-800">
+    // --- FIX: Changed bg-primary to bg-background for consistency ---
+    <footer className="bg-background border-t border-foreground/10">
       <div className="container mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
         
-        {/* Copyright notice with your name */}
-        <p className="text-slate-400 text-sm mb-4 md:mb-0">
+        <p className="text-foreground/70 text-sm mb-4 md:mb-0">
           © 2025 Rohit Kumar. All Rights Reserved.
         </p>
 
-        {/* Logo and Back to Top Button */}
         <div 
-          className="mb-4 md:mb-0 cursor-pointer"
+          className="mb-4 md:mb-0 cursor-pointer order-first md:order-none"
           onClick={scrollToTop}
           title="Back to Top"
         >
           <Logo />
         </div>
 
-        {/* Social Media Links with enhanced hover effect */}
         <div className="flex space-x-6">
-          <a href="https://github.com" aria-label="GitHub Profile" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-all duration-300 transform hover:scale-110">
+          <a href="https://github.com/Rohitkumar9569" aria-label="GitHub Profile" target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-[hsl(var(--accent))] transition-all duration-300 transform hover:scale-110">
             <FaGithub size={24} />
           </a>
-          <a href="https://www.linkedin.com/feed/" aria-label="LinkedIn Profile" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-all duration-300 transform hover:scale-110">
+          <a href="https://www.linkedin.com/in/rohit-kumar-bba12b25b/" aria-label="LinkedIn Profile" target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-[hsl(var(--accent))] transition-all duration-300 transform hover:scale-110">
             <FaLinkedin size={24} />
           </a>
-          <a href="https://x.com/home" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-all duration-300 transform hover:scale-110">
+          <a href="https://x.com/home" aria-label="Twitter Profile" target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-[hsl(var(--accent))] transition-all duration-300 transform hover:scale-110">
             <FaTwitter size={24} />
           </a>
         </div>

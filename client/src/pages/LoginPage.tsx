@@ -40,7 +40,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-900">
+    <div className="flex items-center justify-center min-h-screen bg-neutral-950">
       <div className="w-full max-w-md p-8 space-y-8 bg-slate-800 rounded-lg shadow-lg">
         <div className="text-center">
           <div className='flex justify-center mb-4'>
