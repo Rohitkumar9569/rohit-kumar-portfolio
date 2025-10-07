@@ -19,19 +19,26 @@ const CubeModal: React.FC<CubeModalProps> = ({ isOpen, onClose }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-neutral-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          // Backdrop ko aur transparent banaya gaya (pehle light mein /10 aur dark mein /10 tha)
+          className="fixed inset-0 bg-neutral-100/10 dark:bg-neutral-400/10 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           onClick={onClose}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="relative w-full h-full max-w-3xl max-h-[90vh] bg-slate-800/50 rounded-lg shadow-2xl border border-slate-700 flex items-center justify-center"
+            // Modal ke background ko transparent banaya gaya hai taaki 3D model achhe se dikhe)
+            className="relative w-full h-full max-w-3xl max-h-[70vh] 
+                       bg-zinc-400/10 border border-gray-400/60
+                       dark:bg-slate-700/10 dark:border-slate-700/40
+                       backdrop-blur-lg rounded-lg shadow-2xl flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={onClose}
-              className="absolute top-2 right-2 p-2 bg-slate-700/50 rounded-full text-white hover:bg-slate-700 z-10"
+              className="absolute top-2 right-2 p-2 rounded-full z-10
+                         text-black bg-gray-200/50 hover:bg-gray-300
+                         dark:text-white dark:bg-slate-700/50 dark:hover:bg-slate-700"
               aria-label="Close modal"
             >
               <XMarkIcon className="h-6 w-6" />

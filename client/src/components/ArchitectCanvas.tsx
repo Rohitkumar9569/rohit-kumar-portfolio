@@ -9,15 +9,15 @@ import { useSectionNavigation } from '../hooks/useSectionNavigation';
 const InteractiveCube = () => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [hovered, setHovered] = useState(false);
-  
+
   // Hooks for both routing and section-scrolling
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const navigateToSection = useSectionNavigation();
 
   useFrame((state, delta) => {
     if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.1;
-      meshRef.current.rotation.y += delta * 0.1;
+      meshRef.current.rotation.x += delta * 0.5;
+      meshRef.current.rotation.y += delta * 0.5;
     }
   });
 
@@ -28,14 +28,14 @@ const InteractiveCube = () => {
   const handleFaceClick = (event: any) => {
     event.stopPropagation();
     const faceIndex = Math.floor(event.face.materialIndex);
-    
+
     // Use the appropriate navigation function for each face
     switch (faceIndex) {
       case 0: navigateToSection('about'); break;
       case 1: navigateToSection('skills'); break;
       case 2: navigateToSection('projects'); break;
       case 3: navigateToSection('contact'); break;
-      case 4: navigate('/study'); break; // Navigate to the Study Hub route
+      case 4: navigateToSection('study-hub'); break;
       case 5: navigateToSection('certifications'); break;
       default: break;
     }
@@ -59,10 +59,10 @@ const InteractiveCube = () => {
         <meshPhysicalMaterial attach="material-2" color="#4ade80" roughness={0.5} metalness={0.7} />
         <meshPhysicalMaterial attach="material-3" color="#fbbf24" roughness={0.5} metalness={0.7} />
         <meshPhysicalMaterial attach="material-4" color="#a78bfa" roughness={0.5} metalness={0.7} />
-        <meshPhysicalMaterial attach="material-5" color="#e879f9" roughness={0.5} metalness={0.7} /> 
+        <meshPhysicalMaterial attach="material-5" color="#e879f9" roughness={0.5} metalness={0.7} />
       </motion.mesh>
 
-      <motion.group 
+      <motion.group
         animate={{ scale: hovered ? 1.1 : 1 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -83,7 +83,7 @@ const ArchitectCanvas = () => {
       <ambientLight intensity={0.8} />
       <directionalLight position={[10, 10, 5]} intensity={1.5} />
       <InteractiveCube />
-      <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+      <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={8} />
     </Canvas>
   );
 };

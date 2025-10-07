@@ -1,9 +1,24 @@
 <!doctype html>
-<html lang="en">
-
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />  <link rel="preload" href="/css/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>
+    (function () {
+      // Check for saved theme preference in Local Storage.
+      const theme = localStorage.getItem('theme');
+
+      // If the saved preference is 'light', remove the default 'dark' class 
+      // to prevent a flash of unstyled content (FOUC).
+      if (theme === 'light') {
+        document.documentElement.classList.remove('dark');
+      }
+      // If theme is 'dark' or not set, the 'dark' class remains, ensuring 
+      // the site loads in Dark Mode by default.
+    })();
+  </script>
+
+  <link rel="preload" href="/css/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
     <link rel="stylesheet" href="/css/fonts.css">
   </noscript>
@@ -14,11 +29,12 @@
   <meta name="description" content="The portfolio of Rohit Kumar, a full-stack developer." />
   <meta property="og:title" content="Rohit Kumar | Full-Stack Developer" />
 
-  <meta name="google-site-verification" content="uY2blvR_qEZxxaLHevwnNKowtuyuTLsxQ0LSw1e-YWA" />  
+  <meta name="google-site-verification" content="uY2blvR_qEZxxaLHevwnNKowtuyuTLsxQ0LSw1e-YWA" />  
 </head>
 
 <body>
   <div id="root"></div>
+
   <script type="module" src="/src/main.tsx"></script>
 </body>
 

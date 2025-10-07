@@ -142,7 +142,7 @@ const Navbar = () => {
                     </div>
                     {studyHubDropdownItems.length > 0 && (
                       // Apply enhanced shadow and rounded corners for a premium feel
-                      <ul className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:block bg-card text-card-foreground pt-4 pb-2 rounded-lg shadow-xl shadow-foreground/10 min-w-[150px]">
+                      <ul className="absolute top-full left-1/2 -translate-x-1/2 hidden group-hover:block bg-card text-card-foreground pt-4 pb-2 rounded-lg shadow-xl shadow-foreground/50 min-w-[150px]">
                         {studyHubDropdownItems.map(item => (
                           <li key={item.to}>
                             <Link 

@@ -18,7 +18,6 @@ import profilePhoto from './assets/profile-photo.jpeg';
 
 // --- PAGE IMPORTS ---
 import PortfolioPage from './pages/PortfolioPage';
-const StudyZonePage = React.lazy(() => import('./pages/StudyZonePage'));
 const ExamSpecificPage = React.lazy(() => import('./pages/ExamSpecificPage'));
 const AdminPage = React.lazy(() => import('./pages/AdminPage'));
 const PdfViewerPage = React.lazy(() => import('./pages/PdfViewerPage'));
@@ -30,11 +29,12 @@ const AppContent = () => {
   const [open, setOpen] = useState(false);
 
   const showMainLayout = (
-    (location.pathname === '/' || location.pathname.startsWith('/study')) && 
+    (location.pathname === '/' || location.pathname.startsWith('/study')) &&
     location.pathname !== '/login'
   );
 
   return (
+
     // <-- 2. Removed hardcoded "bg-neutral-950 text-white" to allow theme to work
     <div className="min-h-screen">
       <CommandPalette open={open} setOpen={setOpen} />
@@ -43,7 +43,6 @@ const AppContent = () => {
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<PortfolioPage />} />
-            <Route path="/study" element={<StudyZonePage />} />
             <Route path="/study/:examName" element={<ExamSpecificPage />} />
             <Route path="/pyq/view/:id" element={<PdfViewerPage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -91,11 +90,19 @@ function App() {
     <ThemeProvider>
       <Router>
         <AuthProvider>
-           <Toaster position="top-center" /> 
+          <Toaster position="top-center" />
           <AnimatePresence>
-            {!showApp && <Preloader />}
+            {/* FIX: Added required 'key' prop to satisfy AnimatePresence. 
+                  NOTE: Passing setContentLoaded in onLoadComplete ensures app loads after preloader finishes its tasks. */}
+            {!showApp && <Preloader
+              key="app-preloader"
+              onLoadComplete={() => {
+                setContentLoaded(true); // Content is ready
+                setAnimationFinished(true); // Animation is complete
+              }}
+            />}
           </AnimatePresence>
-          
+
           {showApp && <AppContent />}
         </AuthProvider>
       </Router>

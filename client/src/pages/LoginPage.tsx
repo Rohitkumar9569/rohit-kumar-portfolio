@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api';
-import { useAuth } from '../context/AuthContext'; // Import our custom auth hook
+import { useAuth } from '../context/AuthContext';
 import Logo from '../components/Logo';
 
 const LoginPage: React.FC = () => {
@@ -40,19 +40,30 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-neutral-950">
-      <div className="w-full max-w-md p-8 space-y-8 bg-slate-800 rounded-lg shadow-lg">
+    <div
+      // FIX 1: Background consistent with other sections (light/dark mode)
+      className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-background"
+    >
+      <div
+        // FIX 2: Card background consistent with other theme cards
+        className="w-full max-w-md p-8 space-y-8 
+                  bg-white dark:bg-slate-800 rounded-xl 
+                  shadow-2xl shadow-gray-400/50 dark:shadow-slate-900/50"
+      >
         <div className="text-center">
           <div className='flex justify-center mb-4'>
             <Logo />
           </div>
-          <h2 className="text-3xl font-bold text-white">Admin Login</h2>
-          <p className="mt-2 text-slate-400">Access your dashboard</p>
+          {/* FIX 3: Heading color consistent */}
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Admin Login</h2>
+          {/* FIX 4: Paragraph color consistent */}
+          <p className="mt-2 text-gray-600 dark:text-slate-400">Access your dashboard</p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-slate-300">
+            {/* FIX 5: Label color consistent */}
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-slate-300">
               Email address
             </label>
             <div className="mt-1">
@@ -64,13 +75,16 @@ const LoginPage: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-700 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                // FIX 6: Input styling matching the Contact form (raised/floating effect)
+                className="w-full bg-gray-200/70 dark:bg-slate-700/60 border border-gray-300 dark:border-slate-600 rounded-md py-2 px-3 
+                           text-gray-800 dark:text-white shadow-md shadow-gray-400/30 dark:shadow-slate-900/40 
+                           focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-slate-300">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-slate-300">
               Password
             </label>
             <div className="mt-1">
@@ -82,18 +96,25 @@ const LoginPage: React.FC = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-slate-700 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="w-full bg-gray-200/70 dark:bg-slate-700/60 border border-gray-300 dark:border-slate-600 rounded-md py-2 px-3 
+                           text-gray-800 dark:text-white shadow-md shadow-gray-400/30 dark:shadow-slate-900/40 
+                           focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300"
               />
             </div>
           </div>
 
-          {error && <p className="text-sm text-red-400 text-center">{error}</p>}
+          {/* FIX 7: Error color consistent */}
+          {error && <p className="text-sm text-red-600 dark:text-red-400 text-center">{error}</p>}
 
           <div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:bg-slate-500 disabled:cursor-not-allowed"
+              // FIX 8: Button styling matching the theme's primary button (cyan accent)
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-lg text-sm font-medium text-white 
+             bg-cyan-600 dark:bg-cyan-500 hover:bg-cyan-700 dark:hover:bg-cyan-600 
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 
+             disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>

@@ -1,7 +1,6 @@
 import React, { Suspense, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// CubeModal import is commented out as it is not used in this specific version of the code
-// import CubeModal from '../components/CubeModal'; 
+import CubeModal from '../components/CubeModal';
 const ArchitectCanvas = React.lazy(() => import('../components/ArchitectCanvas'));
 
 import {
@@ -29,7 +28,7 @@ const itemVariant = {
 };
 
 const skillsData = [
-    {
+  {
     category: 'Languages',
     items: [
       { name: 'TypeScript', icon: <SiTypescript size={32} />, description: 'A superset of JavaScript that adds static types, improving code quality and maintainability in large-scale applications.' },
@@ -79,7 +78,7 @@ const Skills = () => {
 
   return (
     <>
-      <section id="skills" className="bg-white dark:bg-slate-900 py-20 px-6 overflow-hidden relative text-gray-800 dark:text-white">
+      <section id="skills" className="bg-background py-20 px-6 overflow-hidden relative text-gray-800 dark:text-white">
         <div className="container mx-auto">
           <motion.div
             variants={containerVariant}
@@ -97,12 +96,11 @@ const Skills = () => {
                   <h3 className="text-xl font-semibold text-cyan-600 dark:text-cyan-400 mb-4">{category.category}</h3>
                   <div className="flex flex-wrap gap-4">
                     {category.items.map((skill) => (
-                      <button 
-                        key={skill.name} 
+                      <button
+                        key={skill.name}
                         onClick={() => setSelectedSkill(skill)}
-                        className="flex items-center text-left gap-3 bg-gray-100/80 dark:bg-slate-700/50 py-2 px-4 rounded-lg transition-transform hover:scale-105 shadow-sm dark:shadow-none"
-                      >
-                        <div className="text-cyan-600 dark:text-cyan-400">{skill.icon}</div>
+className="flex items-center text-left gap-3  bg-gray-300/70 hover:bg-gray-400/50   dark:bg-slate-700/80 dark:hover:bg-slate-600/70     py-2 px-4 rounded-lg transition-transform hover:scale-105   shadow-lg shadow-cyan-800/50 dark:shadow-lg dark:shadow-cyan-800/50"                      >
+                        <div className="text-cyan-500 dark:text-cyan-400">{skill.icon}</div>
                         <p className="font-semibold text-gray-700 dark:text-white">{skill.name}</p>
                       </button>
                     ))}
@@ -137,8 +135,8 @@ const Skills = () => {
         </motion.div>
       </section>
 
-      {/* <CubeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} /> */}
-      
+      <CubeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
       <AnimatePresence>
         {selectedSkill && (
           <motion.div
@@ -163,7 +161,7 @@ const Skills = () => {
                 </div>
                 <h3 className="text-3xl font-extrabold text-gray-800 dark:text-white tracking-tight">{selectedSkill.name}</h3>
                 <p className="text-gray-600 dark:text-slate-300 leading-relaxed mt-4 text-lg">{selectedSkill.description}</p>
-                <button 
+                <button
                   onClick={() => setSelectedSkill(null)}
                   className="mt-8 bg-cyan-500 hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-md shadow-cyan-300/50 dark:shadow-lg dark:hover:shadow-cyan-500/30"
                 >

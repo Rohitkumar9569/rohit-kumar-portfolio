@@ -91,24 +91,24 @@ const ExamSpecificPage = () => {
   const isLoading = isLoadingExam || isLoadingPyqs;
 
   return (
-    // Main section setup for Light Mode (default: #F9FAFB) and Dark Mode (dark: #0A192F)
-    <section className="bg-[#F9FAFB] text-[#0A192F] dark:bg-[#0A192F] dark:text-[#E6F1FF] container mx-auto px-6 py-24 min-h-screen">
-      <h1 className="text-4xl font-bold text-center mb-8">
-        Previous Year Questions for <span className="text-cyan-600 dark:text-[#00F5D4] uppercase">{examData?.exam.shortName || examName}</span>
+    // Background consistent with portfolio theme
+    <section className="bg-slate-50 dark:bg-background container mx-auto px-6 py-24 min-h-screen">
+      <h1 className="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-white">
+        Previous Year Questions for <span className="text-cyan-600 dark:text-cyan-400 uppercase">{examData?.exam.shortName || examName}</span>
       </h1>
 
-      {/* Subject Buttons Container */}
-      <div className="flex justify-center flex-wrap gap-2 md:gap-4 mb-12 bg-gray-200 dark:bg-slate-800 p-2 rounded-lg shadow-md">
+      {/* Subject Buttons Container: Adjusted to match Skills button container */}
+      <div className="flex justify-center flex-wrap gap-2 md:gap-4 mb-12 bg-gray-300/70 dark:bg-slate-700/80 p-3 rounded-xl shadow-md">
         {examData?.subjects.map(subject => (
           <button
             key={subject._id}
             onClick={() => setSearchParams({ subject: subject._id })}
-            className={`px-3 py-2 text-sm md:px-6 md:py-2 font-semibold rounded-md transition-colors duration-200 shadow-sm
-              ${selectedSubjectId === subject._id
-                // Selected State
-                ? 'bg-cyan-600 text-white dark:bg-[#02b3b0] dark:text-[#0A192F]'
-                // Default & Hover States
-                : 'bg-gray-100 text-slate-700 hover:bg-cyan-100 hover:text-cyan-600 dark:bg-transparent dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white'
+            className={`px-3 py-2 text-sm md:px-6 md:py-2 font-semibold rounded-lg transition-colors duration-300 
+             ${selectedSubjectId === subject._id
+                // Selected State: Cyan Accent
+                ? 'bg-cyan-500 text-white dark:bg-cyan-500 shadow-md shadow-gray-900/80 dark:shadow-slate-900/80'
+                // Default & Hover States: Consistent with Skills buttons
+                : 'bg-gray-100 text-slate-700 hover:bg-gray-300 dark:bg-slate-800/80 dark:text-slate-300 dark:hover:bg-slate-700 shadow-sm'
               }`}
           >
             {subject.name}
@@ -127,33 +127,38 @@ const ExamSpecificPage = () => {
           {pyqs?.map((pyq) => (
             <div
               key={pyq._id}
-              // Card Background: Adjusted to match image's dark slate color (#1D2E40)
-              className="bg-[#FFFFFF] dark:bg-[#1D2E40] rounded-xl p-6 flex flex-col justify-between 
-                           shadow-lg shadow-gray-300/50 dark:shadow-cyan-700/20 
-                           hover:shadow-xl hover:scale-[1.02] 
-                           border border-transparent 
-                           transition-all duration-300 transform"
+              // --- FIX: Card Background and Shadow to match Skills/Projects Cards ---
+              className="bg-gray-300/90 dark:bg-slate-700/80 rounded-xl p-6 flex flex-col justify-between 
+                           shadow-xl shadow-cyan-500/30 dark:shadow-cyan-800/50 
+                           hover:shadow-2xl hover:shadow-cyan-500/40 dark:hover:shadow-cyan-800/70
+                           hover:-translate-y-1 transition-all duration-300 transform "
             >
               <div>
-                {/* Year Tag: Background adjusted to match image's dark gray/blue (#3B4E63) */}
-                <span className="bg-cyan-100 dark:bg-[#3B4E63] text-cyan-800 dark:text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">{pyq.year}</span>
-                <h3 className="text-xl font-semibold text-[#0A192F] dark:text-white mt-4 mb-2">{pyq.title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">{examData?.exam.shortName}</p>
+                {/* --- FIX: Year Tag with unique color --- */}
+                <span className="bg-blue-600/80 dark:bg-blue-400/90 text-white dark:text-gray-900 text-xs font-semibold px-3 py-1 rounded-full shadow-md shadow-blue-500/40">
+                  {pyq.year}
+                </span>
+                {/* --- FIX: Title Color (Skill Accent) --- */}
+                <h3 className="text-xl font-semibold text-green-600/80 dark:text-green-500/80 mt-4 mb-2">{pyq.title}</h3>
+                <p className="text-gray-700 dark:text-slate-300 text-sm">{examData?.exam.shortName}</p>
               </div>
               <div className="flex space-x-4 mt-6">
-                {/* View Online Button: Adjusted to match image's light blue/cyan (#30A9BF) */}
-                <Link to={`/pyq/view/${pyq._id}`} className="flex-1 text-center bg-cyan-600 dark:bg-[#30A9BF] hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-md transition-colors shadow-lg hover:shadow-xl">
+                {/* View Online Button: Primary Accent Button */}
+                <Link
+                  to={`/pyq/view/${pyq._id}`}
+                  className="flex-1 text-center bg-cyan-600 dark:bg-cyan-400/60 hover:bg-cyan-700 dark:hover:bg-cyan-700/80 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg shadow-slate-900/80  "
+                >
                   View Online
                 </Link>
-                {/* Download Button: Adjusted to match image's dark slate/blue (#283E54) */}
+                {/* Download Button: Secondary/Outline Button Style */}
                 <a
                   href={pyq.fileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 text-center bg-gray-200 dark:bg-[#283E54] 
-                               hover:bg-gray-300 dark:hover:bg-[#203345] // Darker hover effect
-                               text-gray-800 dark:text-white font-bold py-2 px-4 rounded-md 
-                               transition-colors shadow-lg hover:shadow-xl"
+                  className="flex-1 text-center bg-gray-700 dark:bg-slate-800 
+                      hover:bg-gray-600 dark:hover:bg-slate-700 
+                      text-cyan-400 dark:text-cyan-500 font-bold py-2 px-4 rounded-lg 
+                       transition-colors shadow-md shadow-gray-900/80 dark:shadow-slate-900/80"
                 >
                   Download
                 </a>
