@@ -3639,20 +3639,8 @@ html,body {
   --tw-shadow: var(--tw-shadow-colored);
 }
 
-@media (max-width: 360px) {
-  .max-\[360px\]\:hidden {
-    display: none;
-  }
-}
-
 @media (max-width: 358px) {
   .max-\[358px\]\:hidden {
-    display: none;
-  }
-}
-
-@media (max-width: 355px) {
-  .max-\[355px\]\:hidden {
     display: none;
   }
 }

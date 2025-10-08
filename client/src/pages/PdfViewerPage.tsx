@@ -79,7 +79,7 @@ const PdfViewerPage = () => {
   const y = useMotionValue(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [overscanValue, setOverscanValue] = useState(5000);
+  const [overscanValue, setOverscanValue] = useState(470);
   const [loadProgress, setLoadProgress] = useState<number | null>(null);
   const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(null);
   const numberOfSteps = 40;
