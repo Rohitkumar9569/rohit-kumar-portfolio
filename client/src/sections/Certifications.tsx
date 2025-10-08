@@ -83,8 +83,8 @@ const Certifications = () => {
               onClick={() => setActiveFilter(category)}
               // Filter button styling matching Skills buttons
               className={`py-2 px-5 rounded-full text-sm font-semibold transition-colors duration-300 ${activeFilter === category
-                  ? 'bg-cyan-600 text-white dark:bg-cyan-500 dark:text-white shadow-md shadow-cyan-300/50'
-                  : 'bg-gray-300/70 text-gray-700 hover:bg-gray-400/50 dark:bg-slate-700/80 dark:text-slate-300 dark:hover:bg-slate-600/70'
+                ? 'bg-cyan-600 text-white dark:bg-cyan-500 dark:text-white shadow-md shadow-cyan-300/50'
+                : 'bg-gray-300/70 text-gray-700 hover:bg-gray-400/50 dark:bg-slate-700/80 dark:text-slate-300 dark:hover:bg-slate-600/70'
                 }`}
             >
               {category}
@@ -110,12 +110,12 @@ const Certifications = () => {
                     rel="noopener noreferrer"
                     // --- FIX: Card styling to match Skills buttons ---
                     className="block 
-                      bg-gray-300/70 hover:bg-gray-400/50 
-                      dark:bg-slate-700/80 dark:hover:bg-slate-600/70 
-                      p-6 rounded-lg 
-                      shadow-lg shadow-cyan-500/30 dark:shadow-cyan-800/50 
-                      hover:shadow-xl hover:shadow-cyan-500/40 dark:hover:shadow-cyan-800/70 
-                      hover:-translate-y-1 transition-all duration-300 h-full"
+                     bg-gray-300/70 hover:bg-gray-400/50 
+                     dark:bg-slate-700/80 dark:hover:bg-slate-600/70 
+                     p-6 rounded-lg 
+                     shadow-lg shadow-cyan-500/30 dark:shadow-cyan-800/50 
+                     hover:shadow-xl hover:shadow-cyan-500/40 dark:hover:shadow-cyan-800/70 
+                     hover:-translate-y-1 transition-all duration-300 h-full"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <img src={cert.logo} alt={`${cert.provider} Logo`} className="h-8" loading="lazy" />
@@ -144,8 +144,8 @@ const Certifications = () => {
               onClick={() => setIsExpanded(!isExpanded)}
               // Show More/Less button styling consistent with accent color and dark mode
               className="inline-flex items-center mx-auto gap-3 border font-semibold py-3 px-8 rounded-full transition-colors duration-300 
-                bg-gray-300/70 hover:bg-gray-400/50 dark:bg-slate-700/80 dark:hover:bg-slate-600/70 
-                text-cyan-600 dark:text-cyan-400 border-gray-300 dark:border-slate-700 shadow-md shadow-cyan-300/30 dark:shadow-cyan-800/30"
+               bg-gray-300/70 hover:bg-gray-400/50 dark:bg-slate-700/80 dark:hover:bg-slate-600/70 
+               text-cyan-600 dark:text-cyan-400 border-gray-300 dark:border-slate-700 shadow-md shadow-cyan-300/30 dark:shadow-cyan-800/30"
             >
               {isExpanded ? 'Show Less' : 'Show More'}
               {isExpanded

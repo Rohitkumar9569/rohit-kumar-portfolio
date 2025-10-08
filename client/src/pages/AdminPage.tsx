@@ -16,7 +16,7 @@ const AdminPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-750 text-white p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-slate-700 text-white p-4 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
         <header className="mb-8 flex justify-between items-center">
           <div>

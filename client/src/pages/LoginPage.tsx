@@ -47,8 +47,8 @@ const LoginPage: React.FC = () => {
       <div
         // FIX 2: Card background consistent with other theme cards
         className="w-full max-w-md p-8 space-y-8 
-                  bg-white dark:bg-slate-800 rounded-xl 
-                  shadow-2xl shadow-gray-400/50 dark:shadow-slate-900/50"
+         bg-white dark:bg-slate-800 rounded-xl 
+         shadow-2xl shadow-gray-400/50 dark:shadow-slate-900/50"
       >
         <div className="text-center">
           <div className='flex justify-center mb-4'>
@@ -77,8 +77,8 @@ const LoginPage: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 // FIX 6: Input styling matching the Contact form (raised/floating effect)
                 className="w-full bg-gray-200/70 dark:bg-slate-700/60 border border-gray-300 dark:border-slate-600 rounded-md py-2 px-3 
-                           text-gray-800 dark:text-white shadow-md shadow-gray-400/30 dark:shadow-slate-900/40 
-                           focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300"
+                  text-gray-800 dark:text-white shadow-md shadow-gray-400/30 dark:shadow-slate-900/40 
+                  focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300"
               />
             </div>
           </div>
@@ -97,8 +97,8 @@ const LoginPage: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full bg-gray-200/70 dark:bg-slate-700/60 border border-gray-300 dark:border-slate-600 rounded-md py-2 px-3 
-                           text-gray-800 dark:text-white shadow-md shadow-gray-400/30 dark:shadow-slate-900/40 
-                           focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300"
+                 text-gray-800 dark:text-white shadow-md shadow-gray-400/30 dark:shadow-slate-900/40 
+                 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300"
               />
             </div>
           </div>

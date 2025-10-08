@@ -233,7 +233,7 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
           </div>
         )}
 
-        {/* FIX: Use custom handler for closing the drawer */}
+        {/* Use custom handler for closing the drawer */}
         {isMobile && (<button onClick={handleCloseDrawer} aria-label="Close chat" className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-700 ml-auto"><XMarkIcon className="h-5 w-5" /></button>)}
       </header>
 

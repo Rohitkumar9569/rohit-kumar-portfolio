@@ -6,7 +6,7 @@ const PyqCardSkeleton = () => {
   return (
     // Card Background: White/Light Gray in Light Mode, Slate-800 in Dark Mode (consistent with other cards)
     <div className="bg-white dark:bg-slate-800 rounded-xl p-6 animate-pulse
-            shadow-lg shadow-gray-300/50 dark:shadow-slate-900/50">
+              shadow-lg shadow-gray-300/50 dark:shadow-slate-900/50">
 
       {/* Year Placeholder (Darker bar inside the card) */}
       <div className="h-4 bg-gray-300 dark:bg-slate-700 rounded-full w-1/4 mb-4"></div>

@@ -122,9 +122,8 @@ const About = () => {
             {/* Photo background glow (Cyan/Violet for theme) */}
             <div className="absolute w-72 h-72 sm:w-96 sm:h-96 bg-cyan-500/20 dark:bg-violet-500/20 rounded-full blur-3xl animate-pulse"></div>
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden 
-                shadow-2xl shadow-cyan-500/50 dark:shadow-violet-500/50 
-                // --- FIX: Removed the unwanted border class ---
-                ">
+                shadow-2xl shadow-cyan-500/50 dark:shadow-violet-500/50 
+                ">
               <img
                 src={profilePhoto}
                 alt="Rohit Kumar"
@@ -223,9 +222,9 @@ const About = () => {
               onClick={(e) => e.stopPropagation()}
               // Modal styling consistent
               className={`relative bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-800 
-                         border border-cyan-400/50 dark:border-cyan-700/50 rounded-2xl p-8 
-                         shadow-2xl shadow-cyan-300/30 dark:shadow-cyan-500/10 max-w-lg w-full transform-gpu
-                         text-gray-800 dark:text-white`}
+              border border-cyan-400/50 dark:border-cyan-700/50 rounded-2xl p-8 
+              shadow-2xl shadow-cyan-300/30 dark:shadow-cyan-500/10 max-w-lg w-full transform-gpu
+              text-gray-800 dark:text-white`}
             >
               <div className="flex flex-col items-center text-center">
                 {selectedOrg.logo && (

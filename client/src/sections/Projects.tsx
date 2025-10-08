@@ -49,11 +49,11 @@ const Projects = () => {
               key={index}
               // --- FIX: Card background and hover matching Skills/Certifications components ---
               className="bg-gray-300/70 dark:bg-slate-700/80 rounded-lg overflow-hidden 
-                shadow-xl shadow-cyan-500/30 dark:shadow-cyan-800/50
-                group transform transition-all duration-300 
-                hover:bg-gray-400/50 dark:hover:bg-slate-600/70 
-                hover:shadow-2xl hover:shadow-cyan-500/40 dark:hover:shadow-cyan-800/70 
-                hover:-translate-y-2"
+              shadow-xl shadow-cyan-500/30 dark:shadow-cyan-800/50
+              group transform transition-all duration-300 
+              hover:bg-gray-400/50 dark:hover:bg-slate-600/70 
+              hover:shadow-2xl hover:shadow-cyan-500/40 dark:hover:shadow-cyan-800/70 
+              hover:-translate-y-2"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
