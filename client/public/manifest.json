@@ -1,0 +1,21 @@
+{
+  "name": "Rohit Kumar | Portfolio & Study Hub",
+  "short_name": "Rohit's Hub",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "description": "The portfolio of Rohit Kumar, a full-stack developer and creator of the Study Hub.",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

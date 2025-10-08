@@ -13,8 +13,6 @@
       if (theme === 'light') {
         document.documentElement.classList.remove('dark');
       }
-      // If theme is 'dark' or not set, the 'dark' class remains, ensuring 
-      // the site loads in Dark Mode by default.
     })();
   </script>
 
@@ -22,20 +20,36 @@
   <noscript>
     <link rel="stylesheet" href="/css/fonts.css">
   </noscript>
+  
   <title>Rohit Kumar | Full-Stack Developer</title>
-
+  <meta name="description" content="The portfolio of Rohit Kumar, a full-stack developer and creator of the Study Hub." />
+  
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json" />
+  
+  <meta name="theme-color" content="#0d1117">
+  
+  <link rel="canonical" href="https://rohitkumar-portfolio.vercel.app/" />
 
-  <meta name="description" content="The portfolio of Rohit Kumar, a full-stack developer." />
-  <meta property="og:title" content="Rohit Kumar | Full-Stack Developer" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rohitkumar-portfolio.vercel.app/" />
+  <meta property="og:site_name" content="Rohit Kumar - Portfolio" />
+  <meta property="og:title" content="Rohit Kumar | Full-Stack Developer & Study Hub" />
+  <meta property="og:description" content="The portfolio of Rohit Kumar, a full-stack developer and creator of the Study Hub." />
+  <meta property="og:image" content="https://res.cloudinary.com/dlcvljnnu/image/upload/v1759951140/profile-photo_dznr2x.webp" />
+  
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://rohitkumar-portfolio.vercel.app/" />
+  <meta name="twitter:title" content="Rohit Kumar | Full-Stack Developer & Study Hub" />
+  <meta name="twitter:description" content="The portfolio of Rohit Kumar, a full-stack developer and creator of the Study Hub." />
+  <meta name="twitter:image" content="https://res.cloudinary.com/dlcvljnnu/image/upload/v1759951140/profile-photo_dznr2x.webp" />
 
   <meta name="google-site-verification" content="uY2blvR_qEZxxaLHevwnNKowtuyuTLsxQ0LSw1e-YWA" /> 
 </head>
 
 <body>
   <div id="root"></div>
-
   <script type="module" src="/src/main.tsx"></script>
 </body>
-
 </html>
