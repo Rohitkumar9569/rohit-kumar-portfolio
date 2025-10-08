@@ -2,10 +2,11 @@ import React, { Suspense, useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import Lenis from 'lenis';
 
 // --- CONTEXT IMPORTS ---
 import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext'; // <-- 1. Import our ThemeProvider
+import { ThemeProvider } from './context/ThemeContext';
 
 // --- COMPONENT IMPORTS ---
 import Navbar from './components/Navbar';
@@ -34,8 +35,6 @@ const AppContent = () => {
   );
 
   return (
-
-    // <-- 2. Removed hardcoded "bg-neutral-950 text-white" to allow theme to work
     <div className="min-h-screen">
       <CommandPalette open={open} setOpen={setOpen} />
       {showMainLayout && <Navbar />}
@@ -61,9 +60,32 @@ const AppContent = () => {
 function App() {
   const [contentLoaded, setContentLoaded] = useState(false);
   const [animationFinished, setAnimationFinished] = useState(false);
+  
+  // --- Responsive Smooth Scrolling Setup ---
+  useEffect(() => {
+    const lenis = new Lenis({
+      // The 'lerp' value determines how quickly the scroll 'catches up'.
+      // A value around 0.1 is a sweet spot for responsiveness and smoothness.
+      lerp: 0.2,
+      // Standard sensitivity. You can increase this if you want the scroll
+      // to be even faster.
+      wheelMultiplier: 2,
+      touchMultiplier: 2,
+    });
 
-  // <-- 3. Removed the conflicting useEffect that was setting the theme based on OS preference
-  // All theme logic is now handled by ThemeContext.
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Cleanup function
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
 
   useEffect(() => {
     const img = new Image();
@@ -86,19 +108,16 @@ function App() {
   const showApp = contentLoaded && animationFinished;
 
   return (
-    // <-- 4. Wrapped the entire application in ThemeProvider
     <ThemeProvider>
       <Router>
         <AuthProvider>
           <Toaster position="top-center" />
           <AnimatePresence>
-            {/* FIX: Added required 'key' prop to satisfy AnimatePresence. 
-                  NOTE: Passing setContentLoaded in onLoadComplete ensures app loads after preloader finishes its tasks. */}
             {!showApp && <Preloader
               key="app-preloader"
               onLoadComplete={() => {
-                setContentLoaded(true); // Content is ready
-                setAnimationFinished(true); // Animation is complete
+                setContentLoaded(true); 
+                setAnimationFinished(true);
               }}
             />}
           </AnimatePresence>
