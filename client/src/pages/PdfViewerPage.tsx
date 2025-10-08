@@ -347,7 +347,7 @@ const PdfViewerPage = () => {
               <button onClick={fitWidth} className="p-2 hover:bg-slate-700 rounded-md max-[340px]:hidden" title="Fit to Width">
                 <ArrowsPointingOutIcon className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
-              <button onClick={handleRotate} className="p-2 hover:bg-slate-700 rounded-md max-[380px]:hidden" title="Rotate">
+              <button onClick={handleRotate} className="p-2 hover:bg-slate-700 rounded-md max-[358px]:hidden" title="Rotate">
                 <ArrowPathIcon className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
             </div>

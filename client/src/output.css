@@ -2154,11 +2154,6 @@ html,body {
   background-color: rgb(245 245 245 / 0.1);
 }
 
-.bg-neutral-900 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(23 23 23 / var(--tw-bg-opacity, 1));
-}
-
 .bg-neutral-950 {
   --tw-bg-opacity: 1;
   background-color: rgb(10 10 10 / var(--tw-bg-opacity, 1));
@@ -2166,6 +2161,10 @@ html,body {
 
 .bg-neutral-950\/80 {
   background-color: rgb(10 10 10 / 0.8);
+}
+
+.bg-neutral-950\/90 {
+  background-color: rgb(10 10 10 / 0.9);
 }
 
 .bg-primary {
@@ -2231,19 +2230,6 @@ html,body {
 
 .bg-zinc-400\/10 {
   background-color: rgb(161 161 170 / 0.1);
-}
-
-.bg-neutral-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(38 38 38 / var(--tw-bg-opacity, 1));
-}
-
-.bg-neutral-900\/90 {
-  background-color: rgb(23 23 23 / 0.9);
-}
-
-.bg-neutral-950\/90 {
-  background-color: rgb(10 10 10 / 0.9);
 }
 
 .bg-opacity-50 {
@@ -3653,8 +3639,20 @@ html,body {
   --tw-shadow: var(--tw-shadow-colored);
 }
 
-@media (max-width: 380px) {
-  .max-\[380px\]\:hidden {
+@media (max-width: 360px) {
+  .max-\[360px\]\:hidden {
+    display: none;
+  }
+}
+
+@media (max-width: 358px) {
+  .max-\[358px\]\:hidden {
+    display: none;
+  }
+}
+
+@media (max-width: 355px) {
+  .max-\[355px\]\:hidden {
     display: none;
   }
 }
