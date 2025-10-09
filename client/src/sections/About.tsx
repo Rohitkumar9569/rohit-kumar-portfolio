@@ -136,8 +136,8 @@ const About = () => {
                 download="Rohit-Kumar-Resume.pdf"
                 onClick={handleDownload}
                 className={`${baseResumeButtonClasses} ${isDownloaded
-                    ? 'bg-green-600 dark:bg-green-600 text-white cursor-not-allowed shadow-green-400/50 dark:shadow-green-800/50'
-                    : 'bg-cyan-600 dark:bg-cyan-500 text-white shadow-cyan-400/50 dark:shadow-cyan-800/50 hover:scale-105 hover:bg-cyan-700 dark:hover:bg-cyan-600 hover:shadow-xl hover:shadow-cyan-400/70'
+                    ? 'bg-green-700/80 dark:bg-green-700/80 text-white cursor-not-allowed shadow-slate-950/80 dark:shadow-green-200/40'
+                    : 'bg-cyan-600 dark:bg-cyan-500 text-white shadow-slate-950/80 dark:shadow-white/40 hover:scale-105 hover:bg-cyan-700 dark:hover:bg-cyan-600 hover:shadow-xl hover:shadow-cyan-400/70'
                   }`}
               >
                 <AnimatePresence mode="wait">

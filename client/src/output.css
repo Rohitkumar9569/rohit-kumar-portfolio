@@ -2154,9 +2154,8 @@ html,body {
   background-color: rgb(55 65 81 / var(--tw-bg-opacity, 1));
 }
 
-.bg-green-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(22 163 74 / var(--tw-bg-opacity, 1));
+.bg-green-700\/80 {
+  background-color: rgb(21 128 61 / 0.8);
 }
 
 .bg-neutral-100\/10 {
@@ -2799,13 +2798,13 @@ html,body {
   --tw-shadow: var(--tw-shadow-colored);
 }
 
-.shadow-green-400\/50 {
-  --tw-shadow-color: rgb(74 222 128 / 0.5);
+.shadow-slate-900\/80 {
+  --tw-shadow-color: rgb(15 23 42 / 0.8);
   --tw-shadow: var(--tw-shadow-colored);
 }
 
-.shadow-slate-900\/80 {
-  --tw-shadow-color: rgb(15 23 42 / 0.8);
+.shadow-slate-950\/80 {
+  --tw-shadow-color: rgb(2 6 23 / 0.8);
   --tw-shadow: var(--tw-shadow-colored);
 }
 
@@ -3437,9 +3436,8 @@ html,body {
   background-color: rgb(8 145 178 / var(--tw-bg-opacity, 1));
 }
 
-.dark\:bg-green-600:is(.dark *) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(22 163 74 / var(--tw-bg-opacity, 1));
+.dark\:bg-green-700\/80:is(.dark *) {
+  background-color: rgb(21 128 61 / 0.8);
 }
 
 .dark\:bg-neutral-400\/10:is(.dark *) {
@@ -3596,8 +3594,8 @@ html,body {
   --tw-shadow: var(--tw-shadow-colored);
 }
 
-.dark\:shadow-green-800\/50:is(.dark *) {
-  --tw-shadow-color: rgb(22 101 52 / 0.5);
+.dark\:shadow-green-400\/50:is(.dark *) {
+  --tw-shadow-color: rgb(74 222 128 / 0.5);
   --tw-shadow: var(--tw-shadow-colored);
 }
 
@@ -3618,6 +3616,26 @@ html,body {
 
 .dark\:shadow-violet-500\/50:is(.dark *) {
   --tw-shadow-color: rgb(139 92 246 / 0.5);
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.dark\:shadow-white\/40:is(.dark *) {
+  --tw-shadow-color: rgb(255 255 255 / 0.4);
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.dark\:shadow-green-400\/40:is(.dark *) {
+  --tw-shadow-color: rgb(74 222 128 / 0.4);
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.dark\:shadow-green-500\/40:is(.dark *) {
+  --tw-shadow-color: rgb(34 197 94 / 0.4);
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.dark\:shadow-green-200\/40:is(.dark *) {
+  --tw-shadow-color: rgb(187 247 208 / 0.4);
   --tw-shadow: var(--tw-shadow-colored);
 }
 
