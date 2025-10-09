@@ -351,12 +351,16 @@ const PdfViewerPage = () => {
                 <ArrowPathIcon className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
             </div>
-            <div className="w-5 sm:w-6"></div> 
+            <div className="w-5 sm:w-6"></div>
           </div>
         </motion.header>
         <main className={`relative h-full flex flex-col bg-slate-100 transition-all duration-300 ${isHeaderVisible ? 'pt-10' : 'pt-0'}`}>
           <Document file={pyq?.fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadProgress={handleLoadProgress} onLoadError={console.error} loading={<PdfPageSkeleton />} className="flex-1 overflow-hidden">
-            {numPages > 0 && (<Virtuoso ref={virtuosoRef} overscan={overscanValue} totalCount={numPages} scrollerRef={(ref) => { if (ref) { (pdfContainerRef as React.MutableRefObject<HTMLDivElement | null>).current = ref as HTMLDivElement; } }} className="custom-scrollbar" rangeChanged={range => setCurrentPage(range.startIndex + 1)} itemContent={index => (<div className="flex justify-center py-2 md:py-4"><div className="shadow-lg bg-white" style={{ width: 595 * scale, height: 842 * scale }}><Page pageNumber={index + 1} scale={scale} rotate={rotation} loading={<div style={{ width: 595 * scale, height: 842 * scale }} className="bg-slate-200 animate-pulse rounded-md" />} /></div></div>)} />)}
+            {numPages > 0 && (<Virtuoso ref={virtuosoRef} overscan={overscanValue} totalCount={numPages} scrollerRef={(ref) => {
+              if (ref) {
+                (pdfContainerRef as React.MutableRefObject<HTMLDivElement | null>).current = ref as HTMLDivElement; (ref as HTMLElement).id = 'pdf-scroll-area';
+              }
+            }} className="custom-scrollbar" rangeChanged={range => setCurrentPage(range.startIndex + 1)} itemContent={index => (<div className="flex justify-center py-2 md:py-4"><div className="shadow-lg bg-white" style={{ width: 595 * scale, height: 842 * scale }}><Page pageNumber={index + 1} scale={scale} rotate={rotation} loading={<div style={{ width: 595 * scale, height: 842 * scale }} className="bg-slate-200 animate-pulse rounded-md" />} /></div></div>)} />)}
           </Document>
         </main>
         <AnimatePresence>{isMobile && showCustomScrollbar && (<motion.div ref={trackRef} className="absolute top-0 right-0 h-full w-10 z-20 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}><motion.div drag="y" dragConstraints={trackRef} dragElastic={0} dragMomentum={false} onDragStart={() => setIsDragging(true)} onDragEnd={() => setIsDragging(false)} onDrag={(event, info) => { const container = pdfContainerRef.current; const track = trackRef.current; if (container && track) { const maxThumbY = track.clientHeight - THUMB_HEIGHT; const progress = info.offset.y / maxThumbY; const maxScrollTop = container.scrollHeight - container.clientHeight; container.scrollTop = progress * maxScrollTop; } }} style={{ y, height: THUMB_HEIGHT }} className="w-16 bg-slate-800/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-xs shadow-lg cursor-grab active:cursor-grabbing pointer-events-auto -ml-3">{currentPage} / {numPages}</motion.div></motion.div>)}</AnimatePresence>

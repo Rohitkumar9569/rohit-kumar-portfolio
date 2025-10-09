@@ -60,7 +60,7 @@ const AppContent = () => {
 function App() {
   const [contentLoaded, setContentLoaded] = useState(false);
   const [animationFinished, setAnimationFinished] = useState(false);
-  
+
   // --- Responsive Smooth Scrolling Setup ---
   useEffect(() => {
     const lenis = new Lenis({
@@ -71,6 +71,8 @@ function App() {
       // to be even faster.
       wheelMultiplier: 2,
       touchMultiplier: 2,
+      prevent: (node) =>
+        node.id === 'pdf-scroll-area' || node.id === 'ai-chat-scroll-area',
     });
 
     function raf(time: number) {
@@ -116,7 +118,7 @@ function App() {
             {!showApp && <Preloader
               key="app-preloader"
               onLoadComplete={() => {
-                setContentLoaded(true); 
+                setContentLoaded(true);
                 setAnimationFinished(true);
               }}
             />}

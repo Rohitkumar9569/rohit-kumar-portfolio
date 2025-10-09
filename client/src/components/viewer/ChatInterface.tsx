@@ -238,7 +238,8 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
       </header>
 
       {/* 3. MAIN AREA FIX: h-0 is the key for shrinkability. */}
-      <main ref={chatScrollRef} className={`flex-grow h-0 overflow-y-auto space-y-6 p-4 custom-scroll-smooth`}>
+      <main id="ai-chat-scroll-area"
+       ref={chatScrollRef} className={`flex-grow h-0 overflow-y-auto space-y-6 p-4 custom-scroll-smooth`}>
         {messages.length === 0 ? (
           // Welcome Block must have flex-shrink-0 to allow main to shrink
           <div className='relative flex-shrink-0'> 
