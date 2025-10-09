@@ -1,8 +1,24 @@
+You want to add a unique, premium-style toast notification when the "Download Resume" button is clicked in the provided React component. This toast notification should confirm the download has started.
+Here is the full, updated React component using react-hot-toast for professional, non-intrusive notifications.
+1. Installation
+First, you need to install the required package:
+npm install react-hot-toast
+# OR
+yarn add react-hot-toast
+
+2. Full React Component Code
+I've made the following changes:
+ * Imported toast and Toaster from react-hot-toast.
+ * Created the handleDownload function to show the unique toast before starting the download.
+ * Replaced the static <a> tag with a button that calls handleDownload.
+ * Added the <Toaster /> component to render the notifications.
+<!-- end list -->
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTypewriter, Cursor } from 'react-simple-typewriter';
 import { HiOutlineArrowDownTray } from 'react-icons/hi2';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import toast, { Toaster } from 'react-hot-toast'; 
 
 // Import assets
 import profilePhoto from '../assets/profile-photo.webp';
@@ -93,26 +109,67 @@ const About = () => {
 
   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
 
+  // Function to handle download and show a premium toast
+  const handleDownload = () => {
+    // Show a unique, premium-style toast notification
+    toast.custom((t) => (
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -50 }}
+        className={`bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-2xl rounded-xl p-4 flex items-center gap-4 
+                    ring-2 ring-cyan-500/50 dark:ring-cyan-400/50 backdrop-blur-sm transform-gpu`}
+      >
+        <HiOutlineArrowDownTray className="h-6 w-6 text-cyan-600 dark:text-cyan-400 animate-bounce" />
+        <div>
+          <p className="font-bold">Download Started! 🚀</p>
+          <p className="text-sm text-gray-600 dark:text-slate-400">
+            Rohit Kumar's Resume is downloading now.
+          </p>
+        </div>
+        <button
+          onClick={() => toast.dismiss(t.id)}
+          className="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+          </svg>
+        </button>
+      </motion.div>
+    ), { duration: 4000 }); // Show for 4 seconds
+
+    // Programmatically create and click an anchor tag to trigger the actual download
+    const link = document.createElement('a');
+    link.href = '/Rohit-Kumar-Resume.pdf';
+    link.download = 'Rohit-Kumar-Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+
   // Reusable button styling for Timeline
   const timelineButtonClasses = `
-    bg-gray-300/70 hover:bg-gray-400/50 
-    dark:bg-slate-700/80 dark:hover:bg-slate-600/70 
-    text-gray-800 dark:text-cyan-400 
-    text-xs font-semibold py-1 px-3 rounded-full transition-colors
-  `;
+    bg-gray-300/70 hover:bg-gray-400/50 
+    dark:bg-slate-700/80 dark:hover:bg-slate-600/70 
+    text-gray-800 dark:text-cyan-400 
+    text-xs font-semibold py-1 px-3 rounded-full transition-colors
+  `;
 
   // Reusable button styling for Resume download
   const resumeButtonClasses = `
-    inline-flex items-center gap-2 font-bold py-3 px-8 rounded-full text-lg 
-    bg-cyan-600 dark:bg-cyan-500 text-white 
-    shadow-lg shadow-cyan-400/50 dark:shadow-cyan-800/50 
-    transition-all duration-300 transform hover:scale-105 hover:bg-cyan-700 dark:hover:bg-cyan-600 
-    hover:shadow-xl hover:shadow-cyan-400/70 cursor-pointer w-full sm:w-auto
-  `;
+    inline-flex items-center gap-2 font-bold py-3 px-8 rounded-full text-lg 
+    bg-cyan-600 dark:bg-cyan-500 text-white 
+    shadow-lg shadow-cyan-400/50 dark:shadow-cyan-800/50 
+    transition-all duration-300 transform hover:scale-105 hover:bg-cyan-700 dark:hover:bg-cyan-600 
+    hover:shadow-xl hover:shadow-cyan-400/70 cursor-pointer w-full sm:w-auto
+  `;
 
   return (
     <>
-      {/* Background consistent with other sections */}
+      {/* Toaster component to render notifications */}
+      <Toaster position="top-center" reverseOrder={false} /> 
+
       <section id="about" className="relative bg-slate-50 dark:bg-background min-h-screen flex items-center px-6 pt-28 pb-16 overflow-hidden">
         <motion.div
           className="container mx-auto z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
@@ -172,10 +229,10 @@ const About = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-6 mt-8 justify-center lg:justify-start">
-              {/* Resume Button with consistent 3D effect */}
-              <a href="/Rohit-Kumar-Resume.pdf" download className={resumeButtonClasses}>
+              {/* Resume Button replaced with a functional button */}
+              <button onClick={handleDownload} className={resumeButtonClasses}>
                 Download Resume <HiOutlineArrowDownTray className="h-5 w-5" />
-              </a>
+              </button>
               <div className="flex items-center gap-6">
                 {/* Social Icons with cyan hover */}
                 <a
@@ -203,7 +260,7 @@ const About = () => {
         </motion.div>
       </section>
 
-      {/* Institution Detail Modal */}
+      {/* Institution Detail Modal (No changes here) */}
       <AnimatePresence>
         {selectedOrg && (
           <motion.div
@@ -250,3 +307,4 @@ const About = () => {
 };
 
 export default About;
+
