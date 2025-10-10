@@ -26,7 +26,7 @@ const Contact = () => {
 
         try {
             // Placeholder for actual API call
-            // const response = await API.post('/api/contact', formData);
+             const response = await API.post('/api/contact', formData);
             // if (response.data.success) {
             setStatus('Message sent successfully!');
             setFormData({ name: '', email: '', message: '' });
