@@ -74,7 +74,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 
 
 // --- UPDATED AND RELIABLE CRON JOB SETUP ---
-cron.schedule('15 5 * * *', async () => {
+cron.schedule('00 7 * * *', async () => {
   console.log('⏰ Running daily suggestion generator cron job...');
   try {
     // Call the imported function directly. This is much safer.

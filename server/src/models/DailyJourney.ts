@@ -1,33 +1,70 @@
-// File: server/src/models/DailyJourney.ts
-import { Schema, model, Document } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-// Defines the structure for a pair of questions.
-interface IQuestionPair {
-  ca_question: string;
-  related_pyq: string;
-}
-
-// Defines the structure for the entire day's journey.
-export interface IDailyJourney extends Document {
-  journeyDate: string; // Stored as DD MMM YYYY
-  questions: IQuestionPair[];
-}
-
-const QuestionPairSchema = new Schema<IQuestionPair>({
-  ca_question: { type: String, required: true },
-  related_pyq: { type: String, required: true },
-}, { _id: false });
-
-const DailyJourneySchema = new Schema<IDailyJourney>({
-  journeyDate: {
+/**
+ * Defines the structure for a single question pair.
+ * This is a sub-document within the DailyJourney.
+ */
+const QuestionPairSchema: Schema = new Schema({
+  ca_question: {
     type: String,
-    required: true,
-    unique: true,
-    index: true,
+    default: null,
   },
-  questions: [QuestionPairSchema],
-}, { timestamps: true });
+  related_pyq: {
+    type: String,
+    default: null,
+  },
+  pyq_verified: {
+    type: Boolean,
+    default: false,
+  },
+  pyq_source_url: {
+    type: String,
+    default: null,
+  },
+});
 
-const DailyJourney = model<IDailyJourney>('DailyJourney', DailyJourneySchema);
+/**
+ * Defines the main schema for the daily journey document.
+ */
+const DailyJourneySchema: Schema = new Schema(
+  {
+    journeyDate: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true, // Improves query performance for finding dates
+    },
+    questions: [QuestionPairSchema],
+    meta: {
+      generatedAt: {
+        type: String,
+      },
+      sourceFetchCount: {
+        type: Number,
+      },
+    },
+  },
+  {
+    timestamps: true, // Automatically adds createdAt and updatedAt fields
+  },
+);
 
-export default DailyJourney;
+// --- TypeScript Interfaces for Type Safety ---
+
+export interface IQuestionPair extends Document {
+  ca_question: string | null;
+  related_pyq: string | null;
+  pyq_verified?: boolean;
+  pyq_source_url?: string | null;
+}
+
+export interface IDailyJourney extends Document {
+  journeyDate: string;
+  questions: IQuestionPair[];
+  meta?: {
+    generatedAt: string;
+    sourceFetchCount: number;
+  };
+}
+
+export default mongoose.model<IDailyJourney>('DailyJourney', DailyJourneySchema);

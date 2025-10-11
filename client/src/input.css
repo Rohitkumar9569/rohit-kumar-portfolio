@@ -37,8 +37,7 @@
     @apply bg-background text-foreground;
   }
 }
-/* ---------------------------------- */
-
+ 
 
 /* This should not need changes as it uses a generic color */
 *, ::before, ::after {
