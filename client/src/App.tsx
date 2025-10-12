@@ -15,7 +15,7 @@ import CommandPalette from './components/CommandPalette';
 import Preloader from './components/Preloader';
 import ProtectedRoute from './components/ProtectedRoute';
 import PageLoader from './components/PageLoader';
-import profilePhoto from './assets/profile-photo.jpeg';
+import profilePhoto from './assets/profile-photo.webp';
 
 // --- PAGE IMPORTS ---
 import PortfolioPage from './pages/PortfolioPage';

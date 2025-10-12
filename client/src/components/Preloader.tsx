@@ -29,11 +29,10 @@ const contentVariants = {
 };
 
 const logoVariants = {
-  hidden: { opacity: 0, scale: 0.3, rotate: -90 },
+  hidden: { opacity: 0, scale: 0.3, },
   visible: {
     opacity: 1,
     scale: 1,
-    rotate: 0,
     transition: { type: "spring", stiffness: 150, damping: 20, delay: 0.1 }
   },
   exit: {
@@ -146,14 +145,16 @@ const AnimatedCounter = ({ value }: { value: number }) => {
 // --- Main Preloader Component ---
 interface PreloaderProps {
     onLoadComplete: () => void;
+    imageToPreload: string;
 }
 
-const Preloader: React.FC<PreloaderProps> = ({ onLoadComplete }) => {
+const Preloader: React.FC<PreloaderProps> = ({ onLoadComplete, imageToPreload }) => {
     const [isMinTimeMet, setIsMinTimeMet] = useState(false);
     const [isServerWoken, setIsServerWoken] = useState(!!sessionStorage.getItem('server_woken'));
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [progress, setProgress] = useState(0);
 
-    const isLoadComplete = isMinTimeMet && isServerWoken;
+    const isLoadComplete = isMinTimeMet && isServerWoken && isImageLoaded;
     const loadingStatusMessage = useLoadingMessages(isLoadComplete);
 
     // Effect 1: Minimum Display Time & Progress Simulation (Unchanged)
@@ -188,6 +189,23 @@ const Preloader: React.FC<PreloaderProps> = ({ onLoadComplete }) => {
         };
         wakeUpServer();
     }, [isServerWoken]);
+
+  
+
+    //  NAYA EFFECT For Image Preloading 
+    useEffect(() => {
+        const img = new Image();
+        img.src = imageToPreload;    
+        img.onload = () => {
+            console.log("Profile photo successfully preloaded.");
+            setIsImageLoaded(true);
+        };
+        img.onerror = () => {
+            console.error("Image preloading failed.");
+            setIsImageLoaded(true); 
+        };
+    }, [imageToPreload]); 
+
 
     // Effect 3: Global Completion Check (Unchanged)
     useEffect(() => {
