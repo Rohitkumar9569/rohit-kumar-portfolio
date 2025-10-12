@@ -117,6 +117,7 @@ function App() {
           <AnimatePresence>
             {!showApp && <Preloader
               key="app-preloader"
+              imageToPreload={profilePhoto}
               onLoadComplete={() => {
                 setContentLoaded(true);
                 setAnimationFinished(true);
