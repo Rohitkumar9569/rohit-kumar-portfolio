@@ -16,7 +16,7 @@ const projectsData = [
     description: 'A full-stack MERN application for finding and listing rental rooms. Features user authentication, chat, and detailed room management for landlords.',
     techStack: ['React', 'Node.js', 'MongoDB', 'Express', 'Tailwind CSS'],
     liveLink: 'https://roomradarindia.vercel.app',
-    githubLink: 'https://github.com/',
+    githubLink: 'https://github.com/Rohitkumar9569/ROOMRADAR',
   },
   {
     title: 'Project Two',
