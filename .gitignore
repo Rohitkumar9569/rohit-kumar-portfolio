@@ -46,5 +46,6 @@ pnpm-debug.log*
 # Ignore environment variables file
 .env
 
+
 # Ignore temporary server uploads
 /server/public/uploads
