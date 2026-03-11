@@ -88,7 +88,6 @@ cron.schedule('00 7 * * *', async () => {
 });
 // --- END CRON JOB SETUP ---
 
-
 app.listen(port, () => {
   console.log(`[server]: Server is running on port ${port}`);
 });
