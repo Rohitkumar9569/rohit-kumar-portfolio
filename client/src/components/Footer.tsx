@@ -2,6 +2,7 @@ import React from 'react';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { animateScroll as scroll } from 'react-scroll';
 import Logo from './Logo';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const Footer = () => {
   // This function will smoothly scroll the page to the top
@@ -36,8 +37,8 @@ const Footer = () => {
           <a href="https://www.linkedin.com/in/rohit-kumar-bba12b25b/" aria-label="LinkedIn Profile" target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-[hsl(var(--accent))] transition-all duration-300 transform hover:scale-110">
             <FaLinkedin size={24} />
           </a>
-          <a href="https://x.com/home" aria-label="Twitter Profile" target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-[hsl(var(--accent))] transition-all duration-300 transform hover:scale-110">
-            <FaTwitter size={24} />
+          <a href="https://x.com/RohitKumar7348" aria-label="Twitter Profile" target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-[hsl(var(--accent))] transition-all duration-300 transform hover:scale-110">
+            <FaXTwitter size={24} />
           </a>
         </div>
       </div>
