@@ -9,7 +9,8 @@ import { Drawer } from 'vaul';
 import ChatInterface from '../components/viewer/ChatInterface';
 import PdfViewerSkeleton from '../components/viewer/PdfViewerSkeleton';
 import PdfPageSkeleton from '../components/viewer/PdfPageSkeleton';
-import { ArrowLeftIcon, ChatBubbleOvalLeftEllipsisIcon, MagnifyingGlassPlusIcon, MagnifyingGlassMinusIcon, ArrowPathIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/solid';
+// ChatBubbleBottomCenterTextIcon
+import { ArrowLeftIcon, ChatBubbleBottomCenterTextIcon, MagnifyingGlassPlusIcon, MagnifyingGlassMinusIcon, ArrowPathIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
 
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -91,7 +92,6 @@ const PdfViewerPage = () => {
   const handleOpenDrawer = () => setActiveSnapPoint(1);
   const handleCloseDrawer = () => setActiveSnapPoint(null);
 
-  // --- FIX IS HERE ---
   useEffect(() => {
     if (!isMobile || !pdfViewContainerRef.current) return;
     const container = pdfViewContainerRef.current;
@@ -105,7 +105,6 @@ const PdfViewerPage = () => {
       container.style.removeProperty('pointer-events');
     }
 
-    // Cleanup function: This runs when the component is unmounted (e.g., when you navigate away)
     return () => {
       document.body.style.removeProperty('overflow');
     };
@@ -367,7 +366,19 @@ const PdfViewerPage = () => {
       </div>
       {isMobile ? (
         <Drawer.Root modal={false} open={activeSnapPoint !== null} onOpenChange={(open) => setActiveSnapPoint(open ? 1 : null)} snapPoints={snapPoints} activeSnapPoint={activeSnapPoint} setActiveSnapPoint={setActiveSnapPoint}>
-          <button onClick={handleOpenDrawer} className="fixed bottom-6 right-6 bg-cyan-600 text-white p-4 rounded-full shadow-lg z-20 hover:bg-cyan-700 transition-transform hover:scale-110" title="Chat"><ChatBubbleOvalLeftEllipsisIcon className="h-7 w-7" /></button>
+          
+          <div className="fixed bottom-6 right-6 z-20 flex items-center justify-center group">
+            <div className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
+            <button 
+              onClick={handleOpenDrawer} 
+              className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg shadow-cyan-500/50 transition-transform duration-300 ease-out hover:scale-110 hover:shadow-cyan-400/80 focus:outline-none" 
+              title="Chat"
+            >
+              <ChatBubbleBottomCenterTextIcon className="h-7 w-7 drop-shadow-md" />
+            </button>
+          </div>
+          {/* BUTTON END */}
+
           <Drawer.Portal>
             <Drawer.Content className="fixed bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-neutral-950/90 backdrop-blur-md z-40 border-t border-slate-700 h-full">
               <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-slate-500" />

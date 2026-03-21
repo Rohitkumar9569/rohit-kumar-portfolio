@@ -17,6 +17,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PageLoader from './components/PageLoader';
 import profilePhoto from './assets/profile-photo.webp';
 
+// Yeh line nayi add ki gayi hai: GlobalAIChatWidget ko import karne ke liye
+import GlobalAIChatWidget from './components/GlobalAIChatWidget';
+
 // --- PAGE IMPORTS ---
 import PortfolioPage from './pages/PortfolioPage';
 const ExamSpecificPage = React.lazy(() => import('./pages/ExamSpecificPage'));
@@ -53,6 +56,10 @@ const AppContent = () => {
         </Suspense>
       </main>
       {showMainLayout && <Footer />}
+      
+      {/*  Floating Chat Widget show  */}
+      {location.pathname === '/' && <GlobalAIChatWidget />}
+      
     </div>
   );
 };
