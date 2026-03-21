@@ -60,7 +60,7 @@ const buttonContentVariant = {
 
 const About = () => {
   const [text] = useTypewriter({
-    words: ['Full-Stack Developer', 'Software Engineer', 'Web Application Specialist'],
+    words: ['Software Engineer', 'Full-Stack Developer', 'GATE DA & CSE Qualified', 'AI & Data Science Enthusiast', 'Problem Solver'],
     loop: true, typeSpeed: 80, deleteSpeed: 50, delaySpeed: 2000,
   });
 
@@ -113,10 +113,11 @@ const About = () => {
               <span className="whitespace-nowrap bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-transparent">{text}</span>
               <Cursor cursorColor="#06B6D4" />
             </h2>
-            <p className={`text-lg mb-8 max-w-xl leading-relaxed mx-auto lg:mx-0 text-center lg:text-left text-gray-700 dark:text-slate-300`}>
-              A passionate Computer Science student specializing in building beautiful, functional, and user-centric web applications.
+           <p className="text-lg mb-8 w-full leading-relaxed mx-auto lg:mx-0 text-center lg:text-left text-gray-700 dark:text-slate-300">
+              A Computer Science Engineer skilled in web development and Data Science.
+              <br />
+              GATE qualified in CSE and DA (AIR 7275), building scalable, intelligent systems.
             </p>
-
             <div className="relative border-l-2 border-gray-400/50 dark:border-slate-700/50 pl-8 mt-8">
               {timelineItems.map((item, index) => (
                 <div key={index} className="mb-8 relative group">
