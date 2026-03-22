@@ -2,6 +2,8 @@
 
 import express from 'express';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import Groq from 'groq-sdk';
+import OpenAI from 'openai';
 import PyqDocument from '../models/PyqDocument';
 import Subject from '../models/Subject';
 import cloudinary from '../config/cloudinary';
@@ -13,8 +15,14 @@ if (!process.env.GEMINI_API_KEY) {
   throw new Error('GEMINI_API_KEY is not defined in the environment variables.');
 }
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-// The model is initialized without a static system instruction.
 const generativeModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+// <--- NAYE AI SETUPS START --->
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || '' });
+const openrouter = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENROUTER_API_KEY || '',
+});
 
 const router = express.Router();
 
@@ -335,36 +343,96 @@ Acknowledge your readiness at the start of every new session with this exact lin
 `;
 
     // Format the history for the Gemini API.
-    const formattedHistory = history.map((msg: { sender: string; text: string }) => ({
-      role: msg.sender === 'ai' ? 'model' : 'user',
-      parts: [{ text: msg.text }],
-    }));
-
-    // FIX: Start the chat session by injecting the DYNAMIC system prompt first.
-    const chat = generativeModel.startChat({
-      history: [
-        { role: 'user', parts: [{ text: systemPrompt }] },
-        { role: 'model', parts: [{ text: "Okay, I understand my role and the current date. I will answer all questions and use my tools as instructed." }] },
-        ...formattedHistory
-      ],
-    });
-
+   // Headers set karna (Same rahega)
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
 
-    const result = await chat.sendMessageStream(question);
+    // ==========================================
+    // TIER 1: GOOGLE GEMINI (Pehli Koshish)
+    // ==========================================
+    try {
+      const formattedHistory = history.map((msg: any) => ({
+        role: msg.sender === 'ai' ? 'model' : 'user',
+        parts: [{ text: msg.text }],
+      }));
 
-    for await (const chunk of result.stream) {
-      res.write(`data: ${JSON.stringify({ chunk: chunk.text() })}\n\n`);
+      const chat = generativeModel.startChat({
+        history: [
+          { role: 'user', parts: [{ text: systemPrompt }] },
+          { role: 'model', parts: [{ text: "Okay, I understand my role..." }] },
+          ...formattedHistory
+        ],
+      });
+
+      const result = await chat.sendMessageStream(question);
+      for await (const chunk of result.stream) {
+        res.write(`data: ${JSON.stringify({ chunk: chunk.text() })}\n\n`);
+      }
+      return res.end(); // Agar Gemini chal gaya, toh yahi se return ho jayega
+
+    } catch (geminiError: any) {
+      console.warn('⚠️ Gemini Stream Failed. Switching to Groq...', geminiError.message);
     }
-    res.end();
+
+    // ==========================================
+    // PREPARE HISTORY FOR GROQ & OPENROUTER
+    // ==========================================
+    const fallbackHistory: any = [
+      { role: 'system', content: systemPrompt },
+      ...history.map((msg: any) => ({
+        role: msg.sender === 'ai' ? 'assistant' : 'user',
+        content: msg.text,
+      })),
+      { role: 'user', content: question }
+    ];
+
+    // ==========================================
+    // TIER 2: GROQ (Dusri Koshish)
+    // ==========================================
+    try {
+      const stream = await groq.chat.completions.create({
+        messages: fallbackHistory,
+        model: 'llama-3.3-70b-versatile',
+        stream: true,
+      });
+
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content || "";
+        if (content) res.write(`data: ${JSON.stringify({ chunk: content })}\n\n`);
+      }
+      return res.end(); // Agar Groq chal gaya, toh yahan ruk jayega
+
+    } catch (groqError: any) {
+      console.warn('⚠️ Groq Stream Failed. Switching to OpenRouter...', groqError.message);
+    }
+
+    // ==========================================
+    // TIER 3: OPENROUTER (Aakhri Koshish)
+    // ==========================================
+    try {
+      const stream = await openrouter.chat.completions.create({
+        model: "openrouter/auto",
+        messages: fallbackHistory,
+        stream: true,
+      });
+
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content || "";
+        if (content) res.write(`data: ${JSON.stringify({ chunk: content })}\n\n`);
+      }
+      return res.end(); 
+
+    } catch (orError: any) {
+      console.error('❌ ALL AI APIs FAILED!', orError.message);
+      res.write(`data: ${JSON.stringify({ chunk: "\n\n⚠️ Sārathi is currently taking a short break due to high server load. Please try asking again in a few minutes! 🙏" })}\n\n`);
+      return res.end();
+    }
 
   } catch (error) {
     console.error('Error in chat stream route:', error);
     res.end();
   }
 });
-
 export default router;

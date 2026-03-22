@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Drawer } from 'vaul';
-import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/solid'; // Naya Icon Import
+import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/solid';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { useQuery } from '@tanstack/react-query';
 import ChatInterface from './viewer/ChatInterface';
@@ -194,7 +194,7 @@ const GlobalAIChatWidget = () => {
 
   return (
     <Drawer.Root 
-      modal={false} 
+      modal={true} 
       open={activeSnapPoint !== null} 
       onOpenChange={(open) => setActiveSnapPoint(open ? 1 : null)} 
       snapPoints={snapPoints} 
@@ -204,7 +204,7 @@ const GlobalAIChatWidget = () => {
       {/* 1. ATTRACTIVE MODERN FLOATING BUTTON */}
       <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100] flex items-center justify-center group">
         
-        {/*  Glowing Pulse Animation */}
+        {/* Glowing Pulse Animation */}
         <div className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
         
         {/* Main Attractive Button */}
@@ -218,13 +218,19 @@ const GlobalAIChatWidget = () => {
 
       </div>
 
-      {/* 2. CHAT DRAWER CONTENT */}
+      {/* 2. CHAT DRAWER CONTENT (NEW WATER/FROSTED THEME) */}
+     {/* 2. CHAT DRAWER CONTENT (PERFECT LIGHT WATER THEME) */}
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40 z-[140] md:hidden" />
+        <Drawer.Overlay className="fixed inset-0 bg-black/10 z-[140] transition-opacity duration-300 md:hidden" />
+        
         <Drawer.Content 
-          className="fixed bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-neutral-950/95 backdrop-blur-xl z-[150] border-t border-slate-700 h-[90vh] md:h-[80vh] md:w-[450px] md:left-auto md:right-6 md:bottom-24 md:rounded-2xl md:border shadow-2xl"
+          
+          className="fixed bottom-0 left-0 right-0 flex flex-col rounded-t-2xl z-[150] h-full transition-all duration-300 ease-out
+                     md:h-[80vh] md:w-[450px] md:left-auto md:right-6 md:bottom-24 md:rounded-2xl
+                     shadow-[-5px_0_30px_rgba(0,0,0,0.3)] md:shadow-[0_10px_40px_rgba(0,0,0,0.3)]
+                     bg-slate-900/50 backdrop-blur-md border-t border-white/10 md:border border-white/10"
         >
-          <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-slate-500 md:hidden" />
+          <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-white/30 md:hidden" />
           <VisuallyHidden>
             <Drawer.Title>AI Assistant Chat</Drawer.Title>
             <Drawer.Description>Global chat assistant for Rohit's portfolio.</Drawer.Description>
