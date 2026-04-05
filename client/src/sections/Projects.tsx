@@ -23,7 +23,7 @@ const projectsData = [
     image: pending,
     description: 'A brief and engaging description of your second project will go here. Highlight the key features and the problem it solves.',
     techStack: ['Next.js', 'TypeScript', 'PostgreSQL'],
-    liveLink: '#',
+    liveLink: 'https://mock-panel.vercel.app/',
     githubLink: '#',
   },
   {
