@@ -21,7 +21,7 @@ const projectsData = [
   {
     title: 'Project Two',
     image: mockpanel,
-    description: 'A brief and engaging description of your second project will go here. Highlight the key features and the problem it solves.',
+    description: 'Elite AI board interview simulation with real-time evaluation and feedback.',
     techStack: ['Next.js', 'TypeScript', 'PostgreSQL'],
     liveLink: 'https://mock-panel.vercel.app/',
     githubLink: 'https://github.com/226301182-dotcom/MockPanel',
