@@ -6,7 +6,7 @@ import { HiOutlineExternalLink } from 'react-icons/hi';
 
 // Import your project images
 import roomRadarPreview from '../assets/roomradar-preview.webp';
-import mockpanel from '../assets/pending.webp';
+import mockpanel from '../assets/mockpanel.webp';
 import pending1 from '../assets/pending1.webp';
 
 const projectsData = [
