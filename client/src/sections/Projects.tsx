@@ -20,11 +20,11 @@ const projectsData = [
   },
   {
     title: 'Project Two',
-    image: pending,
+    image: mockpanel,
     description: 'A brief and engaging description of your second project will go here. Highlight the key features and the problem it solves.',
     techStack: ['Next.js', 'TypeScript', 'PostgreSQL'],
     liveLink: 'https://mock-panel.vercel.app/',
-    githubLink: '#',
+    githubLink: 'https://github.com/226301182-dotcom/MockPanel',
   },
   {
     title: 'Project Three',
