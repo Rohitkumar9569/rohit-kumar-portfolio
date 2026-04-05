@@ -19,7 +19,7 @@ const projectsData = [
     githubLink: 'https://github.com/Rohitkumar9569/ROOMRADAR',
   },
   {
-    title: 'Project Two',
+    title: 'MockPanel',
     image: mockpanel,
     description: 'Elite AI board interview simulation with real-time evaluation and feedback.',
     techStack: ['Next.js', 'TypeScript', 'PostgreSQL'],
