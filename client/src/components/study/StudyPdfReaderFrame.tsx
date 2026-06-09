@@ -85,6 +85,39 @@ const readStoredPdfTone = (): PdfToneMode => {
   return storedTone && pdfToneModes.includes(storedTone) ? storedTone : 'auto';
 };
 
+const canUsePdfCacheStorage = () => typeof window !== 'undefined' && 'caches' in window;
+
+const cachePdfUrlForOffline = async (url: string) => {
+  if (!canUsePdfCacheStorage()) throw new Error('Offline cache is not supported.');
+
+  const cache = await window.caches.open('study-hub-pdf-cache-v1');
+  const response = await fetch(url, {
+    method: 'GET',
+    mode: 'cors',
+    headers: { Range: 'bytes=0-' },
+  });
+
+  if (!response.ok) throw new Error('PDF download failed.');
+
+  await cache.put(url, response.clone());
+  const blob = await response.blob();
+  return {
+    objectUrl: window.URL.createObjectURL(blob),
+    sizeBytes: Number(response.headers.get('content-length') || blob.size || 0),
+  };
+};
+
+const readCachedPdfObjectUrl = async (url: string) => {
+  if (!canUsePdfCacheStorage()) return null;
+
+  const cache = await window.caches.open('study-hub-pdf-cache-v1');
+  const match = await cache.match(url);
+  if (!match) return null;
+
+  const blob = await match.blob();
+  return window.URL.createObjectURL(blob);
+};
+
 const StudyPdfReaderFrame = ({
   title,
   fileUrl,
@@ -104,6 +137,10 @@ const StudyPdfReaderFrame = ({
   const [loadProgress, setLoadProgress] = useState<number | null>(null);
   const [pageSize, setPageSize] = useState({ width: 595, height: 842 });
   const [hasError, setHasError] = useState(false);
+  const [documentSource, setDocumentSource] = useState<string>(fileUrl);
+  const [isSavingOffline, setIsSavingOffline] = useState(false);
+  const [isOfflineReady, setIsOfflineReady] = useState(false);
+  const activeObjectUrlRef = useRef<string | null>(null);
   const virtuosoRef = useRef<any>(null);
   const scrollAreaRef = useRef<HTMLElement | null>(null);
   const readerShellRef = useRef<HTMLDivElement | null>(null);
@@ -123,7 +160,7 @@ const StudyPdfReaderFrame = ({
   const pageWidth = pageSize.width * scale;
   const pageHeight = pageSize.height * scale;
   const sourceUrl = downloadUrl || fileUrl;
-  const documentFile = useMemo(() => ({ url: fileUrl }), [fileUrl]);
+  const documentFile = useMemo(() => ({ url: documentSource }), [documentSource]);
   const documentOptions = useMemo(() => ({
     disableRange: false,
     disableAutoFetch: false,
@@ -190,6 +227,14 @@ const StudyPdfReaderFrame = ({
     if (progressResetRef.current === null || typeof window === 'undefined') return;
     window.clearTimeout(progressResetRef.current);
     progressResetRef.current = null;
+  }, []);
+
+  const revokeActiveObjectUrl = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    if (activeObjectUrlRef.current) {
+      window.URL.revokeObjectURL(activeObjectUrlRef.current);
+      activeObjectUrlRef.current = null;
+    }
   }, []);
 
   const fitToWidth = useCallback((baseWidth = pageSize.width) => {
@@ -352,20 +397,48 @@ const StudyPdfReaderFrame = ({
   }, [currentPage]);
 
   useEffect(() => {
+    let isMounted = true;
+    const initializeDocumentSource = async () => {
+      revokeActiveObjectUrl();
+      setDocumentSource(fileUrl);
+      setIsOfflineReady(false);
+      setLoadProgress(null);
+      setHasError(false);
+
+      try {
+        const cachedObjectUrl = await readCachedPdfObjectUrl(sourceUrl);
+        if (!isMounted) return;
+        if (cachedObjectUrl) {
+          revokeActiveObjectUrl();
+          activeObjectUrlRef.current = cachedObjectUrl;
+          setDocumentSource(cachedObjectUrl);
+          setIsOfflineReady(true);
+        }
+      } catch {
+        if (isMounted) {
+          setDocumentSource(fileUrl);
+        }
+      }
+    };
+
     const storedPage = readStoredPdfPage(fileUrl);
     clearProgressReset();
     setCurrentPage(storedPage);
     setPageInput(String(storedPage));
     setNumPages(0);
-    setLoadProgress(null);
-    setHasError(false);
-  }, [clearProgressReset, fileUrl]);
+    void initializeDocumentSource();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [clearProgressReset, fileUrl, revokeActiveObjectUrl]);
 
   useEffect(() => () => {
     clearProgressReset();
+    revokeActiveObjectUrl();
     if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
     if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
-  }, [clearProgressReset]);
+  }, [clearProgressReset, revokeActiveObjectUrl]);
 
   useEffect(() => {
     const target = scrollAreaRef.current;
@@ -448,6 +521,23 @@ const StudyPdfReaderFrame = ({
     setLoadProgress((current) => Math.max(current || 0, nextProgress));
   };
 
+  const handleSaveOffline = async () => {
+    if (!sourceUrl || isSavingOffline) return;
+
+    setIsSavingOffline(true);
+    try {
+      const cachedPdf = await cachePdfUrlForOffline(sourceUrl);
+      revokeActiveObjectUrl();
+      activeObjectUrlRef.current = cachedPdf.objectUrl;
+      setDocumentSource(cachedPdf.objectUrl);
+      setIsOfflineReady(true);
+    } catch (error) {
+      console.error('PDF offline save failed:', error);
+    } finally {
+      setIsSavingOffline(false);
+    }
+  };
+
   const handleLoadSuccess = async (pdf: PDFDocumentProxy) => {
     clearProgressReset();
     setLoadProgress(100);
@@ -502,27 +592,6 @@ const StudyPdfReaderFrame = ({
       {!isFullMode && (
       <header className="study-topbar absolute inset-x-0 top-0 z-30 bg-white/[0.68] px-2 pb-2 pt-[calc(0.55rem+env(safe-area-inset-top))] backdrop-blur-3xl transition duration-200 [backdrop-filter:saturate(1.35)_blur(24px)] dark:bg-[#050814]/[0.62] sm:px-3 sm:py-2 xl:px-5">
           <div className="study-top-blur-edge pointer-events-none absolute inset-x-0 bottom-[-3.25rem] h-14 bg-gradient-to-b from-white/[0.58] via-white/[0.24] to-transparent backdrop-blur-2xl opacity-100 [mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.76)_42%,transparent_100%)] dark:from-[#050814]/[0.68] dark:via-[#050814]/[0.22]" />
-        {clampedVisibleLoadProgress !== null && (
-          <div
-            className="pointer-events-none absolute inset-x-3 top-1.5 z-20 h-1.5 overflow-hidden rounded-full bg-slate-950/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_0_0_1px_rgba(15,23,42,0.08)] dark:bg-white/[0.14] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_0_0_1px_rgba(255,255,255,0.08)]"
-            role="progressbar"
-            aria-label="PDF loading progress"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={Math.round(clampedVisibleLoadProgress)}
-          >
-            <div
-              className="relative h-full overflow-hidden rounded-full bg-[linear-gradient(90deg,#22d3ee_0%,#60a5fa_48%,#fef3c7_100%)] shadow-[0_0_22px_rgba(34,211,238,0.58)] transition-[width] duration-700 ease-out"
-              style={{ width: `${clampedVisibleLoadProgress}%` }}
-            >
-              <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_0%,rgba(255,255,255,0.70)_42%,transparent_68%)] opacity-80" />
-            </div>
-            <div
-              className="absolute inset-y-[-0.22rem] w-12 rounded-full bg-cyan-200/35 blur-md transition-[left] duration-700 ease-out dark:bg-cyan-300/30"
-              style={{ left: `${Math.max(0, clampedVisibleLoadProgress - 8)}%` }}
-            />
-          </div>
-        )}
         <div className="flex min-h-11 min-w-0 flex-wrap items-center gap-2">
           {onClose ? (
             <button
@@ -637,17 +706,17 @@ const StudyPdfReaderFrame = ({
             <span className="text-xs font-black text-slate-500 dark:text-slate-400">/{numPages || '-'}</span>
           </form>
 
-          <a
-            href={sourceUrl}
-            target="_blank"
-            rel="noreferrer"
-            download
-            className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-sm transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100 md:inline-flex"
-            aria-label="Download PDF"
-            title="Download PDF"
+          <button
+            type="button"
+            onClick={handleSaveOffline}
+            disabled={isSavingOffline}
+            className="hidden h-10 shrink-0 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-3 text-xs font-black text-white shadow-sm transition hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100 md:inline-flex"
+            aria-label={isOfflineReady ? 'PDF saved for offline use' : isSavingOffline ? 'Saving PDF for offline use' : 'Save PDF for offline use'}
+            title={isOfflineReady ? 'Saved for offline use' : isSavingOffline ? 'Saving PDF...' : 'Save PDF for offline use'}
           >
             <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
-          </a>
+            <span className="hidden lg:inline">{isSavingOffline ? 'Saving…' : isOfflineReady ? 'Saved' : 'Save'}</span>
+          </button>
 
           <div className="relative ml-auto flex-none self-start md:hidden">
             <button
@@ -710,16 +779,15 @@ const StudyPdfReaderFrame = ({
                     <span>Tone</span>
                     <span className="text-cyan-700 dark:text-cyan-300">{pdfToneLabels[pdfTone]}</span>
                   </button>
-                  <a
-                    href={sourceUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    download
-                    className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                  <button
+                    type="button"
+                    onClick={handleSaveOffline}
+                    disabled={isSavingOffline}
+                    className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 disabled:cursor-wait disabled:opacity-70 dark:text-slate-200 dark:hover:bg-white/[0.08]"
                   >
-                    <span>Download</span>
+                    <span>{isSavingOffline ? 'Saving…' : isOfflineReady ? 'Saved offline' : 'Save offline'}</span>
                     <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
-                  </a>
+                  </button>
                 </div>
               </div>
             )}
@@ -745,16 +813,15 @@ const StudyPdfReaderFrame = ({
               <p className="mt-2 text-sm font-semibold leading-6 text-slate-500 dark:text-slate-400">
                 Download the PDF, or try opening it again.
               </p>
-              <a
-                href={sourceUrl}
-                target="_blank"
-                rel="noreferrer"
-                download
-                className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 text-sm font-black text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100"
+              <button
+                type="button"
+                onClick={handleSaveOffline}
+                disabled={isSavingOffline}
+                className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 text-sm font-black text-white transition hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100"
               >
                 <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
-                Download
-              </a>
+                {isSavingOffline ? 'Saving…' : isOfflineReady ? 'Saved offline' : 'Save offline'}
+              </button>
             </div>
           </div>
         ) : (

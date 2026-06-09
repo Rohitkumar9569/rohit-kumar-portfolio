@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import SectionAnimator from '../components/SectionAnimator';
 import { motion } from 'framer-motion';
 import { FaGithub } from 'react-icons/fa';
@@ -35,20 +36,45 @@ const projectsData = [
   },
 ];
 
-const Projects = () => (
-  <SectionAnimator id="projects" className="portfolio-section-surface py-20 px-6">
-    <div className="container mx-auto">
-      <h2 className="text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white">Built Structures</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {projectsData.map((project, index) => (
-          <motion.div
-            key={project.title}
-            className="flex h-full flex-col overflow-hidden rounded-lg bg-gray-300/70 shadow-xl shadow-cyan-500/30 transition-all duration-300 hover:-translate-y-2 hover:bg-gray-400/50 hover:shadow-2xl hover:shadow-cyan-500/40 dark:bg-slate-700/80 dark:shadow-cyan-800/50 dark:hover:bg-slate-600/70 dark:hover:shadow-cyan-800/70 group"
-            initial={{ opacity: 0.94, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.05, margin: '0px 0px 22% 0px' }}
-            transition={{ duration: 0.26, delay: index * 0.04 }}
-          >
+const shouldUseLightweightMotion = () => {
+  if (typeof window === 'undefined') return true;
+  return window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+};
+
+const Projects = () => {
+  const [disableMotion, setDisableMotion] = useState(() => shouldUseLightweightMotion());
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+
+    const media = window.matchMedia('(pointer: coarse)');
+    const updatePreference = () => setDisableMotion(shouldUseLightweightMotion());
+
+    updatePreference();
+    media.addEventListener?.('change', updatePreference);
+
+    return () => media.removeEventListener?.('change', updatePreference);
+  }, []);
+
+  return (
+    <SectionAnimator id="projects" className="portfolio-section-surface py-20 px-6">
+      <div className="container mx-auto">
+        <h2 className="text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white">Built Structures</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {projectsData.map((project, index) => {
+            const cardMotionProps = disableMotion ? {} : {
+              initial: { opacity: 0.94, y: 8 },
+              whileInView: { opacity: 1, y: 0 },
+              viewport: { once: true, amount: 0.05, margin: '0px 0px 22% 0px' },
+              transition: { duration: 0.26, delay: index * 0.04 },
+            };
+
+            return (
+              <motion.div
+                key={project.title}
+                className="flex h-full flex-col overflow-hidden rounded-lg bg-gray-300/70 shadow-xl shadow-cyan-500/30 transition-all duration-300 md:hover:-translate-y-2 md:hover:bg-gray-400/50 md:hover:shadow-2xl md:hover:shadow-cyan-500/40 dark:bg-slate-700/80 dark:shadow-cyan-800/50 dark:md:hover:bg-slate-600/70 dark:md:hover:shadow-cyan-800/70 group"
+                {...cardMotionProps}
+              >
             <div className="relative overflow-hidden">
               {project.status && (
                 <span className="absolute left-4 top-4 z-10 inline-flex max-w-[calc(100%-2rem)] items-center gap-2 rounded-full border border-amber-300/70 bg-slate-950/90 px-4 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-amber-200 shadow-2xl shadow-cyan-950/40 backdrop-blur-xl dark:border-amber-300/60 dark:bg-slate-950/90 dark:text-amber-200">
@@ -56,7 +82,7 @@ const Projects = () => (
                   {project.status}
                 </span>
               )}
-              <img src={project.image} alt={project.title} className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+              <img src={project.image} alt={project.title} className="w-full h-56 object-cover transition-transform duration-500 md:group-hover:scale-110" loading="lazy" />
             </div>
             <div className="flex flex-1 flex-col p-6">
               <div className="mb-4 flex min-h-[4.5rem] flex-wrap content-start gap-2">
@@ -80,10 +106,12 @@ const Projects = () => (
               </div>
             </div>
           </motion.div>
-        ))}
+            );
+          })}
+        </div>
       </div>
-    </div>
-  </SectionAnimator>
-);
+    </SectionAnimator>
+  );
+};
 
 export default Projects;

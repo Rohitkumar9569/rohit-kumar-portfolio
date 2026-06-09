@@ -1,6 +1,7 @@
 // File: server/src/routes/pyqs.ts
 
 import express from 'express';
+import { Readable } from 'node:stream';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import Groq from 'groq-sdk';
 import OpenAI from 'openai';
@@ -157,6 +158,66 @@ router.get('/', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+router.get('/pdf-proxy', async (req, res) => {
+  const sourceUrl = typeof req.query.url === 'string' ? req.query.url : '';
+  if (!sourceUrl) {
+    return res.status(400).json({ message: 'URL is required.' });
+  }
+
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(sourceUrl);
+  } catch {
+    return res.status(400).json({ message: 'A valid URL is required.' });
+  }
+
+  if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+    return res.status(400).json({ message: 'Only HTTP(S) URLs are supported.' });
+  }
+
+  const rangeHeader = typeof req.headers.range === 'string' ? req.headers.range : undefined;
+
+  try {
+    const upstream = await fetch(parsedUrl.toString(), {
+      method: 'GET',
+      headers: {
+        ...(rangeHeader ? { Range: rangeHeader } : {}),
+        'User-Agent': 'StudyHub/1.0',
+      },
+      redirect: 'follow',
+    });
+
+    if (!upstream.ok || !upstream.body) {
+      return res.status(upstream.status || 502).send('Failed to fetch PDF');
+    }
+
+    const contentType = upstream.headers.get('content-type') || 'application/pdf';
+    const contentLength = upstream.headers.get('content-length');
+    const contentRange = upstream.headers.get('content-range');
+    const statusCode = upstream.status === 206 ? 206 : 200;
+
+    res.status(statusCode);
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Accept-Ranges', 'bytes');
+    res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+    if (contentLength) res.setHeader('Content-Length', contentLength);
+    if (contentRange) res.setHeader('Content-Range', contentRange);
+
+    const pdfStream = Readable.fromWeb(upstream.body as Parameters<typeof Readable.fromWeb>[0]);
+    pdfStream.on('error', () => {
+      if (!res.headersSent) {
+        res.status(502).send('Proxy stream failed.');
+      } else {
+        res.end();
+      }
+    });
+    pdfStream.pipe(res);
+  } catch (error) {
+    console.error('PDF proxy error:', error);
+    res.status(500).send('Proxy error');
+  }
+});
+
 router.get('/:id', async (req, res) => {
   try {
     if (!isValidObjectId(req.params.id)) {
@@ -510,3 +571,5 @@ Acknowledge your readiness only when the user greets you or asks who you are. Ne
   }
 });
 export default router;
+
+

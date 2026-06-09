@@ -14,7 +14,7 @@ const StudyHubCTA = () => {
     'bg-cyan-600 text-white dark:bg-cyan-500 ' +
     'shadow-lg shadow-cyan-400/50 dark:shadow-cyan-800/50 ' +
     'transition-all duration-300 ease-in-out ' +
-    'hover:bg-cyan-700 dark:hover:bg-cyan-600 hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-400/70 focus:outline-none focus:ring-4 focus:ring-cyan-500/50';
+    'md:hover:bg-cyan-700 dark:md:hover:bg-cyan-600 md:hover:-translate-y-1 md:hover:shadow-xl md:hover:shadow-cyan-400/70 focus:outline-none focus:ring-4 focus:ring-cyan-500/50';
 
   return (
     <>
@@ -36,7 +36,7 @@ const StudyHubCTA = () => {
                   <Link
                     key={exam.label}
                     to={exam.to}
-                    className="group rounded-full border border-cyan-300/40 bg-cyan-100/60 px-4 py-1.5 text-sm font-black text-cyan-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-300 hover:bg-cyan-500 hover:text-white hover:shadow-lg hover:shadow-cyan-400/25 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 dark:border-cyan-500/20 dark:bg-slate-700/55 dark:text-cyan-300 dark:hover:border-cyan-300/50 dark:hover:bg-cyan-500/20 dark:hover:text-white"
+                    className="group rounded-full border border-cyan-300/40 bg-cyan-100/60 px-4 py-1.5 text-sm font-black text-cyan-700 shadow-sm transition-all duration-300 md:hover:-translate-y-0.5 md:hover:border-cyan-300 md:hover:bg-cyan-500 md:hover:text-white md:hover:shadow-lg md:hover:shadow-cyan-400/25 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 dark:border-cyan-500/20 dark:bg-slate-700/55 dark:text-cyan-300 dark:md:hover:border-cyan-300/50 dark:md:hover:bg-cyan-500/20 dark:md:hover:text-white"
                   >
                     {exam.label}
                   </Link>

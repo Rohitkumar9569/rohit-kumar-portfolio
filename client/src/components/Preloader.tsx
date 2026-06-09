@@ -1,334 +1,254 @@
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { motion, animate } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../api';
 
-// --- Animation Variants ---
-
 const preloaderVariants = {
-  exit: {
-    opacity: 0,
-    transition: { duration: 0.6, ease: 'easeOut' }
-  }
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.4, ease: 'easeOut' } },
+  exit: { opacity: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
 const contentVariants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 }
+    y: 0,
+    transition: { duration: 0.4, ease: 'easeOut', staggerChildren: 0.08 },
   },
   exit: {
     opacity: 0,
-    transition: {
-      staggerChildren: 0.05,
-      staggerDirection: -1,
-      when: "afterChildren",
-      duration: 0.3
-    }
-  }
+    y: -10,
+    transition: { duration: 0.3, ease: 'easeOut' },
+  },
 };
 
 const logoVariants = {
-  hidden: { opacity: 0, scale: 0.3, },
+  hidden: { opacity: 0, scale: 0.95, y: 8 },
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { type: "spring", stiffness: 150, damping: 20, delay: 0.1 }
+    y: 0,
+    transition: { duration: 0.45, ease: 'easeOut', delay: 0.1 },
   },
   exit: {
-    scale: 1.5,
     opacity: 0,
-    transition: { duration: 0.5, ease: 'easeIn' }
-  }
+    scale: 0.95,
+    y: -8,
+    transition: { duration: 0.25, ease: 'easeOut' },
+  },
 };
 
-// ✨ NEW: Variants for the Name's Masked Reveal Animation
 const nameWrapperVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      delay: 0.2,
-      staggerChildren: 0.05, // Controls the speed of the letter-by-letter reveal
-    },
+    transition: { delay: 0.15, staggerChildren: 0.06 },
   },
-  exit: {
-    y: -20,
-    opacity: 0,
-    transition: { duration: 0.3, ease: 'easeOut' }
-  }
+  exit: { opacity: 0, transition: { duration: 0.25 } },
 };
 
-// ✨ NEW: Variants for each letter inside the mask
 const nameLetterVariants = {
-  hidden: { y: "120%" }, // Starts below the mask
+  hidden: { y: '120%', opacity: 0 },
   visible: {
-    y: "0%", // Slides up into view
-    transition: { type: "spring", stiffness: 300, damping: 25 }
-  },
-};
-
-// ✨ NEW: Variants for the Title's Masked Reveal Animation
-const titleVariants = {
-  hidden: { opacity: 0, y: "100%" },
-  visible: {
+    y: '0%',
     opacity: 1,
-    y: "0%",
-    transition: { duration: 0.6, ease: 'easeOut', delay: 0.8 }
+    transition: { type: 'spring', stiffness: 400, damping: 25 },
   },
-  exit: {
-    y: -20,
-    opacity: 0,
-    transition: { duration: 0.3, ease: 'easeOut' }
-  }
 };
 
-const loadingBarContainerVariants = {
-  hidden: { opacity: 0, y: 20 },
+const titleVariants = {
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { delay: 1.2, duration: 0.5, ease: 'easeOut' }
+    transition: { duration: 0.5, ease: 'easeOut', delay: 0.6 },
   },
-  exit: {
-    opacity: 0,
-    transition: { duration: 0.3, ease: 'easeOut' }
-  }
 };
 
-// --- Custom Hook for Dynamic Loading Messages (Unchanged) ---
+const loadingBarContainerVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { delay: 0.8, duration: 0.45, ease: 'easeOut' },
+  },
+  exit: { opacity: 0, transition: { duration: 0.25, ease: 'easeOut' } },
+};
+
 const useLoadingMessages = (isComplete: boolean) => {
-    const messages = [
-        'Initializing session...',
-        'Waking up the server...',
-        'Optimizing assets...',
-        'Almost there...',
-    ];
-    const [message, setMessage] = useState(messages[0]);
+  const messages = [
+    'Preparing Study Hub...',
+    'Curating study resources...',
+    'Aligning exam material...',
+    'Almost ready...',
+  ];
+  const [message, setMessage] = useState(messages[0]);
 
-    useEffect(() => {
-        if (isComplete) {
-            setMessage('Launch Complete');
-            return;
-        }
-        
-        let index = 0;
-        const interval = setInterval(() => {
-            index = (index + 1) % messages.length;
-            setMessage(messages[index]);
-        }, 1500);
+  useEffect(() => {
+    if (isComplete) {
+      setMessage('Resources Ready');
+      return;
+    }
 
-        return () => clearInterval(interval);
-    }, [isComplete]);
+    let index = 0;
+    const interval = setInterval(() => {
+      index = (index + 1) % messages.length;
+      setMessage(messages[index]);
+    }, 1500);
 
-    return message;
+    return () => clearInterval(interval);
+  }, [isComplete]);
+
+  return message;
 };
 
-// --- Animated Counter Component (Unchanged) ---
 const AnimatedCounter = ({ value }: { value: number }) => {
-    const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(0);
 
-    useEffect(() => {
-        const controls = animate(displayValue, value, {
-            duration: 0.5,
-            ease: "easeOut",
-            onUpdate: (latest) => {
-                setDisplayValue(Math.round(latest));
-            }
-        });
-        return () => controls.stop();
-    }, [value]);
+  useEffect(() => {
+    const controls = animate(displayValue, value, {
+      duration: 0.45,
+      ease: 'easeOut',
+      onUpdate: (latest) => {
+        setDisplayValue(Math.round(latest));
+      },
+    });
+    return () => controls.stop();
+  }, [value]);
 
-    return <>{displayValue}</>;
+  return <>{displayValue}</>;
 };
 
-// --- Main Preloader Component ---
 interface PreloaderProps {
-    onLoadComplete: () => void;
-    imageToPreload: string;
+  onLoadComplete: () => void;
+  imageToPreload: string;
 }
 
 const Preloader: React.FC<PreloaderProps> = ({ onLoadComplete, imageToPreload }) => {
-    const [isMinTimeMet, setIsMinTimeMet] = useState(false);
-    const serverWakeUrl = API_BASE_URL ? `${API_BASE_URL}/api/health` : '';
-    const [isServerWoken, setIsServerWoken] = useState(!serverWakeUrl || !!sessionStorage.getItem('server_woken'));
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
-    const [progress, setProgress] = useState(0);
+  const [isMinTimeMet, setIsMinTimeMet] = useState(false);
+  const serverWakeUrl = API_BASE_URL ? `${API_BASE_URL}/api/health` : '';
+  const [isServerWoken, setIsServerWoken] = useState(!serverWakeUrl || !!sessionStorage.getItem('server_woken'));
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-    const isLoadComplete = isMinTimeMet && isServerWoken && isImageLoaded;
-    const loadingStatusMessage = useLoadingMessages(isLoadComplete);
+  const isLoadComplete = isMinTimeMet && isServerWoken && isImageLoaded;
+  const loadingStatusMessage = useLoadingMessages(isLoadComplete);
 
-    // Effect 1: Minimum Display Time & Progress Simulation (Unchanged)
-    useEffect(() => {
-        setTimeout(() => setIsMinTimeMet(true), 650);
+  useEffect(() => {
+    setTimeout(() => setIsMinTimeMet(true), 650);
 
-        const progressInterval = setInterval(() => {
-            setProgress(prev => {
-                if (prev >= 95) {
-                    clearInterval(progressInterval);
-                    return 95;
-                }
-                return prev + 2;
-            });
-        }, 24);
-        
-        return () => clearInterval(progressInterval);
-    }, []);
-
-    // Effect 2: Server Wake-up Call (Unchanged)
-    useEffect(() => {
-        if (isServerWoken || !serverWakeUrl) return;
-        const wakeUpServer = async () => {
-            try {
-                await axios.get(serverWakeUrl);
-                sessionStorage.setItem('server_woken', 'true');
-            } catch (error) {
-                console.error('Server wake-up call failed:', error);
-            } finally {
-                setIsServerWoken(true);
-            }
-        };
-        wakeUpServer();
-    }, [isServerWoken, serverWakeUrl]);
-
-  
-
-    //  NAYA EFFECT For Image Preloading 
-    useEffect(() => {
-        const img = new Image();
-        img.src = imageToPreload;    
-        img.onload = () => {
-            setIsImageLoaded(true);
-        };
-        img.onerror = () => {
-            console.error("Image preloading failed.");
-            setIsImageLoaded(true); 
-        };
-    }, [imageToPreload]); 
-
-
-    // Effect 3: Global Completion Check (Unchanged)
-    useEffect(() => {
-        if (isLoadComplete) {
-            setProgress(100);
-            setTimeout(onLoadComplete, 250);
+    const progressInterval = window.setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 95) {
+          window.clearInterval(progressInterval);
+          return 95;
         }
-    }, [isLoadComplete, onLoadComplete]);
+        return prev + 2;
+      });
+    }, 24);
 
-    // Parallax/Tilt Effects (Unchanged)
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-    const rotateX = useTransform(y, [-150, 150], [10, -10]);
-    const rotateY = useTransform(x, [-150, 150], [-10, 10]);
+    return () => window.clearInterval(progressInterval);
+  }, []);
 
-    const handleMouseMove = (event: React.MouseEvent) => {
-        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-        x.set(event.clientX - rect.left - rect.width / 2);
-        y.set(event.clientY - rect.top - rect.height / 2);
+  useEffect(() => {
+    if (isServerWoken || !serverWakeUrl) return;
+    const wakeUpServer = async () => {
+      try {
+        await axios.get(serverWakeUrl);
+        sessionStorage.setItem('server_woken', 'true');
+      } catch (error) {
+        console.error('Server wake-up call failed:', error);
+      } finally {
+        setIsServerWoken(true);
+      }
     };
+    wakeUpServer();
+  }, [isServerWoken, serverWakeUrl]);
 
-    const handleMouseLeave = () => {
-        animate(x, 0, { type: 'spring', stiffness: 150, damping: 20 });
-        animate(y, 0, { type: 'spring', stiffness: 150, damping: 20 });
+  useEffect(() => {
+    const img = new Image();
+    img.src = imageToPreload;
+    img.onload = () => {
+      setIsImageLoaded(true);
     };
+    img.onerror = () => {
+      console.error('Image preloading failed.');
+      setIsImageLoaded(true);
+    };
+  }, [imageToPreload]);
 
-    const nameText = "ROHIT KUMAR";
-    const titleText = "FULL-STACK DEVELOPER";
+  useEffect(() => {
+    if (isLoadComplete) {
+      setProgress(100);
+      setTimeout(onLoadComplete, 250);
+    }
+  }, [isLoadComplete, onLoadComplete]);
 
-    return (
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-50 px-6 text-center dark:bg-slate-950 sm:px-8"
+      key="preloader"
+      initial="hidden"
+      animate={isLoadComplete ? 'exit' : 'visible'}
+      exit="exit"
+      variants={preloaderVariants}
+    >
+      <motion.div
+        className="flex flex-col items-center justify-center rounded-[2rem] border border-slate-200 bg-white/85 px-8 py-10 shadow-[0_24px_90px_rgba(15,23,42,0.12)] backdrop-blur md:px-12 md:py-14 dark:border-slate-800 dark:bg-slate-950/80"
+        variants={contentVariants}
+        initial="hidden"
+        animate={isLoadComplete ? 'exit' : 'visible'}
+      >
         <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-50 dark:bg-slate-900"
-            key="preloader"
-            exit="exit"
-            variants={preloaderVariants}
+          className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 md:h-24 md:w-24"
+          variants={logoVariants}
         >
-            <motion.div
-                style={{ rotateX, rotateY, perspective: 1000 }}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                className="flex flex-col items-center justify-center p-8"
-                variants={contentVariants}
-                initial="hidden"
-                animate={isLoadComplete ? "exit" : "visible"}
-            >
-                {/* --- PROFESSIONAL LOGO WITH PULSATING GLOW (Unchanged) --- */}
-                <motion.div 
-                    className="relative w-28 h-28 md:w-36 md:h-36 flex items-center justify-center"
-                    variants={logoVariants}
-                >
-                    <motion.div
-                        className="absolute w-full h-full bg-cyan-500/25 rounded-full blur-2xl"
-                        animate={{ 
-                            scale: [1, 1.15, 1],
-                            opacity: [0.7, 1, 0.7],
-                        }}
-                        transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                        }}
-                    />
-                    <motion.img
-                        src="/favicon.svg"
-                        alt="Logo"
-                        className="relative w-full h-full"
-                    />
-                </motion.div>
-
-                <div className="text-center mt-6">
-                    {/* ✨ UPDATED: Name animation with masked reveal */}
-                    <motion.h1
-                        className="text-3xl font-extrabold md:text-4xl text-gray-800 dark:text-gray-100 tracking-wider"
-                        variants={nameWrapperVariants}
-                        aria-label={nameText}
-                    >
-                        {nameText.split("").map((char, index) => (
-                            <span className="inline-block overflow-hidden" key={char + "-" + index}>
-                                <motion.span className="inline-block" variants={nameLetterVariants}>
-                                    {char === " " ? "\u00A0" : char}
-                                </motion.span>
-                            </span>
-                        ))}
-                    </motion.h1>
-
-                    {/* ✨ UPDATED: Title animation with masked reveal */}
-                    <div className="overflow-hidden mt-1">
-                      <motion.p
-                          className="text-lg md:text-xl text-cyan-600 dark:text-cyan-400 font-semibold tracking-wide"
-                          variants={titleVariants}
-                          aria-label={titleText}
-                      >
-                          {titleText}
-                      </motion.p>
-                    </div>
-                </div>
-            
-                {/* --- Loading Bar and Status (Unchanged) --- */}
-                <motion.div 
-                    className="mt-12 w-64 flex flex-col items-center"
-                    variants={loadingBarContainerVariants}
-                >
-                    <div className="w-full flex justify-between items-center mb-2">
-                        <p className="text-sm text-gray-600 dark:text-slate-400 font-medium">
-                            {loadingStatusMessage}
-                        </p>
-                        <p className="text-sm font-mono text-cyan-600 dark:text-cyan-400">
-                            <AnimatedCounter value={progress} />%
-                        </p>
-                    </div>
-                    <div className="w-full h-1.5 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                        <motion.div
-                            className="h-full bg-cyan-500 rounded-full"
-                            initial={{ width: '0%' }}
-                            animate={{ width: `${progress}%` }}
-                            transition={{ type: "spring", stiffness: 100, damping: 30 }}
-                        />
-                    </div>
-                </motion.div>
-            </motion.div>
+          <motion.img src="/favicon.svg" alt="Study Hub logo" className="h-full w-full object-contain" />
         </motion.div>
-    );
+
+        <div className="max-w-xl">
+          <motion.h1
+            className="font-black uppercase tracking-[0.24em] text-slate-950 dark:text-white"
+            variants={nameWrapperVariants}
+            aria-label="STUDY HUB"
+          >
+            <span className="block text-4xl sm:text-5xl md:text-6xl">STUDY</span>
+            <span className="mt-1 block text-4xl text-blue-700 sm:text-5xl md:text-6xl dark:text-cyan-300">HUB</span>
+          </motion.h1>
+
+          <div className="mt-3 overflow-hidden">
+            <motion.p
+              className="text-sm font-semibold uppercase tracking-[0.32em] text-slate-600 dark:text-slate-400 sm:text-base"
+              variants={titleVariants}
+              aria-label="Preparation · Practice · Performance"
+            >
+              Preparation · Practice · Performance
+            </motion.p>
+          </div>
+        </div>
+
+        <motion.div className="mt-8 w-full max-w-sm" variants={loadingBarContainerVariants}>
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">
+              {loadingStatusMessage}
+            </p>
+            <p className="text-sm font-semibold text-blue-700 dark:text-cyan-300">
+              <AnimatedCounter value={progress} />%
+            </p>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+            <motion.div
+              className="h-full rounded-full bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-500"
+              initial={{ width: '0%' }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+            />
+          </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
 };
 
 export default Preloader;

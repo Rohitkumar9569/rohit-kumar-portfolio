@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import { Document, Page, pdfjs } from 'react-pdf';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
 import PdfPageSkeleton from './PdfPageSkeleton';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs?v=5.4.296';
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 interface PdfDocumentViewportProps {
   fileUrl?: string;
@@ -31,7 +30,6 @@ const PdfDocumentViewport = ({
   scale,
   rotation,
   numPages,
-  overscanValue,
   virtuosoRef,
   pdfContainerRef,
   setCurrentPage,
@@ -42,35 +40,45 @@ const PdfDocumentViewport = ({
   const progressResetRef = useRef<number | null>(null);
   const pageUpdateTimerRef = useRef<number | null>(null);
   const [isScrolling, setIsScrolling] = useState(false);
+
   const isCoarsePointer = useMemo(
     () =>
       typeof window !== 'undefined' &&
       (window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0),
     [],
   );
+
   const pageHeight = pageBaseHeight * scale;
+  const shouldRenderTextLayer = !isCoarsePointer && !isScrolling;
+
+  // 🔥 PERFORMANCE FIX: PDF loading optimization
+  const pdfOptions = useMemo(() => ({
+    cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
+    cMapPacked: true,
+    disableAutoFetch: false, // 🚨 Streaming enable karne ke liye false rakhein
+    disableStream: false,
+    rangeChunkSize: 524288,
+  }), []);
+
+  // 🔥 PERFORMANCE FIX: Mobile vs Desktop Config
   const virtuosoScrollConfig = useMemo(() => {
     if (isCoarsePointer) {
       return {
-        overscan: 280,
-        increaseViewportBy: { top: 360, bottom: 720 },
-        scrollSeekConfiguration: {
-          enter: (velocity: number) => Math.abs(velocity) > 900,
-          exit: (velocity: number) => Math.abs(velocity) < 180,
-        },
+        // Pre-render pages to avoid White Screen
+        overscan: { main: 1600, reverse: 1600 },
+        increaseViewportBy: { top: 1200, bottom: 1200 },
+        scrollSeekConfiguration: undefined,
       };
     }
-
     return {
-      overscan: overscanValue,
-      increaseViewportBy: undefined,
+      overscan: { main: 2400, reverse: 2400 },
+      increaseViewportBy: { top: 1800, bottom: 1800 },
       scrollSeekConfiguration: undefined,
     };
-  }, [isCoarsePointer, overscanValue]);
-  const pdfDevicePixelRatio = useMemo(
-    () => Math.min(window.devicePixelRatio || 1, isCoarsePointer ? 1.25 : 1.5),
-    [isCoarsePointer],
-  );
+  }, [isCoarsePointer]);
+
+  // 🔥 PERFORMANCE FIX: Resolution (1 for mobile to save CPU)
+  const pdfDevicePixelRatio = useMemo(() => (isCoarsePointer ? 1 : 1.5), [isCoarsePointer]);
 
   const clearProgressReset = useCallback(() => {
     if (progressResetRef.current === null || typeof window === 'undefined') return;
@@ -116,18 +124,15 @@ const PdfDocumentViewport = ({
       setLoadProgress(6);
       return;
     }
-
     setLoadProgress(Math.min(99, Math.round((loaded / total) * 100)));
   };
 
-  const handleDocumentLoadSuccess = async (pdf: PDFDocumentProxy) => {
+  const handleDocumentLoadSuccess = async (pdf: any) => {
     clearProgressReset();
     setLoadProgress(100);
     setNumPages(pdf.numPages);
-
     const firstPage = await pdf.getPage(1);
     setUnscaledPageWidth(firstPage.getViewport({ scale: 1 }).width);
-
     if (typeof window !== 'undefined') {
       progressResetRef.current = window.setTimeout(() => {
         setLoadProgress(null);
@@ -145,6 +150,7 @@ const PdfDocumentViewport = ({
   return (
     <Document
       file={fileUrl}
+      options={pdfOptions}
       onLoadSuccess={handleDocumentLoadSuccess}
       onLoadProgress={handleLoadProgress}
       onLoadError={handleLoadError}
@@ -166,6 +172,9 @@ const PdfDocumentViewport = ({
             element.setAttribute('data-native-scroll', 'true');
             element.setAttribute('data-pdf-scroller', 'true');
             element.classList.add('study-scrollbar');
+            element.style.overflowY = 'auto';
+            element.style.overscrollBehavior = 'contain';
+            element.style.setProperty('-webkit-overflow-scrolling', 'touch');
           }
         }}
         className="study-scrollbar h-full overscroll-contain"
@@ -182,14 +191,14 @@ const PdfDocumentViewport = ({
                 scale={scale}
                 rotate={rotation}
                 renderAnnotationLayer={false}
-                renderTextLayer={!isCoarsePointer && !isScrolling}
+                renderTextLayer={shouldRenderTextLayer}
                 devicePixelRatio={pdfDevicePixelRatio}
-                loading={(
+                loading={
                   <div
                     style={{ width: pageBaseWidth * scale, height: pageBaseHeight * scale }}
                     className="animate-pulse rounded-md bg-slate-200"
                   />
-                )}
+                }
               />
             </div>
           </div>

@@ -38,15 +38,33 @@ const allCertificates = [
   { title: 'Gmail', provider: 'Google Cloud', logo: brandLogos.google, link: 'https://www.coursera.org/account/accomplishments/verify/QJAVLIQAXT5R', category: 'Other' },
 ];
 
+const shouldUseLightweightMotion = () => {
+  if (typeof window === 'undefined') return true;
+  return window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+};
+
 const Certifications = () => {
   const categories = ['All', 'Full-Stack', 'Cybersecurity', 'Core CS', 'AI & ML', 'Other'];
   const [activeFilter, setActiveFilter] = useState('All');
   const [isExpanded, setIsExpanded] = useState(false);
+  const [disableMotion, setDisableMotion] = useState(() => shouldUseLightweightMotion());
   const INITIAL_VISIBLE_COUNT = 6;
 
   useEffect(() => {
     setIsExpanded(false);
   }, [activeFilter]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+
+    const media = window.matchMedia('(pointer: coarse)');
+    const updatePreference = () => setDisableMotion(shouldUseLightweightMotion());
+
+    updatePreference();
+    media.addEventListener?.('change', updatePreference);
+
+    return () => media.removeEventListener?.('change', updatePreference);
+  }, []);
 
   const filteredCertificates = activeFilter === 'All'
     ? allCertificates
@@ -89,20 +107,25 @@ const Certifications = () => {
         <div className="relative">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatePresence>
-              {certificatesToShow.map((cert) => (
+              {certificatesToShow.map((cert) => {
+                const cardMotionProps = disableMotion ? { layout: false } : {
+                  variants: itemVariant,
+                  initial: 'hidden',
+                  animate: 'visible',
+                  exit: 'exit',
+                  layout: true,
+                };
+
+                return (
                 <motion.div
                   key={cert.title}
-                  variants={itemVariant}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  layout
+                  {...cardMotionProps}
                 >
                   <a
                     href={cert.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block bg-gray-300/70 hover:bg-gray-400/50 dark:bg-slate-700/80 dark:hover:bg-slate-600/70 p-6 rounded-lg shadow-lg shadow-cyan-500/30 dark:shadow-cyan-800/50 hover:shadow-xl hover:shadow-cyan-500/40 dark:hover:shadow-cyan-800/70 hover:-translate-y-1 transition-all duration-300 h-full"
+                    className="block h-full rounded-lg bg-gray-300/70 p-6 shadow-lg shadow-cyan-500/30 transition-all duration-300 md:hover:-translate-y-1 md:hover:bg-gray-400/50 md:hover:shadow-xl md:hover:shadow-cyan-500/40 dark:bg-slate-700/80 dark:shadow-cyan-800/50 dark:md:hover:bg-slate-600/70 dark:md:hover:shadow-cyan-800/70"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <img src={cert.logo} alt={`${cert.provider} Logo`} className="h-8" loading="lazy" />
@@ -112,7 +135,8 @@ const Certifications = () => {
                     <p className="text-gray-700 dark:text-slate-300">Provided by {cert.provider}</p>
                   </a>
                 </motion.div>
-              ))}
+                );
+              })}
             </AnimatePresence>
           </div>
 

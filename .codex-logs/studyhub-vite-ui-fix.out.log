@@ -382,3 +382,29 @@
 [2m2:16:18 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx, /src/App.tsx[22m
 [2m2:18:11 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx, /src/App.tsx[22m
 [2m2:18:40 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx, /src/App.tsx[22m
+[2m2:25:09 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m2:25:35 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m2:25:49 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m2:25:49 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m2:29:35 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:08:25 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [optimizer] bundling dependencies...
+[2m3:08:26 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mreact-virtuoso[32m[39m
+[2m3:17:56 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx, /src/App.tsx[22m
+[2m3:17:57 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:22:38 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:23:36 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/PageLoader.tsx[22m
+[2m3:23:37 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:26:12 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/PageLoader.tsx[22m
+[2m3:30:15 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:30:15 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:30:30 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:30:41 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:34:09 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/sections/Projects.tsx[22m
+[2m3:34:09 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/sections/Certifications.tsx[22m
+[2m3:34:09 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/sections/Skills.tsx[22m
+[2m3:34:10 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:34:10 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:34:26 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/sections/Projects.tsx[22m
+[2m3:34:27 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:35:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/sections/StudyHubCTA.tsx[22m
+[2m3:35:17 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m

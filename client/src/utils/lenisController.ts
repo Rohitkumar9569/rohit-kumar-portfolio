@@ -10,8 +10,14 @@ const LENIS_NESTED_SCROLL_SELECTOR =
 
 export const shouldPreventLenisScroll = (node: Element) => {
   const element = node as HTMLElement;
-  return Boolean(
+  const isPdfScroller =
     element.id === 'pdf-scroll-area' ||
+    element.getAttribute('data-pdf-scroller') === 'true' ||
+    element.closest?.('#pdf-scroll-area') ||
+    element.closest?.('[data-pdf-scroller="true"]');
+
+  return Boolean(
+    isPdfScroller ||
     element.id === 'ai-chat-scroll-area' ||
     element.closest?.(LENIS_NESTED_SCROLL_SELECTOR),
   );

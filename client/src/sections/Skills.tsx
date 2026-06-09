@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CubeModal from '../components/CubeModal';
 
@@ -76,25 +76,51 @@ const skillsData = [
 const getSkillTooltipId = (name: string) =>
   `skill-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
+const shouldUseLightweightMotion = () => {
+  if (typeof window === 'undefined') return true;
+  return window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+};
+
 const Skills = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const [disableMotion, setDisableMotion] = useState(() => shouldUseLightweightMotion());
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+
+    const media = window.matchMedia('(pointer: coarse)');
+    const updatePreference = () => setDisableMotion(shouldUseLightweightMotion());
+
+    updatePreference();
+    media.addEventListener?.('change', updatePreference);
+
+    return () => media.removeEventListener?.('change', updatePreference);
+  }, []);
+
+  const containerMotionProps = disableMotion ? {} : {
+    variants: containerVariant,
+    initial: 'hidden',
+    whileInView: 'visible',
+    viewport: { once: true, amount: 0.03, margin: '0px 0px 24% 0px' },
+  };
+
+  const itemMotionProps = disableMotion ? {} : {
+    variants: itemVariant,
+  };
 
   return (
     <>
       <section id="skills" className="portfolio-section-surface relative overflow-x-clip overflow-y-visible px-6 py-20 text-gray-800 dark:text-white">
         <div className="container mx-auto">
           <motion.div
-            variants={containerVariant}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.03, margin: '0px 0px 24% 0px' }}
+            {...containerMotionProps}
           >
-            <motion.h2 variants={itemVariant} className="text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white">
+            <motion.h2 {...itemMotionProps} className="text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white">
               Skills & Technologies
             </motion.h2>
 
-            <motion.div variants={itemVariant} className="lg:w-3/5 space-y-8">
+            <motion.div {...itemMotionProps} className="lg:w-3/5 space-y-8">
               {skillsData.map((category) => (
                 <div key={category.category}>
                   <h3 className="text-xl font-semibold text-cyan-600 dark:text-cyan-400 mb-4">{category.category}</h3>
@@ -105,7 +131,7 @@ const Skills = () => {
                           type="button"
                           onClick={() => setSelectedSkill(skill)}
                           aria-describedby={getSkillTooltipId(skill.name)}
-                          className="flex items-center text-left gap-3 bg-gray-300/70 hover:bg-gray-400/50 dark:bg-slate-700/80 dark:hover:bg-slate-600/70 py-2 px-4 rounded-lg transition-transform hover:scale-105 shadow-lg shadow-cyan-800/50 dark:shadow-lg dark:shadow-cyan-800/50"
+                          className="flex items-center text-left gap-3 rounded-lg bg-gray-300/70 px-4 py-2 shadow-lg shadow-cyan-800/50 transition-transform md:hover:scale-105 dark:bg-slate-700/80 dark:shadow-cyan-800/50 dark:hover:bg-slate-600/70"
                         >
                           <div className="text-cyan-500 dark:text-cyan-400">{skill.icon}</div>
                           <p className="font-semibold text-gray-700 dark:text-white">{skill.name}</p>
@@ -130,7 +156,7 @@ const Skills = () => {
               ))}
             </motion.div>
 
-            <motion.div variants={itemVariant} className="mt-12 text-center lg:hidden">
+            <motion.div {...itemMotionProps} className="mt-12 text-center lg:hidden">
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="inline-flex items-center gap-3 bg-gray-200 dark:bg-slate-700 hover:bg-cyan-500 text-gray-800 dark:text-white font-bold py-3 px-6 rounded-lg transition-all duration-300"
@@ -144,10 +170,12 @@ const Skills = () => {
 
         <motion.div
           className="absolute top-1/4 -translate-y-1/2 right-8 w-2/5 h-[500px] hidden lg:block"
-          initial={{ opacity: 0.9, x: 18 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.05, margin: '0px 0px 20% 0px' }}
-          transition={{ duration: 0.35, delay: 0.1 }}
+          {...(disableMotion ? {} : {
+            initial: { opacity: 0.9, x: 18 },
+            whileInView: { opacity: 1, x: 0 },
+            viewport: { once: true, amount: 0.05, margin: '0px 0px 20% 0px' },
+            transition: { duration: 0.35, delay: 0.1 },
+          })}
         >
           <Suspense fallback={null}>
             <ArchitectCanvas />

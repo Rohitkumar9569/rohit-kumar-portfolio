@@ -265,6 +265,13 @@ body.study-app-scroll-root {
   background-clip: content-box;
 }
 
+#pdf-scroll-area {
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overflow-y: auto !important;
+}
+
 .study-shell :where(button, a, [role="button"], input, textarea, select) {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;

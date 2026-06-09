@@ -1,7 +1,7 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import React, { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import API from '../api';
+import API, { API_BASE_URL } from '../api';
 import type { Suggestion } from '../api';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import { Drawer } from 'vaul';
@@ -53,6 +53,19 @@ const PdfViewerPage = () => {
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const [pyq, setPyq] = useState<any>(null);
   const [numPages, setNumPages] = useState<number>(0);
+  const viewerFileUrl = React.useMemo(() => {
+    const originalUrl = pyq?.fileUrl;
+    if (typeof originalUrl !== 'string' || !originalUrl.trim()) return undefined;
+
+    try {
+      const parsedUrl = new URL(originalUrl);
+      if (!['http:', 'https:'].includes(parsedUrl.protocol)) return originalUrl;
+      const apiBase = API_BASE_URL || '';
+      return `${apiBase}/api/pyqs/pdf-proxy?url=${encodeURIComponent(originalUrl)}`;
+    } catch {
+      return originalUrl;
+    }
+  }, [pyq?.fileUrl]);
   const [loading, setLoading] = useState(true);
   const isMobile = useIsMobile();
   const [scale, setScale] = useState(1.0);
@@ -279,7 +292,7 @@ const PdfViewerPage = () => {
         <main className={`relative h-full flex flex-col bg-slate-100 transition-all duration-300 ${isHeaderVisible ? 'pt-10' : 'pt-0'}`}>
           <Suspense fallback={<PdfPageSkeleton />}>
             <PdfDocumentViewport
-              fileUrl={pyq?.fileUrl}
+              fileUrl={viewerFileUrl}
               scale={scale}
               rotation={rotation}
               numPages={numPages}
