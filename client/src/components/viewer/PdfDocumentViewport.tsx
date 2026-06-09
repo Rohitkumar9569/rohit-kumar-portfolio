@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, type MutableRefObject } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import { Document, Page, pdfjs } from 'react-pdf';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
@@ -40,6 +40,37 @@ const PdfDocumentViewport = ({
   setUnscaledPageWidth,
 }: PdfDocumentViewportProps) => {
   const progressResetRef = useRef<number | null>(null);
+  const pageUpdateTimerRef = useRef<number | null>(null);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const isCoarsePointer = useMemo(
+    () =>
+      typeof window !== 'undefined' &&
+      (window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0),
+    [],
+  );
+  const pageHeight = pageBaseHeight * scale;
+  const virtuosoScrollConfig = useMemo(() => {
+    if (isCoarsePointer) {
+      return {
+        overscan: 280,
+        increaseViewportBy: { top: 360, bottom: 720 },
+        scrollSeekConfiguration: {
+          enter: (velocity: number) => Math.abs(velocity) > 900,
+          exit: (velocity: number) => Math.abs(velocity) < 180,
+        },
+      };
+    }
+
+    return {
+      overscan: overscanValue,
+      increaseViewportBy: undefined,
+      scrollSeekConfiguration: undefined,
+    };
+  }, [isCoarsePointer, overscanValue]);
+  const pdfDevicePixelRatio = useMemo(
+    () => Math.min(window.devicePixelRatio || 1, isCoarsePointer ? 1.25 : 1.5),
+    [isCoarsePointer],
+  );
 
   const clearProgressReset = useCallback(() => {
     if (progressResetRef.current === null || typeof window === 'undefined') return;
@@ -47,7 +78,37 @@ const PdfDocumentViewport = ({
     progressResetRef.current = null;
   }, []);
 
-  useEffect(() => () => clearProgressReset(), [clearProgressReset]);
+  useEffect(() => () => {
+    clearProgressReset();
+    if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
+  }, [clearProgressReset]);
+
+  useEffect(() => {
+    const target = pdfContainerRef.current;
+    if (!target) return undefined;
+
+    let scrollIdleTimer: number | null = null;
+    const handleScroll = () => {
+      setIsScrolling(true);
+      if (scrollIdleTimer !== null) window.clearTimeout(scrollIdleTimer);
+      scrollIdleTimer = window.setTimeout(() => setIsScrolling(false), 140);
+    };
+
+    target.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      target.removeEventListener('scroll', handleScroll);
+      if (scrollIdleTimer !== null) window.clearTimeout(scrollIdleTimer);
+    };
+  }, [numPages, pdfContainerRef]);
+
+  const handleRangeChanged = useCallback((range: { startIndex: number }) => {
+    const nextPage = range.startIndex + 1;
+    if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
+    pageUpdateTimerRef.current = window.setTimeout(() => {
+      setCurrentPage(nextPage);
+      pageUpdateTimerRef.current = null;
+    }, isCoarsePointer ? 60 : 90);
+  }, [isCoarsePointer, setCurrentPage]);
 
   const handleLoadProgress = ({ loaded, total }: { loaded: number; total: number }) => {
     clearProgressReset();
@@ -92,16 +153,23 @@ const PdfDocumentViewport = ({
     >
       <Virtuoso
         ref={virtuosoRef}
-        overscan={overscanValue}
+        overscan={virtuosoScrollConfig.overscan}
+        increaseViewportBy={virtuosoScrollConfig.increaseViewportBy}
+        scrollSeekConfiguration={virtuosoScrollConfig.scrollSeekConfiguration}
+        defaultItemHeight={Math.round(pageHeight + 16)}
         totalCount={numPages}
         scrollerRef={(ref) => {
           if (ref) {
             pdfContainerRef.current = ref as HTMLDivElement;
-            (ref as HTMLElement).id = 'pdf-scroll-area';
+            const element = ref as HTMLElement;
+            element.id = 'pdf-scroll-area';
+            element.setAttribute('data-native-scroll', 'true');
+            element.setAttribute('data-pdf-scroller', 'true');
+            element.classList.add('study-scrollbar');
           }
         }}
-        className="custom-scrollbar"
-        rangeChanged={(range) => setCurrentPage(range.startIndex + 1)}
+        className="study-scrollbar h-full overscroll-contain"
+        rangeChanged={handleRangeChanged}
         itemContent={(index) => (
           <div className="flex justify-center py-2 md:py-4">
             <div
@@ -114,8 +182,8 @@ const PdfDocumentViewport = ({
                 scale={scale}
                 rotate={rotation}
                 renderAnnotationLayer={false}
-                renderTextLayer
-                devicePixelRatio={Math.min(window.devicePixelRatio || 1, 1.5)}
+                renderTextLayer={!isCoarsePointer && !isScrolling}
+                devicePixelRatio={pdfDevicePixelRatio}
                 loading={(
                   <div
                     style={{ width: pageBaseWidth * scale, height: pageBaseHeight * scale }}

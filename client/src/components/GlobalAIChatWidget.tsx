@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/solid';
 import ChatInterface from './viewer/ChatInterface';
-import type { Suggestion } from '../api';
+import { API_BASE_URL, type Suggestion } from '../api';
 
 // Message Interface
 interface Message {
@@ -88,8 +88,7 @@ const GlobalAIChatWidget = () => {
     
     try {
       const historyForApi = [...messages, userMessage];
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
-      const response = await fetch(`${baseUrl}/api/pyqs/chat/stream`, {
+      const response = await fetch(`${API_BASE_URL}/api/pyqs/chat/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ history: historyForApi, question: text }),
@@ -141,7 +140,7 @@ const GlobalAIChatWidget = () => {
 
   return (
     <>
-      <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100] flex items-center justify-center group">
+      <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] right-4 z-[100] flex items-center justify-center group md:bottom-8 md:right-8">
         <div className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-300 opacity-20 transition-opacity duration-300 group-hover:opacity-35" />
         <button 
           onClick={handleOpenDrawer}
@@ -164,7 +163,7 @@ const GlobalAIChatWidget = () => {
             role="dialog"
             aria-modal="true"
             aria-label="Sarathi Chat"
-            className="sarathi-chat-panel fixed bottom-0 left-0 right-0 z-[150] flex h-[100dvh] flex-col overflow-hidden rounded-t-[1.35rem] border-t border-slate-200/80 bg-white text-slate-950 shadow-[-10px_0_44px_rgba(15,23,42,0.18)] ring-1 ring-slate-950/5 transition-all duration-300 ease-out dark:border-white/12 dark:bg-slate-950 dark:text-white dark:shadow-[-10px_0_44px_rgba(2,6,23,0.55)] dark:ring-white/10 md:inset-y-4 md:left-auto md:right-4 md:bottom-auto md:h-auto md:w-[min(560px,calc(100vw-2rem))] md:rounded-[1.65rem] md:border md:shadow-[0_30px_86px_rgba(15,23,42,0.20)] dark:md:border-white/12 dark:md:shadow-[0_30px_86px_rgba(2,6,23,0.58)] lg:w-[min(620px,calc(100vw-2rem))] xl:w-[min(680px,calc(100vw-2rem))]"
+            className="sarathi-chat-panel fixed inset-x-0 bottom-0 z-[150] flex max-h-[100dvh] min-h-[100dvh] flex-col overflow-hidden rounded-t-[1.35rem] border-t border-slate-200/80 bg-white pb-[env(safe-area-inset-bottom)] text-slate-950 shadow-[-10px_0_44px_rgba(15,23,42,0.18)] ring-1 ring-slate-950/5 transition-all duration-300 ease-out dark:border-white/12 dark:bg-slate-950 dark:text-white dark:shadow-[-10px_0_44px_rgba(2,6,23,0.55)] dark:ring-white/10 md:inset-y-4 md:left-auto md:right-4 md:bottom-auto md:h-auto md:max-h-none md:min-h-0 md:w-[min(560px,calc(100vw-2rem))] md:rounded-[1.65rem] md:border md:pb-0 md:shadow-[0_30px_86px_rgba(15,23,42,0.20)] dark:md:border-white/12 dark:md:shadow-[0_30px_86px_rgba(2,6,23,0.58)] lg:w-[min(620px,calc(100vw-2rem))] xl:w-[min(680px,calc(100vw-2rem))]"
           >
             <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/50 to-transparent" />
             <span className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-white/30 md:hidden" />

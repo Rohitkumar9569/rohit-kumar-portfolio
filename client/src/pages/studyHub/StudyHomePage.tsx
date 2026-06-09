@@ -464,8 +464,12 @@ const StudyHomePage = () => {
           <StudyEmptyState
             icon={<ExclamationTriangleIcon className="h-8 w-8" aria-hidden="true" />}
             eyebrow="Connection"
-            title="Cards could not load"
-            description="Your content is still available. Retry to fetch the latest home cards."
+            title="Study Hub content could not load"
+            description={
+              import.meta.env.DEV
+                ? 'Start the API server in another terminal with `cd server && npm run dev`, then retry. Cached cards will appear automatically when the server is back.'
+                : 'Check your connection and retry to load the latest Study Hub cards.'
+            }
             actions={<StudyActionButton onClick={() => void refetch()}>Retry loading</StudyActionButton>}
           />
         ) : homeLibrarySections.length > 0 ? (

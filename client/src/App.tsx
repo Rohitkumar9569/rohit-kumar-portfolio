@@ -3,7 +3,9 @@ import { Toaster } from 'react-hot-toast';
 import { Helmet } from 'react-helmet-async';
 import { BrowserRouter as Router, Navigate, Routes, Route, useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
 import { initializePushNotifications } from './utils/mobileNotifications';
+import { createAppLenisOptions, PORTFOLIO_NAV_OFFSET, setLenisInstance } from './utils/lenisController';
 
 // --- CONTEXT IMPORTS ---
 import { AuthProvider } from './context/AuthContext';
@@ -15,6 +17,7 @@ import Footer from './components/Footer';
 import CommandPalette from './components/CommandPalette';
 import ProtectedRoute from './components/ProtectedRoute';
 import PageLoader from './components/PageLoader';
+import AppLaunchScreen from './components/AppLaunchScreen';
 import AppErrorBoundary from './components/AppErrorBoundary';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, STUDY_HUB_OG_IMAGE } from './pages/public/seoHelpers';
 
@@ -35,6 +38,7 @@ const StudyLibraryPage = React.lazy(() => import('./pages/studyHub/StudyLibraryP
 const StudyWorkspacePage = React.lazy(() => import('./pages/studyHub/StudyWorkspacePage'));
 const StudyPreferencesPage = React.lazy(() => import('./pages/studyHub/StudyPreferencesPage'));
 const StudyContributePage = React.lazy(() => import('./pages/studyHub/StudyContributePage'));
+const StudyInstallCard = React.lazy(() => import('./components/study/StudyInstallCard'));
 const StudyResourceReaderPage = React.lazy(() => import('./pages/studyHub/StudyResourceReaderPage'));
 const StudyPdfRoutePage = React.lazy(() => import('./pages/studyHub/StudyPdfRoutePage'));
 const StudyPortfolioPage = React.lazy(() => import('./pages/studyHub/StudyPortfolioPage'));
@@ -48,51 +52,28 @@ const SmoothScrollManager = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const isPortfolioRoute = location.pathname === '/';
-    const isNativeScrollRoute =
-      location.pathname.startsWith('/app') ||
-      location.pathname.startsWith('/admin') ||
-      location.pathname === '/login' ||
-      location.pathname.startsWith('/pyq/view');
-    const isLenisRoute = !isNativeScrollRoute;
-
-    if (!isLenisRoute || isNativeScrollRoute) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+    const isPdfScrollRoute =
+      location.pathname.startsWith('/app/pdf') ||
+      location.pathname.startsWith('/pyq/view');
 
-    const lenis = new Lenis({
-      lerp: isTouchDevice ? 0.48 : (isPortfolioRoute ? 0.34 : 0.26),
-      wheelMultiplier: isPortfolioRoute ? 5.5 : 3.5,
-      touchMultiplier: isTouchDevice ? 13 : (isPortfolioRoute ? 7.5 : 5.5),
-      syncTouch: true,
-      syncTouchLerp: isTouchDevice ? 0.42 : 0.28,
-      touchInertiaExponent: isTouchDevice ? 1.02 : 1.08,
-      gestureOrientation: 'vertical',
-      prevent: (node) => {
-        const element = node as HTMLElement;
-        return Boolean(
-          element.id === 'pdf-scroll-area' ||
-          element.id === 'ai-chat-scroll-area' ||
-          element.closest?.('.sarathi-chat-panel, .portfolio-horizontal-scroll, [data-native-scroll="true"]')
-        );
-      },
-    });
+    if (isPdfScrollRoute) return;
 
-    let animationFrameId = 0;
-    let isRunning = true;
+    const isPortfolioRoute = location.pathname === '/';
 
-    function raf(time: number) {
-      if (!isRunning) return;
-      lenis.raf(time);
-      animationFrameId = requestAnimationFrame(raf);
-    }
+    const lenis = new Lenis(createAppLenisOptions({
+      anchors: isPortfolioRoute
+        ? {
+            offset: PORTFOLIO_NAV_OFFSET,
+          }
+        : false,
+    }));
 
-    animationFrameId = requestAnimationFrame(raf);
+    setLenisInstance(lenis);
 
     return () => {
-      isRunning = false;
-      cancelAnimationFrame(animationFrameId);
+      setLenisInstance(null);
       lenis.destroy();
     };
   }, [location.pathname]);
@@ -155,34 +136,6 @@ const RouteSeoHead = () => {
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={STUDY_HUB_OG_IMAGE} />
     </Helmet>
-  );
-};
-
-const AppLaunchScreen = () => {
-  const [showLaunchScreen, setShowLaunchScreen] = useState(true);
-
-  useEffect(() => {
-    const timerId = window.setTimeout(() => setShowLaunchScreen(false), 850);
-    return () => window.clearTimeout(timerId);
-  }, []);
-
-  if (!showLaunchScreen) return null;
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.32),_transparent_55%),linear-gradient(135deg,_#020617,_#0f172a)] text-white">
-      <div className="flex flex-col items-center gap-4 rounded-[2rem] border border-white/10 bg-white/10 px-8 py-8 text-center shadow-2xl shadow-cyan-500/20 backdrop-blur-xl">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-cyan-400/40 bg-cyan-500/15 text-cyan-200">
-          <span className="text-2xl font-black">S</span>
-        </div>
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-200/80">Study Hub</p>
-          <h1 className="mt-1 text-xl font-black">Preparing your workspace</h1>
-        </div>
-        <div className="h-2 w-40 overflow-hidden rounded-full bg-white/10">
-          <div className="h-full w-1/2 animate-[pulse_1.1s_ease-in-out_infinite] rounded-full bg-cyan-400" />
-        </div>
-      </div>
-    </div>
   );
 };
 
@@ -304,7 +257,15 @@ const AppContent = () => {
         </Suspense>
       </main>
       {showMainLayout && <Footer />}
-      
+
+      {(location.pathname === '/' || location.pathname.startsWith('/app')) &&
+        !location.pathname.startsWith('/app/pdf') &&
+        !location.pathname.startsWith('/app/portfolio') && (
+        <Suspense fallback={null}>
+          <StudyInstallCard />
+        </Suspense>
+      )}
+
       {/*  Floating Chat Widget show  */}
       {location.pathname === '/' && shouldLoadChatWidget && (
         <Suspense fallback={null}>

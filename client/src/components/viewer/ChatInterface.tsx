@@ -115,7 +115,7 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
       </header>
 
       <main id="ai-chat-scroll-area"
-       ref={chatScrollRef} className={`sarathi-chat-scroll ${hasConversation ? 'overflow-y-auto' : 'sarathi-chat-scroll-empty overflow-y-hidden'} flex-grow h-0 space-y-6 p-4 custom-scroll-smooth`}>
+       ref={chatScrollRef} className={`sarathi-chat-scroll study-scrollbar ${hasConversation ? 'overflow-y-auto overscroll-contain' : 'sarathi-chat-scroll-empty overflow-y-hidden'} min-h-0 flex-grow space-y-6 p-4`}>
         {!hasConversation ? (
           <div className="flex min-h-full flex-col items-center justify-center px-1 py-8 text-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-200/40 bg-white shadow-[0_18px_46px_rgba(15,23,42,0.12)] dark:border-white/10 dark:bg-white/[0.045] dark:shadow-[0_18px_46px_rgba(2,6,23,0.35)]">
@@ -183,7 +183,7 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
         <div ref={messagesEndRef} />
       </main>
 
-      <footer className="flex-shrink-0 border-t border-slate-200/70 bg-white/88 p-3 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/80">
+      <footer className={`flex-shrink-0 border-t border-slate-200/70 bg-white/88 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/80 ${isMobile ? 'px-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-3' : 'p-3'}`}>
         <form onSubmit={handleFormSubmit} className="flex items-start gap-2 rounded-2xl border border-slate-200/80 bg-slate-50/90 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.72),0_14px_34px_rgba(15,23,42,0.10)] focus-within:border-cyan-300 focus-within:ring-2 focus-within:ring-cyan-400/20 dark:border-white/10 dark:bg-white/[0.055] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_18px_40px_rgba(2,6,23,0.35)] dark:focus-within:border-cyan-200/30">
           <TextareaAutosize value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleFormSubmit(e); } }} placeholder="Message Sarathi" className="max-h-40 flex-1 resize-none bg-transparent px-2 py-1 text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none dark:text-white dark:placeholder:text-slate-400" maxRows={6} />
           <button type="submit" className="rounded-full bg-slate-950 p-2 text-white shadow-[0_12px_30px_rgba(15,23,42,0.18)] transition hover:scale-105 disabled:scale-100 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none dark:bg-white dark:text-slate-950 dark:shadow-[0_12px_30px_rgba(2,6,23,0.24)] dark:disabled:bg-slate-700 dark:disabled:text-slate-300" disabled={isLoading || !input.trim()}><PaperAirplaneIcon className="h-5 w-5" /></button>

@@ -6,7 +6,7 @@ import {
 import { useTheme } from '../../context/ThemeContext';
 import { usePwaInstallPrompt } from '../../hooks/usePwaInstallPrompt';
 
-const INSTALL_NOTICE_DELAY_MS = 6500;
+const INSTALL_NOTICE_DELAY_MS = 4000;
 const INSTALL_NOTICE_DISMISS_KEY = 'study-hub-install-notice-dismissed';
 
 const StudyInstallCard = () => {

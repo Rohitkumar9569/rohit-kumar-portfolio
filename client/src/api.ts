@@ -24,9 +24,9 @@ export interface JourneyApiResponse {
 }
 
 const getDefaultApiBaseUrl = () => {
-  if (import.meta.env.DEV) return 'http://localhost:5001';
+  if (import.meta.env.DEV) return '';
   if (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)) {
-    return 'http://127.0.0.1:5001';
+    return '';
   }
   return '';
 };

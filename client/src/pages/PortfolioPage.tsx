@@ -1,6 +1,8 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PageLoader from '../components/PageLoader';
+import { scrollToPortfolioSection } from '../utils/lenisController';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from './public/seoHelpers';
 
 // Eagerly load critical components for instant rendering on page load.
@@ -14,6 +16,33 @@ const StudyHubCTA = React.lazy(() => import('../sections/StudyHubCTA'));
 const Contact = React.lazy(() => import('../sections/Contact'));
 
 const PortfolioPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const sectionToScroll = params.get('scrollTo');
+    if (!sectionToScroll) return;
+
+    let timeoutId: number | undefined;
+    const attemptScroll = () => {
+      const sectionElement = document.getElementById(sectionToScroll);
+      if (sectionElement) {
+        scrollToPortfolioSection(sectionToScroll);
+        navigate(location.pathname, { replace: true });
+        return;
+      }
+      timeoutId = window.setTimeout(attemptScroll, 150);
+    };
+
+    attemptScroll();
+    return () => {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, [location.pathname, location.search, navigate]);
+
   return (
     <div className="min-h-screen w-full max-w-full min-w-0 overflow-x-clip [--background:210_40%_98%] [--border:214_32%_91%] [--card-foreground:222_47%_11%] [--card:0_0%_100%] [--foreground:222_47%_11%] [--primary-foreground:215_20%_65%] [--primary:0_0%_100%] dark:[--background:222_47%_11%] dark:[--border:217_33%_27%] dark:[--card-foreground:210_40%_96%] dark:[--card:223_39%_18%] dark:[--foreground:210_40%_96%] dark:[--primary-foreground:215_20%_65%] dark:[--primary:223_39%_18%]">
       <Helmet>

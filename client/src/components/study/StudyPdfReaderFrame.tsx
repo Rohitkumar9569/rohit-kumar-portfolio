@@ -108,8 +108,17 @@ const StudyPdfReaderFrame = ({
   const scrollAreaRef = useRef<HTMLElement | null>(null);
   const readerShellRef = useRef<HTMLDivElement | null>(null);
   const progressResetRef = useRef<number | null>(null);
+  const pageUpdateTimerRef = useRef<number | null>(null);
+  const scrollIdleTimerRef = useRef<number | null>(null);
   const scaleRef = useRef(scale);
   const pinchStateRef = useRef<{ distance: number; scale: number } | null>(null);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const isCoarsePointer = useMemo(
+    () =>
+      typeof window !== 'undefined' &&
+      (window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0),
+    [],
+  );
 
   const pageWidth = pageSize.width * scale;
   const pageHeight = pageSize.height * scale;
@@ -143,11 +152,37 @@ const StudyPdfReaderFrame = ({
     ScrollSeekPlaceholder: ({ height }: { height: number }) => (
       <div className="study-reader-canvas flex justify-center px-0 py-2 sm:px-6 sm:py-4" style={{ height }}>
         <div className="study-reader-page-frame overflow-hidden rounded-lg bg-[linear-gradient(135deg,rgba(255,255,255,0.14),rgba(255,255,255,0.045))] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] dark:bg-[linear-gradient(135deg,rgba(255,255,255,0.09),rgba(255,255,255,0.025))] sm:rounded-xl" style={{ width: pageWidth, maxWidth: '100%', height: Math.max(240, height - 32) }}>
-          <div className="h-full w-full animate-pulse bg-[linear-gradient(110deg,transparent_0%,rgba(255,255,255,0.10)_45%,transparent_70%)]" />
+          <div className="h-full w-full bg-[linear-gradient(110deg,transparent_0%,rgba(255,255,255,0.10)_45%,transparent_70%)]" />
         </div>
       </div>
     ),
   }), [pageWidth, readerTopGap]);
+  const virtuosoScrollConfig = useMemo(() => {
+    if (isCoarsePointer) {
+      return {
+        increaseViewportBy: { top: 480, bottom: 960 },
+        overscan: { main: 480, reverse: 240 },
+        scrollSeekConfiguration: {
+          enter: (velocity: number) => Math.abs(velocity) > 900,
+          exit: (velocity: number) => Math.abs(velocity) < 180,
+        },
+      };
+    }
+
+    return {
+      increaseViewportBy: { top: 2200, bottom: 5200 },
+      overscan: { main: 2600, reverse: 1200 },
+      scrollSeekConfiguration: {
+        enter: (velocity: number) => Math.abs(velocity) > 2200,
+        exit: (velocity: number) => Math.abs(velocity) < 420,
+      },
+    };
+  }, [isCoarsePointer]);
+  const pdfDevicePixelRatio = useMemo(
+    () => Math.min(window.devicePixelRatio || 1, isCoarsePointer ? 1.25 : 2),
+    [isCoarsePointer],
+  );
+  const shouldRenderTextLayer = !isCoarsePointer && !isScrolling;
   const closeButtonClassName =
     'study-control-surface inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/70 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition hover:bg-white hover:text-slate-950 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white dark:focus:ring-cyan-400/40';
 
@@ -291,8 +326,26 @@ const StudyPdfReaderFrame = ({
 
   const handleScrollerRef = useCallback((ref: HTMLElement | Window | null) => {
     if (!(ref instanceof HTMLElement)) return;
+
+    ref.id = 'pdf-scroll-area';
+    ref.setAttribute('data-native-scroll', 'true');
+    ref.setAttribute('data-pdf-scroller', 'true');
+    ref.classList.add('study-scrollbar');
     scrollAreaRef.current = ref;
   }, []);
+
+  const handleRangeChanged = useCallback((range: { startIndex: number }) => {
+    const nextPage = range.startIndex + 1;
+
+    if (pageUpdateTimerRef.current !== null) {
+      window.clearTimeout(pageUpdateTimerRef.current);
+    }
+
+    pageUpdateTimerRef.current = window.setTimeout(() => {
+      setCurrentPage(nextPage);
+      pageUpdateTimerRef.current = null;
+    }, isCoarsePointer ? 60 : 90);
+  }, [isCoarsePointer]);
 
   useEffect(() => {
     setPageInput(String(currentPage));
@@ -308,7 +361,37 @@ const StudyPdfReaderFrame = ({
     setHasError(false);
   }, [clearProgressReset, fileUrl]);
 
-  useEffect(() => () => clearProgressReset(), [clearProgressReset]);
+  useEffect(() => () => {
+    clearProgressReset();
+    if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
+    if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
+  }, [clearProgressReset]);
+
+  useEffect(() => {
+    const target = scrollAreaRef.current;
+    if (!target) return undefined;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+
+      if (scrollIdleTimerRef.current !== null) {
+        window.clearTimeout(scrollIdleTimerRef.current);
+      }
+
+      scrollIdleTimerRef.current = window.setTimeout(() => {
+        setIsScrolling(false);
+        scrollIdleTimerRef.current = null;
+      }, 140);
+    };
+
+    target.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      target.removeEventListener('scroll', handleScroll);
+      if (scrollIdleTimerRef.current !== null) {
+        window.clearTimeout(scrollIdleTimerRef.current);
+      }
+    };
+  }, [numPages]);
 
   useEffect(() => {
     if (!numPages) return;
@@ -691,19 +774,16 @@ const StudyPdfReaderFrame = ({
             <Virtuoso
               ref={virtuosoRef}
               totalCount={numPages}
-              initialItemCount={Math.min(numPages || 4, 4)}
+              initialItemCount={Math.min(numPages || 4, isCoarsePointer ? 2 : 4)}
               defaultItemHeight={Math.round(pageHeight + (isFullMode ? 16 : 32))}
-              increaseViewportBy={{ top: 2200, bottom: 5200 }}
-              overscan={{ main: 2600, reverse: 1200 }}
+              increaseViewportBy={virtuosoScrollConfig.increaseViewportBy}
+              overscan={virtuosoScrollConfig.overscan}
               initialTopMostItemIndex={Math.max(0, Math.min(currentPage, numPages || currentPage) - 1)}
               components={virtuosoComponents}
-              scrollSeekConfiguration={{
-                enter: (velocity) => Math.abs(velocity) > 2200,
-                exit: (velocity) => Math.abs(velocity) < 420,
-              }}
-              className="study-reader-canvas h-full custom-scrollbar"
+              scrollSeekConfiguration={virtuosoScrollConfig.scrollSeekConfiguration}
+              className="study-scrollbar study-reader-canvas h-full overscroll-contain"
               scrollerRef={handleScrollerRef}
-              rangeChanged={(range) => setCurrentPage(range.startIndex + 1)}
+              rangeChanged={handleRangeChanged}
               itemContent={(index) => (
                 <div className={['study-reader-canvas flex justify-center px-0', isFullMode ? 'py-1 sm:px-2 sm:py-2' : 'py-2 sm:px-6 sm:py-4'].join(' ')}>
                   <div
@@ -718,8 +798,8 @@ const StudyPdfReaderFrame = ({
                       className="study-pdf-selectable-page"
                       scale={scale}
                       renderAnnotationLayer={false}
-                      renderTextLayer
-                      devicePixelRatio={Math.min(window.devicePixelRatio || 1, 2)}
+                      renderTextLayer={shouldRenderTextLayer}
+                      devicePixelRatio={pdfDevicePixelRatio}
                       loading={(
                         <div
                           className="h-full w-full animate-pulse bg-[linear-gradient(135deg,rgba(255,255,255,0.16),rgba(255,255,255,0.045))] dark:bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.025))]"

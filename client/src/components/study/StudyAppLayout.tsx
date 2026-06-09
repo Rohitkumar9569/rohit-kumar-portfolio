@@ -3,7 +3,6 @@ import { useLocation, useNavigate, useOutlet } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion, useDragControls, type PanInfo } from 'framer-motion';
 import MobileBottomNav from './MobileBottomNav';
-import StudyInstallCard from './StudyInstallCard';
 import StudySidebar from './StudySidebar';
 import StudyPwaStatus from './StudyPwaStatus';
 import StudyTopBar from './StudyTopBar';
@@ -26,6 +25,7 @@ import {
   getAltDigitIndex,
   isPlainKeyboardKey,
 } from '../../utils/keyboardNavigation';
+import { scrollByLenis } from '../../utils/lenisController';
 
 const swipeTabs = ['/app', '/app/catalog', '/app/ask', '/app/library'];
 const PLATFORM_WORKSPACE_SLUG = 'study-hub';
@@ -425,10 +425,11 @@ const StudyAppLayout = () => {
 
       if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
         event.preventDefault();
-        window.scrollBy({
-          top: (event.key === 'ArrowDown' ? 1 : -1) * Math.max(220, window.innerHeight * 0.62),
-          behavior: 'auto',
-        });
+        const scrollDelta = (event.key === 'ArrowDown' ? 1 : -1) * Math.max(220, window.innerHeight * 0.62);
+
+        if (!scrollByLenis(scrollDelta)) {
+          window.scrollBy({ top: scrollDelta, behavior: 'auto' });
+        }
         return;
       }
 
@@ -486,7 +487,6 @@ const StudyAppLayout = () => {
       </div>
       {!isPdfRoute && !isPortfolioRoute && <MobileBottomNav />}
       {!isPdfRoute && !isPortfolioRoute && <StudyPwaStatus />}
-      {!isPdfRoute && !isPortfolioRoute && <StudyInstallCard />}
     </div>
   );
 };

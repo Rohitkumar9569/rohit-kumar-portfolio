@@ -9,8 +9,10 @@ import {
   STUDY_QUERY_GC_TIME_MS,
   STUDY_QUERY_STALE_TIME_MS,
 } from './studyHubApi';
+import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
+import './utils/pwaInstallStore';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +31,8 @@ const queryClient = new QueryClient({
 registerServiceWorker();
 
 const initMobileShell = async () => {
+  if (!Capacitor.isNativePlatform()) return;
+
   try {
     await StatusBar.setOverlaysWebView({ overlay: false });
     await StatusBar.setStyle({ style: Style.Dark });

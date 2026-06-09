@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
-}
+import {
+  getDeferredInstallPrompt,
+  subscribeInstallPrompt,
+  type BeforeInstallPromptEvent,
+} from '../utils/pwaInstallStore';
 
 const isRunningStandalone = () => {
   if (typeof window === 'undefined') return false;
@@ -31,9 +31,8 @@ export const usePwaInstallPrompt = () => {
   const [isAppleManualInstall, setAppleManualInstall] = useState(isAppleMobileBrowser);
 
   useEffect(() => {
-    const handleBeforeInstallPrompt = (event: Event) => {
-      event.preventDefault();
-      setPromptEvent(event as BeforeInstallPromptEvent);
+    const syncPromptState = () => {
+      setPromptEvent(getDeferredInstallPrompt());
     };
 
     const handleInstalled = () => {
@@ -42,11 +41,12 @@ export const usePwaInstallPrompt = () => {
       setAppleManualInstall(false);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    syncPromptState();
+    const unsubscribe = subscribeInstallPrompt(syncPromptState);
     window.addEventListener('appinstalled', handleInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      unsubscribe();
       window.removeEventListener('appinstalled', handleInstalled);
     };
   }, []);

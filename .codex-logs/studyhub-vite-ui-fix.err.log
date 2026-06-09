@@ -3927,3 +3927,176 @@ React will try to recreate this component tree from scratch using the error boun
 [2m6:48:01 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/sections/About.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
 [2m6:54:37 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/sections/About.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
 [2m6:55:05 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/sections/About.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m8:02:24 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781015158268:25:3)
+[2m8:02:26 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781015158268:25:3)
+[2m8:02:26 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:02:26 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:02:27 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:02:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:02:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:02:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:03:25 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781015575952:25:3)
+[2m8:03:40 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781015575952:25:3)
+[2m8:03:42 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:03:42 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:03:47 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781015575952:25:3)
+[2m8:03:49 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:03:50 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:04:27 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781015575952:25:3)
+[2m8:04:28 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781015575952:25:3)
+[2m8:04:29 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781015575952:25:3)
+[2m8:04:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:04:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:04:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:04:32 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:04:55 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781015575952:25:3)
+[2m8:04:57 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:04:57 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:12:04 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781015575952:25:3)
+[2m8:12:07 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:12:07 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:20:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:20:22 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:20:52 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:26:06 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781016663079:25:3)
+[2m8:30:03 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781017188339:26:3)
+[2m8:30:04 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781017188339:26:3)
+[2m8:30:07 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:30:08 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:30:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mFailed to fetch exams for navbar: AxiosError: Network Error
+    at XMLHttpRequest.handleError (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0bf8c7b1:2120:16)
+[2m8:30:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mReferenceError[22m: StudyInstallCard is not defined
+[39m > StudyAppLayout src/components/study/StudyAppLayout.tsx:490:44
+    488 |        {!isPdfRoute && !isPortfolioRoute && <MobileBottomNav />}
+    489 |        {!isPdfRoute && !isPortfolioRoute && <StudyPwaStatus />}
+    490 |        {!isPdfRoute && !isPortfolioRoute && <StudyInstallCard />}
+        |                                              ^
+    491 |      </div>
+    492 |    );
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21640:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+ > workLoopSync node_modules/react-dom/cjs/react-dom.development.js:26505:4
+
+[2m8:30:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mReferenceError[22m: StudyInstallCard is not defined
+[39m > StudyAppLayout src/components/study/StudyAppLayout.tsx:490:44
+    488 |        {!isPdfRoute && !isPortfolioRoute && <MobileBottomNav />}
+    489 |        {!isPdfRoute && !isPortfolioRoute && <StudyPwaStatus />}
+    490 |        {!isPdfRoute && !isPortfolioRoute && <StudyInstallCard />}
+        |                                              ^
+    491 |      </div>
+    492 |    );
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21640:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+ > workLoopSync node_modules/react-dom/cjs/react-dom.development.js:26505:4
+
+[2m8:30:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyAppLayout> component:
+
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781017230351:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781017227051:321:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m8:30:30 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: ReferenceError: StudyInstallCard is not defined
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781017230351:472:64)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:9632:19)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:12122:19)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:13096:13)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15500:6)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15193:21)
+    at performSyncWorkOnRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15304:19) {"componentStack":"\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781017230351:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781017227051:321:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m9:14:04 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781017266673:26:3)
+[2m9:17:44 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31merror while updating dependencies:
+Error: EPERM: operation not permitted, rename 'D:\MyBlueprintPortfolio\client\node_modules\.vite\deps_temp_4168c39b' -> 'D:\MyBlueprintPortfolio\client\node_modules\.vite\deps'[39m

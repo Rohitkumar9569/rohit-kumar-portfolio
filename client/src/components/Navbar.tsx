@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Link as ScrollLink, scroller } from 'react-scroll';
 import { Bars3Icon, XMarkIcon, ChevronDownIcon, ChevronRightIcon, Squares2X2Icon } from '@heroicons/react/24/solid';
 import Logo from './Logo';
 import API from '../api';
 import ThemeToggleButton from './ThemeToggleButton';
+import { useSectionNavigation } from '../hooks/useSectionNavigation';
+import { useActivePortfolioSection } from '../hooks/useActivePortfolioSection';
+import { getLenisInstance } from '../utils/lenisController';
 
 interface IExamLink {
   _id: string;
@@ -15,13 +18,14 @@ interface IExamLink {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [studyHubExams, setStudyHubExams] = useState<IExamLink[]>([]);
   const [isStudyHubMobileOpen, setStudyHubMobileOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
+  const navigateToSection = useSectionNavigation();
+  const activePortfolioSection = useActivePortfolioSection();
+  const isPortfolioRoute = location.pathname === '/';
 
   useEffect(() => {
     const fetchExams = async () => {
@@ -40,35 +44,42 @@ const Navbar = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setIsScrolled(currentScrollY > 50);
-      setIsVisible(true);
-      setLastScrollY(currentScrollY);
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const sectionToScroll = params.get('scrollTo');
-    if (sectionToScroll) {
-      scroller.scrollTo(sectionToScroll, { duration: 420, delay: 60, smooth: 'easeOutQuad', offset: -70 });
-    }
-  }, [location.search]);
+    if (!isOpen || !isPortfolioRoute) return undefined;
+
+    const lenis = getLenisInstance();
+    document.documentElement.classList.add('portfolio-nav-open');
+    document.body.classList.add('portfolio-nav-open');
+    lenis?.stop();
+
+    return () => {
+      document.documentElement.classList.remove('portfolio-nav-open');
+      document.body.classList.remove('portfolio-nav-open');
+      lenis?.start();
+    };
+  }, [isOpen, isPortfolioRoute]);
 
   const handleScrollTo = (section: string) => {
     setIsOpen(false);
-    if (location.pathname !== '/') {
-      navigate(`/?scrollTo=${section}`);
-    } else {
-      scroller.scrollTo(section, { duration: 420, delay: 0, smooth: 'easeOutQuad', offset: -70 });
-    }
+    navigateToSection(section);
   };
 
   const handleLogoClick = () => {
     if (location.pathname !== '/') {
       navigate('/');
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const lenis = getLenisInstance();
+      if (lenis) {
+        lenis.scrollTo(0, { duration: 1.05 });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 
@@ -101,7 +112,8 @@ const Navbar = () => {
     : fallbackStudyHubDropdownItems;
 
   const isAppRoute = location.pathname.startsWith('/app');
-  const isPortfolioRoute = location.pathname === '/';
+  const isPortfolioNavActive = (sectionId: string) =>
+    isPortfolioRoute && activePortfolioSection === sectionId;
   const navLinkClasses =
     'relative cursor-pointer font-semibold transition-colors duration-300 hover:text-[hsl(var(--accent))] after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-[hsl(var(--accent))] after:transition-transform after:duration-300 hover:after:scale-x-100';
   const appLinkToneClasses = isAppRoute
@@ -146,8 +158,8 @@ const Navbar = () => {
     : 'flex flex-col items-center mt-2 space-y-2 bg-primary w-full py-3';
   const navVisibilityClass = 'translate-y-0';
 
-  return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${headerClasses} ${navVisibilityClass}`}>
+  const navbarMarkup = (
+    <header className={`site-navbar-fixed transition-colors duration-300 ${headerClasses} ${navVisibilityClass}`}>
       <nav className="container mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-6 py-3 lg:grid-cols-[10rem_minmax(0,1fr)_10rem]">
         <button type="button" className="cursor-pointer justify-self-start" onClick={handleLogoClick} aria-label="Go to homepage">
           <Logo />
@@ -158,34 +170,24 @@ const Navbar = () => {
             {navLinks.map((link) => (
               <li key={link.label} className="relative group">
                 {link.type === 'scroll' && (
-                  <ScrollLink
-                    to={link.to!}
-                    href={`#${link.to!}`}
-                    spy={true}
-                    smooth="easeInOutQuart"
-                    offset={-70}
-                    duration={800}
-                    className={navLinkClasses}
-                    activeClass={location.pathname === '/' ? 'active-link' : ''}
+                  <button
+                    type="button"
                     onClick={() => handleScrollTo(link.to!)}
+                    className={`${navLinkClasses} bg-transparent ${isPortfolioNavActive(link.to!) ? 'active-link text-[hsl(var(--accent))]' : ''}`}
                   >
                     {link.label}
-                  </ScrollLink>
+                  </button>
                 )}
                 {link.type === 'hybrid_dropdown' && (
                   <>
-                    <div className={`${navLinkClasses} flex items-center ${location.pathname.startsWith('/study') ? 'active-link' : ''}`}>
-                      <ScrollLink
-                        to={link.scrollTo!}
-                        spy={true}
-                        smooth="easeInOutQuart"
-                        offset={-70}
-                        duration={800}
-                        activeClass={location.pathname === '/' ? 'active-link' : ''}
+                    <div className={`${navLinkClasses} flex items-center ${location.pathname.startsWith('/study') || isPortfolioNavActive(link.scrollTo!) ? 'active-link text-[hsl(var(--accent))]' : ''}`}>
+                      <button
+                        type="button"
                         onClick={() => handleScrollTo(link.scrollTo!)}
+                        className="bg-transparent"
                       >
                         {link.label}
-                      </ScrollLink>
+                      </button>
                       <ChevronDownIcon className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:rotate-180" />
                     </div>
                     <div className="absolute left-1/2 top-full hidden min-w-[230px] -translate-x-1/2 pt-4 group-hover:block group-focus-within:block">
@@ -307,6 +309,8 @@ const Navbar = () => {
       )}
     </header>
   );
+
+  return createPortal(navbarMarkup, document.body);
 };
 
 export default Navbar;
