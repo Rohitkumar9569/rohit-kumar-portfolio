@@ -12426,14 +12426,6 @@ body.portfolio-nav-open {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
-
-  .portfolio-section-surface,
-  .portfolio-root-shell,
-  .premium-site-shell,
-  .study-shell,
-  .portfolio-section-surface {
-    contain: layout paint style;
-  }
 }
 
 html.dark.portfolio-scroll-root {
