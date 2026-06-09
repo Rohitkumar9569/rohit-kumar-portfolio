@@ -457,7 +457,7 @@ const StudyAppLayout = () => {
   return (
     <div
       className={[
-        'study-shell relative min-h-screen text-slate-950 dark:text-slate-100',
+        'study-shell relative min-h-screen min-h-[100dvh] overflow-x-clip overflow-y-auto overscroll-contain text-slate-950 dark:text-slate-100',
         isPortfolioRoute ? 'overflow-x-clip' : 'overflow-x-hidden',
         isPortfolioRoute ? 'study-portfolio-embed' : '',
       ].join(' ')}
@@ -467,7 +467,7 @@ const StudyAppLayout = () => {
         isCollapsed={isSidebarCollapsed}
         onToggleCollapsed={() => setSidebarCollapsed((current) => !current)}
       />
-      <div className={['relative z-10 min-w-0', isPortfolioRoute ? 'overflow-x-clip' : 'overflow-x-hidden', isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'].join(' ')}>
+      <div className={['relative z-10 min-w-0 overflow-y-visible', isPortfolioRoute ? 'overflow-x-clip' : 'overflow-x-hidden', isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'].join(' ')}>
         {!isPdfRoute && !isPortfolioRoute && <StudyTopBar />}
         {!isPdfRoute && !isPortfolioRoute && (
           <div
@@ -481,7 +481,7 @@ const StudyAppLayout = () => {
             <div className="study-top-blur-edge h-full bg-gradient-to-b from-[#eef3f8]/88 via-[#eef3f8]/42 to-transparent backdrop-blur-2xl [mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.74)_44%,transparent_100%)] dark:from-[#050814]/90 dark:via-[#050814]/44" />
           </div>
         )}
-        <main ref={mainRef} id="study-main-content" tabIndex={-1} className={['min-w-0 outline-none', mainClassName].join(' ')}>
+        <main ref={mainRef} id="study-main-content" tabIndex={-1} className={['min-w-0 overflow-y-visible overscroll-contain outline-none', mainClassName].join(' ')}>
           {animatedOutlet}
         </main>
       </div>

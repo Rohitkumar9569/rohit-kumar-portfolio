@@ -8738,8 +8738,11 @@ to {
     rgb(var(--study-bg)) !important;
   color: rgb(var(--study-text));
   scrollbar-color: rgb(var(--study-muted) / 0.48) transparent;
-  overscroll-behavior: none;
+  scrollbar-gutter: stable;
+  overscroll-behavior-y: contain;
   overflow-x: clip !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
 }
 
 @keyframes studySkeletonSweep {
