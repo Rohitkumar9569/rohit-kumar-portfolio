@@ -61,12 +61,26 @@ const NotFoundPage         = React.lazy(() => import('./pages/NotFoundPage'));
 // ─────────────────────────────────────────────
 const SmoothScrollManager = () => {
   const location = useLocation();
+  const isStudyAppRoute = location.pathname.startsWith('/app');
+  const isPdfRoute =
+    location.pathname.startsWith('/app/pdf') ||
+    location.pathname.startsWith('/pyq/view');
 
   useEffect(() => {
-    // ✅ isLenisSupported अब lenisController से import है - duplicate नहीं
-    if (!getLenisInstance() && isLenisSupported()) {
+    const existingLenis = getLenisInstance();
 
-      // ✅ autoRaf: false - हम खुद RAF loop चलाएंगे (autoRaf:true के साथ conflict था)
+    if (isStudyAppRoute) {
+      if (existingLenis) {
+        existingLenis.destroy();
+        setLenisInstance(null);
+      }
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+      }
+      return undefined;
+    }
+
+    if (!existingLenis && isLenisSupported()) {
       const lenis = new Lenis({
         ...createAppLenisOptions(),
         autoRaf: false,
@@ -87,23 +101,21 @@ const SmoothScrollManager = () => {
         setLenisInstance(null);
       };
     }
-  }, []);
 
-  // Route बदलने पर scroll reset
+    return undefined;
+  }, [isStudyAppRoute]);
+
   useEffect(() => {
     const lenis = getLenisInstance();
-    const isPdfRoute =
-      location.pathname.startsWith('/app/pdf') ||
-      location.pathname.startsWith('/pyq/view');
 
-    if (isPdfRoute) return;
+    if (isPdfRoute || isStudyAppRoute) return;
 
     if (lenis) {
       lenis.scrollTo(0, { immediate: true });
     } else {
       window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
     }
-  }, [location.pathname]);
+  }, [isPdfRoute, isStudyAppRoute, location.pathname]);
 
   return null;
 };

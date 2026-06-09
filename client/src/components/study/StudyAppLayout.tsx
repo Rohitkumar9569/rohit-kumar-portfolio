@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type TouchEvent as ReactTouchEvent, type WheelEvent as ReactWheelEvent } from 'react';
 import { useLocation, useNavigate, useOutlet } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion, useDragControls, type PanInfo } from 'framer-motion';
@@ -72,6 +72,7 @@ const StudyAppLayout = () => {
   const dragControls = useDragControls();
   const queryClient = useQueryClient();
   const mainRef = useRef<HTMLElement | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
   const [isDesktopViewport, setDesktopViewport] = useState(() => (
     typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches
   ));
@@ -125,6 +126,39 @@ const StudyAppLayout = () => {
   const transitionDirection =
     typeof navigationDirection === 'number' ? navigationDirection : inferredDirection;
   const canSwipeTabs = isPrimarySwipeRoute && activeSwipeIndex >= 0 && !isPdfRoute && !isPortfolioRoute && !isDesktopViewport;
+
+  const handleStudyShellWheel = useCallback((event: ReactWheelEvent<HTMLDivElement>) => {
+    const target = event.currentTarget;
+    if (target.scrollHeight <= target.clientHeight) return;
+
+    const nextScrollTop = target.scrollTop + event.deltaY;
+    const maxScrollTop = target.scrollHeight - target.clientHeight;
+
+    target.scrollTop = Math.min(Math.max(nextScrollTop, 0), Math.max(maxScrollTop, 0));
+  }, []);
+
+  const handleStudyShellTouchStart = useCallback((event: ReactTouchEvent<HTMLDivElement>) => {
+    touchStartYRef.current = event.touches[0]?.clientY ?? null;
+  }, []);
+
+  const handleStudyShellTouchMove = useCallback((event: ReactTouchEvent<HTMLDivElement>) => {
+    if (touchStartYRef.current === null) return;
+
+    const currentY = event.touches[0]?.clientY ?? touchStartYRef.current;
+    const deltaY = touchStartYRef.current - currentY;
+    touchStartYRef.current = currentY;
+
+    if (Math.abs(deltaY) < 1) return;
+
+    const target = event.currentTarget;
+    if (target.scrollHeight <= target.clientHeight) return;
+
+    event.preventDefault();
+    const nextScrollTop = target.scrollTop + deltaY;
+    const maxScrollTop = target.scrollHeight - target.clientHeight;
+
+    target.scrollTop = Math.min(Math.max(nextScrollTop, 0), Math.max(maxScrollTop, 0));
+  }, []);
 
   const prewarmPrimaryTabs = useCallback(() => {
     preloadPrimaryStudyTabModules();
@@ -462,6 +496,9 @@ const StudyAppLayout = () => {
         isPortfolioRoute ? 'study-portfolio-embed' : '',
       ].join(' ')}
       aria-keyshortcuts="Alt+1 Alt+2 Alt+3 Alt+4 / Backspace ArrowLeft ArrowRight ArrowUp ArrowDown Home End Escape"
+      onWheel={handleStudyShellWheel}
+      onTouchStart={handleStudyShellTouchStart}
+      onTouchMove={handleStudyShellTouchMove}
     >
       <StudySidebar
         isCollapsed={isSidebarCollapsed}

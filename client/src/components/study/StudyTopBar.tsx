@@ -79,7 +79,15 @@ const StudyTopBar = () => {
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
 
-    const handleScroll = () => setHeaderLifted(window.scrollY > 10);
+    const scrollHost: HTMLElement | Window =
+      (typeof document !== 'undefined' ? document.querySelector<HTMLElement>('.study-shell') : null) ?? window;
+
+    const handleScroll = () => {
+      const currentScrollTop = scrollHost === window
+        ? window.scrollY || window.pageYOffset || 0
+        : scrollHost.scrollTop;
+      setHeaderLifted(currentScrollTop > 10);
+    };
     const handleChatScroll = (event: Event) => {
       const customEvent = event as CustomEvent<{ lifted?: boolean }>;
       setHeaderLifted(Boolean(customEvent.detail?.lifted));
@@ -90,12 +98,14 @@ const StudyTopBar = () => {
     };
 
     handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    scrollHost.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
     window.addEventListener('studyhub:chat-scroll', handleChatScroll as EventListener);
     window.addEventListener('studyhub:chat-state', handleChatState as EventListener);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      scrollHost.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
       window.removeEventListener('studyhub:chat-scroll', handleChatScroll as EventListener);
       window.removeEventListener('studyhub:chat-state', handleChatState as EventListener);
     };
@@ -108,7 +118,7 @@ const StudyTopBar = () => {
       <>
         <header
           className={[
-            'study-topbar fixed inset-x-0 top-0 z-40 px-3 pt-[env(safe-area-inset-top)] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200 lg:hidden',
+            'study-topbar fixed inset-x-0 top-0 z-40 block px-3 pt-[env(safe-area-inset-top)] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200 md:hidden',
             isHeaderLifted ? 'study-topbar-lifted' : 'study-topbar-flat',
             isHeaderLifted
               ? 'border-b border-slate-200/65 bg-[#eef3f8]/88 shadow-[0_10px_28px_rgba(15,23,42,0.08)] backdrop-blur-2xl [backdrop-filter:saturate(1.28)_blur(18px)] dark:border-white/10 dark:bg-[#050814]/88 dark:shadow-[0_14px_34px_rgba(0,0,0,0.34)]'
@@ -121,7 +131,7 @@ const StudyTopBar = () => {
               type="button"
               onClick={() => setDrawerOpen(true)}
               className={[
-                'flex h-10 w-10 items-center justify-center rounded-2xl text-slate-600 transition-all duration-300 ease-out hover:scale-105 active:scale-95 dark:text-slate-300',
+                'flex h-10 w-10 items-center justify-center rounded-2xl text-slate-600 transition-all duration-300 ease-out hover:scale-105 active:scale-95 dark:text-slate-300 md:hidden',
                 isHeaderLifted
                   ? 'bg-white/62 shadow-sm shadow-slate-950/5 hover:bg-white hover:text-slate-950 dark:bg-white/[0.07] dark:hover:bg-white/[0.12] dark:hover:text-white'
                   : 'hover:bg-white/60 hover:text-slate-950 dark:hover:bg-white/[0.08] dark:hover:text-white',
@@ -170,7 +180,7 @@ const StudyTopBar = () => {
       <>
         <header
           className={[
-            'study-topbar fixed inset-x-0 top-0 z-40 px-3 pt-[env(safe-area-inset-top)] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200 lg:hidden',
+            'study-topbar fixed inset-x-0 top-0 z-40 block px-3 pt-[env(safe-area-inset-top)] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200 md:hidden',
             isHeaderLifted ? 'study-topbar-lifted' : 'study-topbar-flat',
             isHeaderLifted
               ? 'border-b border-slate-200/70 bg-[#eef3f8]/[0.88] shadow-[0_10px_28px_rgba(15,23,42,0.08)] backdrop-blur-2xl [backdrop-filter:saturate(1.28)_blur(18px)] dark:border-white/10 dark:bg-[#050814]/[0.88] dark:shadow-[0_14px_34px_rgba(0,0,0,0.34)]'
@@ -183,7 +193,7 @@ const StudyTopBar = () => {
               type="button"
               onClick={() => setDrawerOpen(true)}
               className={[
-                'flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-slate-600 transition-all duration-300 ease-out hover:scale-105 active:scale-95 dark:text-slate-300',
+                'flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-slate-600 transition-all duration-300 ease-out hover:scale-105 active:scale-95 dark:text-slate-300 md:hidden',
                 isHeaderLifted
                   ? 'bg-white/62 shadow-sm shadow-slate-950/5 hover:bg-white hover:text-slate-950 dark:bg-white/[0.07] dark:hover:bg-white/[0.12] dark:hover:text-white'
                   : 'hover:bg-white/60 hover:text-slate-950 dark:hover:bg-white/[0.08] dark:hover:text-white',
@@ -207,7 +217,7 @@ const StudyTopBar = () => {
     return (
       <header
         className={[
-          'study-topbar fixed inset-x-0 top-0 z-40 px-3 pt-[env(safe-area-inset-top)] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200 lg:hidden',
+          'study-topbar fixed inset-x-0 top-0 z-40 block px-3 pt-[env(safe-area-inset-top)] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200 md:hidden',
           isHeaderLifted ? 'study-topbar-lifted' : 'study-topbar-flat',
           isHeaderLifted
             ? 'border-b border-slate-200/55 bg-[#eef3f8]/[0.82] shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-2xl [backdrop-filter:saturate(1.3)_blur(20px)] dark:border-white/10 dark:bg-[#050814]/[0.82] dark:shadow-[0_16px_42px_rgba(0,0,0,0.34)]'
@@ -246,7 +256,7 @@ const StudyTopBar = () => {
     <>
       <header
         className={[
-          'study-topbar inset-x-0 top-0 z-40 px-3 text-slate-950 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200 dark:text-white lg:hidden',
+          'study-topbar inset-x-0 top-0 z-40 block px-3 text-slate-950 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200 dark:text-white md:hidden',
           isUtilityRoute
             ? 'fixed pt-[env(safe-area-inset-top)]'
             : 'sticky',
@@ -274,7 +284,7 @@ const StudyTopBar = () => {
             type="button"
             onClick={() => setDrawerOpen(true)}
             className={[
-              'flex shrink-0 items-center justify-center transition-all duration-300 ease-out hover:scale-105 active:scale-95 lg:hidden',
+              'flex shrink-0 items-center justify-center transition-all duration-300 ease-out hover:scale-105 active:scale-95 md:hidden',
               isChatRoute || isUtilityRoute
                 ? 'h-10 w-10 rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white'
                 : 'h-11 w-11 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700 shadow-sm hover:border-cyan-300 hover:text-cyan-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-cyan-400/40 dark:hover:text-cyan-200',
