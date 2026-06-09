@@ -55,10 +55,10 @@ const SectionAnimator: React.FC<SectionAnimatorProps> = ({ children, id, classNa
       {shouldAnimate ? (
         <motion.div
           className="w-full"
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0.92, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.12, margin: '0px 0px -8% 0px' }}
-          transition={{ duration: 0.45, ease: 'easeOut' }}
+          viewport={{ once: true, amount: 0.03, margin: '0px 0px 24% 0px' }}
+          transition={{ duration: 0.28, ease: 'easeOut' }}
         >
           {children}
         </motion.div>

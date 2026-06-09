@@ -24,8 +24,8 @@ const containerVariant = {
 };
 
 const itemVariant = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0.92, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.28 } },
 };
 
 const skillsData = [
@@ -88,7 +88,7 @@ const Skills = () => {
             variants={containerVariant}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
+            viewport={{ once: true, amount: 0.03, margin: '0px 0px 24% 0px' }}
           >
             <motion.h2 variants={itemVariant} className="text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white">
               Skills & Technologies
@@ -144,10 +144,10 @@ const Skills = () => {
 
         <motion.div
           className="absolute top-1/4 -translate-y-1/2 right-8 w-2/5 h-[500px] hidden lg:block"
-          initial={{ opacity: 0, x: 100 }}
+          initial={{ opacity: 0.9, x: 18 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.5 }}
+          viewport={{ once: true, amount: 0.05, margin: '0px 0px 20% 0px' }}
+          transition={{ duration: 0.35, delay: 0.1 }}
         >
           <Suspense fallback={null}>
             <ArchitectCanvas />

@@ -4670,8 +4670,8 @@ html.portfolio-scroll-root {
 
 @supports (content-visibility: auto) {
   .portfolio-section-surface {
-    content-visibility: auto;
-    contain-intrinsic-size: 1400px 800px;
+    content-visibility: visible;
+    contain-intrinsic-size: auto;
   }
 }
 

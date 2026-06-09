@@ -1,36 +1,23 @@
 import { useEffect, useState } from 'react';
 import {
-  CheckCircleIcon,
   DevicePhoneMobileIcon,
-  SignalSlashIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '../../context/ThemeContext';
 import { usePwaInstallPrompt } from '../../hooks/usePwaInstallPrompt';
 
 const INSTALL_NOTICE_DELAY_MS = 6500;
 const INSTALL_NOTICE_DISMISS_KEY = 'study-hub-install-notice-dismissed';
 
 const StudyInstallCard = () => {
+  const { theme } = useTheme();
   const { canInstall, installApp, isAppleManualInstall, isInstalled, isPrompting, isSupported } = usePwaInstallPrompt();
-  const [isOnline, setOnline] = useState(() => (typeof navigator === 'undefined' ? true : navigator.onLine));
   const [isVisible, setVisible] = useState(false);
   const [isDismissed, setDismissed] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.sessionStorage.getItem(INSTALL_NOTICE_DISMISS_KEY) === 'true';
   });
-
-  useEffect(() => {
-    const handleOnline = () => setOnline(true);
-    const handleOffline = () => setOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+  const isDark = theme === 'dark';
 
   useEffect(() => {
     if (isInstalled || isDismissed || (!canInstall && !isAppleManualInstall && !isSupported)) return undefined;
@@ -47,22 +34,52 @@ const StudyInstallCard = () => {
     }
   };
 
+  const openInstallGuide = () => {
+    if (typeof window === 'undefined') return;
+
+    const ua = window.navigator.userAgent.toLowerCase();
+    const isIOS = /iphone|ipad|ipod/.test(ua) || (window.navigator.platform.toLowerCase() === 'macintel' && window.navigator.maxTouchPoints > 1);
+    const isAndroid = /android/.test(ua);
+
+    const guideUrl = isIOS
+      ? 'https://support.apple.com/guide/iphone/install-apps-iph49e4f4df4/ios'
+      : isAndroid
+        ? 'https://support.google.com/chrome/answer/9658361'
+        : 'https://support.google.com/chrome/answer/9658361';
+
+    window.open(guideUrl, '_blank', 'noopener,noreferrer');
+  };
+
   const handleInstall = async () => {
     if (canInstall) {
       const installed = await installApp();
-      if (installed) dismissNotice();
+      if (installed) {
+        dismissNotice();
+        return;
+      }
+    }
+
+    if (isAppleManualInstall) {
+      openInstallGuide();
       return;
     }
 
-    if (!isAppleManualInstall) {
-      dismissNotice();
+    if (!canInstall) {
+      openInstallGuide();
     }
   };
 
   if (isInstalled || isDismissed || !isVisible || (!canInstall && !isAppleManualInstall && !isSupported)) return null;
 
   return (
-    <aside className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.75rem)] left-3 right-3 z-50 mx-auto max-w-[26rem] overflow-hidden rounded-[1.35rem] border border-slate-200/80 bg-white/92 p-3 text-slate-950 shadow-[0_24px_70px_rgba(15,23,42,0.22)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#07101c]/94 dark:text-white dark:shadow-[0_24px_80px_rgba(0,0,0,0.46)] sm:left-auto sm:right-5 lg:bottom-5 lg:right-6">
+    <aside
+      className={[
+        'fixed bottom-[calc(env(safe-area-inset-bottom)+5.75rem)] left-3 right-3 z-50 mx-auto max-w-[25rem] overflow-hidden rounded-[1.35rem] border p-3 shadow-[0_24px_70px_rgba(15,23,42,0.16)] backdrop-blur-2xl sm:left-auto sm:right-5 lg:bottom-5 lg:right-6',
+        isDark
+          ? 'border-cyan-400/20 bg-[linear-gradient(135deg,rgba(7,16,28,0.98),rgba(15,23,42,0.96))] text-white shadow-cyan-950/40'
+          : 'border-cyan-100/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.98),rgba(240,249,255,0.98))] text-slate-950 shadow-cyan-200/70',
+      ].join(' ')}
+    >
       <button
         type="button"
         onClick={dismissNotice}
@@ -79,47 +96,29 @@ const StudyInstallCard = () => {
         </div>
 
         <div className="min-w-0">
-          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-cyan-700 dark:text-cyan-300">
-            Rohit Hub App
+          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-cyan-700 dark:text-cyan-300">
+            Rohit Hub
           </p>
-          <h2 className="mt-0.5 text-base font-black leading-tight text-slate-950 dark:text-white">
-            Install as an app
+          <h2 className="mt-0.5 text-base font-black leading-tight">
+            Install app
           </h2>
-          <p className="mt-1 text-xs font-semibold leading-5 text-slate-600 dark:text-slate-300">
-            Fast launch, offline shell, saved library, and a mobile-app feel.
-          </p>
         </div>
       </div>
 
-      <div className="mt-3 flex items-center gap-2">
-        <span
-          className={[
-            'inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded-2xl border px-3 text-xs font-black',
-            isOnline
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-300'
-              : 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-300',
-          ].join(' ')}
-        >
-          {isOnline ? (
-            <CheckCircleIcon className="h-4 w-4" aria-hidden="true" />
-          ) : (
-            <SignalSlashIcon className="h-4 w-4" aria-hidden="true" />
-          )}
-          {isOnline ? 'Online' : 'Offline'}
-        </span>
+      <div className="mt-3">
         <button
           type="button"
           onClick={handleInstall}
           disabled={isPrompting}
-          className="inline-flex min-h-10 flex-1 items-center justify-center rounded-2xl bg-slate-950 px-3 text-xs font-black text-white shadow-lg shadow-cyan-500/15 transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70 dark:bg-cyan-300 dark:text-slate-950 dark:hover:bg-cyan-200"
+          className="inline-flex min-h-10 w-full items-center justify-center rounded-2xl bg-slate-950 px-3 text-sm font-black text-white shadow-lg shadow-cyan-500/15 transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70 dark:bg-cyan-300 dark:text-slate-950 dark:hover:bg-cyan-200"
         >
           {isPrompting
-            ? 'Opening...'
+            ? 'Preparing...'
             : canInstall
-              ? 'Install app'
+              ? 'Download app'
               : isAppleManualInstall
                 ? 'Add to Home'
-                : 'Open app'}
+                : 'Install app'}
         </button>
       </div>
     </aside>

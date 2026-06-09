@@ -87,11 +87,11 @@ const buttonContentVariant = {
 
 const About = () => {
   const [text] = useTypewriter({
-    words: ['Software Engineer', 'Full-Stack Developer', 'GATE DA & CSE Qualified', 'AI & Data Science Enthusiast', 'Problem Solver'],
+    words: ['Software Engineer', 'Full-Stack Developer', 'GATE Qualified', 'AI Enthusiast', 'Problem Solver'],
     loop: true,
-    typeSpeed: 80,
-    deleteSpeed: 50,
-    delaySpeed: 2000,
+    typeSpeed: 92,
+    deleteSpeed: 52,
+    delaySpeed: 2200,
   });
 
   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
@@ -120,36 +120,39 @@ const About = () => {
     <>
       <section id="about" className="portfolio-section-surface relative min-h-screen flex items-center px-6 pt-28 pb-16 overflow-hidden">
         <motion.div
-          className="container mx-auto z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+          className="container mx-auto z-10 grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1.18fr)_minmax(380px,0.82fr)] xl:grid-cols-[minmax(0,1.25fr)_minmax(460px,0.75fr)]"
           variants={containerVariant}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
         >
-          <motion.div variants={itemVariant} className="relative flex justify-center items-center lg:order-2">
-            <div className="absolute w-72 h-72 sm:w-96 sm:h-96 bg-cyan-500/20 dark:bg-violet-500/20 rounded-full blur-3xl animate-pulse"></div>
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden shadow-2xl shadow-cyan-500/50 dark:shadow-violet-500/50">
+          <motion.div variants={itemVariant} className="relative flex justify-center items-center lg:order-2 lg:self-start lg:pt-8 xl:pt-2">
+            <div className="absolute hidden rounded-full bg-cyan-500/12 blur-3xl sm:block sm:h-96 sm:w-96 lg:h-[28rem] lg:w-[28rem] xl:h-[32rem] xl:w-[32rem]"></div>
+            <div className="relative h-64 w-64 overflow-hidden rounded-full shadow-none sm:h-80 sm:w-80 lg:h-[24rem] lg:w-[24rem] lg:shadow-2xl lg:shadow-cyan-500/35 xl:h-[28rem] xl:w-[28rem]">
               <img src={photoAssets.profilePhoto} alt="Rohit Kumar" className="w-full h-full object-cover" fetchpriority="high" />
             </div>
           </motion.div>
 
           <motion.div variants={itemVariant} className="lg:order-1">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-center lg:text-left text-gray-800 dark:text-white">
-              Hi, I'm <span className="bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-transparent">Rohit Kumar</span>
+              Hi, I'm <span className="whitespace-nowrap text-cyan-700 dark:text-cyan-400">Rohit Kumar</span>
             </h1>
-            <h2 className="text-2xl sm:text-3xl font-semibold my-4 h-10 text-center lg:text-left">
-              <span className="whitespace-nowrap bg-gradient-to-r from-cyan-400 to-violet-500 bg-clip-text text-transparent">{text}</span>
-              <Cursor cursorColor="#06B6D4" />
+            
+            <h2 className="my-4 flex min-h-10 items-center justify-center overflow-hidden text-2xl font-semibold leading-none sm:text-3xl lg:justify-start">
+              <span className="inline-block w-[min(19rem,100%)] whitespace-nowrap text-left text-cyan-700 dark:text-cyan-400 lg:w-auto lg:min-w-[19rem]">
+                {text}
+                <Cursor cursorColor="#0e7490" cursorBlinking={false} />
+              </span>
             </h2>
-            <p className="mb-8 w-full text-center text-base leading-7 text-gray-700 dark:text-slate-300 sm:text-lg lg:mx-0 lg:text-left lg:text-[clamp(0.88rem,1.2vw,1.125rem)] lg:leading-8">
-              <span className="block lg:whitespace-nowrap">
-                A Computer Science Engineer skilled in web development and Data Science.
-              </span>
-              <span className="block lg:whitespace-nowrap">
-                GATE qualified in CSE and DA (AIR 7275), building scalable, intelligent systems.
-              </span>
+            
+            {/* यहाँ से max-w-2xl हटा दिया गया है ताकि टेक्स्ट को फैलने की पूरी जगह मिले */}
+            <p className="mb-8 w-full max-w-[54rem] text-center text-base leading-relaxed text-gray-700 dark:text-slate-300 sm:text-lg lg:mx-0 lg:text-left">
+              A Computer Science Engineer skilled in web development and Data Science.
+              <br className="hidden lg:block" />
+              <span className="xl:whitespace-nowrap">GATE qualified in CSE and DA (AIR 7275), building scalable, intelligent systems.</span>
             </p>
-            <div className="relative border-l-2 border-gray-400/50 dark:border-slate-700/50 pl-8 mt-8">
+
+            <div className="relative mt-8 border-l-2 border-cyan-600/55 pl-8 dark:border-cyan-400/35">
               {timelineItems.map((item, index) => (
                 <div key={index} className="mb-8 relative group">
                   <div className="absolute -left-[41px] top-1 w-4 h-4 bg-white dark:bg-slate-900 rounded-full border-4 border-cyan-500 dark:border-cyan-400 shadow-lg shadow-cyan-300/50 dark:shadow-cyan-800/50"></div>
@@ -242,7 +245,7 @@ const About = () => {
                 <button onClick={() => setSelectedOrg(null)} className="mt-8 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-400/50 dark:shadow-cyan-800/50">
                   Got it!
                 </button>
-              </div>
+              </div> 
             </motion.div>
           </motion.div>
         )}

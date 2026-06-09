@@ -6,8 +6,8 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
 import { brandLogos } from '../assets';
 
 const itemVariant = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0.94, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.26 } },
   exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
 };
 
@@ -61,10 +61,10 @@ const Certifications = () => {
       <div className="container mx-auto">
         <motion.h2
           className="text-4xl font-bold text-center mb-12 text-gray-800 dark:text-white"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0.94, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          viewport={{ once: true, amount: 0.05, margin: '0px 0px 20% 0px' }}
+          transition={{ duration: 0.28 }}
         >
           Certifications & Continuous Learning
         </motion.h2>

@@ -49,24 +49,26 @@ const SmoothScrollManager = () => {
 
   useEffect(() => {
     const isPortfolioRoute = location.pathname === '/';
-    const isLenisRoute = isPortfolioRoute || location.pathname.startsWith('/study');
     const isNativeScrollRoute =
       location.pathname.startsWith('/app') ||
-      location.pathname.startsWith('/resources') ||
-      location.pathname.startsWith('/papers') ||
-      location.pathname.startsWith('/exams') ||
+      location.pathname.startsWith('/admin') ||
+      location.pathname === '/login' ||
       location.pathname.startsWith('/pyq/view');
+    const isLenisRoute = !isNativeScrollRoute;
 
     if (!isLenisRoute || isNativeScrollRoute) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+
     const lenis = new Lenis({
-      lerp: isPortfolioRoute ? 0.2 : 0.11,
-      wheelMultiplier: isPortfolioRoute ? 2 : 1,
-      touchMultiplier: isPortfolioRoute ? 2 : 1,
-      syncTouch: isPortfolioRoute,
-      syncTouchLerp: 0.12,
-      touchInertiaExponent: 1.45,
+      lerp: isTouchDevice ? 0.48 : (isPortfolioRoute ? 0.34 : 0.26),
+      wheelMultiplier: isPortfolioRoute ? 5.5 : 3.5,
+      touchMultiplier: isTouchDevice ? 13 : (isPortfolioRoute ? 7.5 : 5.5),
+      syncTouch: true,
+      syncTouchLerp: isTouchDevice ? 0.42 : 0.28,
+      touchInertiaExponent: isTouchDevice ? 1.02 : 1.08,
+      gestureOrientation: 'vertical',
       prevent: (node) => {
         const element = node as HTMLElement;
         return Boolean(

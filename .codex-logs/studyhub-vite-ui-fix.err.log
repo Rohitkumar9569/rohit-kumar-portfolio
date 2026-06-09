@@ -3372,3 +3372,558 @@ React will try to recreate this component tree from scratch using the error boun
     at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
     at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781005776954:25:3)
 [2m5:20:51 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: UnknownErrorException: Failed to fetch
+[2m6:37:32 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781010427380:25:3)
+[2m6:37:33 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/components/ArchitectCanvas.tsx
+[39m
+[2m6:37:33 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/components/ArchitectCanvas.tsx
+[39m
+[2m6:37:33 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in one of your React components:
+
+    at Lazy
+    at Suspense
+    at div
+    at MotionComponent (http://localhost:5173/node_modules/.vite/deps/framer-motion.js?v=0bf8c7b1:1194:35)
+    at section
+    at Skills (http://localhost:5173/src/sections/Skills.tsx:207:40)
+    at Suspense
+    at div
+    at div
+    at PortfolioPage
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m6:37:33 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Failed to fetch dynamically imported module: http://localhost:5173/src/components/ArchitectCanvas.tsx {"componentStack":"\n    at Lazy\n    at Suspense\n    at div\n    at MotionComponent (http://localhost:5173/node_modules/.vite/deps/framer-motion.js?v=0bf8c7b1:1194:35)\n    at section\n    at Skills (http://localhost:5173/src/sections/Skills.tsx:207:40)\n    at Suspense\n    at div\n    at div\n    at PortfolioPage\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m6:37:34 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781010427380:25:3)
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/Skills.tsx
+[39m
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/Projects.tsx
+[39m
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/StudyHubCTA.tsx
+[39m
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/Contact.tsx
+[39m
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/Skills.tsx
+[39m
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/Projects.tsx
+[39m
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/StudyHubCTA.tsx
+[39m
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/Contact.tsx
+[39m
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in one of your React components:
+
+    at Lazy
+    at Suspense
+    at div
+    at div
+    at PortfolioPage
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/Skills.tsx {"componentStack":"\n    at Lazy\n    at Suspense\n    at div\n    at div\n    at PortfolioPage\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in one of your React components:
+
+    at Lazy
+    at Suspense
+    at div
+    at div
+    at PortfolioPage
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/Projects.tsx {"componentStack":"\n    at Lazy\n    at Suspense\n    at div\n    at div\n    at PortfolioPage\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in one of your React components:
+
+    at Lazy
+    at Suspense
+    at div
+    at div
+    at PortfolioPage
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/StudyHubCTA.tsx {"componentStack":"\n    at Lazy\n    at Suspense\n    at div\n    at div\n    at PortfolioPage\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in one of your React components:
+
+    at Lazy
+    at Suspense
+    at div
+    at div
+    at PortfolioPage
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m6:37:34 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Failed to fetch dynamically imported module: http://localhost:5173/src/sections/Contact.tsx {"componentStack":"\n    at Lazy\n    at Suspense\n    at div\n    at div\n    at PortfolioPage\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m6:39:04 PM[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mStatusBar setup skipped: Error: "StatusBar" plugin is not implemented on web
+    at createPluginMethod (http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:77:15)
+    at http://localhost:5173/node_modules/.vite/deps/@capacitor_core.js?v=0bf8c7b1:83:17
+    at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781010455398:25:3)
+[2m6:40:14 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:14 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:15 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useReducer')
+[39m > Object.useReducer ../../node_modules/.vite/deps/react.js?v=0990f911:966:30
+ > n ../../node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254
+ > About src/sections/About.tsx?t=1781010613896:99:17
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21640:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+
+[2m6:40:15 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:15 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:15 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useReducer')
+[39m > Object.useReducer ../../node_modules/.vite/deps/react.js?v=0990f911:966:30
+ > n ../../node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254
+ > About src/sections/About.tsx?t=1781010613896:99:17
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21640:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+
+[2m6:40:15 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <About> component:
+
+    at About (http://localhost:5173/src/sections/About.tsx?t=1781010613896:99:17)
+    at div
+    at div
+    at PortfolioPage
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m6:40:15 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useReducer')
+    at Object.useReducer (http://localhost:5173/node_modules/.vite/deps/react.js?v=0990f911:966:30)
+    at n (http://localhost:5173/node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254)
+    at About (http://localhost:5173/src/sections/About.tsx?t=1781010613896:99:17)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:9632:19)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:12122:19)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:13096:13)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15500:6) {"componentStack":"\n    at About (http://localhost:5173/src/sections/About.tsx?t=1781010613896:99:17)\n    at div\n    at div\n    at PortfolioPage\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m6:40:19 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:19 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:19 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useReducer')
+[39m > Object.useReducer ../../node_modules/.vite/deps/react.js?v=0990f911:966:30
+ > n ../../node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254
+ > About src/sections/About.tsx?t=1781010613896:99:17
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+
+[2m6:40:19 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:19 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:19 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useReducer')
+[39m > Object.useReducer ../../node_modules/.vite/deps/react.js?v=0990f911:966:30
+ > n ../../node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254
+ > About src/sections/About.tsx?t=1781010613896:99:17
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+
+[2m6:40:19 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <About> component:
+
+    at About (http://localhost:5173/src/sections/About.tsx?t=1781010613896:99:17)
+    at div
+    at div
+    at PortfolioPage
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m6:40:19 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useReducer')
+    at Object.useReducer (http://localhost:5173/node_modules/.vite/deps/react.js?v=0990f911:966:30)
+    at n (http://localhost:5173/node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254)
+    at About (http://localhost:5173/src/sections/About.tsx?t=1781010613896:99:17)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15500:6) {"componentStack":"\n    at About (http://localhost:5173/src/sections/About.tsx?t=1781010613896:99:17)\n    at div\n    at div\n    at PortfolioPage\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m6:40:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useReducer')
+[39m > Object.useReducer ../../node_modules/.vite/deps/react.js?v=0990f911:966:30
+ > n ../../node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254
+ > About src/sections/About.tsx?t=1781010613896:99:17
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+
+[2m6:40:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useReducer')
+[39m > Object.useReducer ../../node_modules/.vite/deps/react.js?v=0990f911:966:30
+ > n ../../node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254
+ > About src/sections/About.tsx?t=1781010613896:99:17
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+
+[2m6:40:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <About> component:
+
+    at About (http://localhost:5173/src/sections/About.tsx?t=1781010613896:99:17)
+    at div
+    at div
+    at PortfolioPage
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m6:40:20 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useReducer')
+    at Object.useReducer (http://localhost:5173/node_modules/.vite/deps/react.js?v=0990f911:966:30)
+    at n (http://localhost:5173/node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254)
+    at About (http://localhost:5173/src/sections/About.tsx?t=1781010613896:99:17)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15500:6) {"componentStack":"\n    at About (http://localhost:5173/src/sections/About.tsx?t=1781010613896:99:17)\n    at div\n    at div\n    at PortfolioPage\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m6:40:25 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:25 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:26 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useReducer')
+[39m > Object.useReducer ../../node_modules/.vite/deps/react.js?v=0990f911:966:30
+ > n ../../node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254
+ > About src/sections/About.tsx?t=1781010625043:99:17
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+
+[2m6:40:26 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:26 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:26 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useReducer')
+[39m > Object.useReducer ../../node_modules/.vite/deps/react.js?v=0990f911:966:30
+ > n ../../node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254
+ > About src/sections/About.tsx?t=1781010625043:99:17
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+
+[2m6:40:26 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <About> component:
+
+    at About (http://localhost:5173/src/sections/About.tsx?t=1781010625043:99:17)
+    at div
+    at div
+    at PortfolioPage
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m6:40:26 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useReducer')
+    at Object.useReducer (http://localhost:5173/node_modules/.vite/deps/react.js?v=0990f911:966:30)
+    at n (http://localhost:5173/node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254)
+    at About (http://localhost:5173/src/sections/About.tsx?t=1781010625043:99:17)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15500:6) {"componentStack":"\n    at About (http://localhost:5173/src/sections/About.tsx?t=1781010625043:99:17)\n    at div\n    at div\n    at PortfolioPage\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m6:40:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useReducer')
+[39m > Object.useReducer ../../node_modules/.vite/deps/react.js?v=0990f911:966:30
+ > n ../../node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254
+ > About src/sections/About.tsx?t=1781010625043:99:17
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+
+[2m6:40:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m6:40:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useReducer')
+[39m > Object.useReducer ../../node_modules/.vite/deps/react.js?v=0990f911:966:30
+ > n ../../node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254
+ > About src/sections/About.tsx?t=1781010625043:99:17
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+
+[2m6:40:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <About> component:
+
+    at About (http://localhost:5173/src/sections/About.tsx?t=1781010625043:99:17)
+    at div
+    at div
+    at PortfolioPage
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m6:40:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useReducer')
+    at Object.useReducer (http://localhost:5173/node_modules/.vite/deps/react.js?v=0990f911:966:30)
+    at n (http://localhost:5173/node_modules/.vite/deps/react-simple-typewriter.js?v=167f2938:34:254)
+    at About (http://localhost:5173/src/sections/About.tsx?t=1781010625043:99:17)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=0bf8c7b1:15500:6) {"componentStack":"\n    at About (http://localhost:5173/src/sections/About.tsx?t=1781010625043:99:17)\n    at div\n    at div\n    at PortfolioPage\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781010426249:337:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0bf8c7b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=0bf8c7b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=0bf8c7b1:490:3)"}
+[2m6:48:01 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/sections/About.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m6:54:37 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/sections/About.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m6:55:05 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/sections/About.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)

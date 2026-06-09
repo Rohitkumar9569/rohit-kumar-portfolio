@@ -44,10 +44,10 @@ const Projects = () => (
           <motion.div
             key={project.title}
             className="flex h-full flex-col overflow-hidden rounded-lg bg-gray-300/70 shadow-xl shadow-cyan-500/30 transition-all duration-300 hover:-translate-y-2 hover:bg-gray-400/50 hover:shadow-2xl hover:shadow-cyan-500/40 dark:bg-slate-700/80 dark:shadow-cyan-800/50 dark:hover:bg-slate-600/70 dark:hover:shadow-cyan-800/70 group"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0.94, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ delay: index * 0.2 }}
+            viewport={{ once: true, amount: 0.05, margin: '0px 0px 22% 0px' }}
+            transition={{ duration: 0.26, delay: index * 0.04 }}
           >
             <div className="relative overflow-hidden">
               {project.status && (

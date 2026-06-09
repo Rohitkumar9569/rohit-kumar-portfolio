@@ -40,12 +40,7 @@ const Navbar = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setIsScrolled(currentScrollY > 50);
-      if (window.innerWidth < 768) {
-        if (currentScrollY > lastScrollY + 120) setIsVisible(false);
-        else if (currentScrollY < lastScrollY) setIsVisible(true);
-      } else {
-        setIsVisible(true);
-      }
+      setIsVisible(true);
       setLastScrollY(currentScrollY);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -56,7 +51,7 @@ const Navbar = () => {
     const params = new URLSearchParams(location.search);
     const sectionToScroll = params.get('scrollTo');
     if (sectionToScroll) {
-      scroller.scrollTo(sectionToScroll, { duration: 800, delay: 100, smooth: 'easeInOutQuart', offset: -70 });
+      scroller.scrollTo(sectionToScroll, { duration: 420, delay: 60, smooth: 'easeOutQuad', offset: -70 });
     }
   }, [location.search]);
 
@@ -65,7 +60,7 @@ const Navbar = () => {
     if (location.pathname !== '/') {
       navigate(`/?scrollTo=${section}`);
     } else {
-      scroller.scrollTo(section, { duration: 800, delay: 0, smooth: 'easeInOutQuart', offset: -70 });
+      scroller.scrollTo(section, { duration: 420, delay: 0, smooth: 'easeOutQuad', offset: -70 });
     }
   };
 
@@ -149,10 +144,10 @@ const Navbar = () => {
   const mobileStudyListClasses = isPortfolioRoute
     ? 'flex flex-col items-center mt-2 space-y-2 bg-white/70 w-full py-3 dark:bg-slate-800/70'
     : 'flex flex-col items-center mt-2 space-y-2 bg-primary w-full py-3';
-  const navVisibilityClass = !isVisible ? '-translate-y-full' : 'translate-y-0';
+  const navVisibilityClass = 'translate-y-0';
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${headerClasses} ${navVisibilityClass}`}>
+    <header className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${headerClasses} ${navVisibilityClass}`}>
       <nav className="container mx-auto grid max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 px-6 py-3 lg:grid-cols-[10rem_minmax(0,1fr)_10rem]">
         <button type="button" className="cursor-pointer justify-self-start" onClick={handleLogoClick} aria-label="Go to homepage">
           <Logo />
