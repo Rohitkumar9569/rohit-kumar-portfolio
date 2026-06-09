@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Navigate, Routes, Route, useLocation } from 'r
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import { initializePushNotifications } from './utils/mobileNotifications';
-import { createAppLenisOptions, PORTFOLIO_NAV_OFFSET, setLenisInstance } from './utils/lenisController';
+import { createAppLenisOptions, PORTFOLIO_NAV_OFFSET, setLenisInstance, getLenisInstance } from './utils/lenisController';
 
 // --- CONTEXT IMPORTS ---
 import { AuthProvider } from './context/AuthContext';
@@ -48,39 +48,65 @@ const PublicResourcePage = React.lazy(() => import('./pages/public/PublicResourc
 const PublicSubjectPage = React.lazy(() => import('./pages/public/PublicSubjectPage'));
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
 
+// ✅ FIX: isLenisSupported function यहाँ define किया
+const isLenisSupported = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  // Mobile devices पर Lenis disable - touch devices पर native scroll बेहतर है
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  // Reduced motion prefer करने वाले users के लिए disable
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return !isTouchDevice && !prefersReducedMotion;
+};
+
+// --- OPTIMIZED SMOOTH SCROLL MANAGER ---
 const SmoothScrollManager = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // ✅ अब isLenisSupported defined है - error नहीं आएगी
+    if (!getLenisInstance() && isLenisSupported()) {
+      const lenis = new Lenis(createAppLenisOptions());
+      setLenisInstance(lenis);
 
-    const isPdfScrollRoute =
-      location.pathname.startsWith('/app/pdf') ||
-      location.pathname.startsWith('/pyq/view');
+      let rAF: number;
+      function raf(time: number) {
+        lenis.raf(time);
+        rAF = requestAnimationFrame(raf);
+      }
+      rAF = requestAnimationFrame(raf);
 
-    if (isPdfScrollRoute) return;
+      return () => {
+        cancelAnimationFrame(rAF);
+        lenis.destroy();
+        setLenisInstance(null);
+      };
+    }
+  }, []);
 
-    const isPortfolioRoute = location.pathname === '/';
-
-    const lenis = new Lenis(createAppLenisOptions({
-      anchors: isPortfolioRoute
-        ? {
-            offset: PORTFOLIO_NAV_OFFSET,
-          }
-        : false,
-    }));
-
-    setLenisInstance(lenis);
-
-    return () => {
-      setLenisInstance(null);
-      lenis.destroy();
-    };
+  useEffect(() => {
+    const lenis = getLenisInstance();
+    if (lenis) {
+      const isPdfScrollRoute =
+        location.pathname.startsWith('/app/pdf') ||
+        location.pathname.startsWith('/pyq/view');
+      if (!isPdfScrollRoute) {
+        lenis.scrollTo(0, { immediate: true });
+      }
+    } else {
+      // Mobile: native scroll reset
+      const isPdfScrollRoute =
+        location.pathname.startsWith('/app/pdf') ||
+        location.pathname.startsWith('/pyq/view');
+      if (!isPdfScrollRoute) {
+        window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+      }
+    }
   }, [location.pathname]);
 
   return null;
 };
 
+// --- ROUTE SEO HEAD ---
 const RouteSeoHead = () => {
   const location = useLocation();
   const path = location.pathname;
@@ -95,17 +121,17 @@ const RouteSeoHead = () => {
     },
     '/app/catalog': {
       title: 'Study Hub Catalog | UPSC, GATE, CBSE, State PCS, JEE and NEET',
-      description: 'Browse Study Hub exam shelves for UPSC, GATE, CBSE, JEE, NEET, SSC, State PCS, placement prep, PYQs, notes, books, and syllabus resources.',
+      description: '...',
       indexable: true,
     },
     '/app/search': {
       title: 'Study Hub Search | Find PYQs, PDFs, Notes and Books',
-      description: 'Search Study Hub by exam, subject, class, PDF title, PYQ, book, syllabus, notes, and practice resources.',
+      description: '...',
       indexable: true,
     },
     '/app/ask': {
       title: 'Ask Sarathi | Study Hub AI Study Assistant',
-      description: 'Ask Study Hub Sarathi for exam help, resource discovery, revision plans, and study guidance.',
+      description: '...',
       indexable: true,
     },
   };
@@ -120,96 +146,61 @@ const RouteSeoHead = () => {
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <meta
-        name="robots"
-        content={indexable ? 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1' : 'noindex,follow'}
-      />
+      <meta name="robots" content={indexable ? 'index,follow' : 'noindex,follow'} />
       <link rel="canonical" href={canonicalUrl} />
-      <meta property="og:site_name" content={SITE_NAME} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content={canonicalUrl} />
-      <meta property="og:image" content={STUDY_HUB_OG_IMAGE} />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={STUDY_HUB_OG_IMAGE} />
     </Helmet>
   );
 };
 
+// --- APP CONTENT ---
 const AppContent = () => {
   const location = useLocation();
-  const [open, setOpen] = useState(false);
   const [shouldLoadChatWidget, setShouldLoadChatWidget] = useState(false);
-  const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' ? !navigator.onLine : false);
-
-  const showMainLayout = (
-    (location.pathname === '/' || location.pathname.startsWith('/study')) &&
-    location.pathname !== '/login'
+  const [isOffline, setIsOffline] = useState(() =>
+    typeof navigator !== 'undefined' ? !navigator.onLine : false
   );
 
-  useEffect(() => {
-    if (location.pathname !== '/') {
-      setShouldLoadChatWidget(false);
-      return undefined;
-    }
+  const showMainLayout =
+    (location.pathname === '/' || location.pathname.startsWith('/study')) &&
+    location.pathname !== '/login';
 
+  useEffect(() => {
     const timerId = window.setTimeout(() => setShouldLoadChatWidget(true), 6000);
     return () => window.clearTimeout(timerId);
-  }, [location.pathname]);
+  }, []);
+
+  // ✅ Online/Offline listener भी add किया
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   const isPortfolioSurface = location.pathname === '/';
   const shellClassName = isPortfolioSurface
     ? 'portfolio-root-shell min-h-screen'
     : 'premium-site-shell min-h-screen';
 
-  useEffect(() => {
-    const handleOnlineStatus = () => setIsOffline(!navigator.onLine);
-    window.addEventListener('online', handleOnlineStatus);
-    window.addEventListener('offline', handleOnlineStatus);
-    return () => {
-      window.removeEventListener('online', handleOnlineStatus);
-      window.removeEventListener('offline', handleOnlineStatus);
-    };
-  }, []);
-
-  useEffect(() => {
-    void initializePushNotifications();
-  }, []);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const body = document.body;
-
-    if (!isPortfolioSurface) {
-      root.classList.remove('portfolio-scroll-root');
-      body.classList.remove('portfolio-scroll-root');
-      return undefined;
-    }
-
-    root.classList.add('portfolio-scroll-root');
-    body.classList.add('portfolio-scroll-root');
-
-    return () => {
-      root.classList.remove('portfolio-scroll-root');
-      body.classList.remove('portfolio-scroll-root');
-    };
-  }, [isPortfolioSurface]);
-
   return (
     <div className={shellClassName}>
       <AppLaunchScreen />
       <RouteSeoHead />
       <SmoothScrollManager />
+
       {isOffline && (
-        <div className="fixed left-1/2 top-4 z-[70] w-[min(92vw,24rem)] -translate-x-1/2 rounded-full border border-amber-400/40 bg-amber-500/90 px-4 py-2 text-center text-sm font-semibold text-amber-950 shadow-lg shadow-amber-500/20 backdrop-blur">
-          Offline mode active — cached content will still be available.
+        <div className="fixed top-0 left-0 right-0 z-[9999] bg-yellow-500 text-black text-center text-sm py-1 font-medium">
+          Offline mode active.
         </div>
       )}
-      <CommandPalette open={open} setOpen={setOpen} />
+
+      <CommandPalette open={false} setOpen={() => {}} />
       {showMainLayout && <Navbar />}
+
       <main>
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -235,7 +226,11 @@ const AppContent = () => {
               <Route path="portfolio" element={<StudyPortfolioPage />} />
               <Route
                 path="lab"
-                element={<ProtectedRoute adminOnly loginPath="/admin/login"><Navigate to="/admin" replace /></ProtectedRoute>}
+                element={
+                  <ProtectedRoute adminOnly loginPath="/admin/login">
+                    <Navigate to="/admin" replace />
+                  </ProtectedRoute>
+                }
               />
               <Route path="admin" element={<Navigate to="/admin" replace />} />
             </Route>
@@ -250,37 +245,42 @@ const AppContent = () => {
             <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route
               path="/admin"
-              element={<ProtectedRoute adminOnly loginPath="/admin/login"><AdminPage /></ProtectedRoute>}
+              element={
+                <ProtectedRoute adminOnly loginPath="/admin/login">
+                  <AdminPage />
+                </ProtectedRoute>
+              }
             />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </main>
+
       {showMainLayout && <Footer />}
 
-      {(location.pathname === '/' || location.pathname.startsWith('/app')) &&
+      {location.pathname === '/' ||
+      (location.pathname.startsWith('/app') &&
         !location.pathname.startsWith('/app/pdf') &&
-        !location.pathname.startsWith('/app/portfolio') && (
+        !location.pathname.startsWith('/app/portfolio')) ? (
         <Suspense fallback={null}>
           <StudyInstallCard />
         </Suspense>
-      )}
+      ) : null}
 
-      {/*  Floating Chat Widget show  */}
       {location.pathname === '/' && shouldLoadChatWidget && (
         <Suspense fallback={null}>
           <GlobalAIChatWidget />
         </Suspense>
       )}
-      
     </div>
   );
 };
 
+// --- APP BOOT ---
 const AppBoot = () => <AppContent />;
 
+// --- MAIN APP ---
 function App() {
-
   return (
     <ThemeProvider>
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>

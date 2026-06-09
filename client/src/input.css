@@ -102,6 +102,41 @@
     --rk-logo-core-fill: rgba(2, 6, 23, 0.24);
   }
 
+
+  /* ✅ Premium mobile touch feel */
+html, body {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* Tap delay aur highlight remove — instant response */
+* {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Scrollable containers mein pan-y allow karo */
+.study-scrollbar,
+.study-chat-canvas,
+.study-reader-canvas,
+.sarathi-chat-scroll,
+.admin-tree-scroll {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+  /* input.css - Global Touch Reset */
+html, body {
+  -webkit-overflow-scrolling: touch;
+  /* Ye mobile par friction kam karta hai aur fluidity badhata hai */
+  overscroll-behavior-y: contain; 
+}
+
+/* Important: Buttons aur Links par touch delay hatao */
+* {
+  touch-action: manipulation; 
+  -webkit-tap-highlight-color: transparent;
+}
+
   html,
 body {
     /* Applying the theme variables */
@@ -4713,7 +4748,7 @@ body.portfolio-nav-open {
     contain-intrinsic-size: auto;
   }
 }
-
+/* ✅ FIX: Mobile animations kill mat karo — sirf heavy GPU effects disable karo */
 @media (pointer: coarse), (hover: none) {
   html {
     scroll-behavior: auto;
@@ -4723,7 +4758,6 @@ body.portfolio-nav-open {
   body,
   #root,
   html.portfolio-scroll-root,
-  body.portfolio-scroll-root,
   .portfolio-root-shell,
   .portfolio-root-shell main,
   .premium-site-shell,
@@ -4737,23 +4771,49 @@ body.portfolio-nav-open {
     scroll-behavior: auto;
   }
 
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0s !important;
-    transition-duration: 0.01ms !important;
-    transition-delay: 0s !important;
-    transform: none !important;
-    -webkit-transform: none !important;
-    filter: none !important;
+  /* ❌ REMOVE karo yeh wala (ye tha asli villain):
+     animation-duration: 0.01ms !important  ← yeh touch heavy banata tha
+     transition-duration: 0.01ms !important ← buttons/cards unresponsive lagte the
+     transform: none !important             ← card lift effects kill ho rahe the
+  */
+
+  /* ✅ Sirf expensive GPU-heavy effects disable karo */
+  .portfolio-space-layer,
+  .portfolio-space-floor,
+  .portfolio-space-orbit,
+  .portfolio-space-glow,
+  .portfolio-space-nebula,
+  .portfolio-space-galaxy-river,
+  .portfolio-space-aurora,
+  .portfolio-space-backdrop::before,
+  .portfolio-shooting-star {
+    animation: none !important;
+    will-change: auto !important;
+  }
+
+  .portfolio-space-floor,
+  .portfolio-space-orbit,
+  .portfolio-space-glow,
+  .portfolio-space-sparkle,
+  .portfolio-shooting-star {
+    display: none !important;
+  }
+
+  /* Blur effects mobile par expensive hain */
+  .site-navbar-solid,
+  .study-topbar,
+  .study-bottom-nav,
+  .study-panel-surface,
+  .study-drawer-surface {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    will-change: auto !important;
   }
 
   .portfolio-section-surface,
   .portfolio-root-shell,
   .premium-site-shell,
-  .study-shell {
+  .study-shell,
+  .portfolio-section-surface {
     contain: layout paint style;
   }
 }

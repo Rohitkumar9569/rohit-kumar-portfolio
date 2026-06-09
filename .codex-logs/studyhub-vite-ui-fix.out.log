@@ -324,3 +324,46 @@
 [2m9:17:25 PM[22m [36m[1m[vite][22m[39m server restarted.
 [2m9:17:26 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [optimizer] scanning dependencies...
 [2m9:17:29 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [optimizer] bundling dependencies...
+[2m9:34:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [optimizer] bundling dependencies...
+[2m9:34:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33m@capacitor/core, @capacitor/splash-screen, @capacitor/status-bar, @tanstack/react-query, react-dom/client, react-helmet-async, react, react/jsx-dev-runtime, @capacitor/push-notifications, @heroicons/react/24/outline, @heroicons/react/24/solid, axios, cmdk, framer-motion, lenis, react-dom, react-hot-toast, react-icons/fa, react-icons/fa6, react-icons/hi2, react-router-dom, react-scroll, react-simple-typewriter[32m[39m
+[2m9:34:38 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m9:35:18 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33m@capacitor/haptics[32m[39m
+[2m9:35:19 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33m@radix-ui/react-dialog[32m[39m
+[2m9:35:19 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m9:36:02 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mreact-markdown, react-pdf[32m[39m
+[2m9:37:59 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/study/StudyAppLayout.tsx[22m
+[2m9:38:55 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mreact-icons/hi, react-icons/si[32m[39m
+[2m9:38:56 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [optimizer] bundling dependencies...
+[2m9:38:56 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33m@react-three/drei, @react-three/fiber, three[32m[39m
+[2m9:38:56 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m9:39:05 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [optimizer] bundling dependencies...
+[2m9:39:06 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mreact-textarea-autosize[32m[39m
+[2m9:39:06 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m9:54:20 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx[22m
+[2m9:54:24 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx[22m
+[2m9:54:27 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx[22m
+[2m9:54:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx[22m
+[2m9:55:08 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx[22m
+[2m9:58:41 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx[22m
+[2m10:05:55 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:05:58 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:07:46 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:07:54 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:07:58 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:08:10 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:08:24 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:08:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:08:31 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:09:09 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:09:11 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:11:31 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:15:03 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx, /src/App.tsx[22m
+[2m10:15:12 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx, /src/App.tsx[22m
+[2m10:15:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m10:16:25 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx[22m
+[2m10:16:30 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m1:32:36 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m1:33:44 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx, /src/App.tsx[22m
+[2m1:34:03 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m1:37:43 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m1:37:43 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
