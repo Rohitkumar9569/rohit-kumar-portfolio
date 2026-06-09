@@ -4719,6 +4719,9 @@ body.portfolio-nav-open {
     scroll-behavior: auto;
   }
 
+  html,
+  body,
+  #root,
   html.portfolio-scroll-root,
   body.portfolio-scroll-root,
   .portfolio-root-shell,
@@ -4727,9 +4730,11 @@ body.portfolio-nav-open {
   .study-shell,
   .portfolio-section-surface {
     -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: transparent;
     touch-action: pan-y;
     overscroll-behavior-y: contain;
     overflow-anchor: none;
+    scroll-behavior: auto;
   }
 
   *, *::before, *::after {
