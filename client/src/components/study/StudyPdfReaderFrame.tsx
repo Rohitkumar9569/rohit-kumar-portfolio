@@ -1,4 +1,4 @@
-import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { type FormEvent, type TouchEvent as ReactTouchEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Virtuoso } from 'react-virtuoso';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -108,6 +108,8 @@ const StudyPdfReaderFrame = ({
   const scrollAreaRef = useRef<HTMLElement | null>(null);
   const readerShellRef = useRef<HTMLDivElement | null>(null);
   const progressResetRef = useRef<number | null>(null);
+  const scaleRef = useRef(scale);
+  const pinchStateRef = useRef<{ distance: number; scale: number } | null>(null);
 
   const pageWidth = pageSize.width * scale;
   const pageHeight = pageSize.height * scale;
@@ -165,6 +167,31 @@ const StudyPdfReaderFrame = ({
 
   const zoomBy = (delta: number) => {
     setScale((current) => clampScale(Number((current + delta).toFixed(2))));
+  };
+
+  const handlePdfTouchStart = (event: ReactTouchEvent<HTMLDivElement>) => {
+    if (event.touches.length !== 2) return;
+
+    event.preventDefault();
+    const [firstTouch, secondTouch] = Array.from(event.touches);
+    const distance = Math.hypot(firstTouch.clientX - secondTouch.clientX, firstTouch.clientY - secondTouch.clientY);
+    pinchStateRef.current = { distance, scale: scaleRef.current };
+  };
+
+  const handlePdfTouchMove = (event: ReactTouchEvent<HTMLDivElement>) => {
+    if (event.touches.length !== 2 || !pinchStateRef.current) return;
+
+    event.preventDefault();
+    const [firstTouch, secondTouch] = Array.from(event.touches);
+    const currentDistance = Math.hypot(firstTouch.clientX - secondTouch.clientX, firstTouch.clientY - secondTouch.clientY);
+    const nextScale = clampScale(pinchStateRef.current.scale * (currentDistance / pinchStateRef.current.distance));
+    setScale(Number(nextScale.toFixed(2)));
+  };
+
+  const handlePdfTouchEnd = (event: ReactTouchEvent<HTMLDivElement>) => {
+    if (event.touches.length < 2) {
+      pinchStateRef.current = null;
+    }
   };
 
   const cycleWidthMode = () => {
@@ -244,6 +271,10 @@ const StudyPdfReaderFrame = ({
 
     void enterReadMode();
   };
+
+  useEffect(() => {
+    scaleRef.current = scale;
+  }, [scale]);
 
   const handleClose = async () => {
     try {
@@ -386,7 +417,7 @@ const StudyPdfReaderFrame = ({
       className={['study-shell study-pdf-reader-shell relative flex h-full flex-col overflow-hidden text-slate-950 dark:text-white', isFullMode ? 'study-pdf-full-mode' : ''].join(' ')}
     >
       {!isFullMode && (
-      <header className="study-topbar absolute inset-x-0 top-0 z-30 bg-white/[0.68] px-3 py-2 backdrop-blur-3xl transition duration-200 [backdrop-filter:saturate(1.35)_blur(24px)] dark:bg-[#050814]/[0.62] xl:px-5">
+      <header className="study-topbar absolute inset-x-0 top-0 z-30 bg-white/[0.68] px-2 pb-2 pt-[calc(0.55rem+env(safe-area-inset-top))] backdrop-blur-3xl transition duration-200 [backdrop-filter:saturate(1.35)_blur(24px)] dark:bg-[#050814]/[0.62] sm:px-3 sm:py-2 xl:px-5">
           <div className="study-top-blur-edge pointer-events-none absolute inset-x-0 bottom-[-3.25rem] h-14 bg-gradient-to-b from-white/[0.58] via-white/[0.24] to-transparent backdrop-blur-2xl opacity-100 [mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.76)_42%,transparent_100%)] dark:from-[#050814]/[0.68] dark:via-[#050814]/[0.22]" />
         {clampedVisibleLoadProgress !== null && (
           <div
@@ -409,7 +440,7 @@ const StudyPdfReaderFrame = ({
             />
           </div>
         )}
-        <div className="flex h-11 min-w-0 items-center gap-2">
+        <div className="flex min-h-11 min-w-0 flex-wrap items-center gap-2">
           {onClose ? (
             <button
               type="button"
@@ -535,7 +566,7 @@ const StudyPdfReaderFrame = ({
             <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
           </a>
 
-          <div className="relative md:hidden">
+          <div className="relative ml-auto flex-none self-start md:hidden">
             <button
               type="button"
               onClick={() => setMobileMenuOpen((current) => !current)}
@@ -548,7 +579,7 @@ const StudyPdfReaderFrame = ({
             </button>
 
             {isMobileMenuOpen && (
-              <div className="study-control-surface absolute right-0 top-[calc(100%+0.55rem)] z-40 w-52 rounded-3xl border border-white/70 bg-white/[0.92] p-2 shadow-[0_20px_52px_rgba(15,23,42,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#101521]/[0.92] dark:shadow-[0_24px_64px_rgba(0,0,0,0.42)]">
+              <div className="study-control-surface absolute right-0 top-[calc(100%+0.55rem)] z-[60] w-52 max-w-[calc(100vw-1.25rem)] origin-top-right rounded-3xl border border-white/70 bg-white/[0.92] p-2 shadow-[0_20px_52px_rgba(15,23,42,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#101521]/[0.92] dark:shadow-[0_24px_64px_rgba(0,0,0,0.42)]">
                 <div className="grid grid-cols-3 gap-1.5">
                   <button
                     type="button"
@@ -614,7 +645,14 @@ const StudyPdfReaderFrame = ({
       </header>
       )}
 
-      <div className="study-reader-canvas min-h-0 flex-1">
+      <div
+        className="study-reader-canvas min-h-0 flex-1"
+        onTouchStart={handlePdfTouchStart}
+        onTouchMove={handlePdfTouchMove}
+        onTouchEnd={handlePdfTouchEnd}
+        onTouchCancel={handlePdfTouchEnd}
+        style={{ touchAction: 'pan-y' }}
+      >
         {isPreparing ? (
           documentLoadingFallback
         ) : hasError ? (

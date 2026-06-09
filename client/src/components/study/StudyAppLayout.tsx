@@ -462,9 +462,6 @@ const StudyAppLayout = () => {
       ].join(' ')}
       aria-keyshortcuts="Alt+1 Alt+2 Alt+3 Alt+4 / Backspace ArrowLeft ArrowRight ArrowUp ArrowDown Home End Escape"
     >
-      <a href="#study-main-content" className="study-skip-link">
-        Skip to study content
-      </a>
       <StudySidebar
         isCollapsed={isSidebarCollapsed}
         onToggleCollapsed={() => setSidebarCollapsed((current) => !current)}

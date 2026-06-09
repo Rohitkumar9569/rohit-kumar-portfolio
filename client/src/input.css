@@ -4668,6 +4668,52 @@ html.portfolio-scroll-root {
   background: #f8fafc !important;
 }
 
+@supports (content-visibility: auto) {
+  .portfolio-section-surface {
+    content-visibility: auto;
+    contain-intrinsic-size: 1400px 800px;
+  }
+}
+
+@media (pointer: coarse), (hover: none) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.portfolio-scroll-root,
+  body.portfolio-scroll-root,
+  .portfolio-root-shell,
+  .portfolio-root-shell main,
+  .premium-site-shell,
+  .study-shell,
+  .portfolio-section-surface {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior-y: contain;
+    overflow-anchor: none;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    will-change: auto !important;
+  }
+
+  .portfolio-section-surface,
+  .portfolio-root-shell,
+  .premium-site-shell,
+  .study-shell {
+    contain: layout paint style;
+  }
+}
+
 html.dark.portfolio-scroll-root {
   background: #0f172a !important;
 }

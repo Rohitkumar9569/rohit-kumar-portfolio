@@ -4,6 +4,17 @@ import { Canvas, useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
 import { OrbitControls, Text } from '@react-three/drei';
 import { useSectionNavigation } from '../hooks/useSectionNavigation';
 
+const shouldUse3DScene = () => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  const hasTouch = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  return !hasTouch && !prefersReducedMotion;
+};
+
 const WebGLContextGuard = () => {
   const { gl, invalidate } = useThree();
 
@@ -116,8 +127,43 @@ const InteractiveCube = () => {
 };
 
 const ArchitectCanvas = () => {
+  const [use3DScene, setUse3DScene] = useState(() => shouldUse3DScene());
+
+  useEffect(() => {
+    const updatePreference = () => setUse3DScene(shouldUse3DScene());
+
+    updatePreference();
+
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const coarsePointerMedia = window.matchMedia('(pointer: coarse)');
+
+    reducedMotionMedia.addEventListener?.('change', updatePreference);
+    coarsePointerMedia.addEventListener?.('change', updatePreference);
+
+    return () => {
+      reducedMotionMedia.removeEventListener?.('change', updatePreference);
+      coarsePointerMedia.removeEventListener?.('change', updatePreference);
+    };
+  }, []);
+
+  if (!use3DScene) {
+    return (
+      <div className="flex h-full min-h-[280px] items-center justify-center rounded-[1.75rem] border border-cyan-400/30 bg-slate-950/85 px-6 text-center text-sm font-semibold leading-7 text-slate-200 shadow-[0_24px_70px_rgba(8,145,178,0.18)]">
+        3D skill cube is disabled on touch devices for smoother scrolling.
+      </div>
+    );
+  }
+
   return (
-    <Canvas>
+    <Canvas
+      dpr={[1, 1.25]}
+      gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
+      camera={{ position: [0, 0, 6], fov: 45 }}
+    >
       <WebGLContextGuard />
       <ambientLight intensity={0.8} />
       <directionalLight position={[10, 10, 5]} intensity={1.5} />
