@@ -105,7 +105,7 @@ const StudyAppLayout = () => {
       ? 'study-portfolio-main-scroll w-full max-w-full min-w-0 overflow-x-clip overflow-y-visible pb-0'
       : [
         [
-          'relative mx-auto w-full max-w-full overflow-x-hidden pb-[calc(env(safe-area-inset-bottom)+6rem)] sm:max-w-[560px] md:max-w-[760px] lg:max-w-[1180px] lg:px-8 lg:pb-10 lg:pt-4 2xl:max-w-[1240px]',
+          'relative w-full min-w-0 overflow-x-hidden pb-[calc(env(safe-area-inset-bottom)+6rem)] lg:px-8 lg:pb-10 lg:pt-4',
           isHomeRoute || isUtilityRoute ? 'px-0 sm:px-6' : 'px-4 sm:px-6',
         ].join(' '),
         hasMobileTopChrome ? 'pt-[calc(env(safe-area-inset-top)+4.25rem)]' : 'pt-3',
@@ -491,20 +491,17 @@ const StudyAppLayout = () => {
   return (
     <div
       className={[
-        'study-shell relative h-[100dvh] min-h-[100dvh] overflow-x-clip overflow-y-auto overscroll-contain text-slate-950 dark:text-slate-100',
+        'study-shell relative flex min-h-[100dvh] flex-col overflow-hidden text-slate-950 dark:text-slate-100',
         isPortfolioRoute ? 'overflow-x-clip' : 'overflow-x-hidden',
         isPortfolioRoute ? 'study-portfolio-embed' : '',
       ].join(' ')}
       aria-keyshortcuts="Alt+1 Alt+2 Alt+3 Alt+4 / Backspace ArrowLeft ArrowRight ArrowUp ArrowDown Home End Escape"
-      onWheel={handleStudyShellWheel}
-      onTouchStart={handleStudyShellTouchStart}
-      onTouchMove={handleStudyShellTouchMove}
     >
       <StudySidebar
         isCollapsed={isSidebarCollapsed}
         onToggleCollapsed={() => setSidebarCollapsed((current) => !current)}
       />
-      <div className={['relative z-10 min-h-0 min-w-0 overflow-y-visible', isPortfolioRoute ? 'overflow-x-clip' : 'overflow-x-hidden', isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'].join(' ')}>
+      <div className={['relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-y-visible', isPortfolioRoute ? 'overflow-x-clip' : 'overflow-x-hidden', isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'].join(' ')}>
         {!isPdfRoute && !isPortfolioRoute && <StudyTopBar />}
         {!isPdfRoute && !isPortfolioRoute && (
           <div
@@ -518,7 +515,15 @@ const StudyAppLayout = () => {
             <div className="study-top-blur-edge h-full bg-gradient-to-b from-[#eef3f8]/88 via-[#eef3f8]/42 to-transparent backdrop-blur-2xl [mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.74)_44%,transparent_100%)] dark:from-[#050814]/90 dark:via-[#050814]/44" />
           </div>
         )}
-        <main ref={mainRef} id="study-main-content" tabIndex={-1} className={['min-h-0 min-w-0 overflow-y-auto overscroll-contain outline-none', mainClassName].join(' ')}>
+        <main
+          ref={mainRef}
+          id="study-main-content"
+          tabIndex={-1}
+          className={['flex-1 min-h-0 min-w-0 overflow-y-auto overscroll-contain outline-none pr-0', mainClassName].join(' ')}
+          onWheel={handleStudyShellWheel}
+          onTouchStart={handleStudyShellTouchStart}
+          onTouchMove={handleStudyShellTouchMove}
+        >
           {animatedOutlet}
         </main>
       </div>

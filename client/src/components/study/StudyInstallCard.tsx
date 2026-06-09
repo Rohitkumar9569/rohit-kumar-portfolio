@@ -43,6 +43,9 @@ const StudyInstallCard = () => {
       }
     }
 
+    if (typeof window !== 'undefined') {
+      window.location.assign('/app');
+    }
     dismissNotice();
   };
 
@@ -93,7 +96,7 @@ const StudyInstallCard = () => {
             ? 'Preparing...'
             : canInstall
               ? 'Download app'
-              : 'Close'}
+              : 'Open app'}
         </button>
       </div>
     </aside>

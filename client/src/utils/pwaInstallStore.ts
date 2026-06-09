@@ -13,6 +13,14 @@ const notifyListeners = () => {
 };
 
 if (typeof window !== 'undefined') {
+  const handleBeforeInstallPrompt = (event: Event) => {
+    const promptEvent = event as BeforeInstallPromptEvent;
+    event.preventDefault();
+    deferredPrompt = promptEvent;
+    notifyListeners();
+  };
+
+  window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
     notifyListeners();

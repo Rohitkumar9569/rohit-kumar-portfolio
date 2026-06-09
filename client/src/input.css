@@ -232,14 +232,15 @@ body.study-app-scroll-root {
 .study-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgb(var(--study-muted) / 0.36) transparent;
+  scrollbar-gutter: auto;
   scroll-behavior: smooth;
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
 }
 
 .study-scrollbar::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
 }
 
 .study-scrollbar::-webkit-scrollbar-track {
@@ -249,10 +250,10 @@ body.study-app-scroll-root {
 .study-scrollbar::-webkit-scrollbar-thumb {
   background: linear-gradient(
     180deg,
-    rgb(var(--study-muted) / 0.18),
-    rgb(var(--study-muted) / 0.42)
+    rgb(var(--study-muted) / 0.22),
+    rgb(var(--study-muted) / 0.48)
   );
-  border: 3px solid transparent;
+  border: 2px solid transparent;
   border-radius: 999px;
   background-clip: content-box;
 }
@@ -1131,10 +1132,10 @@ to { color: transparent }
     rgb(var(--study-bg)) !important;
   color: rgb(var(--study-text));
   scrollbar-color: rgb(var(--study-muted) / 0.48) transparent;
-  scrollbar-gutter: stable;
+  scrollbar-gutter: auto;
   overscroll-behavior-y: contain;
   overflow-x: clip !important;
-  overflow-y: auto !important;
+  overflow-y: hidden !important;
   height: 100dvh;
   max-height: 100dvh;
   -webkit-overflow-scrolling: touch;

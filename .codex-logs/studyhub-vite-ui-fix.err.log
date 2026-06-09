@@ -4100,3 +4100,1574 @@ React will try to recreate this component tree from scratch using the error boun
     at async initMobileShell (http://localhost:5173/src/main.tsx?t=1781017266673:26:3)
 [2m9:17:44 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31merror while updating dependencies:
 Error: EPERM: operation not permitted, rename 'D:\MyBlueprintPortfolio\client\node_modules\.vite\deps_temp_4168c39b' -> 'D:\MyBlueprintPortfolio\client\node_modules\.vite\deps'[39m
+[2m9:54:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] SyntaxError: The requested module '/src/utils/lenisController.ts?t=1781022260658' does not provide an export named 'scrollToPortfolioSection'
+[2m9:54:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/pages/PortfolioPage.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m9:54:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] SyntaxError: The requested module '/src/utils/lenisController.ts?t=1781022260658' does not provide an export named 'scrollToPortfolioSection'
+[2m9:54:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m9:54:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] SyntaxError: The requested module '/src/utils/lenisController.ts?t=1781022260658' does not provide an export named 'scrollToPortfolioSection'
+[2m9:54:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/components/Navbar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m9:54:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] SyntaxError: The requested module '/src/utils/lenisController.ts?t=1781022260658' does not provide an export named 'scrollToPortfolioSection'
+[2m9:54:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/components/ArchitectCanvas.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m9:54:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] SyntaxError: The requested module '/src/utils/lenisController.ts?t=1781022260658' does not provide an export named 'scrollToPortfolioSection'
+[2m9:54:21 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/components/CommandPalette.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m9:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] SyntaxError: The requested module '/src/utils/lenisController.ts?t=1781022267622' does not provide an export named 'scrollToPortfolioSection'
+[2m9:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/pages/PortfolioPage.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m9:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] SyntaxError: The requested module '/src/utils/lenisController.ts?t=1781022267622' does not provide an export named 'scrollToPortfolioSection'
+[2m9:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/components/Navbar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m9:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] SyntaxError: The requested module '/src/utils/lenisController.ts?t=1781022267622' does not provide an export named 'scrollToPortfolioSection'
+[2m9:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m9:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] SyntaxError: The requested module '/src/utils/lenisController.ts?t=1781022267622' does not provide an export named 'scrollToPortfolioSection'
+[2m9:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/components/CommandPalette.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m9:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] SyntaxError: The requested module '/src/utils/lenisController.ts?t=1781022267622' does not provide an export named 'scrollToPortfolioSection'
+[2m9:54:28 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/components/ArchitectCanvas.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m10:05:56 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mReferenceError[22m: lenisInstance is not defined
+[39m > src/App.tsx:55:4
+    53 |    useEffect(() => {
+    54 |      // 1. Singleton: Lenis ko sirf ek baar initialize karein
+    55 |      if (!lenisInstance) {
+       |      ^
+    56 |        const lenis = new Lenis(createAppLenisOptions());
+    57 |        setLenisInstance(lenis);
+ > commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:25
+ > commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom.development.js:24965:12
+ > commitPassiveMountEffects_complete node_modules/react-dom/cjs/react-dom.development.js:24930:8
+ > commitPassiveMountEffects_begin node_modules/react-dom/cjs/react-dom.development.js:24917:6
+ > commitPassiveMountEffects node_modules/react-dom/cjs/react-dom.development.js:24905:2
+ > flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27078:2
+ > flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:13
+ > commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:4
+ > commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:4
+
+[2m10:05:56 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mReferenceError[22m: lenisInstance is not defined
+[39m > src/App.tsx:55:4
+    53 |    useEffect(() => {
+    54 |      // 1. Singleton: Lenis ko sirf ek baar initialize karein
+    55 |      if (!lenisInstance) {
+       |      ^
+    56 |        const lenis = new Lenis(createAppLenisOptions());
+    57 |        setLenisInstance(lenis);
+ > commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:25
+ > invokePassiveEffectMountInDEV node_modules/react-dom/cjs/react-dom.development.js:25193:12
+ > invokeEffectsInDev node_modules/react-dom/cjs/react-dom.development.js:27390:10
+ > commitDoubleInvokeEffectsInDEV node_modules/react-dom/cjs/react-dom.development.js:27369:6
+ > flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27095:4
+ > flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:13
+ > commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:4
+ > commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:4
+ > performSyncWorkOnRoot node_modules/react-dom/cjs/react-dom.development.js:26156:2
+
+[2m10:05:56 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <SmoothScrollManager> component:
+
+    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781022955506:76:19)
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781022955506:264:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m10:05:56 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: ReferenceError: lenisInstance is not defined
+    at http://localhost:5173/src/App.tsx?t=1781022955506:79:3
+    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13818:24)
+    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14757:8)
+    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14730:7)
+    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14721:12)
+    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14712:4)
+    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15796:4)
+    at flushPassiveEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15763:13)
+    at commitRootImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15741:91)
+    at commitRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15639:5) {"componentStack":"\n    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781022955506:76:19)\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781022955506:264:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m10:05:56 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <SmoothScrollManager> component:
+
+    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781022955506:76:19)
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781022955506:264:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m10:05:56 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: ReferenceError: lenisInstance is not defined
+    at http://localhost:5173/src/App.tsx?t=1781022955506:79:3
+    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13818:24)
+    at invokePassiveEffectMountInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14903:7)
+    at invokeEffectsInDev (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15951:52)
+    at commitDoubleInvokeEffectsInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15941:27)
+    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15804:4)
+    at flushPassiveEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15763:13)
+    at commitRootImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15741:91)
+    at commitRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15639:5)
+    at performSyncWorkOnRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15317:4) {"componentStack":"\n    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781022955506:76:19)\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781022955506:264:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m10:07:48 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mReferenceError[22m: lenisInstance is not defined
+[39m > src/App.tsx:55:4
+    53 |    useEffect(() => {
+    54 |      // 1. Singleton: Lenis ko sirf ek baar initialize karein
+    55 |      if (!lenisInstance) {
+       |      ^
+    56 |        const lenis = new Lenis(createAppLenisOptions());
+    57 |        setLenisInstance(lenis);
+ > commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:25
+ > commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom.development.js:24965:12
+ > commitPassiveMountEffects_complete node_modules/react-dom/cjs/react-dom.development.js:24930:8
+ > commitPassiveMountEffects_begin node_modules/react-dom/cjs/react-dom.development.js:24917:6
+ > commitPassiveMountEffects node_modules/react-dom/cjs/react-dom.development.js:24905:2
+ > flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27078:2
+ > flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:13
+ > commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:4
+ > commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:4
+
+[2m10:07:48 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mReferenceError[22m: lenisInstance is not defined
+[39m > src/App.tsx:55:4
+    53 |    useEffect(() => {
+    54 |      // 1. Singleton: Lenis ko sirf ek baar initialize karein
+    55 |      if (!lenisInstance) {
+       |      ^
+    56 |        const lenis = new Lenis(createAppLenisOptions());
+    57 |        setLenisInstance(lenis);
+ > commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:25
+ > invokePassiveEffectMountInDEV node_modules/react-dom/cjs/react-dom.development.js:25193:12
+ > invokeEffectsInDev node_modules/react-dom/cjs/react-dom.development.js:27390:10
+ > commitDoubleInvokeEffectsInDEV node_modules/react-dom/cjs/react-dom.development.js:27369:6
+ > flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27095:4
+ > flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:13
+ > commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:4
+ > commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:4
+ > performSyncWorkOnRoot node_modules/react-dom/cjs/react-dom.development.js:26156:2
+
+[2m10:07:48 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <SmoothScrollManager> component:
+
+    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023066913:76:19)
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781023066913:264:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m10:07:48 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: ReferenceError: lenisInstance is not defined
+    at http://localhost:5173/src/App.tsx?t=1781023066913:79:3
+    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13818:24)
+    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14757:8)
+    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14730:7)
+    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14721:12)
+    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14712:4)
+    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15796:4)
+    at flushPassiveEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15763:13)
+    at commitRootImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15741:91)
+    at commitRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15639:5) {"componentStack":"\n    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023066913:76:19)\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781023066913:264:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m10:07:48 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <SmoothScrollManager> component:
+
+    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023066913:76:19)
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781023066913:264:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m10:07:48 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: ReferenceError: lenisInstance is not defined
+    at http://localhost:5173/src/App.tsx?t=1781023066913:79:3
+    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13818:24)
+    at invokePassiveEffectMountInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14903:7)
+    at invokeEffectsInDev (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15951:52)
+    at commitDoubleInvokeEffectsInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15941:27)
+    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15804:4)
+    at flushPassiveEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15763:13)
+    at commitRootImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15741:91)
+    at commitRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15639:5)
+    at performSyncWorkOnRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15317:4) {"componentStack":"\n    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023066913:76:19)\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781023066913:264:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m10:07:59 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mReferenceError[22m: lenisInstance is not defined
+[39m > src/App.tsx:55:4
+    53 |    useEffect(() => {
+    54 |      // 1. Singleton: Lenis ko sirf ek baar initialize karein
+    55 |      if (!lenisInstance) {
+       |      ^
+    56 |        const lenis = new Lenis(createAppLenisOptions());
+    57 |        setLenisInstance(lenis);
+ > commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:25
+ > commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom.development.js:24965:12
+ > commitPassiveMountEffects_complete node_modules/react-dom/cjs/react-dom.development.js:24930:8
+ > commitPassiveMountEffects_begin node_modules/react-dom/cjs/react-dom.development.js:24917:6
+ > commitPassiveMountEffects node_modules/react-dom/cjs/react-dom.development.js:24905:2
+ > flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27078:2
+ > flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:13
+ > commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:4
+ > commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:4
+
+[2m10:07:59 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mReferenceError[22m: lenisInstance is not defined
+[39m > src/App.tsx:55:4
+    53 |    useEffect(() => {
+    54 |      // 1. Singleton: Lenis ko sirf ek baar initialize karein
+    55 |      if (!lenisInstance) {
+       |      ^
+    56 |        const lenis = new Lenis(createAppLenisOptions());
+    57 |        setLenisInstance(lenis);
+ > commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:25
+ > invokePassiveEffectMountInDEV node_modules/react-dom/cjs/react-dom.development.js:25193:12
+ > invokeEffectsInDev node_modules/react-dom/cjs/react-dom.development.js:27390:10
+ > commitDoubleInvokeEffectsInDEV node_modules/react-dom/cjs/react-dom.development.js:27369:6
+ > flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27095:4
+ > flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:13
+ > commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:4
+ > commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:4
+ > performSyncWorkOnRoot node_modules/react-dom/cjs/react-dom.development.js:26156:2
+
+[2m10:07:59 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <SmoothScrollManager> component:
+
+    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023078236:76:19)
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781023078236:264:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m10:07:59 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: ReferenceError: lenisInstance is not defined
+    at http://localhost:5173/src/App.tsx?t=1781023078236:79:3
+    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13818:24)
+    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14757:8)
+    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14730:7)
+    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14721:12)
+    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14712:4)
+    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15796:4)
+    at flushPassiveEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15763:13)
+    at commitRootImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15741:91)
+    at commitRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15639:5) {"componentStack":"\n    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023078236:76:19)\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781023078236:264:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m10:07:59 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <SmoothScrollManager> component:
+
+    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023078236:76:19)
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781023078236:264:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m10:07:59 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: ReferenceError: lenisInstance is not defined
+    at http://localhost:5173/src/App.tsx?t=1781023078236:79:3
+    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13818:24)
+    at invokePassiveEffectMountInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14903:7)
+    at invokeEffectsInDev (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15951:52)
+    at commitDoubleInvokeEffectsInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15941:27)
+    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15804:4)
+    at flushPassiveEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15763:13)
+    at commitRootImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15741:91)
+    at commitRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15639:5)
+    at performSyncWorkOnRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15317:4) {"componentStack":"\n    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023078236:76:19)\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781023078236:264:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m10:08:31 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mReferenceError[22m: lenisInstance is not defined
+[39m > src/App.tsx:55:4
+    53 |    useEffect(() => {
+    54 |      // 1. Singleton: Lenis ko sirf ek baar initialize karein
+    55 |      if (!lenisInstance) {
+       |      ^
+    56 |        const lenis = new Lenis(createAppLenisOptions());
+    57 |        setLenisInstance(lenis);
+ > commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:25
+ > commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom.development.js:24965:12
+ > commitPassiveMountEffects_complete node_modules/react-dom/cjs/react-dom.development.js:24930:8
+ > commitPassiveMountEffects_begin node_modules/react-dom/cjs/react-dom.development.js:24917:6
+ > commitPassiveMountEffects node_modules/react-dom/cjs/react-dom.development.js:24905:2
+ > flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27078:2
+ > flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:13
+ > commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:4
+ > commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:4
+
+[2m10:08:31 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mReferenceError[22m: lenisInstance is not defined
+[39m > src/App.tsx:55:4
+    53 |    useEffect(() => {
+    54 |      // 1. Singleton: Lenis ko sirf ek baar initialize karein
+    55 |      if (!lenisInstance) {
+       |      ^
+    56 |        const lenis = new Lenis(createAppLenisOptions());
+    57 |        setLenisInstance(lenis);
+ > commitHookEffectListMount node_modules/react-dom/cjs/react-dom.development.js:23189:25
+ > invokePassiveEffectMountInDEV node_modules/react-dom/cjs/react-dom.development.js:25193:12
+ > invokeEffectsInDev node_modules/react-dom/cjs/react-dom.development.js:27390:10
+ > commitDoubleInvokeEffectsInDEV node_modules/react-dom/cjs/react-dom.development.js:27369:6
+ > flushPassiveEffectsImpl node_modules/react-dom/cjs/react-dom.development.js:27095:4
+ > flushPassiveEffects node_modules/react-dom/cjs/react-dom.development.js:27023:13
+ > commitRootImpl node_modules/react-dom/cjs/react-dom.development.js:26974:4
+ > commitRoot node_modules/react-dom/cjs/react-dom.development.js:26721:4
+ > performSyncWorkOnRoot node_modules/react-dom/cjs/react-dom.development.js:26156:2
+
+[2m10:08:31 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <SmoothScrollManager> component:
+
+    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023110098:76:19)
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781023110098:264:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m10:08:31 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: ReferenceError: lenisInstance is not defined
+    at http://localhost:5173/src/App.tsx?t=1781023110098:79:3
+    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13818:24)
+    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14757:8)
+    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14730:7)
+    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14721:12)
+    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14712:4)
+    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15796:4)
+    at flushPassiveEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15763:13)
+    at commitRootImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15741:91)
+    at commitRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15639:5) {"componentStack":"\n    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023110098:76:19)\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781023110098:264:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m10:08:31 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <SmoothScrollManager> component:
+
+    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023110098:76:19)
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781023110098:264:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m10:08:31 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: ReferenceError: lenisInstance is not defined
+    at http://localhost:5173/src/App.tsx?t=1781023110098:79:3
+    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13818:24)
+    at invokePassiveEffectMountInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:14903:7)
+    at invokeEffectsInDev (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15951:52)
+    at commitDoubleInvokeEffectsInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15941:27)
+    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15804:4)
+    at flushPassiveEffects (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15763:13)
+    at commitRootImpl (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15741:91)
+    at commitRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15639:5)
+    at performSyncWorkOnRoot (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15317:4) {"componentStack":"\n    at SmoothScrollManager (http://localhost:5173/src/App.tsx?t=1781023110098:76:19)\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781023110098:264:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m10:09:10 PM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mJSX attributes must only be assigned a non-empty 'expression'.
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.tsx:105:20 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m105 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m<[0m[38;5;249md[0m[38;5;249mi[0m[38;5;249mv[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249ml[0m[38;5;249ma[0m[38;5;249ms[0m[38;5;249ms[0m[38;5;249mN[0m[38;5;249ma[0m[38;5;249mm[0m[38;5;249me[0m[38;5;249m=[0m{/* shellClassName */}[38;5;249m>[0m
+ [38;5;240m    │[0m                    ───────────┬──────────  
+ [38;5;240m    │[0m                               ╰──────────── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mD:/MyBlueprintPortfolio/client/src/App.tsx[39m
+      at transformWithOxc (file:///D:/MyBlueprintPortfolio/client/node_modules/vite/dist/node/chunks/node.js:3338:19)
+      at TransformPluginContext.transform (file:///D:/MyBlueprintPortfolio/client/node_modules/vite/dist/node/chunks/node.js:3409:26)
+      at EnvironmentPluginContainer.transform (file:///D:/MyBlueprintPortfolio/client/node_modules/vite/dist/node/chunks/node.js:30273:51)
+      at async loadAndTransform (file:///D:/MyBlueprintPortfolio/client/node_modules/vite/dist/node/chunks/node.js:24532:26)
+      at async viteTransformMiddleware (file:///D:/MyBlueprintPortfolio/client/node_modules/vite/dist/node/chunks/node.js:24326:20)
+[2m10:09:10 PM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:07:35 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/components/ArchitectCanvas.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m2:07:36 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m2:07:36 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m2:07:36 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useRef')
+[39m > Object.useRef ../../node_modules/.vite/deps/react.js?v=68716bd1:969:30
+ > BrowserRouter ../../node_modules/.vite/deps/react-router-dom.js?v=ea004616:4396:32
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m2:07:36 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m2:07:36 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m2:07:36 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useRef')
+[39m > Object.useRef ../../node_modules/.vite/deps/react.js?v=68716bd1:969:30
+ > BrowserRouter ../../node_modules/.vite/deps/react-router-dom.js?v=ea004616:4396:32
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m2:07:36 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <BrowserRouter> component:
+
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ea004616:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+[2m2:07:36 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mTypeError[22m: Cannot read properties of null (reading 'useRef')
+[39m > Object.useRef ../../node_modules/.vite/deps/react.js?v=68716bd1:969:30
+ > BrowserRouter ../../node_modules/.vite/deps/react-router-dom.js?v=ea004616:4396:32
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27465:13
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+ > workLoopSync node_modules/react-dom/cjs/react-dom.development.js:26505:4
+ > renderRootSync node_modules/react-dom/cjs/react-dom.development.js:26473:6
+ > recoverFromConcurrentError node_modules/react-dom/cjs/react-dom.development.js:25889:19
+
+[2m2:25:53 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m2:25:53 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m2:25:53 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useRef')
+[39m > Object.useRef ../../node_modules/.vite/deps/react.js?v=ee6ce0b1:969:30
+ > BrowserRouter ../../node_modules/.vite/deps/react-router-dom.js?v=7bb2961a:4396:32
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m2:25:53 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m2:25:53 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m2:25:53 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useRef')
+[39m > Object.useRef ../../node_modules/.vite/deps/react.js?v=ee6ce0b1:969:30
+ > BrowserRouter ../../node_modules/.vite/deps/react-router-dom.js?v=7bb2961a:4396:32
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m2:25:53 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <BrowserRouter> component:
+
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=7bb2961a:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+[2m2:25:53 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mTypeError[22m: Cannot read properties of null (reading 'useRef')
+[39m > Object.useRef ../../node_modules/.vite/deps/react.js?v=ee6ce0b1:969:30
+ > BrowserRouter ../../node_modules/.vite/deps/react-router-dom.js?v=7bb2961a:4396:32
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27465:13
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+ > workLoopSync node_modules/react-dom/cjs/react-dom.development.js:26505:4
+ > renderRootSync node_modules/react-dom/cjs/react-dom.development.js:26473:6
+ > recoverFromConcurrentError node_modules/react-dom/cjs/react-dom.development.js:25889:19
+
+[2m3:08:26 AM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/study/cards?workspace=study-hub&parent=root[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+[2m3:08:26 AM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/study/cards?workspace=study-hub&parent=all[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+[2m3:08:26 AM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/study/pdf-proxy?url=https%3A%2F%2Fwww.upsc.gov.in%2Fsites%2Fdefault%2Ffiles%2FQP_CSP_2026_GENERAL_STUDIES_PAPER-I_25052026.pdf[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+[2m3:08:26 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: ResponseException: Unexpected server response (502) while retrieving PDF "http://localhost:5173/api/study/pdf-proxy?url=https%3A%2F%2Fwww.upsc.gov.in%2Fsites%2Fdefault%2Ffiles%2FQP_CSP_2026_GENERAL_STUDIES_PAPER-I_25052026.pdf".
+[2m3:08:29 AM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/study/cards?workspace=study-hub&parent=all&summary=true[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+[2m3:08:30 AM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/study/cards?workspace=study-hub&parent=all&summary=true[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+[2m3:08:31 AM[22m [31m[1m[vite][22m[39m [31mhttp proxy error: /api/study/pdf-proxy?url=https%3A%2F%2Fwww.upsc.gov.in%2Fsites%2Fdefault%2Ffiles%2FQP_CSP_2026_GENERAL_STUDIES_PAPER-I_25052026.pdf[39m
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+[2m3:08:31 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: ResponseException: Unexpected server response (502) while retrieving PDF "http://localhost:5173/api/study/pdf-proxy?url=https%3A%2F%2Fwww.upsc.gov.in%2Fsites%2Fdefault%2Ffiles%2FQP_CSP_2026_GENERAL_STUDIES_PAPER-I_25052026.pdf".
+[2m3:42:15 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:15 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:15 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21640:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:15 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:15 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:15 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21640:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:15 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyPdfReaderFrame> component:
+
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)
+    at div
+    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at main
+    at div
+    at div
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m3:42:15 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useState')
+    at useState (http://localhost:5173/node_modules/.vite/deps/react.js?v=fb644c7f:963:30)
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12122:19)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13096:13)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15500:6)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15193:21) {"componentStack":"\n    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)\n    at div\n    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at main\n    at div\n    at div\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m3:42:17 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:17 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:17 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:17 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:17 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:17 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:17 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyPdfReaderFrame> component:
+
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)
+    at div
+    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at main
+    at div
+    at div
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m3:42:17 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useState')
+    at useState (http://localhost:5173/node_modules/.vite/deps/react.js?v=fb644c7f:963:30)
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15500:6)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15193:21) {"componentStack":"\n    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)\n    at div\n    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at main\n    at div\n    at div\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyPdfReaderFrame> component:
+
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)
+    at div
+    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at main
+    at div
+    at div
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useState')
+    at useState (http://localhost:5173/node_modules/.vite/deps/react.js?v=fb644c7f:963:30)
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15500:6)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15193:21) {"componentStack":"\n    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)\n    at div\n    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at main\n    at div\n    at div\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyPdfReaderFrame> component:
+
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)
+    at div
+    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at main
+    at div
+    at div
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useState')
+    at useState (http://localhost:5173/node_modules/.vite/deps/react.js?v=fb644c7f:963:30)
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15500:6)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15193:21) {"componentStack":"\n    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)\n    at div\n    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at main\n    at div\n    at div\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyPdfReaderFrame> component:
+
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)
+    at div
+    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at main
+    at div
+    at div
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useState')
+    at useState (http://localhost:5173/node_modules/.vite/deps/react.js?v=fb644c7f:963:30)
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15500:6)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15193:21) {"componentStack":"\n    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)\n    at div\n    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at main\n    at div\n    at div\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyPdfReaderFrame> component:
+
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)
+    at div
+    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at main
+    at div
+    at div
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useState')
+    at useState (http://localhost:5173/node_modules/.vite/deps/react.js?v=fb644c7f:963:30)
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15500:6)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15193:21) {"componentStack":"\n    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)\n    at div\n    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at main\n    at div\n    at div\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:18 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyPdfReaderFrame> component:
+
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)
+    at div
+    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at main
+    at div
+    at div
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useState')
+    at useState (http://localhost:5173/node_modules/.vite/deps/react.js?v=fb644c7f:963:30)
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15500:6)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15193:21) {"componentStack":"\n    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)\n    at div\n    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at main\n    at div\n    at div\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useState')
+[39m > useState ../../node_modules/.vite/deps/react.js?v=fb644c7f:963:30
+ > StudyPdfReaderFrame src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > mountIndeterminateComponent node_modules/react-dom/cjs/react-dom.development.js:20103:12
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21626:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+ > beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27490:6
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26596:11
+
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyPdfReaderFrame> component:
+
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)
+    at div
+    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at main
+    at div
+    at div
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m3:42:19 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useState')
+    at useState (http://localhost:5173/node_modules/.vite/deps/react.js?v=fb644c7f:963:30)
+    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:96:34)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12362:12)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13089:41)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15517:36)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15500:6)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15193:21) {"componentStack":"\n    at StudyPdfReaderFrame (http://localhost:5173/src/components/study/StudyPdfReaderFrame.tsx?t=1781043133756:94:32)\n    at div\n    at StudyPdfRoutePage (http://localhost:5173/src/pages/studyHub/StudyPdfRoutePage.tsx?t=1781043083888:12:25)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at main\n    at div\n    at div\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781043083888:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781043083888:201:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m4:45:01 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/components/ArchitectCanvas.tsx?t=1781043915334
+[39m
+[2m4:45:01 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/components/ArchitectCanvas.tsx?t=1781043915334
+[39m
+[2m4:45:01 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in one of your React components:
+
+    at Lazy
+    at Suspense
+    at div
+    at MotionComponent (http://localhost:5173/node_modules/.vite/deps/framer-motion.js?v=cfb9c3b1:1194:35)
+    at section
+    at Skills (http://localhost:5173/src/sections/Skills.tsx?t=1781043915334:211:40)
+    at Suspense
+    at div
+    at div
+    at PortfolioPage (http://localhost:5173/src/pages/PortfolioPage.tsx?t=1781043915334:25:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781046812704:219:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m4:45:01 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Failed to fetch dynamically imported module: http://localhost:5173/src/components/ArchitectCanvas.tsx?t=1781043915334 {"componentStack":"\n    at Lazy\n    at Suspense\n    at div\n    at MotionComponent (http://localhost:5173/node_modules/.vite/deps/framer-motion.js?v=cfb9c3b1:1194:35)\n    at section\n    at Skills (http://localhost:5173/src/sections/Skills.tsx?t=1781043915334:211:40)\n    at Suspense\n    at div\n    at div\n    at PortfolioPage (http://localhost:5173/src/pages/PortfolioPage.tsx?t=1781043915334:25:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781046812704:219:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m4:57:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useContext')
+[39m > Object.useContext ../../node_modules/.vite/deps/react.js?v=8f671496:960:22
+ > useInRouterContext ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22
+ > useLocation ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3
+ > StudyAppLayout src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21640:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+
+[2m4:57:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useContext')
+[39m > Object.useContext ../../node_modules/.vite/deps/react.js?v=8f671496:960:22
+ > useInRouterContext ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22
+ > useLocation ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3
+ > StudyAppLayout src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21640:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+
+[2m4:57:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyAppLayout> component:
+
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781047546049:219:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m4:57:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useContext')
+    at Object.useContext (http://localhost:5173/node_modules/.vite/deps/react.js?v=8f671496:960:22)
+    at useInRouterContext (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22)
+    at useLocation (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3)
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12122:19)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13096:13)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15517:36) {"componentStack":"\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781047546049:219:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m4:57:09 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:09 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:09 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useContext')
+[39m > Object.useContext ../../node_modules/.vite/deps/react.js?v=8f671496:960:22
+ > useInRouterContext ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22
+ > useLocation ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3
+ > StudyAppLayout src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21640:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+
+[2m4:57:09 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:09 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:09 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useContext')
+[39m > Object.useContext ../../node_modules/.vite/deps/react.js?v=8f671496:960:22
+ > useInRouterContext ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22
+ > useLocation ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3
+ > StudyAppLayout src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21640:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+ > invokeGuardedCallback node_modules/react-dom/cjs/react-dom.development.js:4277:30
+
+[2m4:57:09 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyAppLayout> component:
+
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781047546049:219:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m4:57:09 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useContext')
+    at Object.useContext (http://localhost:5173/node_modules/.vite/deps/react.js?v=8f671496:960:22)
+    at useInRouterContext (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22)
+    at useLocation (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3)
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12122:19)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13096:13)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15517:36) {"componentStack":"\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781047546049:219:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m4:57:28 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:28 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:29 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useContext')
+[39m > Object.useContext ../../node_modules/.vite/deps/react.js?v=8f671496:960:22
+ > useInRouterContext ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22
+ > useLocation ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3
+ > StudyAppLayout src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > mountLazyComponent node_modules/react-dom/cjs/react-dom.development.js:19988:16
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21632:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+
+[2m4:57:29 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:29 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:29 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useContext')
+[39m > Object.useContext ../../node_modules/.vite/deps/react.js?v=8f671496:960:22
+ > useInRouterContext ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22
+ > useLocation ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3
+ > StudyAppLayout src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > mountLazyComponent node_modules/react-dom/cjs/react-dom.development.js:19988:16
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21632:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+
+[2m4:57:29 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyAppLayout> component:
+
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781047546049:219:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m4:57:29 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useContext')
+    at Object.useContext (http://localhost:5173/node_modules/.vite/deps/react.js?v=8f671496:960:22)
+    at useInRouterContext (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22)
+    at useLocation (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3)
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12122:19)
+    at mountLazyComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12309:14)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13092:13)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12) {"componentStack":"\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781047546049:219:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m4:57:33 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:33 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:33 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useContext')
+[39m > Object.useContext ../../node_modules/.vite/deps/react.js?v=8f671496:960:22
+ > useInRouterContext ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22
+ > useLocation ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3
+ > StudyAppLayout src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > mountLazyComponent node_modules/react-dom/cjs/react-dom.development.js:19988:16
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21632:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+
+[2m4:57:33 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:33 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mWarning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+[2m4:57:33 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'useContext')
+[39m > Object.useContext ../../node_modules/.vite/deps/react.js?v=8f671496:960:22
+ > useInRouterContext ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22
+ > useLocation ../../node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3
+ > StudyAppLayout src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom.development.js:15486:17
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom.development.js:19617:19
+ > mountLazyComponent node_modules/react-dom/cjs/react-dom.development.js:19988:16
+ > beginWork node_modules/react-dom/cjs/react-dom.development.js:21632:15
+ > HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:4164:13
+ > Object.invokeGuardedCallbackDev node_modules/react-dom/cjs/react-dom.development.js:4213:15
+
+[2m4:57:33 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <StudyAppLayout> component:
+
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781047546049:219:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m4:57:33 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Cannot read properties of null (reading 'useContext')
+    at Object.useContext (http://localhost:5173/node_modules/.vite/deps/react.js?v=8f671496:960:22)
+    at useInRouterContext (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3084:22)
+    at useLocation (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=0ac639ee:3097:3)
+    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:9632:19)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12122:19)
+    at mountLazyComponent (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:12309:14)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:13092:13)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15982:12)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom-Cspfk2UH.js?v=cfb9c3b1:15568:12) {"componentStack":"\n    at StudyAppLayout (http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610:56:19)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781047546049:219:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
+[2m4:57:46 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610
+[39m
+[2m4:57:46 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Failed to fetch dynamically imported module: http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610
+[39m
+[2m4:57:46 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mThe above error occurred in the <Route.Provider> component:
+
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)
+    at Suspense
+    at main
+    at div
+    at AppContent (http://localhost:5173/src/App.tsx?t=1781047628610:219:19)
+    at AppBoot
+    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)
+    at App
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)
+    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, AppErrorBoundary.
+[2m4:57:46 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mApplication error boundary caught an error: TypeError: Failed to fetch dynamically imported module: http://localhost:5173/src/components/study/StudyAppLayout.tsx?t=1781047628610 {"componentStack":"\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3329:8)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3772:8)\n    at Suspense\n    at main\n    at div\n    at AppContent (http://localhost:5173/src/App.tsx?t=1781047628610:219:19)\n    at AppBoot\n    at AppErrorBoundary (http://localhost:5173/src/components/AppErrorBoundary.tsx:21:1)\n    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:40:32)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:3720:18)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=cfb9c3b1:4395:8)\n    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.tsx:7:33)\n    at App\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=cfb9c3b1:2440:30)\n    at _HelmetProvider (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=cfb9c3b1:490:3)"}
