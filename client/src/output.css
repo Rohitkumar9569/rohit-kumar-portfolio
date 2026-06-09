@@ -638,11 +638,6 @@ video {
 
 /* ✅ Premium mobile touch feel */
 
-html, body {
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-}
-
 /* Tap delay aur highlight remove — instant response */
 
 * {
@@ -659,14 +654,6 @@ html, body {
 .admin-tree-scroll {
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
-}
-
-/* input.css - Global Touch Reset */
-
-html, body {
-  -webkit-overflow-scrolling: touch;
-  /* Ye mobile par friction kam karta hai aur fluidity badhata hai */
-  overscroll-behavior-y: contain;
 }
 
 /* Important: Buttons aur Links par touch delay hatao */
@@ -4968,13 +4955,13 @@ body.study-app-scroll-root {
   background-color: rgb(255 255 255 / 0.97);
 }
 
-.bg-zinc-400\/10 {
-  background-color: rgb(161 161 170 / 0.1);
-}
-
 .bg-yellow-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(234 179 8 / var(--tw-bg-opacity, 1));
+}
+
+.bg-zinc-400\/10 {
+  background-color: rgb(161 161 170 / 0.1);
 }
 
 .bg-opacity-50 {

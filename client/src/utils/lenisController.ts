@@ -4,6 +4,7 @@ let lenisInstance: Lenis | null = null;
 
 export const PORTFOLIO_NAV_OFFSET = -72;
 
+// Ye saare classes Lenis ke scroll ko bypass karenge
 const LENIS_NESTED_SCROLL_SELECTOR =
   '.sarathi-chat-panel, .portfolio-horizontal-scroll, [data-native-scroll="true"], .study-drawer-surface, .study-chat-canvas, .study-scrollbar, .study-reader-canvas, .study-pdf-reader-shell, .admin-tree-scroll, .admin-command-scroll';
 
@@ -16,26 +17,41 @@ export const shouldPreventLenisScroll = (node: Element) => {
   );
 };
 
-// ✅ KEY FIX: Mobile par Lenis disable, desktop par buttery smooth
 export const isLenisSupported = (): boolean => {
   if (typeof window === 'undefined') return false;
-  // Reduced motion: always skip
+  // Reduced motion: accessibility ke liye skip
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
-  // Touch/mobile devices: native scroll is smoother — disable Lenis
-  const isTouch = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
-  if (isTouch) return false;
-  return true;
+  return true; 
 };
 
 export const createAppLenisOptions = (options = {}) => {
+  const isTouch =
+    typeof window !== 'undefined' &&
+    (window.matchMedia('(pointer: coarse)').matches ||
+      navigator.maxTouchPoints > 0);
+
+  if (isTouch) {
+    // 📱 MOBILE PREMIUM CONFIG (Floating Glide)
+    return {
+      autoRaf: false,
+      prevent: shouldPreventLenisScroll, // Nested scroll hijacking rokne ke liye
+      lerp: 0.1,               // Glide hone ke baad page bohot smoothly rukega
+      smoothTouch: true,       // 🔥 Premium JS inertia ON
+      touchMultiplier: 2.5,    // 🔥 MAGIC FIX: Thoda sa swipe karne par freely aage jayega (No friction)
+      syncTouch: false,        // Native scroll ko hijack nahi karega
+      ...options,
+    };
+  }
+
+  // 💻 DESKTOP CONFIG (Snappy & Light)
   return {
-    autoRaf: true,
-    lerp: 0.075,           // Desktop: silky smooth (0.075 = premium feel)
-    duration: 1.4,
-    wheelMultiplier: 1.0,  // Don't over-amplify
-    smoothWheel: true,
-    syncTouch: false,      // Mobile par disable (native hi best hai)
-    smoothTouch: false,    // Native momentum = premium feel on touch
+    autoRaf: false,
+    prevent: shouldPreventLenisScroll,
+    lerp: 0.15,             // Scroll stickiness khatam karne ke liye
+    wheelMultiplier: 1.5,   // Kam force mein zyada scroll
+    smoothWheel: true,      // Desktop par premium glide
+    smoothTouch: false,     
+    syncTouch: false,       
     ...options,
   };
 };
@@ -65,8 +81,12 @@ export const scrollToPortfolioSection = (sectionId: string) => {
     });
     return;
   }
-  const target = document.getElementById(sectionId);
-  if (!target) return;
-  const top = target.getBoundingClientRect().top + window.scrollY + PORTFOLIO_NAV_OFFSET;
-  window.scrollTo({ top, behavior: 'smooth' });
+  
+  // ✅ window object SSR safety check
+  if (typeof window !== 'undefined') {
+    const target = document.getElementById(sectionId);
+    if (!target) return;
+    const top = target.getBoundingClientRect().top + window.scrollY + PORTFOLIO_NAV_OFFSET;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
 };

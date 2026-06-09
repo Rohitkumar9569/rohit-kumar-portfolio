@@ -104,10 +104,7 @@
 
 
   /* ✅ Premium mobile touch feel */
-html, body {
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-}
+
 
 /* Tap delay aur highlight remove — instant response */
 * {
@@ -124,12 +121,7 @@ html, body {
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
 }
-  /* input.css - Global Touch Reset */
-html, body {
-  -webkit-overflow-scrolling: touch;
-  /* Ye mobile par friction kam karta hai aur fluidity badhata hai */
-  overscroll-behavior-y: contain; 
-}
+
 
 /* Important: Buttons aur Links par touch delay hatao */
 * {
