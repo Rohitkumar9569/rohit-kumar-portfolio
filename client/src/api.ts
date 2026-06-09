@@ -16,41 +16,54 @@ export interface QuestionPair {
   related_pyq: string;
 }
 
-// The shape of the API response for the daily journey.
+// Compatibility shape for the premium assistant endpoints.
 export interface JourneyApiResponse {
   journey?: QuestionPair[];
   isExhausted: boolean;
   message?: string;
 }
 
+const getDefaultApiBaseUrl = () => {
+  if (import.meta.env.DEV) return 'http://localhost:5001';
+  if (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+    return 'http://127.0.0.1:5001';
+  }
+  return '';
+};
+
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || getDefaultApiBaseUrl();
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000',
+  baseURL: API_BASE_URL,
 });
 
-/**
- * Fetches the daily learning journey from the backend.
- */
+API.interceptors.request.use((config) => {
+  if (typeof window === 'undefined') return config;
+  const token = window.localStorage.getItem('authToken');
+  if (token && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+const disabledJourneyMessage = 'Sarathi is ready for Study Hub, portfolio, exam, software, and general learning guidance.';
+
 export const fetchDailyJourney = async (): Promise<JourneyApiResponse> => {
   try {
     const { data } = await API.get('/api/suggestions/today');
     return data;
   } catch (error) {
-    console.error("Error fetching daily journey:", error);
+    console.error("Error checking assistant suggestions:", error);
     return { 
       isExhausted: true, 
-      message: 'Failed to connect to the server.' 
+      message: disabledJourneyMessage,
+      journey: [],
     };
   }
 };
 
-// --- NEW FUNCTION ADDED ---
-/**
- * Fetches a historical learning journey for a specific date.
- * @param date - The date in DD MMM YYYY format.
- */
-export const fetchJourneyByDate = async (date: string): Promise<Suggestion[]> => {
-  // This endpoint returns a flat array of Suggestion objects.
-  const { data } = await API.get(`/api/suggestions/by-date?date=${date}`);
+export const fetchJourneyByDate = async (_date: string): Promise<Suggestion[]> => {
+  const { data } = await API.get('/api/suggestions/by-date');
   return data;
 };
 

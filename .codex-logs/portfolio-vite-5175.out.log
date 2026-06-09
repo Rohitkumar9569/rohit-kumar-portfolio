@@ -1,0 +1,5 @@
+
+> client@0.0.0 vite
+> vite --host 127.0.0.1 --port 5175 --strictPort
+
+[2m3:49:13 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Forced re-optimization of dependencies

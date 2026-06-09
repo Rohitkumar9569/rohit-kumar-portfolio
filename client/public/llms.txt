@@ -1,0 +1,35 @@
+# Rohit Kumar Study Hub
+
+Rohit Kumar Study Hub is a free exam preparation workspace and developer portfolio built by Rohit Kumar. It provides organized resources for UPSC CSE, GATE, CBSE, JEE, NEET, SSC, State PCS, placement preparation, PYQs, notes, books, syllabus, practice material, search, saved resources, and a premium study app.
+
+## Important URLs
+
+- Home and portfolio: https://rohitkumar-portfolio.vercel.app/
+- Study Hub app: https://rohitkumar-portfolio.vercel.app/app
+- Catalog: https://rohitkumar-portfolio.vercel.app/app/catalog
+- Search: https://rohitkumar-portfolio.vercel.app/app/search
+- Sitemap: https://rohitkumar-portfolio.vercel.app/sitemap.xml
+- Robots: https://rohitkumar-portfolio.vercel.app/robots.txt
+
+## Featured Public Exam Pages
+
+- UPSC CSE: https://rohitkumar-portfolio.vercel.app/exams/upsc-cse
+- GATE CSE: https://rohitkumar-portfolio.vercel.app/exams/gate-cse
+- CBSE Class 10: https://rohitkumar-portfolio.vercel.app/exams/cbse-class-10
+- CBSE Class 12: https://rohitkumar-portfolio.vercel.app/exams/cbse-class-12
+- UPPSC PCS: https://rohitkumar-portfolio.vercel.app/exams/uppsc
+- BPSC: https://rohitkumar-portfolio.vercel.app/exams/bpsc
+- RPSC RAS: https://rohitkumar-portfolio.vercel.app/exams/rpsc-ras
+- JEE Main: https://rohitkumar-portfolio.vercel.app/exams/jee-main
+- NEET UG: https://rohitkumar-portfolio.vercel.app/exams/neet-ug
+
+## Content Policy
+
+Study Hub generated starter resources are study aids. Official exam notifications, official syllabi, official question papers, NCERT/board sources, and standard books remain the source of truth.
+
+## Owner
+
+Rohit Kumar
+
+- GitHub: https://github.com/Rohitkumar9569
+- Portfolio: https://rohitkumar-portfolio.vercel.app/

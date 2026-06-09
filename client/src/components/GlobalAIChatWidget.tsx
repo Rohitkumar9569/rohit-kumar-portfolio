@@ -1,13 +1,9 @@
 // File: src/components/GlobalAIChatWidget.tsx
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Drawer } from 'vaul';
+import { useState, useRef, useEffect } from 'react';
 import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/solid';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { useQuery } from '@tanstack/react-query';
 import ChatInterface from './viewer/ChatInterface';
-import { fetchDailyJourney, fetchJourneyByDate } from '../api';
-import type { Suggestion, JourneyApiResponse } from '../api';
+import type { Suggestion } from '../api';
 
 // Message Interface
 interface Message {
@@ -17,107 +13,64 @@ interface Message {
   journeyId: string | null;
 }
 
-// Helper Function
-const extractJourneyIdFromQuestion = (text: string, journeys: Record<string, Suggestion[]>) => {
-  const sanitizedText = text.split('. ').slice(1).join('. ');
-  for (const id in journeys) {
-    if (journeys[id].some(s => s.questionText === sanitizedText)) {
-      return id;
-    }
-  }
-  return null;
-};
+const EMPTY_JOURNEYS: Record<string, Suggestion[]> = {};
 
 const GlobalAIChatWidget = () => {
-  // --- DRAWER STATE ---
-  const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(null);
-  const numberOfSteps = 40;
-  const snapPoints = Array.from({ length: numberOfSteps }, (_, i) => parseFloat(((i + 1) / numberOfSteps).toFixed(2)));
-  const smallSnapPoint = snapPoints[5];
+  const [isOpen, setIsOpen] = useState(false);
 
   // --- CHAT STATE ---
   const [messages, setMessages] = useState<Message[]>([]);
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [journeys, setJourneys] = useState<Record<string, Suggestion[]>>({});
+  const journeys = EMPTY_JOURNEYS;
   const [activeJourneyId, setActiveJourneyId] = useState<string | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
   const [answeredIds, setAnsweredIds] = useState<Set<string>>(new Set());
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [scrollToIndex, setScrollToIndex] = useState<number | null>(null);
+  const [initialLoading] = useState(false);
   const chatScrollRef = useRef<HTMLDivElement>(null);
 
   // --- BODY SCROLL LOCK FIX ---
   useEffect(() => {
-    if (activeSnapPoint !== null) {
-      document.body.style.setProperty('overflow', 'hidden');
-    } else {
-      document.body.style.removeProperty('overflow');
-    }
-    return () => document.body.style.removeProperty('overflow');
-  }, [activeSnapPoint]);
+    const root = document.documentElement;
+    const body = document.body;
 
-  // --- FETCH DAILY JOURNEY ---
-  const { data: todayJourneyData, isLoading: queryLoading } = useQuery<JourneyApiResponse>({
-    queryKey: ['dailyJourney_global'],
-    queryFn: fetchDailyJourney,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  });
+    if (!isOpen) {
+      body.style.removeProperty('overflow');
+      body.style.removeProperty('overscroll-behavior');
+      root.style.removeProperty('overflow');
+      root.style.removeProperty('overscroll-behavior');
+      body.classList.remove('sarathi-scroll-locked');
+      root.classList.remove('sarathi-scroll-locked');
+      return undefined;
+    }
 
-  useEffect(() => {
-    if (todayJourneyData && !todayJourneyData.isExhausted && todayJourneyData.journey) {
-      const flatJourney = todayJourneyData.journey.flatMap((pair, pairIndex) => ([
-        { _id: pair.ca_question, questionText: pair.ca_question, originalIndex: pairIndex * 2 + 1, isPYQ: false },
-        { _id: pair.related_pyq, questionText: pair.related_pyq, originalIndex: pairIndex * 2 + 2, isPYQ: true },
-      ]));
-      setJourneys(prev => ({ ...prev, 'today': flatJourney }));
-    } else if (todayJourneyData && todayJourneyData.isExhausted) {
-      setJourneys(prev => ({ ...prev, 'today': [] }));
-    }
-    if (!queryLoading) {
-      setInitialLoading(false);
-    }
-  }, [todayJourneyData, queryLoading]);
+    const previousBodyOverflow = body.style.overflow;
+    const previousBodyOverscroll = body.style.overscrollBehavior;
+    const previousRootOverflow = root.style.overflow;
+    const previousRootOverscroll = root.style.overscrollBehavior;
+
+    body.style.setProperty('overflow', 'hidden');
+    body.style.setProperty('overscroll-behavior', 'none');
+    root.style.setProperty('overflow', 'hidden');
+    root.style.setProperty('overscroll-behavior', 'none');
+    body.classList.add('sarathi-scroll-locked');
+    root.classList.add('sarathi-scroll-locked');
+
+    return () => {
+      body.style.overflow = previousBodyOverflow;
+      body.style.overscrollBehavior = previousBodyOverscroll;
+      root.style.overflow = previousRootOverflow;
+      root.style.overscrollBehavior = previousRootOverscroll;
+      body.classList.remove('sarathi-scroll-locked');
+      root.classList.remove('sarathi-scroll-locked');
+    };
+  }, [isOpen]);
 
   // --- FILTER MESSAGES ---
-  const filteredMessages = messages.filter(msg => {
-    if (messages.length > 0 && messages[0].sender === 'ai' && msg === messages[0] && !activeJourneyId) return true;
-    return msg.journeyId === activeJourneyId;
-  });
-
-  // --- SCROLL LOGIC ---
-  useEffect(() => {
-    if (scrollToIndex !== null && chatScrollRef.current) {
-      const children = chatScrollRef.current.querySelectorAll('.chat-message-container');
-      if (scrollToIndex >= 0 && scrollToIndex < children.length) {
-        (children[scrollToIndex] as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      setScrollToIndex(null);
-    }
-  }, [scrollToIndex]);
-
-  // --- API LOGIC ---
-  const fetchAndStoreJourney = async (date: string, isAiTriggered: boolean = false) => {
-    if (journeys[date]) {
-      setActiveJourneyId(date);
-      return;
-    }
-    try {
-      const journey = await fetchJourneyByDate(date);
-      setJourneys(prev => ({ ...prev, [date]: journey }));
-      setActiveJourneyId(date);
-      if (isAiTriggered) {
-        const aiMessage: Message = { sender: 'ai', text: `Here is the Active Learning Journey for ${date}.`, historicalJourney: journey, journeyId: date };
-        setMessages(prev => [...prev, aiMessage]);
-      }
-    } catch (error) {
-      handleSendMessage(`Sorry, I couldn't find any questions for ${date}.`, true);
-    }
-  };
+  const filteredMessages = messages;
 
   const handleSendMessage = async (text: string, isAiMessage: boolean = false) => {
     if (!text.trim() || isAiLoading) return;
-    const currentJourneyId = activeJourneyId || extractJourneyIdFromQuestion(text, journeys);
+    const currentJourneyId = null;
     
     if (isAiMessage) {
       const aiInfoMessage: Message = { sender: 'ai', text, journeyId: currentJourneyId };
@@ -180,85 +133,64 @@ const GlobalAIChatWidget = () => {
       });
     } finally {
       setIsAiLoading(false);
-      const match = fullResponse.match(/\[FETCH_JOURNEY_FOR_DATE:(.*?)\]/);
-      if (match && match[1]) {
-        const date = match[1];
-        setMessages(prev => prev.slice(0, -1));
-        fetchAndStoreJourney(date, true);
-      }
     }
   };
 
-  const handleOpenDrawer = () => setActiveSnapPoint(1);
-  const handleCloseDrawer = () => setActiveSnapPoint(null);
+  const handleOpenDrawer = () => setIsOpen(true);
+  const handleCloseDrawer = () => setIsOpen(false);
 
   return (
-    <Drawer.Root 
-      modal={true} 
-      open={activeSnapPoint !== null} 
-      onOpenChange={(open) => setActiveSnapPoint(open ? 1 : null)} 
-      snapPoints={snapPoints} 
-      activeSnapPoint={activeSnapPoint} 
-      setActiveSnapPoint={setActiveSnapPoint}
-    >
-      {/* 1. ATTRACTIVE MODERN FLOATING BUTTON */}
+    <>
       <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100] flex items-center justify-center group">
-        
-        {/* Glowing Pulse Animation */}
-        <div className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
-        
-        {/* Main Attractive Button */}
+        <div className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-300 opacity-20 transition-opacity duration-300 group-hover:opacity-35" />
         <button 
           onClick={handleOpenDrawer}
-          className="relative flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg shadow-cyan-500/50 transition-transform duration-300 ease-out hover:scale-110 hover:shadow-cyan-400/80 focus:outline-none"
-          title="Need help? Let's chat!"
+          className="relative flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-slate-950 text-cyan-100 shadow-[0_18px_46px_rgba(2,6,23,0.42)] ring-1 ring-cyan-200/15 transition-transform duration-300 ease-out hover:scale-105 hover:border-cyan-200/35 hover:text-white hover:shadow-[0_22px_58px_rgba(34,211,238,0.22)] focus:outline-none focus:ring-4 focus:ring-cyan-400/20 md:h-16 md:w-16"
+          title="Ask Sarathi"
         >
-          <ChatBubbleBottomCenterTextIcon className="h-7 w-7 md:h-8 md:w-8 drop-shadow-md" />
+          <ChatBubbleBottomCenterTextIcon className="h-7 w-7 md:h-8 md:w-8" />
         </button>
-
       </div>
 
-      {/* 2. CHAT DRAWER CONTENT (NEW WATER/FROSTED THEME) */}
-     {/* 2. CHAT DRAWER CONTENT (PERFECT LIGHT WATER THEME) */}
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/10 z-[140] transition-opacity duration-300 md:hidden" />
-        
-        <Drawer.Content 
-          
-          className="fixed bottom-0 left-0 right-0 flex flex-col rounded-t-2xl z-[150] h-full transition-all duration-300 ease-out
-                     md:h-[80vh] md:w-[450px] md:left-auto md:right-6 md:bottom-24 md:rounded-2xl
-                     shadow-[-5px_0_30px_rgba(0,0,0,0.3)] md:shadow-[0_10px_40px_rgba(0,0,0,0.3)]
-                     bg-slate-900/50 backdrop-blur-md border-t border-white/10 md:border border-white/10"
-        >
-          <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-white/30 md:hidden" />
-          <VisuallyHidden>
-            <Drawer.Title>AI Assistant Chat</Drawer.Title>
-            <Drawer.Description>Global chat assistant for Rohit's portfolio.</Drawer.Description>
-          </VisuallyHidden>
-          
-          <ChatInterface 
-            documentId="global"
-            isMobileLayout={true} 
-            messages={filteredMessages} 
-            isLoading={isAiLoading} 
-            onSendMessage={handleSendMessage} 
-            journeys={journeys} 
-            activeJourneyId={activeJourneyId} 
-            setActiveJourneyId={setActiveJourneyId} 
-            isCompleted={isCompleted} 
-            setIsCompleted={setIsCompleted} 
-            answeredIds={answeredIds} 
-            setAnsweredIds={setAnsweredIds} 
-            initialLoading={initialLoading} 
-            activeSnapPoint={activeSnapPoint} 
-            smallSnapPoint={smallSnapPoint} 
-            setScrollToIndex={setScrollToIndex} 
-            chatScrollRef={chatScrollRef} 
-            handleCloseDrawer={handleCloseDrawer} 
+      {isOpen && (
+        <>
+          <button
+            type="button"
+            aria-label="Close Sarathi chat overlay"
+            onClick={handleCloseDrawer}
+            className="fixed inset-0 z-[140] bg-slate-950/34 backdrop-blur-sm md:bg-transparent md:backdrop-blur-0"
           />
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-label="Sarathi Chat"
+            className="sarathi-chat-panel fixed bottom-0 left-0 right-0 z-[150] flex h-[100dvh] flex-col overflow-hidden rounded-t-[1.35rem] border-t border-slate-200/80 bg-white text-slate-950 shadow-[-10px_0_44px_rgba(15,23,42,0.18)] ring-1 ring-slate-950/5 transition-all duration-300 ease-out dark:border-white/12 dark:bg-slate-950 dark:text-white dark:shadow-[-10px_0_44px_rgba(2,6,23,0.55)] dark:ring-white/10 md:inset-y-4 md:left-auto md:right-4 md:bottom-auto md:h-auto md:w-[min(560px,calc(100vw-2rem))] md:rounded-[1.65rem] md:border md:shadow-[0_30px_86px_rgba(15,23,42,0.20)] dark:md:border-white/12 dark:md:shadow-[0_30px_86px_rgba(2,6,23,0.58)] lg:w-[min(620px,calc(100vw-2rem))] xl:w-[min(680px,calc(100vw-2rem))]"
+          >
+            <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/50 to-transparent" />
+            <span className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-white/30 md:hidden" />
+            <ChatInterface
+              documentId="global"
+              isMobileLayout={true}
+              messages={filteredMessages}
+              isLoading={isAiLoading}
+              onSendMessage={handleSendMessage}
+              journeys={journeys}
+              activeJourneyId={activeJourneyId}
+              setActiveJourneyId={setActiveJourneyId}
+              isCompleted={isCompleted}
+              setIsCompleted={setIsCompleted}
+              answeredIds={answeredIds}
+              setAnsweredIds={setAnsweredIds}
+              initialLoading={initialLoading}
+              activeSnapPoint={isOpen ? 1 : null}
+              smallSnapPoint={0.18}
+              chatScrollRef={chatScrollRef}
+              handleCloseDrawer={handleCloseDrawer}
+            />
+          </section>
+        </>
+      )}
+    </>
   );
 };
 

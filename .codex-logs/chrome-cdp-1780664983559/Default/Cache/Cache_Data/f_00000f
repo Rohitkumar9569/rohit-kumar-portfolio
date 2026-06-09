@@ -1,0 +1,336 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/pages/PortfolioPage.tsx");const React = __vite__cjsImport0_react; const Suspense = __vite__cjsImport0_react["Suspense"];const _jsxDEV = __vite__cjsImport5_react_jsxDevRuntime["jsxDEV"];import __vite__cjsImport0_react from "/node_modules/.vite/deps/react.js?v=90a255a8";
+import { Helmet } from "/node_modules/.vite/deps/react-helmet-async.js?v=90a255a8";
+import PageLoader from "/src/components/PageLoader.tsx";
+import PortfolioSpaceBackdrop from "/src/components/PortfolioSpaceBackdrop.tsx";
+// Eagerly load critical components for instant rendering on page load.
+import About from "/src/sections/About.tsx";
+var _jsxFileName = "D:/MyBlueprintPortfolio/client/src/pages/PortfolioPage.tsx";
+import __vite__cjsImport5_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=90a255a8";
+// Lazy-load sections that appear below the fold for better initial performance.
+const Skills = React.lazy(_c = () => import("/src/sections/Skills.tsx"));
+_c2 = Skills;
+const Certifications = React.lazy(_c3 = () => import("/src/sections/Certifications.tsx"));
+_c4 = Certifications;
+const Projects = React.lazy(_c5 = () => import("/src/sections/Projects.tsx"));
+_c6 = Projects;
+const StudyHubCTA = React.lazy(_c7 = () => import("/src/sections/StudyHubCTA.tsx"));
+_c8 = StudyHubCTA;
+const Contact = React.lazy(_c9 = () => import("/src/sections/Contact.tsx"));
+_c10 = Contact;
+const PortfolioPage = () => {
+	// --- Structured Data for Advanced SEO (JSON-LD) ---
+	const structuredData = {
+		"@context": "https://schema.org",
+		"@graph": [{
+			"@type": "Person",
+			"name": "Rohit Kumar",
+			"url": "https://rohitkumar-portfolio.vercel.app/",
+			"sameAs": ["https://www.linkedin.com/in/rohit-kumar-bba12b25b/", "https://github.com/Rohitkumar9569"],
+			"jobTitle": "Full-Stack Developer",
+			"worksFor": {
+				"@type": "Organization",
+				"name": "Rohit Kumar Portfolio"
+			},
+			"image": "https://res.cloudinary.com/dlcvljnnu/image/upload/v1759951140/profile-photo_dznr2x.webp",
+			"description": "A passionate Full-Stack Developer specializing in the MERN stack and creating high-performance web applications. Creator of the Study Hub, a resource for competitive exam preparation.",
+			"knowsAbout": [
+				"React",
+				"Node.js",
+				"Express.js",
+				"MongoDB",
+				"TypeScript",
+				"JavaScript",
+				"Cybersecurity",
+				"Cloud Computing",
+				"React Three Fiber"
+			]
+		}, {
+			"@type": "WebSite",
+			"name": "Rohit Kumar | Portfolio & Study Hub",
+			"url": "https://rohitkumar-portfolio.vercel.app/",
+			"author": {
+				"@type": "Person",
+				"name": "Rohit Kumar"
+			},
+			"description": "Official portfolio of Rohit Kumar, showcasing full-stack development projects and the Study Hub for exam PYQs.",
+			"potentialAction": {
+				"@type": "SearchAction",
+				"target": "https://rohitkumar-portfolio.vercel.app/study/{search_term_string}",
+				"query-input": "required name=search_term_string"
+			}
+		}]
+	};
+	return /* @__PURE__ */ _jsxDEV("div", {
+		className: "portfolio-space-shell relative min-h-screen overflow-hidden",
+		children: [
+			/* @__PURE__ */ _jsxDEV(PortfolioSpaceBackdrop, {}, void 0, false, {
+				fileName: _jsxFileName,
+				lineNumber: 58,
+				columnNumber: 7
+			}, this),
+			/* @__PURE__ */ _jsxDEV(Helmet, { children: [
+				/* @__PURE__ */ _jsxDEV("title", { children: "Rohit Kumar | Full-Stack Developer & Creator of Study Hub" }, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 61,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					name: "description",
+					content: "Explore the portfolio of Rohit Kumar, a skilled Full-Stack Developer. Discover projects, skills, and the Study Hub - a free resource with PYQs for exams like GATE and UPSC."
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 62,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("link", {
+					rel: "canonical",
+					href: "https://rohitkumar-portfolio.vercel.app/"
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 63,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					property: "og:type",
+					content: "website"
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 66,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					property: "og:url",
+					content: "https://rohitkumar-portfolio.vercel.app/"
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 67,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					property: "og:title",
+					content: "Rohit Kumar | Full-Stack Developer & Creator of Study Hub"
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 68,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					property: "og:description",
+					content: "Discover projects, skills, and the Study Hub - a free resource for exam preparation."
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 69,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					property: "og:image",
+					content: "https://res.cloudinary.com/dlcvljnnu/image/upload/v1759951140/profile-photo_dznr2x.webp"
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 70,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					property: "og:site_name",
+					content: "Rohit Kumar's Portfolio"
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 71,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					name: "twitter:card",
+					content: "summary_large_image"
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 74,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					name: "twitter:url",
+					content: "https://rohitkumar-portfolio.vercel.app/"
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 75,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					name: "twitter:title",
+					content: "Rohit Kumar | Full-Stack Developer & Creator of Study Hub"
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 76,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					name: "twitter:description",
+					content: "Discover projects, skills, and the Study Hub - a free resource for exam preparation."
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 77,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("meta", {
+					name: "twitter:image",
+					content: "https://res.cloudinary.com/dlcvljnnu/image/upload/v1759951140/profile-photo_dznr2x.webp"
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 78,
+					columnNumber: 9
+				}, this),
+				/* @__PURE__ */ _jsxDEV("script", {
+					type: "application/ld+json",
+					children: JSON.stringify(structuredData)
+				}, void 0, false, {
+					fileName: _jsxFileName,
+					lineNumber: 81,
+					columnNumber: 9
+				}, this)
+			] }, void 0, true, {
+				fileName: _jsxFileName,
+				lineNumber: 59,
+				columnNumber: 7
+			}, this),
+			/* @__PURE__ */ _jsxDEV("div", {
+				className: "portfolio-space-content relative z-10",
+				children: [
+					/* @__PURE__ */ _jsxDEV(About, {}, void 0, false, {
+						fileName: _jsxFileName,
+						lineNumber: 87,
+						columnNumber: 9
+					}, this),
+					/* @__PURE__ */ _jsxDEV(Suspense, {
+						fallback: /* @__PURE__ */ _jsxDEV("section", {
+							id: "skills",
+							className: "min-h-[60vh]",
+							"aria-label": "Loading skills"
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 88,
+							columnNumber: 29
+						}, this),
+						children: /* @__PURE__ */ _jsxDEV(Skills, {}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 89,
+							columnNumber: 11
+						}, this)
+					}, void 0, false, {
+						fileName: _jsxFileName,
+						lineNumber: 88,
+						columnNumber: 9
+					}, this),
+					/* @__PURE__ */ _jsxDEV(Suspense, {
+						fallback: /* @__PURE__ */ _jsxDEV(PageLoader, {}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 92,
+							columnNumber: 29
+						}, this),
+						children: /* @__PURE__ */ _jsxDEV(Certifications, {}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 93,
+							columnNumber: 11
+						}, this)
+					}, void 0, false, {
+						fileName: _jsxFileName,
+						lineNumber: 92,
+						columnNumber: 9
+					}, this),
+					/* @__PURE__ */ _jsxDEV(Suspense, {
+						fallback: /* @__PURE__ */ _jsxDEV(PageLoader, {}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 96,
+							columnNumber: 29
+						}, this),
+						children: /* @__PURE__ */ _jsxDEV(Projects, {}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 97,
+							columnNumber: 11
+						}, this)
+					}, void 0, false, {
+						fileName: _jsxFileName,
+						lineNumber: 96,
+						columnNumber: 9
+					}, this),
+					/* @__PURE__ */ _jsxDEV(Suspense, {
+						fallback: /* @__PURE__ */ _jsxDEV(PageLoader, {}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 100,
+							columnNumber: 29
+						}, this),
+						children: /* @__PURE__ */ _jsxDEV(StudyHubCTA, {}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 101,
+							columnNumber: 11
+						}, this)
+					}, void 0, false, {
+						fileName: _jsxFileName,
+						lineNumber: 100,
+						columnNumber: 9
+					}, this),
+					/* @__PURE__ */ _jsxDEV(Suspense, {
+						fallback: /* @__PURE__ */ _jsxDEV(PageLoader, {}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 104,
+							columnNumber: 29
+						}, this),
+						children: /* @__PURE__ */ _jsxDEV(Contact, {}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 105,
+							columnNumber: 11
+						}, this)
+					}, void 0, false, {
+						fileName: _jsxFileName,
+						lineNumber: 104,
+						columnNumber: 9
+					}, this)
+				]
+			}, void 0, true, {
+				fileName: _jsxFileName,
+				lineNumber: 86,
+				columnNumber: 7
+			}, this)
+		]
+	}, void 0, true, {
+		fileName: _jsxFileName,
+		lineNumber: 57,
+		columnNumber: 5
+	}, this);
+};
+_c11 = PortfolioPage;
+export default PortfolioPage;
+var _c, _c2, _c3, _c4, _c5, _c6, _c7, _c8, _c9, _c10, _c11;
+$RefreshReg$(_c, "Skills$React.lazy");
+$RefreshReg$(_c2, "Skills");
+$RefreshReg$(_c3, "Certifications$React.lazy");
+$RefreshReg$(_c4, "Certifications");
+$RefreshReg$(_c5, "Projects$React.lazy");
+$RefreshReg$(_c6, "Projects");
+$RefreshReg$(_c7, "StudyHubCTA$React.lazy");
+$RefreshReg$(_c8, "StudyHubCTA");
+$RefreshReg$(_c9, "Contact$React.lazy");
+$RefreshReg$(_c10, "Contact");
+$RefreshReg$(_c11, "PortfolioPage");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope;
+import * as __vite_react_currentExports from "/src/pages/PortfolioPage.tsx";
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+
+  const currentExports = __vite_react_currentExports;
+  queueMicrotask(() => {
+    RefreshRuntime.registerExportsForReactRefresh("D:/MyBlueprintPortfolio/client/src/pages/PortfolioPage.tsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("D:/MyBlueprintPortfolio/client/src/pages/PortfolioPage.tsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) { return RefreshRuntime.register(type, "D:/MyBlueprintPortfolio/client/src/pages/PortfolioPage.tsx" + ' ' + id); }
+function $RefreshSig$() { return RefreshRuntime.createSignatureFunctionForTransform(); }
+
+//# sourceMappingURL=data:application/json;base64,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QUMvQix3QkFBQyxVQUFELENBQVc7Ozs7O0tBQ0g7Ozs7O0tBRVYsd0JBQUMsVUFBRDtNQUFVLFVBQVUsd0JBQUMsWUFBRCxDQUFhOzs7OztnQkFDL0Isd0JBQUMsYUFBRCxDQUFjOzs7OztLQUNOOzs7OztLQUVWLHdCQUFDLFVBQUQ7TUFBVSxVQUFVLHdCQUFDLFlBQUQsQ0FBYTs7Ozs7Z0JBQy9CLHdCQUFDLFNBQUQsQ0FBVTs7Ozs7S0FDRjs7Ozs7SUFDUDs7Ozs7O0VBQ0Y7Ozs7OztBQUVUOztBQUVBLGVBQWUiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiUG9ydGZvbGlvUGFnZS50c3giXSwidmVyc2lvbiI6Mywic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0LCB7IFN1c3BlbnNlIH0gZnJvbSAncmVhY3QnO1xuaW1wb3J0IHsgSGVsbWV0IH0gZnJvbSAncmVhY3QtaGVsbWV0LWFzeW5jJztcbmltcG9ydCBQYWdlTG9hZGVyIGZyb20gJy4uL2NvbXBvbmVudHMvUGFnZUxvYWRlcic7XG5pbXBvcnQgUG9ydGZvbGlvU3BhY2VCYWNrZHJvcCBmcm9tICcuLi9jb21wb25lbnRzL1BvcnRmb2xpb1NwYWNlQmFja2Ryb3AnO1xuXG4vLyBFYWdlcmx5IGxvYWQgY3JpdGljYWwgY29tcG9uZW50cyBmb3IgaW5zdGFudCByZW5kZXJpbmcgb24gcGFnZSBsb2FkLlxuaW1wb3J0IEFib3V0IGZyb20gJy4uL3NlY3Rpb25zL0Fib3V0JztcblxuLy8gTGF6eS1sb2FkIHNlY3Rpb25zIHRoYXQgYXBwZWFyIGJlbG93IHRoZSBmb2xkIGZvciBiZXR0ZXIgaW5pdGlhbCBwZXJmb3JtYW5jZS5cbmNvbnN0IFNraWxscyA9IFJlYWN0LmxhenkoKCkgPT4gaW1wb3J0KCcuLi9zZWN0aW9ucy9Ta2lsbHMnKSk7XG5jb25zdCBDZXJ0aWZpY2F0aW9ucyA9IFJlYWN0LmxhenkoKCkgPT4gaW1wb3J0KCcuLi9zZWN0aW9ucy9DZXJ0aWZpY2F0aW9ucycpKTtcbmNvbnN0IFByb2plY3RzID0gUmVhY3QubGF6eSgoKSA9PiBpbXBvcnQoJy4uL3NlY3Rpb25zL1Byb2plY3RzJykpO1xuY29uc3QgU3R1ZHlIdWJDVEEgPSBSZWFjdC5sYXp5KCgpID0+IGltcG9ydCgnLi4vc2VjdGlvbnMvU3R1ZHlIdWJDVEEnKSk7XG5jb25zdCBDb250YWN0ID0gUmVhY3QubGF6eSgoKSA9PiBpbXBvcnQoJy4uL3NlY3Rpb25zL0NvbnRhY3QnKSk7XG5cbmNvbnN0IFBvcnRmb2xpb1BhZ2UgPSAoKSA9PiB7XG4gIC8vIC0tLSBTdHJ1Y3R1cmVkIERhdGEgZm9yIEFkdmFuY2VkIFNFTyAoSlNPTi1MRCkgLS0tXG4gIGNvbnN0IHN0cnVjdHVyZWREYXRhID0ge1xuICAgICdAY29udGV4dCc6ICdodHRwczovL3NjaGVtYS5vcmcnLFxuICAgICdAZ3JhcGgnOiBbXG4gICAgICB7XG4gICAgICAgICdAdHlwZSc6ICdQZXJzb24nLFxuICAgICAgICAnbmFtZSc6ICdSb2hpdCBLdW1hcicsXG4gICAgICAgICd1cmwnOiAnaHR0cHM6Ly9yb2hpdGt1bWFyLXBvcnRmb2xpby52ZXJjZWwuYXBwLycsXG4gICAgICAgICdzYW1lQXMnOiBbXG4gICAgICAgICAgJ2h0dHBzOi8vd3d3LmxpbmtlZGluLmNvbS9pbi9yb2hpdC1rdW1hci1iYmExMmIyNWIvJyxcbiAgICAgICAgICAnaHR0cHM6Ly9naXRodWIuY29tL1JvaGl0a3VtYXI5NTY5JyxcbiAgICAgICAgXSxcbiAgICAgICAgJ2pvYlRpdGxlJzogJ0Z1bGwtU3RhY2sgRGV2ZWxvcGVyJyxcbiAgICAgICAgJ3dvcmtzRm9yJzoge1xuICAgICAgICAgICdAdHlwZSc6ICdPcmdhbml6YXRpb24nLFxuICAgICAgICAgICduYW1lJzogJ1JvaGl0IEt1bWFyIFBvcnRmb2xpbydcbiAgICAgICAgfSxcbiAgICAgICAgJ2ltYWdlJzogJ2h0dHBzOi8vcmVzLmNsb3VkaW5hcnkuY29tL2RsY3Zsam5udS9pbWFnZS91cGxvYWQvdjE3NTk5NTExNDAvcHJvZmlsZS1waG90b19kem5yMngud2VicCcsXG4gICAgICAgICdkZXNjcmlwdGlvbic6ICdBIHBhc3Npb25hdGUgRnVsbC1TdGFjayBEZXZlbG9wZXIgc3BlY2lhbGl6aW5nIGluIHRoZSBNRVJOIHN0YWNrIGFuZCBjcmVhdGluZyBoaWdoLXBlcmZvcm1hbmNlIHdlYiBhcHBsaWNhdGlvbnMuIENyZWF0b3Igb2YgdGhlIFN0dWR5IEh1YiwgYSByZXNvdXJjZSBmb3IgY29tcGV0aXRpdmUgZXhhbSBwcmVwYXJhdGlvbi4nLFxuICAgICAgICAna25vd3NBYm91dCc6IFsnUmVhY3QnLCAnTm9kZS5qcycsICdFeHByZXNzLmpzJywgJ01vbmdvREInLCAnVHlwZVNjcmlwdCcsICdKYXZhU2NyaXB0JywgJ0N5YmVyc2VjdXJpdHknLCAnQ2xvdWQgQ29tcHV0aW5nJywgJ1JlYWN0IFRocmVlIEZpYmVyJ11cbiAgICAgIH0sXG4gICAgICB7XG4gICAgICAgICdAdHlwZSc6ICdXZWJTaXRlJyxcbiAgICAgICAgJ25hbWUnOiAnUm9oaXQgS3VtYXIgfCBQb3J0Zm9saW8gJiBTdHVkeSBIdWInLFxuICAgICAgICAndXJsJzogJ2h0dHBzOi8vcm9oaXRrdW1hci1wb3J0Zm9saW8udmVyY2VsLmFwcC8nLFxuICAgICAgICAnYXV0aG9yJzoge1xuICAgICAgICAgICdAdHlwZSc6ICdQZXJzb24nLFxuICAgICAgICAgICduYW1lJzogJ1JvaGl0IEt1bWFyJ1xuICAgICAgICB9LFxuICAgICAgICAnZGVzY3JpcHRpb24nOiAnT2ZmaWNpYWwgcG9ydGZvbGlvIG9mIFJvaGl0IEt1bWFyLCBzaG93Y2FzaW5nIGZ1bGwtc3RhY2sgZGV2ZWxvcG1lbnQgcHJvamVjdHMgYW5kIHRoZSBTdHVkeSBIdWIgZm9yIGV4YW0gUFlRcy4nLFxuICAgICAgICAncG90ZW50aWFsQWN0aW9uJzoge1xuICAgICAgICAgICdAdHlwZSc6ICdTZWFyY2hBY3Rpb24nLFxuICAgICAgICAgICd0YXJnZXQnOiAnaHR0cHM6Ly9yb2hpdGt1bWFyLXBvcnRmb2xpby52ZXJjZWwuYXBwL3N0dWR5L3tzZWFyY2hfdGVybV9zdHJpbmd9JyxcbiAgICAgICAgICAncXVlcnktaW5wdXQnOiAncmVxdWlyZWQgbmFtZT1zZWFyY2hfdGVybV9zdHJpbmcnXG4gICAgICAgIH1cbiAgICAgIH1cbiAgICBdXG4gIH07XG5cbiAgcmV0dXJuIChcbiAgICA8ZGl2IGNsYXNzTmFtZT1cInBvcnRmb2xpby1zcGFjZS1zaGVsbCByZWxhdGl2ZSBtaW4taC1zY3JlZW4gb3ZlcmZsb3ctaGlkZGVuXCI+XG4gICAgICA8UG9ydGZvbGlvU3BhY2VCYWNrZHJvcCAvPlxuICAgICAgPEhlbG1ldD5cbiAgICAgICAgey8qIC0tLSBQcmltYXJ5IFNFTyBNZXRhIFRhZ3MgLS0tICovfVxuICAgICAgICA8dGl0bGU+Um9oaXQgS3VtYXIgfCBGdWxsLVN0YWNrIERldmVsb3BlciAmIENyZWF0b3Igb2YgU3R1ZHkgSHViPC90aXRsZT5cbiAgICAgICAgPG1ldGEgbmFtZT1cImRlc2NyaXB0aW9uXCIgY29udGVudD1cIkV4cGxvcmUgdGhlIHBvcnRmb2xpbyBvZiBSb2hpdCBLdW1hciwgYSBza2lsbGVkIEZ1bGwtU3RhY2sgRGV2ZWxvcGVyLiBEaXNjb3ZlciBwcm9qZWN0cywgc2tpbGxzLCBhbmQgdGhlIFN0dWR5IEh1YiAtIGEgZnJlZSByZXNvdXJjZSB3aXRoIFBZUXMgZm9yIGV4YW1zIGxpa2UgR0FURSBhbmQgVVBTQy5cIiAvPlxuICAgICAgICA8bGluayByZWw9XCJjYW5vbmljYWxcIiBocmVmPVwiaHR0cHM6Ly9yb2hpdGt1bWFyLXBvcnRmb2xpby52ZXJjZWwuYXBwL1wiIC8+XG5cbiAgICAgICAgey8qIC0tLSBPcGVuIEdyYXBoIC8gRmFjZWJvb2sgTWV0YSBUYWdzIC0tLSAqL31cbiAgICAgICAgPG1ldGEgcHJvcGVydHk9XCJvZzp0eXBlXCIgY29udGVudD1cIndlYnNpdGVcIiAvPlxuICAgICAgICA8bWV0YSBwcm9wZXJ0eT1cIm9nOnVybFwiIGNvbnRlbnQ9XCJodHRwczovL3JvaGl0a3VtYXItcG9ydGZvbGlvLnZlcmNlbC5hcHAvXCIgLz5cbiAgICAgICAgPG1ldGEgcHJvcGVydHk9XCJvZzp0aXRsZVwiIGNvbnRlbnQ9XCJSb2hpdCBLdW1hciB8IEZ1bGwtU3RhY2sgRGV2ZWxvcGVyICYgQ3JlYXRvciBvZiBTdHVkeSBIdWJcIiAvPlxuICAgICAgICA8bWV0YSBwcm9wZXJ0eT1cIm9nOmRlc2NyaXB0aW9uXCIgY29udGVudD1cIkRpc2NvdmVyIHByb2plY3RzLCBza2lsbHMsIGFuZCB0aGUgU3R1ZHkgSHViIC0gYSBmcmVlIHJlc291cmNlIGZvciBleGFtIHByZXBhcmF0aW9uLlwiIC8+XG4gICAgICAgIDxtZXRhIHByb3BlcnR5PVwib2c6aW1hZ2VcIiBjb250ZW50PVwiaHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGxjdmxqbm51L2ltYWdlL3VwbG9hZC92MTc1OTk1MTE0MC9wcm9maWxlLXBob3RvX2R6bnIyeC53ZWJwXCIgLz5cbiAgICAgICAgPG1ldGEgcHJvcGVydHk9XCJvZzpzaXRlX25hbWVcIiBjb250ZW50PVwiUm9oaXQgS3VtYXIncyBQb3J0Zm9saW9cIiAvPlxuXG4gICAgICAgIHsvKiAtLS0gVHdpdHRlciBDYXJkIE1ldGEgVGFncyAtLS0gKi99XG4gICAgICAgIDxtZXRhIG5hbWU9XCJ0d2l0dGVyOmNhcmRcIiBjb250ZW50PVwic3VtbWFyeV9sYXJnZV9pbWFnZVwiIC8+XG4gICAgICAgIDxtZXRhIG5hbWU9XCJ0d2l0dGVyOnVybFwiIGNvbnRlbnQ9XCJodHRwczovL3JvaGl0a3VtYXItcG9ydGZvbGlvLnZlcmNlbC5hcHAvXCIgLz5cbiAgICAgICAgPG1ldGEgbmFtZT1cInR3aXR0ZXI6dGl0bGVcIiBjb250ZW50PVwiUm9oaXQgS3VtYXIgfCBGdWxsLVN0YWNrIERldmVsb3BlciAmIENyZWF0b3Igb2YgU3R1ZHkgSHViXCIgLz5cbiAgICAgICAgPG1ldGEgbmFtZT1cInR3aXR0ZXI6ZGVzY3JpcHRpb25cIiBjb250ZW50PVwiRGlzY292ZXIgcHJvamVjdHMsIHNraWxscywgYW5kIHRoZSBTdHVkeSBIdWIgLSBhIGZyZWUgcmVzb3VyY2UgZm9yIGV4YW0gcHJlcGFyYXRpb24uXCIgLz5cbiAgICAgICAgPG1ldGEgbmFtZT1cInR3aXR0ZXI6aW1hZ2VcIiBjb250ZW50PVwiaHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGxjdmxqbm51L2ltYWdlL3VwbG9hZC92MTc1OTk1MTE0MC9wcm9maWxlLXBob3RvX2R6bnIyeC53ZWJwXCIgLz5cblxuICAgICAgICB7LyogLS0tIFNjaGVtYS5vcmcgTWFya3VwIC0tLSAqL31cbiAgICAgICAgPHNjcmlwdCB0eXBlPVwiYXBwbGljYXRpb24vbGQranNvblwiPlxuICAgICAgICAgIHtKU09OLnN0cmluZ2lmeShzdHJ1Y3R1cmVkRGF0YSl9XG4gICAgICAgIDwvc2NyaXB0PlxuICAgICAgPC9IZWxtZXQ+XG5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwicG9ydGZvbGlvLXNwYWNlLWNvbnRlbnQgcmVsYXRpdmUgei0xMFwiPlxuICAgICAgICA8QWJvdXQgLz5cbiAgICAgICAgPFN1c3BlbnNlIGZhbGxiYWNrPXs8c2VjdGlvbiBpZD1cInNraWxsc1wiIGNsYXNzTmFtZT1cIm1pbi1oLVs2MHZoXVwiIGFyaWEtbGFiZWw9XCJMb2FkaW5nIHNraWxsc1wiIC8+fT5cbiAgICAgICAgICA8U2tpbGxzIC8+XG4gICAgICAgIDwvU3VzcGVuc2U+XG5cbiAgICAgICAgPFN1c3BlbnNlIGZhbGxiYWNrPXs8UGFnZUxvYWRlciAvPn0+XG4gICAgICAgICAgPENlcnRpZmljYXRpb25zIC8+XG4gICAgICAgIDwvU3VzcGVuc2U+XG5cbiAgICAgICAgPFN1c3BlbnNlIGZhbGxiYWNrPXs8UGFnZUxvYWRlciAvPn0+XG4gICAgICAgICAgPFByb2plY3RzIC8+XG4gICAgICAgIDwvU3VzcGVuc2U+XG5cbiAgICAgICAgPFN1c3BlbnNlIGZhbGxiYWNrPXs8UGFnZUxvYWRlciAvPn0+XG4gICAgICAgICAgPFN0dWR5SHViQ1RBIC8+XG4gICAgICAgIDwvU3VzcGVuc2U+XG5cbiAgICAgICAgPFN1c3BlbnNlIGZhbGxiYWNrPXs8UGFnZUxvYWRlciAvPn0+XG4gICAgICAgICAgPENvbnRhY3QgLz5cbiAgICAgICAgPC9TdXNwZW5zZT5cbiAgICAgIDwvZGl2PlxuICAgIDwvZGl2PlxuICApO1xufTtcblxuZXhwb3J0IGRlZmF1bHQgUG9ydGZvbGlvUGFnZTtcbiJdfQ==

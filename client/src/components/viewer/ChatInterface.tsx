@@ -1,21 +1,12 @@
 // File: src/components/viewer/ChatInterface.tsx
 
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { Drawer } from 'vaul';
-import { PaperAirplaneIcon, XMarkIcon, ClipboardDocumentIcon, CheckIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
+import { PaperAirplaneIcon, XMarkIcon, ClipboardDocumentIcon, CheckIcon } from '@heroicons/react/24/solid';
 import TextareaAutosize from 'react-textarea-autosize';
 import Logo from '../Logo';
 import type { Suggestion } from '@/api';
 
 const LazyReactMarkdown = lazy(() => import('react-markdown'));
-
-const CONGRATULATIONS_STATE = {
-  message: "Congratulations! You've completed today's learning journey. Keep this momentum going!",
-  suggestions: [
-    { _id: 'fallback1', questionText: 'How can I improve my answer writing skills?', originalIndex: 0, isPYQ: false },
-    { _id: 'fallback2', questionText: 'What is an effective revision strategy?', originalIndex: 0, isPYQ: false }
-  ]
-};
 
 // Message structure from parent
 export interface Message {
@@ -40,7 +31,6 @@ interface ChatInterfaceProps {
   answeredIds: Set<string>;
   setAnsweredIds: (ids: Set<string>) => void;
   initialLoading: boolean;
-  setScrollToIndex: (index: number | null) => void;
   chatScrollRef: React.RefObject<HTMLDivElement>;
   activeSnapPoint?: number | string | null;
   smallSnapPoint?: number | string | null;
@@ -55,10 +45,7 @@ interface SharedChatUIProps extends ChatInterfaceProps {
 const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
   const {
     isMobile, messages, isLoading, onSendMessage,
-    journeys, activeJourneyId, setActiveJourneyId,
-    isCompleted, setIsCompleted, answeredIds, setAnsweredIds,
     initialLoading,
-    setScrollToIndex,
     chatScrollRef,
     // FIX: Destructure handleCloseDrawer
     handleCloseDrawer
@@ -67,66 +54,39 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
   const [input, setInput] = useState('');
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Helper to get the full list for the current journey (ALL 10 questions)
-  const activeQuestions: Suggestion[] = activeJourneyId ? journeys[activeJourneyId] || [] : [];
-
-  // Effect to check for completion status
-  useEffect(() => {
-    if (!activeJourneyId) {
-      setIsCompleted(false);
-      return;
-    }
-    const currentQuestions = journeys[activeJourneyId] || [];
-    const answeredCount = currentQuestions.filter(q => answeredIds.has(q._id)).length;
-    const allQuestionsAnswered = currentQuestions.length > 0 && answeredCount === currentQuestions.length;
-    setIsCompleted(allQuestionsAnswered);
-  }, [activeJourneyId, answeredIds, journeys, setIsCompleted]);
+  const hasConversation = messages.length > 0;
+  const starterPrompts = [
+    {
+      label: 'Rohit profile',
+      prompt: 'Give me a concise premium summary of Rohit Kumar profile.',
+    },
+    {
+      label: 'Study Hub',
+      prompt: 'Explain Study Hub features and how a student should use it.',
+    },
+    {
+      label: 'Projects',
+      prompt: 'Show Rohit Kumar best portfolio projects and what makes them strong.',
+    },
+    {
+      label: 'Skills',
+      prompt: 'Summarize Rohit Kumar technical skills and strengths.',
+    },
+  ];
 
   useEffect(() => {
     // Scroll to bottom when messages increase
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages.length]);
 
-  const handleJourneyChange = (newJourneyId: string) => {
-    // If empty string is selected, set to null to clear questions/chat filter
-    const nextJourneyId = newJourneyId === '' ? null : newJourneyId;
-    setActiveJourneyId(nextJourneyId);
-
-    // Smooth scroll to the bottom of the current view (or suggestions if new)
-    if (messages.length === 0 && nextJourneyId) {
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 50);
-    }
-  };
-
-  const handleSuggestionClick = (clickedSuggestion: Suggestion) => {
-    const fullQuestionText = `${clickedSuggestion.originalIndex}. ${clickedSuggestion.questionText}`;
-    const isAnswered = answeredIds.has(clickedSuggestion._id);
-
-    if (isAnswered) {
-      // Find the index of the user's message in the *filtered* messages list
-      const questionMessageIndex = messages.findIndex(
-        (msg) => msg.sender === 'user' && msg.text.trim() === fullQuestionText
-      );
-
-      if (questionMessageIndex !== -1) {
-        // Trigger scrolling to the user's question message
-        setScrollToIndex(questionMessageIndex);
-      }
-      return;
-    }
-
-    // New answer logic: send question to AI
-    onSendMessage(fullQuestionText);
-    const newAnsweredIds = new Set(answeredIds).add(clickedSuggestion._id);
-    setAnsweredIds(newAnsweredIds);
-  };
-
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSendMessage(input);
+    setInput('');
+  };
+
+  const handleStarterPrompt = (prompt: string) => {
+    onSendMessage(prompt);
     setInput('');
   };
 
@@ -136,133 +96,44 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
-  const JourneyDropdown = () => (
-    <div className="relative w-full">
-      <select
-        id="journey-select"
-        value={activeJourneyId || ''}
-        onChange={(e) => handleJourneyChange(e.target.value)}
-        className="w-full appearance-none rounded-lg border border-cyan-500 bg-slate-700 pl-3 pr-8 py-1.5 text-sm font-bold text-white shadow-lg cursor-pointer transition-colors focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
-      >
-        <option value="" className="text-slate-400 bg-slate-800 font-semibold">Select a Learning Journey</option>
-
-        {Object.keys(journeys).sort((a, b) => {
-          // Sort by 'today' first, then descending by date
-          if (a === 'today') return -1;
-          if (b === 'today') return 1;
-          return b.localeCompare(a);
-        }).map(journeyId => (
-          <option key={journeyId} value={journeyId} className="bg-slate-800 text-white font-semibold">
-            {journeyId === 'today' ? "Today's Journey" : `Journey for ${journeyId}`}
-          </option>
-        ))}
-      </select>
-      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-300">
-        <ChevronDownIcon className="h-4 w-4" />
-      </div>
-    </div>
-  );
-
-  const renderSuggestions = () => {
-    if (initialLoading && Object.keys(journeys).length === 0) {
-      return <p className="text-slate-400 text-sm animate-pulse">Building today's learning journey...</p>;
-    }
-
-    // Hide questions if no journey is active
-    if (!activeJourneyId) return null;
-
-    // Show fallback suggestions if the journey is completed
-    if (isCompleted) {
-      return (
-        // Fix for Suggestions shrinking - Case 1: Completed State
-        <div className='w-full flex-shrink-0'>
-          <p className="text-slate-300 text-sm mb-2">{CONGRATULATIONS_STATE.message}</p>
-          <div className="flex flex-wrap gap-2">
-            {CONGRATULATIONS_STATE.suggestions.map((q) => (
-              <button key={q._id} onClick={() => onSendMessage(q.questionText)} className="bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 transition-colors px-3 py-1 text-sm">{q.questionText}</button>
-            ))}
-          </div>
-        </div>
-      )
-    }
-
-    return (
-      // Fix for Suggestions shrinking - Case 2: Active Journey State
-      <div className="w-full flex-shrink-0">
-        <div className="flex flex-col gap-2">
-          {activeQuestions.map((q) => {
-            const isAnswered = answeredIds.has(q._id);
-            return (
-              <button
-                key={q._id}
-                onClick={() => handleSuggestionClick(q)}
-                disabled={isLoading}
-                className={`w-full rounded-lg p-3 text-sm text-left transition-colors ${isAnswered ? 'bg-slate-800/80 hover:bg-slate-800/90' : 'bg-slate-800 hover:bg-slate-700/50'}`}
-              >
-                <span className={`font-semibold mr-2 ${isAnswered ? 'text-slate-500' : (q.isPYQ ? 'text-amber-400' : 'text-cyan-400')}`}>{q.originalIndex}.</span>
-                <span className={`${isAnswered ? 'text-slate-500' : 'text-white'}`}>{q.questionText}</span>
-              </button>
-            );
-          })}
-        </div>
-        {messages.length > 0 && <p className="mt-4 text-slate-400 text-sm">Scroll down to view chat history or select a question from above to begin a new discussion.</p>}
-
-        {!activeJourneyId && (
-          <p className="mt-4 text-slate-400 text-sm">Select a learning journey from the dropdown above to view curated questions.</p>
-        )}
-      </div>
-    );
-  };
-
   return (
-    // 1. OUTER CONTAINER FIX: Use Flex Column and h-full (h-full is inherited from Drawer.Content)
     <div className={`relative flex-1 h-full flex flex-col bg-transparent`}>
       
-      {/* 2. HEADER FIX: Use flex-shrink-0 to ensure it never shrinks */}
-      <header className={`sticky top-0 z-20 border-b border-slate-700 flex items-center justify-between px-4 py-3 bg-neutral-950 flex-shrink-0`}>
-        {/* AI Assistant Header with Permanent Gradient and Conditional Pulse */}
-        <h2 className={`text-base font-semibold flex-shrink-0 ai-default-gradient 
+      <header className="sticky top-0 z-20 flex flex-shrink-0 items-center justify-between border-b border-slate-200/70 bg-white/88 px-4 py-3 shadow-[0_16px_38px_rgba(15,23,42,0.10)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/92 dark:shadow-[0_18px_44px_rgba(2,6,23,0.42)]">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border border-cyan-200/40 bg-cyan-50 shadow-sm dark:border-cyan-200/15 dark:bg-white/[0.04]">
+            <Logo isSmall={true} />
+          </span>
+          <h2 className={`truncate text-base font-black tracking-normal text-slate-950 dark:text-white
             ${isLoading || initialLoading ? 'ai-pulse' : ''}`}
-        >
-          AI Assistant
-        </h2>
+          >
+            Sarathi
+          </h2>
+        </div>
 
-        {!initialLoading && Object.keys(journeys).length > 0 && (
-          <div className="flex-grow flex justify-end max-w-[200px] sm:max-w-xs mx-3">
-            <JourneyDropdown />
-          </div>
-        )}
-
-        {/* Use custom handler for closing the drawer */}
-        {isMobile && (<button onClick={handleCloseDrawer} aria-label="Close chat" className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-700 ml-auto"><XMarkIcon className="h-5 w-5" /></button>)}
+        {isMobile && (<button onClick={handleCloseDrawer} aria-label="Close chat" className="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"><XMarkIcon className="h-5 w-5" /></button>)}
       </header>
 
-      {/* 3. MAIN AREA FIX: h-0 is the key for shrinkability. */}
       <main id="ai-chat-scroll-area"
-       ref={chatScrollRef} className={`flex-grow h-0 overflow-y-auto space-y-6 p-4 custom-scroll-smooth`}>
-        {messages.length === 0 ? (
-          // Welcome Block must have flex-shrink-0 to allow main to shrink
-          <div className='relative flex-shrink-0'> 
-            <div className="flex items-start mb-4 chat-message-container">
-              <div className="flex-shrink-0 mr-3">
-                <div className="bg-slate-800 p-2 rounded-full relative">
-                  <Logo isSmall={true} />
-                  {initialLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      {/* Removed old animation ring */}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="bg-slate-800 rounded-xl rounded-tl-none p-3 max-w-full flex-grow">
-                <p className="font-semibold  bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400  text-base ">Welcome! </p>
-                <p className="font-semibold  bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400  text-base">Hint: Ask me anything about Rohit's profile or general knowledge</p>
-                <p className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 text-base">Hint: Ask "ques 5 oct 2025" - today any date  </p>
-
-              </div>
+       ref={chatScrollRef} className={`sarathi-chat-scroll ${hasConversation ? 'overflow-y-auto' : 'sarathi-chat-scroll-empty overflow-y-hidden'} flex-grow h-0 space-y-6 p-4 custom-scroll-smooth`}>
+        {!hasConversation ? (
+          <div className="flex min-h-full flex-col items-center justify-center px-1 py-8 text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-200/40 bg-white shadow-[0_18px_46px_rgba(15,23,42,0.12)] dark:border-white/10 dark:bg-white/[0.045] dark:shadow-[0_18px_46px_rgba(2,6,23,0.35)]">
+              <Logo isSmall={true} />
             </div>
-
-            {activeJourneyId && renderSuggestions()}
+            <h3 className="mt-5 text-2xl font-black tracking-normal text-slate-950 dark:text-white">Ask Sarathi</h3>
+            <div className="mt-6 grid w-full max-w-sm grid-cols-1 gap-2 sm:grid-cols-2">
+              {starterPrompts.map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => handleStarterPrompt(item.prompt)}
+                  className="rounded-2xl border border-slate-200/80 bg-white/88 px-4 py-3 text-left text-sm font-black text-slate-700 shadow-[0_14px_34px_rgba(15,23,42,0.10)] transition hover:-translate-y-0.5 hover:border-cyan-300 hover:bg-cyan-50 hover:text-slate-950 focus:outline-none focus:ring-2 focus:ring-cyan-400/25 dark:border-white/10 dark:bg-white/[0.045] dark:text-slate-100 dark:shadow-[0_14px_34px_rgba(2,6,23,0.26)] dark:hover:border-cyan-200/25 dark:hover:bg-cyan-300/10 dark:hover:text-white dark:focus:ring-cyan-300/20"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
           </div>
         ) : (
           <>
@@ -274,9 +145,8 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
                 // FIX: Ensure every chat message block is shrinkable
                 <div key={index} className={`chat-message-container min-h-0 flex-shrink ${isUser ? 'flex justify-end' : 'flex justify-start'}`}>
                   <div className={`flex flex-col max-w-full min-h-0 flex-shrink`}>
-                    {/* 1. Profile/Icon Row (Top) */}
                     <div className={`flex items-center mb-1 ${isUser ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`p-2 rounded-full flex-shrink-0 ${isUser ? 'bg-cyan-600' : 'bg-slate-700'} ${isUser ? 'order-2 ml-2' : 'order-1 mr-2'}`}>
+                      <div className={`flex-shrink-0 rounded-full border p-2 shadow-lg ${isUser ? 'order-2 ml-2 border-cyan-200/25 bg-cyan-500/20 shadow-cyan-950/40' : 'order-1 mr-2 border-amber-100/15 bg-slate-900/80 shadow-slate-950/50'}`}>
                         {isUser ? (
                           <span className="font-bold text-white text-sm h-6 w-6 flex items-center justify-center">You</span>
                         ) : (
@@ -287,20 +157,18 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
                       </div>
                     </div>
 
-                    {/* 2. Message Content Row (Full Width Below Icon) */}
                     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`group relative p-3 rounded-xl max-w-full text-white ${isUser ? 'bg-cyan-700 rounded-br-none' : 'bg-slate-800 rounded-bl-none'}`}>
-                        <div className="prose prose-invert prose-p:my-2 prose-headings:my-2 prose-ul:my-2">
+                      <div className={`group relative max-w-full rounded-2xl border p-3 shadow-[0_18px_44px_rgba(15,23,42,0.14)] dark:shadow-[0_18px_44px_rgba(2,6,23,0.30)] ${isUser ? 'rounded-br-none border-cyan-200/30 bg-cyan-600/90 text-white' : 'rounded-bl-none border-slate-200/80 bg-white/90 text-slate-800 dark:border-white/10 dark:bg-white/[0.055] dark:text-white'}`}>
+                        <div className={`${isUser ? 'prose-invert' : 'prose-slate dark:prose-invert'} prose prose-p:my-2 prose-headings:my-2 prose-ul:my-2`}>
                           <Suspense fallback={<p>{msg.text}</p>}>
                             <LazyReactMarkdown>{msg.text}</LazyReactMarkdown>
                           </Suspense>
 
-                          {/* CURSOR FIX: Append cursor after markdown is rendered */}
                           {isStreaming && <span className="blinking-cursor"></span>}
                         </div>
 
                         {msg.sender === 'ai' && !isLoading && msg.text && (
-                          <button onClick={() => handleCopy(msg.text, index)} className="absolute -top-2 -right-2 bg-slate-600 p-1 rounded-full opacity-0 group-hover:opacity-100">
+                          <button onClick={() => handleCopy(msg.text, index)} className="absolute -right-2 -top-2 rounded-full border border-white/10 bg-slate-900/90 p-1 opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
                             {copiedIndex === index ? <CheckIcon className="h-4 w-4 text-green-400" /> : <ClipboardDocumentIcon className="h-4 w-4 text-white" />}
                           </button>
                         )}
@@ -310,18 +178,15 @@ const SharedChatUI: React.FC<SharedChatUIProps> = (props) => {
                 </div>
               );
             })}
-            {/* Suggestions Wrapper Fix */}
-            {!isLoading && activeJourneyId && <div className="pt-4 flex-shrink-0">{renderSuggestions()}</div>}
           </>
         )}
         <div ref={messagesEndRef} />
       </main>
 
-      {/* 4. FOOTER FIX: Use flex-shrink-0 to ensure it never shrinks */}
-      <footer className="p-2 flex-shrink-0">
-        <form onSubmit={handleFormSubmit} className="flex items-start gap-2 border border-slate-700 bg-slate-800 rounded-xl p-2 focus-within:ring-2 focus-within:ring-cyan-500">
-          <TextareaAutosize value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleFormSubmit(e); } }} placeholder="Ask me anything..." className="flex-1 bg-transparent resize-none text-white max-h-40 focus:outline-none" maxRows={6} />
-          <button type="submit" className="bg-cyan-600 hover:bg-cyan-700 p-2 rounded-full disabled:bg-slate-600" disabled={isLoading || !input.trim()}><PaperAirplaneIcon className="h-5 w-5 text-white" /></button>
+      <footer className="flex-shrink-0 border-t border-slate-200/70 bg-white/88 p-3 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/80">
+        <form onSubmit={handleFormSubmit} className="flex items-start gap-2 rounded-2xl border border-slate-200/80 bg-slate-50/90 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.72),0_14px_34px_rgba(15,23,42,0.10)] focus-within:border-cyan-300 focus-within:ring-2 focus-within:ring-cyan-400/20 dark:border-white/10 dark:bg-white/[0.055] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_18px_40px_rgba(2,6,23,0.35)] dark:focus-within:border-cyan-200/30">
+          <TextareaAutosize value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleFormSubmit(e); } }} placeholder="Message Sarathi" className="max-h-40 flex-1 resize-none bg-transparent px-2 py-1 text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none dark:text-white dark:placeholder:text-slate-400" maxRows={6} />
+          <button type="submit" className="rounded-full bg-slate-950 p-2 text-white shadow-[0_12px_30px_rgba(15,23,42,0.18)] transition hover:scale-105 disabled:scale-100 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none dark:bg-white dark:text-slate-950 dark:shadow-[0_12px_30px_rgba(2,6,23,0.24)] dark:disabled:bg-slate-700 dark:disabled:text-slate-300" disabled={isLoading || !input.trim()}><PaperAirplaneIcon className="h-5 w-5" /></button>
         </form>
       </footer>
     </div>

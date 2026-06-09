@@ -1,0 +1,11 @@
+/* TEAM */
+Owner: Rohit Kumar
+Role: Full-Stack Developer and Study Hub creator
+GitHub: https://github.com/Rohitkumar9569
+Site: https://rohitkumar-portfolio.vercel.app/
+
+/* SITE */
+Name: Rohit Kumar Study Hub
+Purpose: Free exam preparation workspace for PYQs, notes, books, syllabus, search, saved resources, and portfolio.
+Stack: React, TypeScript, Tailwind CSS, Node.js, MongoDB
+Language: English, Hinglish

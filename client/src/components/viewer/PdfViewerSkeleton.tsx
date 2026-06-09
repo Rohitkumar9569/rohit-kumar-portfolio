@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PdfViewerSkeleton = () => {
   const isMobile = window.innerWidth < 768;
 

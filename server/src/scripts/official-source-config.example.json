@@ -1,0 +1,67 @@
+[
+  {
+    "id": "cbse-class-10-sqp-2025-26",
+    "sourceName": "CBSE Academic",
+    "sourceUrl": "https://cbseacademic.nic.in/",
+    "pageUrl": "https://cbseacademic.nic.in/sqp_classx_2025-26.html",
+    "targetBasePath": ["School Boards", "CBSE", "Class 10"],
+    "titlePrefix": "CBSE Class 10",
+    "year": 2026,
+    "includeAny": [".pdf"],
+    "excludeAny": ["Circular"],
+    "rightsNote": "Official CBSE Academic sample paper/marking scheme. Keep official URL unless mirror permission is confirmed."
+  },
+  {
+    "id": "cbse-class-12-sqp-2025-26",
+    "sourceName": "CBSE Academic",
+    "sourceUrl": "https://cbseacademic.nic.in/",
+    "pageUrl": "https://cbseacademic.nic.in/sqp_classxii_2025-26.html",
+    "targetBasePath": ["School Boards", "CBSE", "Class 12"],
+    "titlePrefix": "CBSE Class 12",
+    "year": 2026,
+    "includeAny": [".pdf"],
+    "excludeAny": ["Circular"],
+    "rightsNote": "Official CBSE Academic sample paper/marking scheme. Keep official URL unless mirror permission is confirmed."
+  },
+  {
+    "id": "upsc-previous-question-papers",
+    "enabled": true,
+    "parser": "upsc-pyq",
+    "sourceName": "UPSC",
+    "sourceUrl": "https://www.upsc.gov.in/examinations/previous-question-papers",
+    "pageUrl": "https://www.upsc.gov.in/examinations/previous-question-papers",
+    "pageUrls": [
+      "https://www.upsc.gov.in/examinations/previous-question-papers",
+      "https://www.upsc.gov.in/examinations/previous-question-papers/archives"
+    ],
+    "targetBasePath": ["Competitive Exams", "UPSC"],
+    "titlePrefix": "UPSC",
+    "includeAny": [".pdf"],
+    "rightsNote": "Official UPSC previous question paper. Keep official URL/source attribution unless mirror permission is confirmed."
+  },
+  {
+    "id": "upsc-syllabus",
+    "enabled": true,
+    "parser": "upsc-syllabus",
+    "sourceName": "UPSC",
+    "sourceUrl": "https://www.upsc.gov.in/examinations/revised-syllabus-scheme",
+    "pageUrl": "https://www.upsc.gov.in/examinations/revised-syllabus-scheme",
+    "targetBasePath": ["Competitive Exams", "UPSC"],
+    "targetSection": "Syllabus",
+    "resourceType": "syllabus",
+    "titlePrefix": "UPSC",
+    "includeAny": [".pdf"],
+    "rightsNote": "Official UPSC syllabus/scheme PDF. Keep official URL/source attribution unless mirror permission is confirmed."
+  },
+  {
+    "id": "gate-2024-question-papers",
+    "sourceName": "GATE 2024 IISc",
+    "sourceUrl": "https://gate2024.iisc.ac.in/question-papers/",
+    "pageUrl": "https://gate2024.iisc.ac.in/question-papers/",
+    "targetBasePath": ["Entrance Exams", "GATE"],
+    "titlePrefix": "GATE 2024",
+    "year": 2024,
+    "includeAny": [".pdf"],
+    "rightsNote": "Official GATE 2024 paper/answer key. Keep official URL unless mirror permission is confirmed."
+  }
+]

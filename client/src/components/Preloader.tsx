@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../api';
 
 // --- Animation Variants ---
 
@@ -150,7 +151,8 @@ interface PreloaderProps {
 
 const Preloader: React.FC<PreloaderProps> = ({ onLoadComplete, imageToPreload }) => {
     const [isMinTimeMet, setIsMinTimeMet] = useState(false);
-    const [isServerWoken, setIsServerWoken] = useState(!!sessionStorage.getItem('server_woken'));
+    const serverWakeUrl = API_BASE_URL ? `${API_BASE_URL}/api/health` : '';
+    const [isServerWoken, setIsServerWoken] = useState(!serverWakeUrl || !!sessionStorage.getItem('server_woken'));
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [progress, setProgress] = useState(0);
 
@@ -159,7 +161,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onLoadComplete, imageToPreload })
 
     // Effect 1: Minimum Display Time & Progress Simulation (Unchanged)
     useEffect(() => {
-        setTimeout(() => setIsMinTimeMet(true), 3000);
+        setTimeout(() => setIsMinTimeMet(true), 650);
 
         const progressInterval = setInterval(() => {
             setProgress(prev => {
@@ -169,17 +171,17 @@ const Preloader: React.FC<PreloaderProps> = ({ onLoadComplete, imageToPreload })
                 }
                 return prev + 2;
             });
-        }, 80);
+        }, 24);
         
         return () => clearInterval(progressInterval);
     }, []);
 
     // Effect 2: Server Wake-up Call (Unchanged)
     useEffect(() => {
-        if (isServerWoken) return;
+        if (isServerWoken || !serverWakeUrl) return;
         const wakeUpServer = async () => {
             try {
-                await axios.get(import.meta.env.VITE_API_URL);
+                await axios.get(serverWakeUrl);
                 sessionStorage.setItem('server_woken', 'true');
             } catch (error) {
                 console.error('Server wake-up call failed:', error);
@@ -188,7 +190,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onLoadComplete, imageToPreload })
             }
         };
         wakeUpServer();
-    }, [isServerWoken]);
+    }, [isServerWoken, serverWakeUrl]);
 
   
 
@@ -197,7 +199,6 @@ const Preloader: React.FC<PreloaderProps> = ({ onLoadComplete, imageToPreload })
         const img = new Image();
         img.src = imageToPreload;    
         img.onload = () => {
-            console.log("Profile photo successfully preloaded.");
             setIsImageLoaded(true);
         };
         img.onerror = () => {
@@ -211,7 +212,7 @@ const Preloader: React.FC<PreloaderProps> = ({ onLoadComplete, imageToPreload })
     useEffect(() => {
         if (isLoadComplete) {
             setProgress(100);
-            setTimeout(onLoadComplete, 1200);
+            setTimeout(onLoadComplete, 250);
         }
     }, [isLoadComplete, onLoadComplete]);
 

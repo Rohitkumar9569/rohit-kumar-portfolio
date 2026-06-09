@@ -1,0 +1,542 @@
+export type StudyHubExamSpec = {
+  category: string;
+  family: string;
+  exam: string;
+  icon: string;
+  branches: string[];
+  aliases?: string[];
+  tone?: 'blue' | 'cyan' | 'emerald' | 'amber' | 'rose' | 'violet' | 'indigo' | 'slate';
+};
+
+const coreEntranceResourceBranches = [
+  'Syllabus',
+  'Syllabus / Official Syllabus',
+  'Syllabus / Exam Pattern',
+  'Previous Year Papers',
+  'Previous Year Papers / Year-wise',
+  'Previous Year Papers / Topic-wise PYQs',
+  'Study Material',
+  'Study Material / Available Official Material',
+  'Study Material / Notes',
+  'Study Material / Revision Material',
+  'Mock Tests',
+  'Answer Keys',
+  'Updates',
+];
+
+const ncertBridgeBranches = [
+  'NCERT Books / Class 11 Foundation',
+  'NCERT Books / Class 12 Foundation',
+  'NCERT Bridge / Physics',
+  'NCERT Bridge / Chemistry',
+  'NCERT Bridge / Biology',
+  'NCERT Bridge / Mathematics',
+];
+
+const needsNcertBridge = (spec: StudyHubExamSpec) => {
+  const key = `${spec.family} ${spec.exam}`.toLowerCase();
+  return [
+    'cuet ug',
+    'jee',
+    'bitsat',
+    'state engineering',
+    'neet ug',
+    'nursing',
+    'aiims norcet',
+    'nata',
+    'b.arch',
+    'b.planning',
+    'icar',
+    'agriculture',
+    'veterinary',
+  ].some((term) => key.includes(term));
+};
+
+const isGateSpec = (spec: StudyHubExamSpec) => spec.exam.trim().toLowerCase() === 'gate';
+
+const withCoreEntranceBranches = (spec: StudyHubExamSpec) => ({
+  ...spec,
+  branches: Array.from(new Set([
+    ...(isGateSpec(spec) ? [] : coreEntranceResourceBranches),
+    ...(needsNcertBridge(spec) ? ncertBridgeBranches : []),
+    ...spec.branches,
+  ])),
+});
+
+export type GateTestPaper = {
+  code: string;
+  name: string;
+  aliases?: string[];
+};
+
+export const gateTestPapers: GateTestPaper[] = [
+  { code: 'AE', name: 'Aerospace Engineering' },
+  { code: 'AG', name: 'Agricultural Engineering' },
+  { code: 'AR', name: 'Architecture and Planning' },
+  { code: 'BM', name: 'Biomedical Engineering' },
+  { code: 'BT', name: 'Biotechnology' },
+  { code: 'CE', name: 'Civil Engineering', aliases: ['Civil'] },
+  { code: 'CH', name: 'Chemical Engineering', aliases: ['Chemical'] },
+  { code: 'CS', name: 'Computer Science and Information Technology', aliases: ['CSE', 'Computer Science', 'Computer Science and IT'] },
+  { code: 'CY', name: 'Chemistry' },
+  { code: 'DA', name: 'Data Science and Artificial Intelligence', aliases: ['Data Science and AI', 'Data Science'] },
+  { code: 'EC', name: 'Electronics and Communication Engineering', aliases: ['ECE', 'Electronics', 'Electronics and Communication'] },
+  { code: 'EE', name: 'Electrical Engineering', aliases: ['Electrical'] },
+  { code: 'ES', name: 'Environmental Science and Engineering', aliases: ['Environmental Science'] },
+  { code: 'EY', name: 'Ecology and Evolution' },
+  { code: 'GE', name: 'Geomatics Engineering' },
+  { code: 'GG', name: 'Geology and Geophysics' },
+  { code: 'IN', name: 'Instrumentation Engineering', aliases: ['Instrumentation'] },
+  { code: 'MA', name: 'Mathematics' },
+  { code: 'ME', name: 'Mechanical Engineering', aliases: ['Mechanical'] },
+  { code: 'MN', name: 'Mining Engineering', aliases: ['Mining'] },
+  { code: 'MT', name: 'Metallurgical Engineering', aliases: ['Metallurgical'] },
+  { code: 'NM', name: 'Naval Architecture and Marine Engineering' },
+  { code: 'PE', name: 'Petroleum Engineering', aliases: ['Petroleum'] },
+  { code: 'PH', name: 'Physics' },
+  { code: 'PI', name: 'Production and Industrial Engineering', aliases: ['Production and Industrial'] },
+  { code: 'ST', name: 'Statistics' },
+  { code: 'TF', name: 'Textile Engineering and Fibre Science', aliases: ['Textile Engineering'] },
+  { code: 'XE', name: 'Engineering Sciences' },
+  { code: 'XH', name: 'Humanities and Social Sciences' },
+  { code: 'XL', name: 'Life Sciences' },
+];
+
+const gatePaperDisplayNames: Record<string, string> = {
+  AE: 'GATE Aerospace',
+  AG: 'GATE Agricultural',
+  AR: 'GATE Architecture',
+  BM: 'GATE Biomedical',
+  BT: 'GATE Biotechnology',
+  CE: 'GATE Civil',
+  CH: 'GATE Chemical',
+  CS: 'GATE CSE',
+  CY: 'GATE Chemistry',
+  DA: 'GATE DA',
+  EC: 'GATE ECE',
+  EE: 'GATE Electrical',
+  ES: 'GATE Environmental Science',
+  EY: 'GATE Ecology and Evolution',
+  GE: 'GATE Geomatics',
+  GG: 'GATE Geology and Geophysics',
+  IN: 'GATE Instrumentation',
+  MA: 'GATE Mathematics',
+  ME: 'GATE Mechanical',
+  MN: 'GATE Mining',
+  MT: 'GATE Metallurgical',
+  NM: 'GATE Naval Architecture',
+  PE: 'GATE Petroleum',
+  PH: 'GATE Physics',
+  PI: 'GATE Production and Industrial',
+  ST: 'GATE Statistics',
+  TF: 'GATE Textile',
+  XE: 'GATE Engineering Sciences',
+  XH: 'GATE Humanities and Social Sciences',
+  XL: 'GATE Life Sciences',
+};
+
+export const getGatePaperBranchName = (paper: GateTestPaper) =>
+  gatePaperDisplayNames[paper.code] || `GATE ${paper.code} ${paper.name}`;
+
+export const gateResourceFolders = ['Overview', 'Syllabus', 'Previous Year Papers', 'Study Material', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'];
+
+export const gateCommonStudyMaterial = ['General Aptitude / Quantitative Aptitude', 'General Aptitude / Verbal Ability'];
+
+export const gateStudyMaterialByCode: Record<string, string[]> = {
+  AE: ['Engineering Mathematics', 'Flight Mechanics', 'Aerodynamics', 'Structures', 'Propulsion'],
+  AG: ['Engineering Mathematics', 'Soil and Water Conservation', 'Farm Machinery', 'Irrigation and Drainage', 'Food Process Engineering'],
+  AR: ['Architecture', 'Planning', 'Building Materials', 'Urban Design', 'Services and Infrastructure'],
+  BM: ['Engineering Mathematics', 'Electrical Circuits', 'Signals and Systems', 'Biomechanics', 'Medical Instrumentation'],
+  BT: ['Engineering Mathematics', 'Biochemistry', 'Microbiology', 'Molecular Biology', 'Bioprocess Engineering'],
+  CE: ['Engineering Mathematics', 'Structural Engineering', 'Geotechnical Engineering', 'Water Resources', 'Transportation Engineering', 'Environmental Engineering'],
+  CH: ['Engineering Mathematics', 'Fluid Mechanics', 'Heat Transfer', 'Mass Transfer', 'Chemical Reaction Engineering', 'Process Control'],
+  CS: ['Engineering Mathematics', 'Discrete Mathematics', 'Data Structures Algorithms', 'Theory of Computation', 'Operating System', 'DBMS', 'Computer Networks', 'Compiler Design', 'Digital Logic', 'Computer Architecture'],
+  CY: ['Physical Chemistry', 'Organic Chemistry', 'Inorganic Chemistry'],
+  DA: ['Linear Algebra and Statistics', 'Programming Python', 'Data Structures Algorithms', 'Machine Learning', 'Artificial Intelligence', 'Database Management'],
+  EC: ['Engineering Mathematics', 'Network Theory', 'Signals and Systems', 'Analog Circuits', 'Digital Circuits', 'Control Systems', 'Communications', 'Electromagnetics'],
+  EE: ['Engineering Mathematics', 'Electric Circuits', 'Electrical Machines', 'Power Systems', 'Power Electronics', 'Control Systems', 'Signals and Systems'],
+  ES: ['Environmental Chemistry', 'Environmental Microbiology', 'Water and Wastewater Treatment', 'Air Pollution', 'Solid Waste Management'],
+  EY: ['Ecology', 'Evolution', 'Mathematics and Quantitative Ecology', 'Behavioral Ecology'],
+  GE: ['Engineering Mathematics', 'Surveying and Mapping', 'Remote Sensing', 'GIS', 'Image Processing and Analysis'],
+  GG: ['Geology', 'Geophysics', 'Structural Geology', 'Petrology', 'Geochemistry'],
+  IN: ['Engineering Mathematics', 'Electrical Circuits', 'Signals and Systems', 'Control Systems', 'Sensors and Industrial Instrumentation'],
+  MA: ['Linear Algebra', 'Real Analysis', 'Complex Analysis', 'Algebra', 'Topology', 'Probability and Statistics'],
+  ME: ['Engineering Mathematics', 'Thermodynamics', 'Fluid Mechanics', 'Manufacturing', 'Machine Design', 'Heat Transfer', 'Industrial Engineering'],
+  MN: ['Engineering Mathematics', 'Mine Development', 'Surface Mining', 'Underground Mining', 'Mine Ventilation'],
+  MT: ['Engineering Mathematics', 'Thermodynamics', 'Physical Metallurgy', 'Mechanical Metallurgy', 'Manufacturing Processes'],
+  NM: ['Engineering Mathematics', 'Fluid Mechanics', 'Ship Resistance', 'Marine Structures', 'Marine Engineering'],
+  PE: ['Engineering Mathematics', 'Petroleum Exploration', 'Reservoir Engineering', 'Drilling Engineering', 'Production Engineering'],
+  PH: ['Mathematical Physics', 'Classical Mechanics', 'Electromagnetic Theory', 'Quantum Mechanics', 'Thermodynamics and Statistical Physics'],
+  PI: ['Engineering Mathematics', 'Manufacturing Processes', 'Industrial Engineering', 'Operations Research', 'Quality and Reliability'],
+  ST: ['Probability', 'Statistical Inference', 'Regression Analysis', 'Design of Experiments', 'Multivariate Analysis'],
+  TF: ['Engineering Mathematics', 'Textile Fibres', 'Yarn Manufacture', 'Fabric Manufacture', 'Textile Testing'],
+  XE: ['Engineering Mathematics', 'Fluid Mechanics', 'Materials Science', 'Solid Mechanics', 'Thermodynamics', 'Energy Science'],
+  XH: ['Reasoning and Comprehension', 'Economics', 'English', 'Linguistics', 'Philosophy', 'Psychology', 'Sociology'],
+  XL: ['Chemistry', 'Biochemistry', 'Botany', 'Microbiology', 'Zoology', 'Food Technology'],
+};
+
+export const gateBranchFirstBranches = gateTestPapers.flatMap((paper) => {
+  const branchName = getGatePaperBranchName(paper);
+  const resourceFolders = gateResourceFolders.map((folder) => `${branchName} / ${folder}`);
+  const studyTopics = [...gateCommonStudyMaterial, ...(gateStudyMaterialByCode[paper.code] || [])].map(
+    (topic) => `${branchName} / Study Material / ${topic}`
+  );
+  return [...resourceFolders, ...studyTopics];
+});
+
+const rawDetailedEntranceSpecs: StudyHubExamSpec[] = [
+  {
+    category: 'Entrance Exams',
+    family: 'CUET',
+    exam: 'CUET UG',
+    icon: 'university',
+    aliases: ['Common University Entrance Test UG', 'NTA CUET UG', 'Central University Admission', 'DU Admission via CUET', 'BHU Admission CUET', 'JNU Admission CUET', 'CUET 2026'],
+    branches: ['Overview', 'Syllabus / Language Tests', 'Syllabus / Domain Subjects', 'Syllabus / General Test', 'Previous Year Papers / 2025', 'Previous Year Papers / 2024', 'Previous Year Papers / 2023', 'Previous Year Papers / 2022', 'Study Material / General Test', 'Study Material / English', 'Study Material / Hindi', 'Study Material / Mathematics', 'Study Material / Physics', 'Study Material / Chemistry', 'Study Material / Biology', 'Study Material / Accountancy', 'Study Material / Business Studies', 'Study Material / Economics', 'Study Material / History', 'Study Material / Geography', 'Study Material / Political Science', 'Study Material / Sociology', 'Study Material / Psychology', 'Study Material / Computer Science', 'Mock Tests / General Test', 'Mock Tests / Domain Subject-wise', 'Answer Keys', 'Strategy / University Cut-off Guide', 'Strategy / Subject Combination Guide', 'Updates / Notification', 'Updates / Admit Card', 'Updates / Result', 'University Preference Guide'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'CUET',
+    exam: 'CUET PG',
+    icon: 'university',
+    aliases: ['Common University Entrance Test PG', 'CUET Postgraduate', 'NTA CUET PG', 'Central University PG Admission', 'MA Entrance Central University', 'MSc Entrance Central University'],
+    branches: ['Overview', 'Syllabus / Subject-wise PG', 'Previous Year Papers / Subject-wise', 'Study Material / General Paper', 'Study Material / Domain Subject-wise', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'JEE',
+    exam: 'JEE Main',
+    icon: 'nuclear',
+    aliases: ['Joint Entrance Examination Main', 'JEE Mains', 'NTA JEE', 'B.Tech Entrance', 'Engineering Entrance India', 'NITs Entrance', 'IIITs Entrance'],
+    branches: ['Overview', 'Syllabus / Physics Class 11', 'Syllabus / Physics Class 12', 'Syllabus / Chemistry Physical', 'Syllabus / Chemistry Organic', 'Syllabus / Chemistry Inorganic', 'Syllabus / Mathematics', 'Previous Year Papers / January Session', 'Previous Year Papers / April Session', 'Study Material / Physics / Mechanics', 'Study Material / Physics / Thermodynamics', 'Study Material / Physics / Electrostatics', 'Study Material / Physics / Current Electricity', 'Study Material / Physics / Magnetism', 'Study Material / Physics / Optics', 'Study Material / Physics / Modern Physics', 'Study Material / Chemistry / Physical Chemistry', 'Study Material / Chemistry / Organic Chemistry', 'Study Material / Chemistry / Inorganic Chemistry', 'Study Material / Mathematics / Algebra', 'Study Material / Mathematics / Calculus', 'Study Material / Mathematics / Coordinate Geometry', 'Study Material / Mathematics / Trigonometry', 'Study Material / Mathematics / Vectors & 3D', 'Chapter-wise PYQs / Physics', 'Chapter-wise PYQs / Chemistry', 'Chapter-wise PYQs / Mathematics', 'Mock Tests / Full Mock', 'Mock Tests / Subject-wise', 'Answer Keys', 'Strategy / 12 Month Plan', 'Strategy / 6 Month Plan', 'Strategy / Topper Strategy', 'Strategy / Booklist', 'Updates / Notification', 'Updates / Admit Card', 'Updates / Result', 'Updates / Cut-off & College Predictor'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'JEE',
+    exam: 'JEE Advanced',
+    icon: 'nuclear',
+    aliases: ['IIT JEE', 'IIT Entrance', 'Joint Entrance Examination Advanced', 'IITs Admission', 'JEE Advanced Paper 1', 'JEE Advanced Paper 2'],
+    branches: ['Overview', 'Syllabus / Physics', 'Syllabus / Chemistry', 'Syllabus / Mathematics', 'Previous Year Papers / Paper 1', 'Previous Year Papers / Paper 2', 'Study Material / Physics Advanced Level', 'Study Material / Chemistry Advanced Level', 'Study Material / Mathematics Advanced Level', 'Chapter-wise PYQs', 'Mock Tests / Paper 1 Mock', 'Mock Tests / Paper 2 Mock', 'Answer Keys', 'Strategy / Topper Strategy', 'Strategy / After JEE Main Plan', 'Updates / Notification', 'Updates / Result', 'Updates / Rank vs Branch Guide', 'IIT Branch Selection Guide'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: '',
+    exam: 'BITSAT',
+    icon: 'gear',
+    aliases: ['BITS Pilani Admission Test', 'BITS Admission', 'BITSAT Exam', 'BITS Goa', 'BITS Hyderabad'],
+    branches: ['Overview', 'Syllabus / Physics', 'Syllabus / Chemistry', 'Syllabus / Mathematics', 'Syllabus / English Proficiency', 'Syllabus / Logical Reasoning', 'Previous Year Papers', 'Study Material / Physics', 'Study Material / Chemistry', 'Study Material / Mathematics', 'Study Material / English', 'Study Material / Logical Reasoning', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: '',
+    exam: 'State Engineering Entrances',
+    icon: 'gear',
+    aliases: ['MHT CET', 'WBJEE', 'KCET', 'COMEDK UGET', 'AP EAMCET', 'TS EAMCET', 'KEAM', 'GUJCET', 'State Engineering Entrance'],
+    branches: ['State Exams / MHT CET Maharashtra', 'State Exams / WBJEE West Bengal', 'State Exams / KCET Karnataka', 'State Exams / COMEDK Karnataka', 'State Exams / AP EAMCET Andhra Pradesh', 'State Exams / TS EAMCET Telangana', 'State Exams / KEAM Kerala', 'State Exams / GUJCET Gujarat', 'State Exams / OJEE Odisha', 'State Exams / BCECE Bihar', 'State Exams / HP CET Himachal', 'Previous Year Papers / MHT CET', 'Previous Year Papers / WBJEE', 'Previous Year Papers / KCET', 'Study Material / Physics', 'Study Material / Chemistry', 'Study Material / Mathematics', 'Study Material / Biology', 'Mock Tests / MHT CET', 'Mock Tests / WBJEE', 'Strategy / State-wise', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: '',
+    exam: 'GATE',
+    icon: 'gate',
+    aliases: ['Graduate Aptitude Test in Engineering', 'GATE CSE', 'GATE CS', 'GATE ECE', 'GATE EC', 'GATE EE', 'GATE ME', 'GATE CE', 'GATE DA', 'IIT MTech Admission', 'PSU Recruitment GATE'],
+    branches: gateBranchFirstBranches,
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Medical & Paramedical',
+    exam: 'NEET UG',
+    icon: 'neet',
+    aliases: ['National Eligibility cum Entrance Test', 'MBBS Entrance', 'Medical Entrance India', 'BDS Entrance', 'AYUSH Entrance', 'NTA NEET'],
+    branches: ['Overview', 'Syllabus / Physics Class 11', 'Syllabus / Physics Class 12', 'Syllabus / Chemistry Physical', 'Syllabus / Chemistry Organic', 'Syllabus / Chemistry Inorganic', 'Syllabus / Biology Botany', 'Syllabus / Biology Zoology', 'Previous Year Papers', 'Study Material / Physics / Mechanics', 'Study Material / Physics / Thermodynamics', 'Study Material / Physics / Optics', 'Study Material / Physics / Modern Physics', 'Study Material / Physics / Electrostatics', 'Study Material / Chemistry / Physical Chemistry', 'Study Material / Chemistry / Organic Chemistry', 'Study Material / Chemistry / Inorganic Chemistry', 'Study Material / Biology / Cell Biology', 'Study Material / Biology / Plant Physiology', 'Study Material / Biology / Human Physiology', 'Study Material / Biology / Genetics & Evolution', 'Study Material / Biology / Ecology', 'Study Material / Biology / Biotechnology', 'Study Material / Biology / Reproduction', 'Chapter-wise PYQs / Physics', 'Chapter-wise PYQs / Chemistry', 'Chapter-wise PYQs / Biology', 'Mock Tests / Full Mock', 'Mock Tests / Subject-wise', 'Mock Tests / Chapter-wise', 'Answer Keys', 'Strategy / 12 Month Plan', 'Strategy / 6 Month Plan', 'Strategy / Topper Strategy', 'Strategy / Booklist', 'Updates / Notification', 'Updates / Admit Card', 'Updates / Result', 'Updates / State Quota Cut-off', 'Updates / AIQ Cut-off', 'Counselling Guide / MCC Counselling', 'Counselling Guide / State Quota'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Medical & Paramedical',
+    exam: 'NEET PG',
+    icon: 'medical',
+    aliases: ['NEET Postgraduate', 'MD MS Entrance', 'PG Medical Entrance', 'NBE NEET PG', 'Doctor Specialist Exam'],
+    branches: ['Overview', 'Syllabus', 'Previous Year Papers', 'Study Material / Pre-Clinical Subjects', 'Study Material / Para-Clinical Subjects', 'Study Material / Clinical Subjects', 'Study Material / Surgery', 'Study Material / Medicine', 'Study Material / OBG', 'Study Material / Pediatrics', 'Study Material / Psychiatry', 'Study Material / Orthopedics', 'Study Material / ENT', 'Study Material / Ophthalmology', 'Study Material / Dermatology', 'Study Material / Radiology', 'Study Material / Pathology', 'Study Material / Pharmacology', 'Study Material / Microbiology', 'Study Material / Forensic Medicine', 'Study Material / Anatomy', 'Study Material / Physiology', 'Study Material / Biochemistry', 'Study Material / Community Medicine', 'Study Material / Anesthesia', 'Mock Tests', 'Answer Keys', 'Strategy / Subject Rank Prediction', 'Updates / Notification', 'Updates / Result', 'Updates / Counselling MCC'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Medical & Paramedical',
+    exam: 'INI CET',
+    icon: 'medical',
+    aliases: ['Institute of National Importance Combined Entrance Test', 'AIIMS PG Entrance', 'PGIMER Entrance', 'JIPMER PG', 'NIMHANS Entrance', 'INI SS Super Speciality'],
+    branches: ['Overview', 'Syllabus', 'Previous Year Papers', 'Study Material / Clinical Subjects', 'Study Material / Basic Sciences', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Medical & Paramedical',
+    exam: 'FMGE',
+    icon: 'neet',
+    aliases: ['Foreign Medical Graduate Examination', 'MCI Screening Test', 'NMC FMGE', 'Foreign Medical Doctor Exam', 'Licentiate Exam'],
+    branches: ['Overview', 'Syllabus', 'Previous Year Papers', 'Study Material / All Medical Subjects', 'Study Material / High Yield Topics', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Medical & Paramedical',
+    exam: 'AIIMS NORCET',
+    icon: 'medical',
+    aliases: ['AIIMS Nursing Officer Recruitment', 'NORCET Nursing', 'Central Government Nursing Officer', 'Nursing Officer Exam', 'Staff Nurse Exam AIIMS'],
+    branches: ['Overview', 'Syllabus / Nursing Officer', 'Previous Year Papers', 'Study Material / Nursing Fundamentals', 'Study Material / Medical Surgical Nursing', 'Study Material / OBG Nursing', 'Study Material / Pediatric Nursing', 'Study Material / Community Health Nursing', 'Study Material / Mental Health Nursing', 'Study Material / Anatomy & Physiology', 'Study Material / Pharmacology', 'Study Material / General Aptitude', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Medical & Paramedical',
+    exam: 'GPAT',
+    icon: 'gpat',
+    aliases: ['Graduate Pharmacy Aptitude Test', 'Pharmacy Entrance', 'NIPER JEE', 'M Pharma Entrance', 'B Pharma PG Entrance'],
+    branches: ['Overview', 'Syllabus', 'Previous Year Papers', 'Study Material / Pharmacognosy', 'Study Material / Pharmaceutical Chemistry', 'Study Material / Pharmacology', 'Study Material / Pharmaceutics', 'Study Material / Pharmaceutical Analysis', 'Study Material / Biochemistry', 'Study Material / Microbiology', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Medical & Paramedical',
+    exam: 'Nursing Entrance',
+    icon: 'medical',
+    aliases: ['BSc Nursing Entrance', 'JIPMER Nursing', 'PGIMER Nursing', 'IGNOU Nursing Admission', 'Army Nursing MNS', 'Military Nursing Service'],
+    branches: ['Programs / BSc Nursing Entrance', 'Programs / Post Basic BSc Nursing', 'Programs / MSc Nursing Entrance', 'Syllabus / BSc Nursing', 'Syllabus / MSc Nursing', 'Previous Year Papers', 'Study Material / Nursing Subjects', 'Study Material / Biology', 'Study Material / Physics', 'Study Material / Chemistry', 'Study Material / General English', 'Study Material / GK & Current Affairs', 'Mock Tests', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Medical & Paramedical',
+    exam: 'AIAPGET',
+    icon: 'ayush',
+    aliases: ['All India AYUSH Post Graduate Entrance Test', 'MD Ayurveda Entrance', 'AYUSH PG Entrance', 'Homeopathy PG', 'Unani PG Entrance'],
+    branches: ['Overview', 'Syllabus / Ayurveda', 'Syllabus / Unani', 'Syllabus / Siddha', 'Syllabus / Homeopathy', 'Previous Year Papers', 'Study Material / Ayurveda Subjects', 'Study Material / Homeopathy Subjects', 'Study Material / Unani Subjects', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Medical & Paramedical',
+    exam: 'Paramedical Entrance',
+    icon: 'medical',
+    aliases: ['AIIMS Paramedical Entrance', 'BSc Paramedical Entrance', 'BMLT Entrance', 'Radiology Entrance', 'Physiotherapy Entrance', 'Allied Health Sciences Entrance'],
+    branches: ['Programs / AIIMS Paramedical', 'Programs / BSc MLT', 'Programs / Radiology Imaging', 'Programs / Operation Theatre Technology', 'Programs / Physiotherapy', 'Syllabus / Biology', 'Syllabus / Physics', 'Syllabus / Chemistry', 'Syllabus / General Aptitude', 'Previous Year Papers', 'Study Material / Biology', 'Study Material / Physics', 'Study Material / Chemistry', 'Study Material / Allied Health Basics', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Agriculture & Veterinary',
+    exam: 'Veterinary Entrance',
+    icon: 'bio_research',
+    aliases: ['BVSc AH Entrance', 'Veterinary Admission', 'AIPVT Exam', 'Animal Husbandry Entrance'],
+    branches: ['Exam Tracks / AIPVT', 'Exam Tracks / State Veterinary Entrances', 'Syllabus', 'Previous Year Papers', 'Study Material / Zoology', 'Study Material / Botany', 'Study Material / Physics', 'Study Material / Chemistry', 'Mock Tests', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Management',
+    exam: 'CAT',
+    icon: 'ssc_cgl',
+    aliases: ['Common Admission Test', 'IIM Entrance', 'MBA Entrance India', 'CAT VARC', 'CAT DILR', 'CAT QA', 'CAT Quantitative Aptitude'],
+    branches: ['Overview', 'Syllabus / VARC Verbal Ability RC', 'Syllabus / DILR Data Interpretation LR', 'Syllabus / QA Quantitative Ability', 'Previous Year Papers / Slot 1', 'Previous Year Papers / Slot 2', 'Previous Year Papers / Slot 3', 'Study Material / VARC / Reading Comprehension', 'Study Material / VARC / Para Jumbles', 'Study Material / VARC / Para Summary', 'Study Material / VARC / Odd Sentence Out', 'Study Material / VARC / Vocabulary', 'Study Material / DILR / Logical Reasoning Sets', 'Study Material / DILR / Data Interpretation', 'Study Material / DILR / Caselets', 'Study Material / DILR / Complex Puzzles', 'Study Material / QA / Arithmetic', 'Study Material / QA / Algebra', 'Study Material / QA / Number System', 'Study Material / QA / Geometry Mensuration', 'Study Material / QA / Modern Math', 'Study Material / QA / Permutation Combination Probability', 'Section-wise Tests / VARC', 'Section-wise Tests / DILR', 'Section-wise Tests / QA', 'Mock Tests / Full Mock', 'Answer Keys', 'Strategy / Topper Strategy', 'Strategy / 6 Month Plan', 'Strategy / Topic Prioritization', 'Updates / IIM Cut-off History', 'WAT PI Preparation', 'IIM Interview Questions'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Management',
+    exam: 'XAT',
+    icon: 'ssc_cgl',
+    aliases: ['Xavier Aptitude Test', 'XLRI Entrance', 'XAT Exam', 'XLRI Jamshedpur'],
+    branches: ['Overview', 'Syllabus / Verbal Logical Ability', 'Syllabus / Decision Making', 'Syllabus / Quantitative Ability & Data Interpretation', 'Syllabus / General Knowledge', 'Previous Year Papers', 'Study Material / Decision Making', 'Study Material / Verbal Logical Ability', 'Study Material / Quantitative Ability', 'Study Material / General Knowledge', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Management',
+    exam: 'SNAP',
+    icon: 'ssc_cgl',
+    aliases: ['Symbiosis National Aptitude Test', 'Symbiosis MBA Entrance', 'SIBM Entrance', 'SCMHRD Entrance'],
+    branches: ['Overview', 'Syllabus', 'Previous Year Papers', 'Study Material / General English', 'Study Material / Quantitative Aptitude', 'Study Material / Analytical & Logical Reasoning', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Management',
+    exam: 'NMAT',
+    icon: 'ssc_cgl',
+    aliases: ['NMIMS Management Aptitude Test', 'NMAT by GMAC', 'NMIMS Entrance', 'Mumbai NMIMS MBA'],
+    branches: ['Overview', 'Syllabus / Language Skills', 'Syllabus / Quantitative Skills', 'Syllabus / Logical Reasoning', 'Previous Year Papers', 'Study Material', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Management',
+    exam: 'CMAT',
+    icon: 'ssc_cgl',
+    aliases: ['Common Management Admission Test', 'NTA CMAT', 'AICTE CMAT', 'MBA Entrance NTA'],
+    branches: ['Overview', 'Syllabus / Quantitative Techniques', 'Syllabus / Logical Reasoning', 'Syllabus / Language Comprehension', 'Syllabus / General Awareness', 'Syllabus / Innovation & Entrepreneurship', 'Previous Year Papers', 'Study Material', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Management',
+    exam: 'MAT',
+    icon: 'ssc_cgl',
+    aliases: ['Management Aptitude Test', 'AIMA MAT', 'MBA MAT Score', 'MAT September', 'MAT February'],
+    branches: ['Overview', 'Syllabus / Mathematical Skills', 'Syllabus / Language Comprehension', 'Syllabus / Data Analysis & Sufficiency', 'Syllabus / Intelligence & Critical Reasoning', 'Syllabus / Indian & Global Environment', 'Previous Year Papers', 'Study Material', 'Mock Tests', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Management',
+    exam: 'IIFT',
+    icon: 'ssc_cgl',
+    aliases: ['Indian Institute of Foreign Trade', 'IIFT MBA IB', 'IIFT Delhi', 'IIFT Kolkata', 'International Business MBA'],
+    branches: ['Overview', 'Syllabus / Quantitative Analysis', 'Syllabus / Verbal Ability', 'Syllabus / Reading Comprehension', 'Syllabus / Data Interpretation & Logical Reasoning', 'Syllabus / General Knowledge', 'Previous Year Papers', 'Study Material', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Management',
+    exam: 'MAH MBA CET',
+    icon: 'ssc_cgl',
+    aliases: ['Maharashtra MBA CET', 'DTE Maharashtra MBA', 'MHT MBA CET', 'Mumbai MBA Entrance', 'Maharashtra State MBA'],
+    branches: ['Overview', 'Syllabus / Logical Reasoning', 'Syllabus / Abstract Reasoning', 'Syllabus / Quantitative Aptitude', 'Syllabus / Verbal Ability & Reading Comprehension', 'Previous Year Papers', 'Study Material', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Law',
+    exam: 'CLAT',
+    icon: 'judiciary',
+    aliases: ['Common Law Admission Test', 'CLAT UG', 'CLAT PG', 'NLU Entrance', 'National Law University Admission', '5 Year Law Entrance', 'BA LLB Entrance'],
+    branches: ['Overview', 'Syllabus / English Language', 'Syllabus / Current Affairs & General Knowledge', 'Syllabus / Legal Reasoning', 'Syllabus / Logical Reasoning', 'Syllabus / Quantitative Techniques', 'Previous Year Papers / CLAT UG', 'Previous Year Papers / CLAT PG', 'Study Material / English Language', 'Study Material / Current Affairs / Monthly Updates', 'Study Material / Current Affairs / Yearly Compilation', 'Study Material / Legal Reasoning / Legal Principles', 'Study Material / Legal Reasoning / Torts', 'Study Material / Legal Reasoning / Contracts', 'Study Material / Legal Reasoning / Criminal Law', 'Study Material / Legal Reasoning / Constitutional Law', 'Study Material / Logical Reasoning', 'Study Material / Quantitative Techniques', 'Study Material / GK / Static GK', 'Mock Tests / CLAT UG Mock', 'Mock Tests / CLAT PG Mock', 'Answer Keys', 'Strategy / NLU Preference Guide', 'Strategy / Topper Strategy', 'Updates / Notification', 'Updates / Result', 'Updates / NLU Cut-off'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Law',
+    exam: 'AILET',
+    icon: 'judiciary',
+    aliases: ['All India Law Entrance Test', 'NLU Delhi Entrance', 'National Law University Delhi Admission', 'AILET UG', 'AILET PG'],
+    branches: ['Overview', 'Syllabus', 'Previous Year Papers', 'Study Material / English', 'Study Material / General Knowledge', 'Study Material / Legal Aptitude', 'Study Material / Reasoning', 'Study Material / Mathematics', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Law',
+    exam: 'LSAT India',
+    icon: 'judiciary',
+    aliases: ['Law School Admission Test India', 'Pearson VUE LSAT', 'Private Law School Entrance'],
+    branches: ['Overview', 'Syllabus / Analytical Reasoning', 'Syllabus / Logical Reasoning', 'Syllabus / Reading Comprehension', 'Previous Year Papers', 'Study Material / Analytical Reasoning', 'Study Material / Logical Reasoning', 'Study Material / Reading Comprehension', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Law',
+    exam: 'SLAT',
+    icon: 'judiciary',
+    aliases: ['Symbiosis Law Admission Test', 'SLS Pune Entrance', 'Symbiosis Law School', 'SLAT UG PG'],
+    branches: ['Overview', 'Syllabus / Legal Reasoning', 'Syllabus / Logical Reasoning', 'Syllabus / Reading Comprehension', 'Syllabus / Quantitative Aptitude', 'Syllabus / General Knowledge', 'Previous Year Papers', 'Study Material', 'Mock Tests', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Law',
+    exam: 'MH CET Law',
+    icon: 'judiciary',
+    aliases: ['Maharashtra Law CET', 'DTE Maharashtra LLB Entrance', '3 Year LLB Entrance', '5 Year LLB Entrance Maharashtra', 'Maharashtra Law Admission'],
+    branches: ['Overview', 'Syllabus / Legal Aptitude', 'Syllabus / General Knowledge', 'Syllabus / Logical Reasoning', 'Syllabus / English', 'Syllabus / Mathematics', 'Previous Year Papers', 'Study Material', 'Mock Tests', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Design & Architecture',
+    exam: 'NID DAT',
+    icon: 'design',
+    aliases: ['National Institute of Design', 'NID Design Aptitude Test', 'NID Ahmedabad', 'NID Bangalore', 'Product Design Entrance', 'Communication Design Entrance'],
+    branches: ['Overview', 'Syllabus / Preliminary DAT', 'Syllabus / Studio Test', 'Previous Year Papers', 'Study Material / Design Aptitude', 'Study Material / Observation & Visualization', 'Study Material / Creative Thinking', 'Study Material / Material & Product', 'Study Material / Communication Design', 'Study Material / General Awareness Design', 'Studio Test Preparation', 'Portfolio Guide', 'Mock Tests / Prelim', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Design & Architecture',
+    exam: 'NIFT',
+    icon: 'nift',
+    aliases: ['National Institute of Fashion Technology', 'NIFT Admission', 'Fashion Design Entrance', 'Textile Design Entrance', 'NIFT Delhi', 'NIFT Mumbai', 'NIFT Bangalore'],
+    branches: ['Overview', 'Syllabus / CAT Creative Ability Test', 'Syllabus / GAT General Ability Test', 'Syllabus / Situation Test', 'Previous Year Papers / GAT', 'Study Material / CAT Sketching Techniques', 'Study Material / CAT Color Theory', 'Study Material / CAT Garment Construction', 'Study Material / GAT Quantitative Ability', 'Study Material / GAT Communication Ability', 'Study Material / GAT English Comprehension', 'Study Material / GAT Analytical Ability', 'Study Material / GAT GK Current Affairs', 'Situation Test Preparation', 'Mock Tests / GAT Mock', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Design & Architecture',
+    exam: 'UCEED',
+    icon: 'design',
+    aliases: ['Undergraduate Common Entrance Exam for Design', 'IIT Design Entrance', 'IIT Bombay Design', 'IIT Delhi Design', 'IIT Guwahati Design', 'B.Des Entrance IIT'],
+    branches: ['Overview', 'Syllabus / Part A', 'Syllabus / Part B', 'Previous Year Papers', 'Study Material / Visualization & Spatial Ability', 'Study Material / Observation & Design Sensitivity', 'Study Material / Environmental & Social Awareness', 'Study Material / Analytical & Logical Reasoning', 'Study Material / Language & Creativity', 'Study Material / Drawing', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Design & Architecture',
+    exam: 'CEED',
+    icon: 'design',
+    aliases: ['Common Entrance Exam for Design', 'IIT MDes Entrance', 'Masters in Design IIT', 'M.Des Entrance'],
+    branches: ['Overview', 'Syllabus / Part A', 'Syllabus / Part B', 'Previous Year Papers', 'Study Material / Visualization & Spatial Ability', 'Study Material / Design Thinking', 'Study Material / Environmental Awareness', 'Study Material / Analytical Reasoning', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Design & Architecture',
+    exam: 'NATA',
+    icon: 'architecture',
+    aliases: ['National Aptitude Test in Architecture', 'B.Arch Entrance', 'Architecture Admission', 'COA Architecture Exam', 'NATA 2025'],
+    branches: ['Overview', 'Syllabus / Drawing Test', 'Syllabus / PCM Based Test', 'Syllabus / General Aptitude', 'Previous Year Papers', 'Study Material / Drawing Techniques', 'Study Material / 3D Visualization', 'Study Material / Aesthetic Sensitivity', 'Study Material / Mathematics', 'Study Material / Physics', 'Study Material / General Aptitude', 'Drawing Practice Sheets', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Design & Architecture',
+    exam: 'JEE B.Arch B.Planning',
+    icon: 'architecture',
+    aliases: ['JEE Main Paper 2', 'B.Arch JEE', 'B.Planning JEE', 'Architecture NIT IIT Admission', 'Town Planning Entrance'],
+    branches: ['Overview', 'Syllabus / Paper 2A B.Arch', 'Syllabus / Paper 2B B.Planning', 'Previous Year Papers / Paper 2A', 'Previous Year Papers / Paper 2B', 'Study Material / Drawing Aptitude', 'Study Material / Mathematics', 'Study Material / Aptitude', 'Study Material / Planning', 'Drawing Practice', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Agriculture & Veterinary',
+    exam: 'ICAR AIEEA',
+    icon: 'nabard',
+    aliases: ['ICAR All India Entrance Examination for Admission', 'BSc Agriculture Entrance', 'MSc Agriculture Entrance', 'IARI PhD Entrance', 'Agricultural Research Entrance', 'NTA ICAR AIEEA'],
+    branches: ['Overview', 'Syllabus / UG Entrance', 'Syllabus / PG Entrance', 'Syllabus / PhD Entrance', 'Previous Year Papers / UG', 'Previous Year Papers / PG', 'Study Material / Physics', 'Study Material / Chemistry', 'Study Material / Biology', 'Study Material / Agriculture', 'Study Material / Mathematics', 'Study Material / Agricultural Sciences PG', 'Mock Tests / UG Mock', 'Mock Tests / PG Mock', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Agriculture & Veterinary',
+    exam: 'ICAR JRF SRF NET',
+    icon: 'nabard',
+    aliases: ['ICAR JRF', 'ICAR SRF', 'ICAR NET', 'ASRB NET Agriculture', 'Agriculture Research Fellowship', 'Agricultural Scientists Recruitment Board NET'],
+    branches: ['Overview', 'Syllabus / Agriculture', 'Syllabus / Horticulture', 'Syllabus / Plant Sciences', 'Syllabus / Animal Sciences', 'Syllabus / Agricultural Engineering', 'Previous Year Papers / JRF', 'Previous Year Papers / SRF', 'Previous Year Papers / NET', 'Study Material / Agriculture Core', 'Study Material / Plant Breeding', 'Study Material / Genetics', 'Study Material / Soil Science', 'Study Material / Agronomy', 'Study Material / Horticulture', 'Study Material / Animal Sciences', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Agriculture & Veterinary',
+    exam: 'State Agriculture Entrances',
+    icon: 'nabard',
+    aliases: ['State Agriculture Entrance', 'BSc Agriculture State Admission', 'Agriculture University Entrance', 'Horticulture Entrance', 'Forestry Entrance'],
+    branches: ['State Exams / Rajasthan Agriculture RAUAT', 'State Exams / MP Agriculture PCAT', 'State Exams / UP Agriculture UPCATET', 'State Exams / Maharashtra MCAER', 'State Exams / Punjab PAU CET', 'State Exams / Karnataka KRCET', 'Syllabus / PCB Based', 'Syllabus / PCM Based', 'Syllabus / Agriculture Based', 'Previous Year Papers', 'Study Material', 'Mock Tests', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Teaching Research',
+    exam: 'CSIR NET',
+    icon: 'research',
+    aliases: ['CSIR National Eligibility Test', 'CSIR JRF', 'Junior Research Fellowship Science', 'NTA CSIR NET', 'Assistant Professor Science'],
+    branches: ['Overview', 'Syllabus / Life Sciences', 'Syllabus / Chemical Sciences', 'Syllabus / Mathematical Sciences', 'Syllabus / Physical Sciences', 'Syllabus / Earth Sciences', 'Previous Year Papers / Life Sciences', 'Previous Year Papers / Chemical Sciences', 'Previous Year Papers / Mathematical Sciences', 'Previous Year Papers / Physical Sciences', 'Study Material / Life Sciences', 'Study Material / Chemical Sciences', 'Study Material / Mathematical Sciences', 'Study Material / Physical Sciences', 'Study Material / Earth Sciences', 'Study Material / General Aptitude Part A', 'Mock Tests / Subject-wise', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Professional Certifications',
+    exam: 'CA Foundation',
+    icon: 'ssc_cgl',
+    aliases: ['Chartered Accountant Foundation', 'CA CPT Old', 'ICAI Foundation', 'CA Entry Level', 'Accounting Entrance'],
+    branches: ['Overview', 'Syllabus / Paper 1 Accounting Principles', 'Syllabus / Paper 2 Business Laws', 'Syllabus / Paper 3 Quantitative Aptitude', 'Syllabus / Paper 4 Business Economics', 'Previous Year Papers / May Attempt', 'Previous Year Papers / November Attempt', 'Study Material / Paper 1 Accounting', 'Study Material / Paper 2 Business Laws', 'Study Material / Paper 3 Maths & Statistics', 'Study Material / Paper 4 Economics', 'Mock Tests / Paper-wise', 'Mock Tests / Full Mock', 'Answer Keys', 'ICAI Study Material', 'Strategy', 'MTP RTP Papers', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Professional Certifications',
+    exam: 'CA Intermediate',
+    icon: 'ssc_cgl',
+    aliases: ['CA IPCC Old', 'CA Inter', 'ICAI Intermediate', 'Chartered Accountant Intermediate'],
+    branches: ['Overview', 'Syllabus / Group I Paper 1 Accounting', 'Syllabus / Group I Paper 2 Corporate Laws', 'Syllabus / Group I Paper 3 Cost & Management Accounting', 'Syllabus / Group I Paper 4 Taxation', 'Syllabus / Group II Paper 5 Advanced Accounting', 'Syllabus / Group II Paper 6 Auditing & Assurance', 'Syllabus / Group II Paper 7 EIS SM', 'Previous Year Papers / Group I', 'Previous Year Papers / Group II', 'Study Material / All Papers', 'ICAI Practice Manual', 'Mock Tests', 'Answer Keys', 'MTP RTP', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Professional Certifications',
+    exam: 'CA Final',
+    icon: 'ca_final',
+    aliases: ['Chartered Accountant Final', 'CA Finals', 'ICAI Final', 'SFM Paper', 'Direct Tax Final', 'Indirect Tax Final'],
+    branches: ['Overview', 'Syllabus / Group I Paper 1 Financial Reporting', 'Syllabus / Group I Paper 2 SFM', 'Syllabus / Group I Paper 3 Advanced Auditing', 'Syllabus / Group I Paper 4 Corporate & Economic Laws', 'Syllabus / Group II Paper 5 SCMPE', 'Syllabus / Group II Paper 6 Elective', 'Syllabus / Group II Paper 7 Direct Tax', 'Syllabus / Group II Paper 8 Indirect Tax', 'Previous Year Papers / Group I', 'Previous Year Papers / Group II', 'Study Material / All Papers', 'ICAI Practice Manual', 'Mock Tests', 'Answer Keys', 'MTP RTP', 'Strategy', 'Updates'],
+  },
+  {
+    category: 'Entrance Exams',
+    family: 'Professional Certifications',
+    exam: 'CS Executive Professional',
+    icon: 'placement',
+    aliases: ['Company Secretary', 'ICSI', 'CS Foundation', 'CS Executive', 'CS Professional', 'Company Secretaryship Exam'],
+    branches: ['Levels / Foundation', 'Levels / Executive', 'Levels / Professional', 'Syllabus / Foundation Papers', 'Syllabus / Executive Papers', 'Syllabus / Professional Papers', 'Previous Year Papers / Foundation', 'Previous Year Papers / Executive', 'Previous Year Papers / Professional', 'Study Material / Company Law', 'Study Material / Securities Laws', 'Study Material / Economic Laws', 'Study Material / Tax Laws', 'Study Material / Financial Management', 'Study Material / Corporate Governance', 'Mock Tests', 'Answer Keys', 'Strategy', 'Updates'],
+  },
+];
+
+export const detailedEntranceSpecs: StudyHubExamSpec[] = rawDetailedEntranceSpecs.map(withCoreEntranceBranches);

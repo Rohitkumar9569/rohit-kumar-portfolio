@@ -1,0 +1,68 @@
+[
+  {
+    "class": "Class 12",
+    "subject": "Physics",
+    "language": "English",
+    "url": "https://ncert.nic.in/textbook/pdf/phys12/epimath0.pdf",
+    "filename": "Class 12 - Physics - English.pdf",
+    "cloudinaryFolder": "ncert/Class 12/Physics",
+    "localPath": "D:\\MyBlueprintPortfolio\\server\\downloads\\ncert-books\\Class 12 - Physics - English.pdf.pdf",
+    "downloadedAt": "2026-06-02T07:34:47.570Z",
+    "error": "read ECONNRESET"
+  },
+  {
+    "class": "Class 12",
+    "subject": "Chemistry",
+    "language": "English",
+    "url": "https://ncert.nic.in/textbook/pdf/chem12/epimath0.pdf",
+    "filename": "Class 12 - Chemistry - English.pdf",
+    "cloudinaryFolder": "ncert/Class 12/Chemistry",
+    "localPath": "D:\\MyBlueprintPortfolio\\server\\downloads\\ncert-books\\Class 12 - Chemistry - English.pdf.pdf",
+    "downloadedAt": "2026-06-02T07:34:47.844Z",
+    "error": "Request failed with status code 404"
+  },
+  {
+    "class": "Class 11",
+    "subject": "Physics",
+    "language": "English",
+    "url": "https://ncert.nic.in/textbook/pdf/phys11/<replace-with-actual-filename>.pdf",
+    "filename": "Class 11 - Physics - English.pdf",
+    "cloudinaryFolder": "ncert/Class 11/Physics",
+    "localPath": "D:\\MyBlueprintPortfolio\\server\\downloads\\ncert-books\\Class 11 - Physics - English.pdf.pdf",
+    "downloadedAt": "2026-06-02T07:34:48.092Z",
+    "error": "Request failed with status code 404"
+  },
+  {
+    "class": "Class 11",
+    "subject": "Chemistry",
+    "language": "English",
+    "url": "https://ncert.nic.in/textbook/pdf/chem11/<replace-with-actual-filename>.pdf",
+    "filename": "Class 11 - Chemistry - English.pdf",
+    "cloudinaryFolder": "ncert/Class 11/Chemistry",
+    "localPath": "D:\\MyBlueprintPortfolio\\server\\downloads\\ncert-books\\Class 11 - Chemistry - English.pdf.pdf",
+    "downloadedAt": "2026-06-02T07:34:48.204Z",
+    "error": "Request failed with status code 404"
+  },
+  {
+    "class": "Class 10",
+    "subject": "Mathematics",
+    "language": "English",
+    "url": "https://ncert.nic.in/textbook/pdf/math10/<replace-with-actual-filename>.pdf",
+    "filename": "Class 10 - Mathematics - English.pdf",
+    "cloudinaryFolder": "ncert/Class 10/Mathematics",
+    "localPath": "D:\\MyBlueprintPortfolio\\server\\downloads\\ncert-books\\Class 10 - Mathematics - English.pdf.pdf",
+    "downloadedAt": "2026-06-02T07:34:48.417Z",
+    "error": "Request failed with status code 404"
+  },
+  {
+    "class": "Class 6",
+    "subject": "Mathematics",
+    "language": "English",
+    "url": "https://ncert.nic.in/textbook/pdf/math06/<replace-with-actual-filename>.pdf",
+    "filename": "Class 6 - Mathematics - English.pdf",
+    "cloudinaryFolder": "ncert/Class 6/Mathematics",
+    "localPath": "D:\\MyBlueprintPortfolio\\server\\downloads\\ncert-books\\Class 6 - Mathematics - English.pdf.pdf",
+    "downloadedAt": "2026-06-02T07:34:48.542Z",
+    "error": "Request failed with status code 404"
+  }
+]

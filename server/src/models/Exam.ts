@@ -16,12 +16,15 @@ const ExamSchema = new Schema<IExam>(
       type: String,
       required: true,
       trim: true,
+      maxlength: 120,
     },
     shortName: {
       type: String,
       required: true,
       trim: true,
       unique: true,
+      uppercase: true,
+      maxlength: 30,
     },
     slug: {
       type: String,
@@ -29,6 +32,9 @@ const ExamSchema = new Schema<IExam>(
       trim: true,
       unique: true,
       index: true,
+      lowercase: true,
+      maxlength: 80,
+      match: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
     },
   },
   { timestamps: true }

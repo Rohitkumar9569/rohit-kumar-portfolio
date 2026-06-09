@@ -24,8 +24,8 @@ export interface IPyqDocument extends Document {
 
 const PyqDocumentSchema = new Schema<IPyqDocument>(
   {
-    title: { type: String, required: true, trim: true },
-    year: { type: Number, required: true },
+    title: { type: String, required: true, trim: true, maxlength: 160 },
+    year: { type: Number, required: true, min: 1900, max: 2100 },
     fileUrl: { type: String, required: true },
     cloudinaryPublicId: { type: String, required: true },
     // Replaced string fields with direct references
@@ -48,6 +48,8 @@ const PyqDocumentSchema = new Schema<IPyqDocument>(
     timestamps: true,
   }
 );
+
+PyqDocumentSchema.index({ subjectId: 1, year: -1, title: 1 });
 
 const PyqDocument = model<IPyqDocument>('PyqDocument', PyqDocumentSchema);
 

@@ -26,14 +26,10 @@ type Pair = {
   pyq_source_url?: string | null;
 };
 
-// --- Environment Variable Check ---
-if (!process.env.GEMINI_API_KEY || !process.env.MONGO_URI) {
-  throw new Error('Required environment variables are not defined');
-}
-
 // --- Client Initialization ---
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const generativeModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+const generativeModel = process.env.GEMINI_API_KEY
+  ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY).getGenerativeModel({ model: 'gemini-2.5-flash' })
+  : null;
 const httpClient = axios.create({ timeout: 15000 });
 axiosRetry(httpClient, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
@@ -52,6 +48,7 @@ async function getArticleContentAndSummarize(url: string): Promise<string> {
     const articleText = $('article, .story-details, .main-content, .article-body').text();
     const cleanedText = articleText.replace(/\s\s+/g, ' ').trim().slice(0, 8000);
     if (cleanedText.length < 200) return cleanedText;
+    if (!generativeModel) return cleanedText.slice(0, 1200);
     const prompt = `Summarize the key arguments from the following news article text in about 150 words for a UPSC aspirant.\n\nArticle Text: "${cleanedText}"`;
     const result = await generativeModel.generateContent(prompt);
     return result.response.text();
@@ -152,6 +149,10 @@ async function verifyPyq(pyqText: string): Promise<{ verified: boolean; url?: st
  * Generates a question pair (Current Affairs and PYQ) for a given article.
  */
 async function generatePairForArticle(article: Article, dateDisplay: string): Promise<Pair | null> {
+  if (!generativeModel) {
+    throw new Error('GEMINI_API_KEY is not configured for daily journey generation.');
+  }
+
   const prompt = `You are an expert AI mentor for UPSC aspirants.
 CONTEXT: An AI has summarized a news article titled "${article.title}" (Source: ${article.source}).
 SUMMARY OF ARTICLE: "${article.summary}"
@@ -192,9 +193,19 @@ Produce the JSON now.`;
  */
 export const generateDailyJourney = async () => {
   console.log('🚀 Starting Daily Journey Generation...');
-  let dbConnection: typeof mongoose | null = null;
+  let openedConnection = false;
   try {
-    dbConnection = await mongoose.connect(process.env.MONGO_URI!);
+    if (!process.env.MONGO_URI) {
+      throw new Error('MONGO_URI is not defined');
+    }
+    if (!generativeModel) {
+      throw new Error('GEMINI_API_KEY is not defined');
+    }
+
+    if (mongoose.connection.readyState !== 1) {
+      await mongoose.connect(process.env.MONGO_URI);
+      openedConnection = true;
+    }
     console.log('✅ MongoDB connected.');
 
     const todayQueryString = new Date().toLocaleDateString('en-GB', { timeZone: INDIA_TZ }).replace(/\//g, '-');
@@ -240,8 +251,8 @@ export const generateDailyJourney = async () => {
     console.error('❌ An error occurred during the main generation process:', error.message);
     throw error;
   } finally {
-    if (dbConnection) {
-      await dbConnection.disconnect();
+    if (openedConnection && mongoose.connection.readyState !== 0) {
+      await mongoose.disconnect();
       console.log('🔌 MongoDB disconnected.');
     }
   }

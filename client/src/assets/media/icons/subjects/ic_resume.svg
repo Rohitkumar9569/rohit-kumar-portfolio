@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Resume icon">
+
+  <defs>
+    <linearGradient id="subject-247-main" x1="19" y1="14" x2="109" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f59e0b"/>
+      <stop offset=".55" stop-color="#fb7185"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="subject-247-warm" x1="24" y1="23" x2="102" y2="105" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff7ed"/>
+      <stop offset=".55" stop-color="#facc15"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <filter id="subject-247-shadow" x="-28" y="-24" width="184" height="184" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="9" flood-color="#020617" flood-opacity=".26"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="64" cy="105" rx="38" ry="8" fill="#020617" opacity=".16"/>
+  <path d="M31 108c16 8 50 8 66 0" fill="none" stroke="url(#subject-247-main)" stroke-width="5.5" stroke-linecap="round" opacity=".78"/>
+<g filter="url(#subject-247-shadow)"><path d="M44 39v-8c0-6 5-10 11-10h20c6 0 11 4 11 10v8" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linecap="round"/><rect x="22" y="39" width="86" height="63" rx="16" fill="url(#subject-247-warm)"/><path d="M22 59h86" stroke="#fff7ed" stroke-width="8" opacity=".65"/><path d="M56 69h17v24l-9-5-8 5z" fill="#ef4444"/></g>
+</svg>

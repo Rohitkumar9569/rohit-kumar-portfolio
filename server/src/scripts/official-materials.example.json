@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Science Sample Paper 2025-26",
+    "url": "https://cbseacademic.nic.in/web_material/SQP/ClassX_2025_26/Science-SQP.pdf",
+    "targetPath": [
+      "School Boards",
+      "CBSE",
+      "Class 10",
+      "Sample Papers",
+      "Science"
+    ],
+    "sourceName": "CBSE Academic",
+    "sourceUrl": "https://cbseacademic.nic.in/",
+    "sourceType": "official",
+    "resourceType": "sample_paper",
+    "mirrorAllowed": false,
+    "rightsNote": "Official CBSE Academic PDF. Keep official URL unless mirror permission is confirmed.",
+    "language": "english",
+    "year": 2026,
+    "subject": "Science",
+    "paper": "Sample Paper"
+  },
+  {
+    "title": "NCERT Mathematics Book",
+    "url": "https://ncert.nic.in/textbook/pdf/<verified-ncert-pdf-code>.pdf",
+    "targetPath": [
+      "School Boards",
+      "NCERT",
+      "Class 10",
+      "Books",
+      "Mathematics"
+    ],
+    "sourceName": "NCERT",
+    "sourceUrl": "https://ncert.nic.in/textbook.php",
+    "sourceType": "ncert",
+    "resourceType": "book",
+    "mirrorAllowed": false,
+    "rightsNote": "Official NCERT textbook PDF. Verify URL and terms before any Cloudinary mirror.",
+    "language": "english",
+    "subject": "Mathematics"
+  }
+]

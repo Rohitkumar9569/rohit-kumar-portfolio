@@ -15,6 +15,7 @@ const SubjectSchema = new Schema<ISubject>(
       type: String,
       required: true,
       trim: true,
+      maxlength: 120,
     },
     // Creates a link to the Exam collection
     examId: {
@@ -26,6 +27,8 @@ const SubjectSchema = new Schema<ISubject>(
   },
   { timestamps: true }
 );
+
+SubjectSchema.index({ examId: 1, name: 1 }, { unique: true });
 
 const Subject = model<ISubject>('Subject', SubjectSchema);
 

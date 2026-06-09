@@ -1,0 +1,24 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cap" x1="37" y1="20" x2="99" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1E3A8A"/>
+    </linearGradient>
+    <linearGradient id="body" x1="30" y1="74" x2="98" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <filter id="shadow" x="12" y="10" width="112" height="112" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="7" flood-color="#111827" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M64 20L110 38L64 56L18 38L64 20Z" fill="url(#cap)"/>
+    <path d="M91 47V66" stroke="#FBBF24" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="91" cy="69" r="5" fill="#FBBF24"/>
+    <circle cx="64" cy="62" r="23" fill="#FFD1A6"/>
+    <path d="M43 52C48 44 57 39 66 40C75 41 83 47 86 56C75 52 62 52 43 52Z" fill="#1E3A8A"/>
+    <path d="M28 111C31 88 45 78 64 78C83 78 97 88 100 111H28Z" fill="url(#body)"/>
+    <path d="M51 81L64 97L77 81" stroke="#FACC15" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
+import { ArrowDownTrayIcon, DocumentTextIcon, EyeIcon } from '@heroicons/react/24/outline';
 import API from '../api';
 import PyqCardSkeleton from '../components/PyqCardSkeleton';
+import { getCloudinaryPdfThumbnailUrl } from '../utils/cloudinaryPdfThumbnail';
 
 // --- Interfaces (No changes) ---
 interface IExam {
@@ -24,6 +26,47 @@ interface IPyq {
   subject: string;
   fileUrl: string;
 }
+
+const PyqThumbnail = ({ fileUrl }: { fileUrl: string }) => {
+  const [failed, setFailed] = useState(false);
+  const thumbnailUrl = getCloudinaryPdfThumbnailUrl(fileUrl);
+
+  if (!thumbnailUrl || failed) {
+    return (
+      <div className="relative flex h-40 w-full items-center justify-center overflow-hidden border-b border-slate-200 bg-[radial-gradient(circle_at_top_left,rgba(14,165,233,0.16),transparent_36%),linear-gradient(135deg,#ffffff,#eef6ff_52%,#f8fafc)] dark:border-slate-800 dark:bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.15),transparent_36%),linear-gradient(135deg,#020617,#0f172a_58%,#111827)]">
+        <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/35 blur-2xl dark:bg-cyan-400/10" />
+        <div className="absolute -bottom-10 -left-8 h-28 w-28 rounded-full bg-slate-300/35 blur-2xl dark:bg-slate-400/10" />
+        <div className="relative h-24 w-32">
+          <div className="absolute left-4 top-1 h-8 w-16 rounded-t-2xl border border-white/45 bg-white/55 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/10" />
+          <div className="absolute inset-x-0 bottom-0 flex h-20 items-center justify-center rounded-[1.35rem] border border-white/55 bg-white/70 shadow-[0_24px_52px_rgba(15,23,42,0.16)] backdrop-blur dark:border-white/10 dark:bg-white/10 dark:shadow-[0_24px_52px_rgba(0,0,0,0.38)]">
+            <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 shadow-sm dark:bg-slate-400/10 dark:text-slate-300">
+              <DocumentTextIcon className="h-7 w-7" aria-hidden="true" />
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative h-40 w-full overflow-hidden border-b border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-950">
+      <img
+        src={thumbnailUrl}
+        alt=""
+        loading="lazy"
+        className="h-full w-full bg-white object-cover object-top transition duration-300 group-hover:scale-[1.025] dark:bg-slate-900"
+        onError={() => setFailed(true)}
+      />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-950/45 via-slate-950/12 to-transparent" />
+      <span className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 shadow-[0_12px_30px_rgba(15,23,42,0.16)] backdrop-blur dark:bg-emerald-400/10 dark:text-emerald-300">
+        <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
+      </span>
+      <span className="absolute right-3 top-3 rounded-full border border-white/70 bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-slate-700 shadow-[0_12px_30px_rgba(15,23,42,0.12)] backdrop-blur dark:border-slate-700/70 dark:bg-slate-950/80 dark:text-slate-200">
+        PDF
+      </span>
+    </div>
+  );
+};
 
 // --- API functions (No changes) ---
 const fetchExamAndSubjects = async (examName: string) => {
@@ -186,17 +229,26 @@ const ExamSpecificPage = () => {
         ) : pyqs?.length === 0 ? (
           <p className="text-center text-slate-500 dark:text-slate-400 mt-16">No PYQs found for this subject yet. Select a subject to see papers.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,320px))] justify-center gap-5">
             {pyqs?.map((pyq) => (
-              <div key={pyq._id} className="bg-gray-300/90 dark:bg-slate-700/80 rounded-xl p-6 flex flex-col justify-between shadow-xl shadow-cyan-500/30 dark:shadow-cyan-800/50 hover:shadow-2xl hover:shadow-cyan-500/40 dark:hover:shadow-cyan-800/70 hover:-translate-y-1 transition-all duration-300 transform">
+              <div key={pyq._id} className="group flex min-h-[292px] w-full max-w-[320px] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_22px_58px_rgba(15,23,42,0.13)] ring-1 ring-slate-950/5 transition duration-200 hover:-translate-y-1 hover:border-cyan-300 hover:shadow-[0_30px_78px_rgba(15,23,42,0.20)] dark:border-slate-700/70 dark:bg-slate-900/80 dark:shadow-[0_26px_74px_rgba(0,0,0,0.56)] dark:ring-white/5 dark:hover:border-cyan-400/50 dark:hover:shadow-[0_30px_86px_rgba(8,145,178,0.22)]">
                 <div>
-                  <span className="bg-blue-600/80 dark:bg-blue-400/90 text-white dark:text-gray-900 text-xs font-semibold px-3 py-1 rounded-full shadow-md shadow-blue-500/40">{pyq.year}</span>
-                  <h3 className="text-xl font-semibold text-green-600/80 dark:text-green-500/80 mt-4 mb-2">{pyq.title}</h3>
-                  <p className="text-gray-700 dark:text-slate-300 text-sm">{examShortName}</p>
+                  <PyqThumbnail fileUrl={pyq.fileUrl} />
+                  <div className="px-4 py-3.5">
+                    <span className="inline-flex rounded-full bg-cyan-50 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-cyan-700 dark:bg-cyan-400/10 dark:text-cyan-200">{pyq.year}</span>
+                    <h3 className="mt-3 line-clamp-2 text-base font-black leading-snug text-slate-950 dark:text-white">{pyq.title}</h3>
+                    <p className="mt-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">{examShortName} / Previous Year Paper</p>
+                  </div>
                 </div>
-                <div className="flex space-x-4 mt-6">
-                  <Link to={`/pyq/view/${pyq._id}`} className="flex-1 text-center bg-cyan-600 dark:bg-cyan-400/60 hover:bg-cyan-700 dark:hover:bg-cyan-700/80 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg shadow-slate-900/80">View Online</Link>
-                  <a href={pyq.fileUrl} target="_blank" rel="noopener noreferrer" className="flex-1 text-center bg-gray-700 dark:bg-slate-800 hover:bg-gray-600 dark:hover:bg-slate-700 text-cyan-400 dark:text-cyan-500 font-bold py-2 px-4 rounded-lg transition-colors shadow-md shadow-gray-900/80 dark:shadow-slate-900/80">Download</a>
+                <div className="mt-auto grid grid-cols-2 gap-2 px-3 pb-3 pt-0">
+                  <Link to={`/pyq/view/${pyq._id}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-cyan-50 px-3 text-sm font-black text-cyan-700 transition hover:bg-cyan-100 dark:bg-cyan-400/10 dark:text-cyan-200 dark:hover:bg-cyan-400/20">
+                    <EyeIcon className="h-4 w-4" aria-hidden="true" />
+                    View
+                  </Link>
+                  <a href={pyq.fileUrl} target="_blank" rel="noopener noreferrer" download className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-3 text-sm font-black text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200">
+                    <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
+                    Download
+                  </a>
                 </div>
               </div>
             ))}

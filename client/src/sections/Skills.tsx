@@ -1,13 +1,14 @@
 import React, { Suspense, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CubeModal from '../components/CubeModal';
+
 const ArchitectCanvas = React.lazy(() => import('../components/ArchitectCanvas'));
 
 import {
-  FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaGitAlt, FaGithub, FaJsSquare, FaCode
+  FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaGitAlt, FaGithub, FaJsSquare, FaCode,
 } from 'react-icons/fa';
 import {
-  SiTypescript, SiMongodb, SiExpress, SiTailwindcss, SiVite, SiVercel, SiPostman, SiRedux, SiMongoose
+  SiTypescript, SiMongodb, SiExpress, SiTailwindcss, SiVite, SiVercel, SiPostman, SiRedux, SiMongoose,
 } from 'react-icons/si';
 import { HiCubeTransparent } from 'react-icons/hi2';
 
@@ -36,7 +37,7 @@ const skillsData = [
       { name: 'C#', icon: <FaCode size={32} />, description: 'A modern, object-oriented language from Microsoft, used to build robust web APIs, desktop apps, and games with the .NET framework.' },
       { name: 'HTML5', icon: <FaHtml5 size={32} />, description: 'The standard markup language for creating the structure and content of web pages with semantic meaning.' },
       { name: 'CSS3', icon: <FaCss3Alt size={32} />, description: 'The language for styling web pages, used to create visually engaging designs, responsive layouts, and animations.' },
-    ]
+    ],
   },
   {
     category: 'Frontend',
@@ -44,21 +45,21 @@ const skillsData = [
       { name: 'React', icon: <FaReact size={32} />, description: 'A powerful JavaScript library for building complex user interfaces with a reusable, component-based architecture.' },
       { name: 'Redux', icon: <SiRedux size={32} />, description: 'A predictable state container for JavaScript apps, essential for managing complex application-wide state in a centralized way.' },
       { name: 'Tailwind CSS', icon: <SiTailwindcss size={32} />, description: 'A utility-first CSS framework that allows for rapid, custom UI development directly within the HTML markup.' },
-    ]
+    ],
   },
   {
     category: 'Backend',
     items: [
       { name: 'Node.js', icon: <FaNodeJs size={32} />, description: 'A JavaScript runtime that allows for building fast, scalable, and high-performance server-side applications.' },
       { name: 'Express.js', icon: <SiExpress size={32} />, description: 'A minimal and flexible Node.js web framework that simplifies the process of building robust APIs and web applications.' },
-    ]
+    ],
   },
   {
     category: 'Database',
     items: [
       { name: 'MongoDB', icon: <SiMongodb size={32} />, description: 'A popular NoSQL document database that offers flexibility and scalability for modern, data-intensive applications.' },
       { name: 'Mongoose', icon: <SiMongoose size={32} />, description: 'An Object Data Modeling (ODM) library for MongoDB and Node.js that provides schema validation and simplifies database interactions.' },
-    ]
+    ],
   },
   {
     category: 'Tools & Platforms',
@@ -68,9 +69,12 @@ const skillsData = [
       { name: 'Vite', icon: <SiVite size={32} />, description: 'A next-generation frontend build tool that provides an extremely fast development experience and optimized production builds.' },
       { name: 'Postman', icon: <SiPostman size={32} />, description: 'A comprehensive platform for the API lifecycle, used for designing, testing, documenting, and monitoring APIs.' },
       { name: 'Vercel', icon: <SiVercel size={32} />, description: 'A cloud platform optimized for frontend developers, offering seamless deployment, scalability, and performance for modern web applications.' },
-    ]
+    ],
   },
 ];
+
+const getSkillTooltipId = (name: string) =>
+  `skill-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
 const Skills = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,7 +82,7 @@ const Skills = () => {
 
   return (
     <>
-      <section id="skills" className="bg-background py-20 px-6 overflow-hidden relative text-gray-800 dark:text-white">
+      <section id="skills" className="portfolio-section-surface relative overflow-x-clip overflow-y-visible px-6 py-20 text-gray-800 dark:text-white">
         <div className="container mx-auto">
           <motion.div
             variants={containerVariant}
@@ -96,13 +100,30 @@ const Skills = () => {
                   <h3 className="text-xl font-semibold text-cyan-600 dark:text-cyan-400 mb-4">{category.category}</h3>
                   <div className="flex flex-wrap gap-4">
                     {category.items.map((skill) => (
-                      <button
-                        key={skill.name}
-                        onClick={() => setSelectedSkill(skill)}
-className="flex items-center text-left gap-3  bg-gray-300/70 hover:bg-gray-400/50   dark:bg-slate-700/80 dark:hover:bg-slate-600/70     py-2 px-4 rounded-lg transition-transform hover:scale-105   shadow-lg shadow-cyan-800/50 dark:shadow-lg dark:shadow-cyan-800/50"                      >
-                        <div className="text-cyan-500 dark:text-cyan-400">{skill.icon}</div>
-                        <p className="font-semibold text-gray-700 dark:text-white">{skill.name}</p>
-                      </button>
+                      <span key={skill.name} className="group/skill relative z-20 inline-flex hover:z-50 focus-within:z-50">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedSkill(skill)}
+                          aria-describedby={getSkillTooltipId(skill.name)}
+                          className="flex items-center text-left gap-3 bg-gray-300/70 hover:bg-gray-400/50 dark:bg-slate-700/80 dark:hover:bg-slate-600/70 py-2 px-4 rounded-lg transition-transform hover:scale-105 shadow-lg shadow-cyan-800/50 dark:shadow-lg dark:shadow-cyan-800/50"
+                        >
+                          <div className="text-cyan-500 dark:text-cyan-400">{skill.icon}</div>
+                          <p className="font-semibold text-gray-700 dark:text-white">{skill.name}</p>
+                        </button>
+                        <span
+                          id={getSkillTooltipId(skill.name)}
+                          role="tooltip"
+                          className="skill-hover-card pointer-events-none absolute bottom-[calc(100%+0.85rem)] left-1/2 z-50 w-[min(21rem,calc(100vw-2rem))] translate-y-3 -translate-x-1/2 p-5 text-center opacity-0 transition-all duration-200 group-hover/skill:-translate-y-1 group-hover/skill:opacity-100 group-focus-within/skill:-translate-y-1 group-focus-within/skill:opacity-100 lg:left-0 lg:translate-x-0"
+                        >
+                          <span className="skill-hover-card__icon mx-auto flex h-14 w-14 items-center justify-center rounded-2xl" aria-hidden="true">
+                            {React.cloneElement(skill.icon, { size: 28 })}
+                          </span>
+                          <span className="mt-4 block text-base font-black text-slate-950 dark:text-white">{skill.name}</span>
+                          <span className="mt-2 block text-sm font-semibold leading-6 text-slate-600 dark:text-slate-200">
+                            {skill.description}
+                          </span>
+                        </span>
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -118,7 +139,6 @@ className="flex items-center text-left gap-3  bg-gray-300/70 hover:bg-gray-400/5
                 View 3D Skill Cube
               </button>
             </motion.div>
-
           </motion.div>
         </div>
 
@@ -150,9 +170,8 @@ className="flex items-center text-left gap-3  bg-gray-300/70 hover:bg-gray-400/5
               initial={{ scale: 0.8, opacity: 0, y: 30 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.8, opacity: 0, y: 30, transition: { duration: 0.2 } }}
-              transition={{ type: "spring", stiffness: 250, damping: 25 }}
-              onClick={(e) => e.stopPropagation()}
-              // --- FIX: Correctly apply gradient only in dark mode ---
+              transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+              onClick={(event) => event.stopPropagation()}
               className="relative bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-800 border border-cyan-400/50 dark:border-cyan-700/50 rounded-2xl p-8 shadow-xl dark:shadow-2xl shadow-cyan-300/30 dark:shadow-cyan-500/10 max-w-md w-full"
             >
               <div className="flex flex-col items-center text-center">

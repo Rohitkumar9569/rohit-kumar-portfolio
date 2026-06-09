@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Rohit Kumar Study Hub</string>
+    <string name="title_activity_main">Rohit Kumar Study Hub</string>
+    <string name="package_name">com.myblueprintportfolio.app</string>
+    <string name="custom_url_scheme">com.myblueprintportfolio.app</string>
+</resources>

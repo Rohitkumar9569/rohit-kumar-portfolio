@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Class 12 Physics NCERT Book",
+    "class": "Class 12",
+    "subject": "Physics",
+    "language": "English",
+    "url": "https://ncert.nic.in/textbook/pdf/<verified-ncert-pdf-code>.pdf",
+    "filename": "Class 12 - Physics - English",
+    "cloudinaryFolder": "study-hub/school-boards/ncert/class-12/books/physics",
+    "targetPath": [
+      "School Boards",
+      "NCERT",
+      "Class 12",
+      "Books",
+      "Physics"
+    ],
+    "sourceName": "NCERT",
+    "sourceUrl": "https://ncert.nic.in/textbook.php",
+    "sourceType": "ncert",
+    "resourceType": "book"
+  },
+  {
+    "title": "Class 12 Chemistry NCERT Book",
+    "class": "Class 12",
+    "subject": "Chemistry",
+    "language": "English",
+    "url": "https://ncert.nic.in/textbook/pdf/<verified-ncert-pdf-code>.pdf",
+    "filename": "Class 12 - Chemistry - English",
+    "cloudinaryFolder": "study-hub/school-boards/ncert/class-12/books/chemistry",
+    "targetPath": [
+      "School Boards",
+      "NCERT",
+      "Class 12",
+      "Books",
+      "Chemistry"
+    ],
+    "sourceName": "NCERT",
+    "sourceUrl": "https://ncert.nic.in/textbook.php",
+    "sourceType": "ncert",
+    "resourceType": "book"
+  }
+]

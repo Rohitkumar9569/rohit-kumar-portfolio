@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PdfPageSkeleton = () => {
   return (
     <div className="flex justify-center py-2 md:py-4">

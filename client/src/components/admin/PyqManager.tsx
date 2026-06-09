@@ -161,6 +161,7 @@ const PyqManager: React.FC = () => {
   return (
     <div className="bg-slate-800 p-6 rounded-lg shadow-lg mt-8">
       <h2 className="text-2xl font-bold text-white mb-6">Manage PYQs</h2>
+      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
       {/* Selection Dropdowns */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">

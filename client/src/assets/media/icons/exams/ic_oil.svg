@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Oil icon">
+
+  <defs>
+    <linearGradient id="exams-20-main" x1="20" y1="14" x2="108" y2="114" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38bdf8"/>
+      <stop offset=".52" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+    <linearGradient id="exams-20-warm" x1="24" y1="26" x2="104" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fef3c7"/>
+      <stop offset=".58" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <filter id="exams-20-shadow" x="-24" y="-20" width="176" height="176" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="9" stdDeviation="8" flood-color="#0f172a" flood-opacity=".24"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="64" cy="104" rx="34" ry="7" fill="#0f172a" opacity=".16"/>
+  <path d="M35 109c9 5 49 5 58 0" fill="none" stroke="url(#exams-20-main)" stroke-width="5.5" stroke-linecap="round" opacity=".78"/>
+
+        <g filter="url(#exams-20-shadow)">
+          <circle cx="64" cy="65" r="17" fill="#f8fafc"/>
+          <path d="M64 25v16M64 89v16M24 65h16M88 65h16M36 37l11 11M81 81l11 11M92 37L81 48M47 81L36 92" stroke="url(#exams-20-main)" stroke-width="9" stroke-linecap="round"/>
+          <circle cx="64" cy="65" r="32" fill="none" stroke="url(#exams-20-warm)" stroke-width="9" stroke-dasharray="16 10"/>
+        </g>
+</svg>

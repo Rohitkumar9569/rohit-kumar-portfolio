@@ -1,0 +1,486 @@
+import type { StudyCardGoalType, StudyCardTone } from '../models/StudyCard';
+
+export type StudyHubSchoolBoardSpec = {
+  category: string;
+  family: string;
+  exam: string;
+  icon: string;
+  goalType: StudyCardGoalType;
+  branches: string[];
+  aliases?: string[];
+  tone?: StudyCardTone;
+};
+
+const class10Core = ['Mathematics', 'Science', 'Social Science', 'Hindi', 'English', 'Sanskrit'];
+const class12Science = ['Physics', 'Chemistry', 'Mathematics', 'Biology', 'English', 'Hindi'];
+const class12Commerce = ['Accountancy', 'Business Studies', 'Economics', 'Mathematics'];
+const class12Arts = ['History', 'Geography', 'Political Science', 'Economics', 'Hindi', 'English'];
+const allClassNumbers = Array.from({ length: 12 }, (_, index) => index + 1);
+
+const cbseClassResourceBranches = [
+  'Syllabus',
+  'NCERT Books',
+  'NCERT Solutions',
+  'Study Material',
+  'Revision Notes',
+  'Previous Year Papers',
+  'Sample Papers',
+  'Practice Questions',
+  'Answer Keys',
+];
+
+const stateClassResourceBranches = [
+  'Syllabus',
+  'Textbooks',
+  'Study Material',
+  'Revision Notes',
+  'Previous Year Papers',
+  'Sample Papers',
+  'Practice Questions',
+  'Answer Keys',
+  'Updates',
+];
+
+const uniqueBranches = (branches: string[]) => Array.from(new Set(branches));
+
+const primaryClassSubjects: Record<number, string[]> = {
+  1: ['Mathematics', 'English Marigold', 'Hindi Rimjhim'],
+  2: ['Mathematics', 'English Marigold', 'Hindi Rimjhim'],
+  3: ['Mathematics', 'English Marigold', 'Hindi Rimjhim', 'EVS Aas Paas'],
+  4: ['Mathematics', 'English Marigold', 'Hindi Rimjhim', 'EVS Aas Paas'],
+  5: ['Mathematics', 'English Marigold', 'Hindi Rimjhim', 'EVS Aas Paas'],
+};
+
+const middleClassSubjects: Record<number, string[]> = {
+  6: ['Mathematics', 'Science', 'Social Science', 'English', 'Hindi', 'Sanskrit'],
+  7: ['Mathematics', 'Science', 'Social Science', 'English', 'Hindi', 'Sanskrit'],
+  8: ['Mathematics', 'Science', 'Social Science', 'English', 'Hindi', 'Sanskrit'],
+  9: ['Mathematics', 'Science', 'Social Science', 'English', 'Hindi', 'Computer Science'],
+};
+
+const getSchoolClassSubjects = (classNumber: number) => {
+  if (primaryClassSubjects[classNumber]) return primaryClassSubjects[classNumber];
+  if (middleClassSubjects[classNumber]) return middleClassSubjects[classNumber];
+  if (classNumber === 10) return class10Core;
+  if (classNumber >= 11) {
+    return uniqueBranches([
+      ...class12Science,
+      ...class12Commerce,
+      ...class12Arts,
+      'Computer Science',
+      'Physical Education',
+    ]);
+  }
+  return [];
+};
+
+const stateBoardClassBranches = (extras: string[] = []) => [
+  ...allClassNumbers.flatMap((classNumber) => {
+    const className = `Class ${classNumber}`;
+    return [
+      ...stateClassResourceBranches.map((resource) => `${className} / ${resource}`),
+      ...getSchoolClassSubjects(classNumber).map((subject) => `${className} / Subjects / ${subject}`),
+    ];
+  }),
+  ...extras,
+];
+
+const seniorBoardBranches = (extras: string[] = []) => uniqueBranches(stateBoardClassBranches(extras));
+
+const cbseClassBranches = (classNumber: number) => {
+  const subjects = primaryClassSubjects[classNumber] || middleClassSubjects[classNumber] || [];
+  const common = uniqueBranches([
+    ...cbseClassResourceBranches,
+    ...subjects,
+    'NCERT Books / All Subjects',
+    'NCERT Solutions / All Subjects',
+    'Worksheets / All Subjects',
+    'Revision Notes / All Subjects',
+  ]);
+
+  if (classNumber <= 5) return [...common, 'Activity Sheets / All Subjects'];
+  if (classNumber === 9) return [...common, 'Sample Papers', 'Important Questions / All Subjects'];
+  return common;
+};
+
+const cbseClassSpecs: StudyHubSchoolBoardSpec[] = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((classNumber) => ({
+  category: 'School Boards',
+  family: 'CBSE',
+  exam: `Class ${classNumber}`,
+  icon: classNumber <= 5 ? 'class-primary' : 'class-middle',
+  goalType: 'class',
+  aliases: [`CBSE Class ${classNumber}`, `NCERT Class ${classNumber}`, `Class ${classNumber} CBSE`],
+  branches: cbseClassBranches(classNumber),
+}));
+
+const regionalStateBoards: Array<{ exam: string; aliases: string[] }> = [
+  { exam: 'AP Board', aliases: ['AP Board BIEAP', 'Andhra Pradesh Board', 'BIEAP', 'BSEAP', 'AP SSC', 'AP Intermediate'] },
+  { exam: 'Telangana Board', aliases: ['Telangana Board TSBIE', 'TSBIE', 'BSE Telangana', 'TS SSC', 'Telangana Intermediate'] },
+  { exam: 'Tamil Nadu Board', aliases: ['Tamil Nadu Board TNBSE', 'TNBSE', 'TN Board', 'Tamil Nadu SSLC', 'Tamil Nadu HSC'] },
+  { exam: 'Karnataka Board', aliases: ['Karnataka Board KSEEB', 'Karnataka Board PUC', 'Karnataka PUC', 'KSEEB', 'Karnataka SSLC', 'Karnataka 2nd PUC'] },
+  { exam: 'West Bengal Board', aliases: ['West Bengal Board WBCHSE', 'WBBSE', 'WBCHSE', 'West Bengal Madhyamik', 'West Bengal HS'] },
+  { exam: 'Gujarat Board', aliases: ['Gujarat Board GSEB', 'GSEB', 'Gujarat SSC', 'Gujarat HSC'] },
+  { exam: 'Haryana Board', aliases: ['Haryana Board HBSE', 'HBSE', 'BSEH', 'Haryana 10th Board', 'Haryana 12th Board'] },
+  { exam: 'Punjab Board', aliases: ['Punjab Board PSEB', 'PSEB', 'Punjab Matric', 'Punjab Senior Secondary'] },
+  { exam: 'Kerala Board', aliases: ['Kerala Board DHSE', 'Kerala SSLC', 'Kerala Plus Two', 'DHSE Kerala'] },
+  { exam: 'Odisha Board', aliases: ['Odisha Board CHSE', 'BSE Odisha', 'CHSE Odisha', 'Odisha 10th Board', 'Odisha 12th Board'] },
+  { exam: 'Assam Board', aliases: ['Assam Board SEBA', 'Assam Board AHSEC', 'SEBA', 'AHSEC', 'Assam HSLC', 'Assam HS'] },
+  { exam: 'Jharkhand Board', aliases: ['Jharkhand Board JAC', 'JAC Board', 'Jharkhand Matric', 'Jharkhand Inter'] },
+  { exam: 'Chhattisgarh Board', aliases: ['Chhattisgarh Board CGBSE', 'CGBSE', 'CG Board', 'Chhattisgarh 10th Board', 'Chhattisgarh 12th Board'] },
+  { exam: 'Himachal Board', aliases: ['Himachal Board HPBOSE', 'HPBOSE', 'Himachal 10th Board', 'Himachal 12th Board'] },
+  { exam: 'Uttarakhand Board', aliases: ['Uttarakhand Board UBSE', 'UBSE', 'UK Board', 'Uttarakhand 10th Board', 'Uttarakhand 12th Board'] },
+  { exam: 'Goa Board', aliases: ['Goa Board GBSHSE', 'GBSHSE', 'Goa SSC', 'Goa HSSC'] },
+];
+
+const regionalStateBoardSpecs: StudyHubSchoolBoardSpec[] = regionalStateBoards.map((board) => ({
+  category: 'School Boards',
+  family: 'State Boards',
+  exam: board.exam,
+  icon: 'state-board',
+  goalType: 'board',
+  aliases: board.aliases,
+  branches: seniorBoardBranches(),
+}));
+
+export const detailedSchoolBoardSpecs: StudyHubSchoolBoardSpec[] = [
+  {
+    category: 'School Boards',
+    family: 'CBSE',
+    exam: 'Class 10',
+    icon: 'cbse',
+    goalType: 'class',
+    aliases: ['CBSE Class 10', 'CBSE 10th Board', 'Class 10 Board Exam', 'Secondary School Certificate', 'SSC CBSE', 'Board Pariksha Class 10'],
+    branches: [
+      ...cbseClassResourceBranches,
+      'Board Pattern',
+      'Mathematics Standard',
+      'Mathematics Basic',
+      'Science',
+      'Social Science / History',
+      'Social Science / Geography',
+      'Social Science / Political Science',
+      'Social Science / Economics',
+      'English Language & Literature',
+      'Hindi A / Hindi B',
+      'Sanskrit',
+      'Computer Applications',
+      'Information Technology',
+      'Previous Year Papers / 2025',
+      'Previous Year Papers / 2024',
+      'Previous Year Papers / 2023',
+      'Previous Year Papers / 2022',
+      'Previous Year Papers / 2021',
+      'Sample Papers / Official CBSE',
+      'Sample Papers / Practice Questions',
+      'NCERT Solutions / Mathematics',
+      'NCERT Solutions / Science',
+      'NCERT Solutions / Social Science',
+      'NCERT Solutions / English',
+      'NCERT Solutions / Hindi',
+      'NCERT Exemplar / Mathematics',
+      'NCERT Exemplar / Science',
+      'Important Questions / Mathematics',
+      'Important Questions / Science',
+      'Important Questions / Social Science',
+      'Important Questions / English',
+      'Formula Sheets / Mathematics',
+      'Revision Notes / All Subjects',
+      'Answer Keys',
+    ],
+  },
+  {
+    category: 'School Boards',
+    family: 'CBSE',
+    exam: 'Class 11',
+    icon: 'cbse',
+    goalType: 'class',
+    aliases: ['CBSE Class 11', 'NCERT Class 11', 'Class 11 CBSE', 'Senior Secondary Class 11'],
+    branches: [
+      ...cbseClassResourceBranches,
+      'Science Stream / Physics',
+      'Science Stream / Chemistry',
+      'Science Stream / Mathematics',
+      'Science Stream / Biology',
+      'Science Stream / Computer Science',
+      'Commerce Stream / Accountancy',
+      'Commerce Stream / Business Studies',
+      'Commerce Stream / Economics',
+      'Arts Stream / History',
+      'Arts Stream / Political Science',
+      'Arts Stream / Geography',
+      'English Core',
+      'Hindi Core',
+      'NCERT Solutions / Physics',
+      'NCERT Solutions / Chemistry',
+      'NCERT Solutions / Mathematics',
+      'NCERT Solutions / Biology',
+      'NCERT Solutions / Accountancy',
+      'NCERT Solutions / Business Studies',
+      'NCERT Solutions / Economics',
+      'Revision Notes / All Subjects',
+      'Practice Questions / Chapter-wise',
+    ],
+  },
+  {
+    category: 'School Boards',
+    family: 'CBSE',
+    exam: 'Class 12',
+    icon: 'cbse',
+    goalType: 'class',
+    aliases: ['CBSE Class 12', 'CBSE 12th Board', 'Class 12 Board Exam', 'Higher Secondary Certificate', 'HSC CBSE', 'Board Pariksha Class 12', 'Senior Secondary CBSE'],
+    branches: [
+      ...cbseClassResourceBranches,
+      'Board Pattern',
+      'Science Stream / Physics',
+      'Science Stream / Chemistry',
+      'Science Stream / Mathematics',
+      'Science Stream / Biology',
+      'Science Stream / Computer Science',
+      'Science Stream / Physical Education',
+      'Commerce Stream / Accountancy',
+      'Commerce Stream / Business Studies',
+      'Commerce Stream / Economics',
+      'Commerce Stream / Mathematics',
+      'Commerce Stream / Computer Science',
+      'Arts Stream / History',
+      'Arts Stream / Political Science',
+      'Arts Stream / Geography',
+      'Arts Stream / Sociology',
+      'Arts Stream / Psychology',
+      'Arts Stream / Economics',
+      'Arts Stream / Fine Arts',
+      'English Core',
+      'Hindi Core / Hindi Elective',
+      'Sanskrit Core',
+      'Previous Year Papers / 2025 All Subjects',
+      'Previous Year Papers / 2024 All Subjects',
+      'Previous Year Papers / 2023',
+      'Previous Year Papers / 2022',
+      'Sample Papers / Official CBSE',
+      'Sample Papers / Practice Questions',
+      'NCERT Solutions / Physics',
+      'NCERT Solutions / Chemistry',
+      'NCERT Solutions / Mathematics',
+      'NCERT Solutions / Biology',
+      'NCERT Solutions / Accountancy',
+      'NCERT Solutions / Business Studies',
+      'NCERT Solutions / Economics',
+      'NCERT Exemplar / Physics',
+      'NCERT Exemplar / Chemistry',
+      'NCERT Exemplar / Mathematics',
+      'NCERT Exemplar / Biology',
+      'HC Verma Solutions / Physics',
+      'RD Sharma Solutions / Mathematics',
+      'Important Questions / All Subjects',
+      'Formula Sheets / Physics',
+      'Formula Sheets / Chemistry',
+      'Formula Sheets / Mathematics',
+      'Formula Sheets / Biology',
+      'Practical Files / Physics',
+      'Practical Files / Chemistry',
+      'Practical Files / Biology',
+      'Practical Files / Computer Science',
+      'Revision Notes / All Subjects',
+      'Answer Keys',
+    ],
+  },
+  ...cbseClassSpecs,
+  {
+    category: 'School Boards',
+    family: 'ICSE / ISC',
+    exam: 'Class 10',
+    icon: 'icse',
+    goalType: 'class',
+    aliases: ['ICSE Class 10', 'ICSE Board Class 10', 'Indian Certificate of Secondary Education', 'CISCE Board', 'ISC Class 10'],
+    branches: [
+      'Board Pattern',
+      'Mathematics',
+      'Physics',
+      'Chemistry',
+      'Biology',
+      'History & Civics',
+      'Geography',
+      'English Language Paper 1',
+      'English Literature Paper 2',
+      'Hindi',
+      'Computer Applications',
+      'Commercial Studies',
+      'Economics',
+      'Previous Year Papers / 2025',
+      'Previous Year Papers / 2024',
+      'Previous Year Papers / 2023',
+      'Previous Year Papers / 2022',
+      'Sample Papers',
+      'Important Questions',
+      'Revision Notes',
+      'Answer Keys',
+    ],
+  },
+  {
+    category: 'School Boards',
+    family: 'ICSE / ISC',
+    exam: 'Class 12',
+    icon: 'icse',
+    goalType: 'class',
+    aliases: ['ISC Class 12', 'ISC Board Class 12', 'Indian School Certificate', 'CISCE Class 12', 'ISC Science', 'ISC Commerce'],
+    branches: [
+      'Board Pattern',
+      'Science Stream / Physics',
+      'Science Stream / Chemistry',
+      'Science Stream / Mathematics',
+      'Science Stream / Biology',
+      'Science Stream / Computer Science',
+      'Commerce Stream / Accounts',
+      'Commerce Stream / Commerce',
+      'Commerce Stream / Economics',
+      'Commerce Stream / Mathematics',
+      'Arts Stream / History',
+      'Arts Stream / Political Science',
+      'Arts Stream / Geography',
+      'Arts Stream / Sociology',
+      'Arts Stream / Psychology',
+      'English Paper 1',
+      'English Literature Paper 2',
+      'Hindi',
+      'Previous Year Papers / 2025',
+      'Previous Year Papers / 2024',
+      'Previous Year Papers / 2023',
+      'Sample Papers',
+      'Important Questions',
+      'Answer Keys',
+    ],
+  },
+  {
+    category: 'School Boards',
+    family: 'State Boards',
+    exam: 'UP Board',
+    icon: 'state-board',
+    goalType: 'board',
+    aliases: ['UP Board Class 10 12', 'UPMSP', 'Uttar Pradesh Madhyamik Shiksha Parishad', 'UP Board High School', 'UP Board Intermediate', 'Uttar Pradesh Board'],
+    branches: seniorBoardBranches(['Class 12 / Arts / Civics']),
+  },
+  {
+    category: 'School Boards',
+    family: 'State Boards',
+    exam: 'Bihar Board',
+    icon: 'state-board',
+    goalType: 'board',
+    aliases: ['Bihar Board Class 10 12', 'BSEB', 'Bihar School Examination Board', 'Bihar Board Matric', 'Bihar Board Inter', 'Patna Board'],
+    branches: seniorBoardBranches(['Class 10 / Blueprint', 'Class 12 / Blueprint']),
+  },
+  {
+    category: 'School Boards',
+    family: 'State Boards',
+    exam: 'MP Board',
+    icon: 'state-board',
+    goalType: 'board',
+    aliases: ['MP Board Class 10 12', 'MPBSE', 'Madhya Pradesh Board of Secondary Education', 'MP Board Exam', 'MP 10th Board', 'MP 12th Board', 'Bhopal Board'],
+    branches: seniorBoardBranches(['Class 10 / Blueprint', 'Class 12 / Blueprint']),
+  },
+  {
+    category: 'School Boards',
+    family: 'State Boards',
+    exam: 'Rajasthan Board',
+    icon: 'state-board',
+    goalType: 'board',
+    aliases: ['Rajasthan Board Class 10 12', 'RBSE', 'Rajasthan Board of Secondary Education', 'Rajasthan Board Exam', 'Ajmer Board', 'BSER Ajmer'],
+    branches: seniorBoardBranches(),
+  },
+  {
+    category: 'School Boards',
+    family: 'State Boards',
+    exam: 'Maharashtra Board',
+    icon: 'state-board',
+    goalType: 'board',
+    aliases: ['Maharashtra Board Class 10 12', 'MSBSHSE', 'Maharashtra Board SSC', 'Maharashtra Board HSC', 'Pune Board', 'Mumbai Board', 'Nagpur Board'],
+    branches: [
+      'Class 10 / SSC Guide',
+      'Class 12 / HSC Guide',
+      ...seniorBoardBranches().filter((branch) => !branch.endsWith('/ Board Guide')),
+      'Class 10 / Previous Year Papers / SSC',
+      'Class 12 / Previous Year Papers / HSC',
+    ],
+  },
+  ...regionalStateBoardSpecs,
+  {
+    category: 'School Boards',
+    family: 'Olympiads',
+    exam: 'Science Olympiads',
+    icon: 'olympiad-main',
+    goalType: 'exam',
+    aliases: ['Science Olympiads NSEP NSEC NSEB', 'National Science Olympiad', 'Indian National Olympiad INO', 'HBCSE Olympiad', 'Physics Olympiad India', 'Chemistry Olympiad India', 'Biology Olympiad India', 'IPhO Selection', 'IChO Selection'],
+    branches: [
+      'NSO National Science Olympiad',
+      'NSEP Physics',
+      'NSEC Chemistry',
+      'NSEB Biology',
+      'NSEA Astronomy',
+      'NSEJS Junior Science',
+      'NSEP Syllabus',
+      'NSEC Syllabus',
+      'NSEB Syllabus',
+      'NSEA Syllabus',
+      'NSEP Previous Year Papers',
+      'NSEC Previous Year Papers',
+      'NSEB Previous Year Papers',
+      'NSEA Previous Year Papers',
+      'Physics Study Material',
+      'Chemistry Study Material',
+      'Biology Study Material',
+      'Astronomy Study Material',
+      'Mock Tests',
+      'Answer Keys',
+      'INO Qualification Strategy',
+      'International Olympiad Guide',
+    ],
+  },
+  {
+    category: 'School Boards',
+    family: 'Olympiads',
+    exam: 'SOF Olympiads',
+    icon: 'olympiad-main',
+    goalType: 'exam',
+    aliases: ['Science Olympiad Foundation', 'SOF IMO', 'SOF NSO', 'SOF IEO', 'SOF NCO', 'School Olympiad', 'Class 1-12 Olympiad'],
+    branches: [
+      'IMO International Mathematics',
+      'NSO National Science',
+      'IEO International English',
+      'NCO National Cyber',
+      'Class-wise Syllabus',
+      'IMO Previous Year Papers',
+      'NSO Previous Year Papers',
+      'IEO Previous Year Papers',
+      'NCO Previous Year Papers',
+      'Mathematics Study Material',
+      'Science Study Material',
+      'English Study Material',
+      'Cyber & Computer Study Material',
+      'Mock Tests',
+      'Answer Keys',
+      'Strategy',
+    ],
+  },
+  {
+    category: 'School Boards',
+    family: 'Scholarships',
+    exam: 'NMMS Scholarship',
+    icon: 'nmms',
+    goalType: 'exam',
+    aliases: ['National Means cum Merit Scholarship', 'NMMS Exam', 'Class 8 Scholarship', 'State NMMS', 'SCERT Scholarship'],
+    branches: [
+      'SAT Syllabus',
+      'MAT Syllabus',
+      'SAT Previous Year Papers',
+      'MAT Previous Year Papers',
+      'Mental Ability Study Material',
+      'Mathematics Study Material',
+      'Science Study Material',
+      'Social Science Study Material',
+      'Language Study Material',
+      'Mock Tests',
+      'Answer Keys',
+      'Strategy',
+      'Updates',
+    ],
+  },
+];

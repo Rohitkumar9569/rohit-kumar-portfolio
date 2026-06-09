@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Iit icon">
+
+  <defs>
+    <linearGradient id="education-4-main" x1="20" y1="14" x2="108" y2="114" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60a5fa"/>
+      <stop offset=".52" stop-color="#22c55e"/>
+      <stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <linearGradient id="education-4-warm" x1="24" y1="26" x2="104" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fef3c7"/>
+      <stop offset=".58" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <filter id="education-4-shadow" x="-24" y="-20" width="176" height="176" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="9" stdDeviation="8" flood-color="#0f172a" flood-opacity=".24"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="64" cy="104" rx="34" ry="7" fill="#0f172a" opacity=".16"/>
+  <path d="M35 109c9 5 49 5 58 0" fill="none" stroke="url(#education-4-main)" stroke-width="5.5" stroke-linecap="round" opacity=".78"/>
+
+        <g filter="url(#education-4-shadow)">
+          <path d="M64 22l43 21-43 21-43-21 43-21z" fill="url(#education-4-main)"/>
+          <path d="M33 57h14v34H33zM57 57h14v34H57zM81 57h14v34H81z" fill="#f8fafc" opacity=".92"/>
+          <path d="M26 94h82" stroke="url(#education-4-main)" stroke-width="8" stroke-linecap="round"/>
+        </g>
+</svg>

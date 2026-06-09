@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Indian History icon">
+
+  <defs>
+    <linearGradient id="subject-151-main" x1="19" y1="14" x2="109" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22c55e"/>
+      <stop offset=".55" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="subject-151-warm" x1="24" y1="23" x2="102" y2="105" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff7ed"/>
+      <stop offset=".55" stop-color="#facc15"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <filter id="subject-151-shadow" x="-28" y="-24" width="184" height="184" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="9" flood-color="#020617" flood-opacity=".26"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="64" cy="105" rx="38" ry="8" fill="#020617" opacity=".16"/>
+  <path d="M31 108c16 8 50 8 66 0" fill="none" stroke="url(#subject-151-main)" stroke-width="5.5" stroke-linecap="round" opacity=".78"/>
+<g filter="url(#subject-151-shadow)"><path d="M23 32l29-12 28 12 25-10v74l-25 10-28-12-29 12V32z" fill="url(#subject-151-main)"/><path d="M52 20v74M80 32v74" stroke="#f8fafc" stroke-width="6" opacity=".74"/><path d="M42 66c10-20 31-21 44-4" fill="none" stroke="#fef3c7" stroke-width="7" stroke-linecap="round"/></g>
+</svg>

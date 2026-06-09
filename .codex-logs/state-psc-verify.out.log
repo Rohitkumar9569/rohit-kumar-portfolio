@@ -1,0 +1,6 @@
+
+> server@1.0.0 admin:seed-state-psc-premium
+> ts-node src/scripts/seedStatePscPremiumLibrary.ts --verify
+
+Verifying State PSC premium library seed.
+Prepared state PSC cards: 31. Premium packs: 226 (16 UPPSC, 210 remaining PSC).

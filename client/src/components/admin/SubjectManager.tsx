@@ -115,6 +115,7 @@ const SubjectManager: React.FC = () => {
   return (
     <div className="bg-slate-800 p-6 rounded-lg shadow-lg mt-8">
       <h2 className="text-2xl font-bold text-white mb-6">Manage Subjects</h2>
+      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
 
       {/* Dropdown to select an exam */}
       <div className="mb-6">

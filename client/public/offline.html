@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rohit Kumar Study Hub Offline</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f8fafc;
+        color: #0f172a;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          background: #020617;
+          color: #f8fafc;
+        }
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      main {
+        width: min(100%, 520px);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        border-radius: 8px;
+        padding: 28px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        main {
+          background: rgba(15, 23, 42, 0.88);
+          box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+        }
+      }
+
+      p {
+        color: #64748b;
+        line-height: 1.6;
+      }
+
+      a {
+        display: inline-flex;
+        margin-top: 12px;
+        border-radius: 8px;
+        background: #0f172a;
+        color: #fff;
+        padding: 10px 14px;
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        p {
+          color: #cbd5e1;
+        }
+
+        a {
+          background: #fff;
+          color: #0f172a;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <strong>Rohit Kumar Study Hub is offline</strong>
+      <h1>Your saved resources are still available.</h1>
+      <p>
+        The app shell is cached. Open Library for saved metadata and offline resources, or reconnect to load fresh content.
+      </p>
+      <a href="/app/library">Open Library</a>
+    </main>
+  </body>
+</html>

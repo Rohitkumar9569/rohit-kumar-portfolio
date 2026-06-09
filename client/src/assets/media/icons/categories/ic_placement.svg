@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Placement icon">
+
+  <defs>
+    <linearGradient id="categories-5-main" x1="20" y1="14" x2="108" y2="114" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22d3ee"/>
+      <stop offset=".52" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+    <linearGradient id="categories-5-warm" x1="24" y1="26" x2="104" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fef3c7"/>
+      <stop offset=".58" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <filter id="categories-5-shadow" x="-24" y="-20" width="176" height="176" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="9" stdDeviation="8" flood-color="#0f172a" flood-opacity=".24"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="64" cy="104" rx="34" ry="7" fill="#0f172a" opacity=".16"/>
+  <path d="M35 109c9 5 49 5 58 0" fill="none" stroke="url(#categories-5-main)" stroke-width="5.5" stroke-linecap="round" opacity=".78"/>
+
+        <g filter="url(#categories-5-shadow)">
+          <path d="M45 41v-7c0-5 4-9 9-9h20c5 0 9 4 9 9v7" fill="none" stroke="#f8fafc" stroke-width="7" stroke-linecap="round"/>
+          <rect x="25" y="40" width="78" height="58" rx="14" fill="url(#categories-5-warm)"/>
+          <path d="M25 58h78" stroke="#fff7ed" stroke-width="7" opacity=".65"/>
+          <path d="M56 68h16v22l-8-4-8 4z" fill="#ef4444"/>
+        </g>
+</svg>

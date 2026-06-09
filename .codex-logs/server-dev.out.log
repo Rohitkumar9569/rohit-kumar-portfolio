@@ -1,0 +1,221 @@
+
+> server@1.0.0 dev
+> nodemon src/index.ts
+
+[33m[nodemon] 3.1.10[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: ts,json[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[server]: Server is running on port 5001
+[db] Connected to MongoDB
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+[assistant] Sarathi learning assistant active: Study Hub, portfolio, exams, and general concepts.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m

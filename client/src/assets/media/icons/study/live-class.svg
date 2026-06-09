@@ -1,0 +1,19 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="live" x1="26" y1="52" x2="104" y2="96" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF4D4D"/>
+      <stop offset="1" stop-color="#DC2626"/>
+    </linearGradient>
+    <filter id="glow" x="8" y="16" width="112" height="104" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="9" stdDeviation="7" flood-color="#EF4444" flood-opacity="0.32"/>
+    </filter>
+  </defs>
+  <g filter="url(#glow)">
+    <path d="M36 44C36 34 44 26 54 26" stroke="#4F46E5" stroke-width="7" stroke-linecap="round"/>
+    <path d="M92 44C92 34 84 26 74 26" stroke="#4F46E5" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="64" cy="42" r="8" fill="#EF4444"/>
+    <rect x="21" y="55" width="86" height="41" rx="10" fill="url(#live)"/>
+    <text x="35" y="84" fill="white" font-family="Inter,Arial,sans-serif" font-size="25" font-weight="900">LIVE</text>
+    <path d="M32 105H96" stroke="#991B1B" stroke-width="5" stroke-linecap="round" opacity="0.45"/>
+  </g>
+</svg>

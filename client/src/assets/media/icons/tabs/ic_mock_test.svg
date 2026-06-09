@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Mock Test icon">
+
+  <defs>
+    <linearGradient id="tabs-2-main" x1="20" y1="14" x2="108" y2="114" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f59e0b"/>
+      <stop offset=".52" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#64748b"/>
+    </linearGradient>
+    <linearGradient id="tabs-2-warm" x1="24" y1="26" x2="104" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fef3c7"/>
+      <stop offset=".58" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <filter id="tabs-2-shadow" x="-24" y="-20" width="176" height="176" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="9" stdDeviation="8" flood-color="#0f172a" flood-opacity=".24"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="64" cy="104" rx="34" ry="7" fill="#0f172a" opacity=".16"/>
+  <path d="M35 109c9 5 49 5 58 0" fill="none" stroke="url(#tabs-2-main)" stroke-width="5.5" stroke-linecap="round" opacity=".78"/>
+
+        <g filter="url(#tabs-2-shadow)">
+          <rect x="31" y="26" width="66" height="82" rx="15" fill="url(#tabs-2-main)"/>
+          <path d="M49 48h30M49 62h30M49 76h22" stroke="#f8fafc" stroke-width="6" stroke-linecap="round"/>
+          <path d="M39 48l5 5 9-12M39 76l5 5 9-12" fill="none" stroke="#fef3c7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+</svg>

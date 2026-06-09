@@ -1,0 +1,19 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="8" y="8" width="112" height="112" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="7" flood-color="#0F172A" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <rect x="25" y="72" width="76" height="18" rx="6" fill="#3B82F6"/>
+    <rect x="28" y="76" width="70" height="7" rx="3.5" fill="#DBEAFE"/>
+    <rect x="33" y="54" width="78" height="18" rx="6" fill="#F59E0B"/>
+    <rect x="37" y="58" width="68" height="7" rx="3.5" fill="#FEF3C7"/>
+    <rect x="20" y="36" width="80" height="18" rx="6" fill="#EF4444"/>
+    <rect x="24" y="40" width="70" height="7" rx="3.5" fill="#FEE2E2"/>
+    <rect x="31" y="18" width="74" height="18" rx="6" fill="#22C55E"/>
+    <rect x="36" y="22" width="61" height="7" rx="3.5" fill="#DCFCE7"/>
+    <path d="M69 72V104L59 98L49 104V72H69Z" fill="#EF4444"/>
+    <path d="M19 95H108" stroke="#1E3A8A" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

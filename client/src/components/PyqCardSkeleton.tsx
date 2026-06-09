@@ -1,7 +1,5 @@
 // src/components/PyqCardSkeleton.tsx
 
-import React from 'react';
-
 const PyqCardSkeleton = () => {
   return (
     // Card Background: White/Light Gray in Light Mode, Slate-800 in Dark Mode (consistent with other cards)

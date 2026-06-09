@@ -1,25 +1,25 @@
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Virtuoso } from 'react-virtuoso';
-import API, { fetchDailyJourney, fetchJourneyByDate } from '../api';
-import type { JourneyApiResponse, Suggestion } from '../api';
+import API from '../api';
+import type { Suggestion } from '../api';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import { Drawer } from 'vaul';
-import ChatInterface from '../components/viewer/ChatInterface';
 import PdfViewerSkeleton from '../components/viewer/PdfViewerSkeleton';
 import PdfPageSkeleton from '../components/viewer/PdfPageSkeleton';
 // ChatBubbleBottomCenterTextIcon
 import { ArrowLeftIcon, ChatBubbleBottomCenterTextIcon, MagnifyingGlassPlusIcon, MagnifyingGlassMinusIcon, ArrowPathIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/solid';
-import { useQuery } from '@tanstack/react-query';
 
-import { Document, Page, pdfjs } from 'react-pdf';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
+const ChatInterface = React.lazy(() => import('../components/viewer/ChatInterface'));
+const PdfDocumentViewport = React.lazy(() => import('../components/viewer/PdfDocumentViewport'));
 
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
+const ChatPanelFallback = () => (
+  <div className="flex h-full flex-col bg-neutral-950 p-4">
+    <div className="h-10 rounded-lg bg-slate-800/80" />
+    <div className="mt-4 flex-1 rounded-xl bg-slate-900/80" />
+    <div className="mt-4 h-12 rounded-xl bg-slate-800/80" />
+  </div>
+);
 
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -38,15 +38,7 @@ interface Message {
   journeyId: string | null;
 }
 
-const extractJourneyIdFromQuestion = (text: string, journeys: Record<string, Suggestion[]>) => {
-  const sanitizedText = text.split('. ').slice(1).join('. ');
-  for (const id in journeys) {
-    if (journeys[id].some(s => s.questionText === sanitizedText)) {
-      return id;
-    }
-  }
-  return null;
-};
+const EMPTY_JOURNEYS: Record<string, Suggestion[]> = {};
 
 const PdfViewerPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,11 +46,10 @@ const PdfViewerPage = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [journeys, setJourneys] = useState<Record<string, Suggestion[]>>({});
+  const journeys = EMPTY_JOURNEYS;
   const [activeJourneyId, setActiveJourneyId] = useState<string | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
   const [answeredIds, setAnsweredIds] = useState<Set<string>>(new Set());
-  const [scrollToIndex, setScrollToIndex] = useState<number | null>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const [pyq, setPyq] = useState<any>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -69,7 +60,6 @@ const PdfViewerPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInput, setPageInput] = useState("1");
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const lastScrollY = useRef(0);
   const autoHideDisabled = useRef(false);
   const interactionTimeoutRef = useRef<number | null>(null);
   const [unscaledPageWidth, setUnscaledPageWidth] = useState<number | null>(null);
@@ -80,7 +70,7 @@ const PdfViewerPage = () => {
   const y = useMotionValue(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [overscanValue, setOverscanValue] = useState(470);
+  const overscanValue = isMobile ? 220 : 360;
   const [loadProgress, setLoadProgress] = useState<number | null>(null);
   const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(null);
   const numberOfSteps = 40;
@@ -110,66 +100,13 @@ const PdfViewerPage = () => {
     };
   }, [activeSnapPoint, isMobile]);
 
-  const { data: todayJourneyData, isLoading: queryLoading } = useQuery<JourneyApiResponse>({
-    queryKey: ['dailyJourney'],
-    queryFn: fetchDailyJourney,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  });
+  const [initialLoading] = useState(false);
 
-  const [initialLoading, setInitialLoading] = useState(true);
-
-  useEffect(() => {
-    if (todayJourneyData && !todayJourneyData.isExhausted && todayJourneyData.journey) {
-      const flatJourney = todayJourneyData.journey.flatMap((pair, pairIndex) => ([
-        { _id: pair.ca_question, questionText: pair.ca_question, originalIndex: pairIndex * 2 + 1, isPYQ: false },
-        { _id: pair.related_pyq, questionText: pair.related_pyq, originalIndex: pairIndex * 2 + 2, isPYQ: true },
-      ]));
-      setJourneys(prev => ({ ...prev, 'today': flatJourney }));
-    } else if (todayJourneyData && todayJourneyData.isExhausted) {
-      setJourneys(prev => ({ ...prev, 'today': [] }));
-    }
-    if (!queryLoading) {
-      setInitialLoading(false);
-    }
-  }, [todayJourneyData, queryLoading]);
-
-  const filteredMessages = messages.filter(msg => {
-    if (messages.length > 0 && messages[0].sender === 'ai' && msg === messages[0] && !activeJourneyId) return true;
-    return msg.journeyId === activeJourneyId;
-  });
-
-  useEffect(() => {
-    if (scrollToIndex !== null && chatScrollRef.current) {
-      const children = chatScrollRef.current.querySelectorAll('.chat-message-container');
-      if (scrollToIndex >= 0 && scrollToIndex < children.length) {
-        (children[scrollToIndex] as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      setScrollToIndex(null);
-    }
-  }, [scrollToIndex, chatScrollRef.current]);
-
-  const fetchAndStoreJourney = async (date: string, isAiTriggered: boolean = false) => {
-    if (journeys[date]) {
-      setActiveJourneyId(date);
-      return;
-    }
-    try {
-      const journey = await fetchJourneyByDate(date);
-      setJourneys(prev => ({ ...prev, [date]: journey }));
-      setActiveJourneyId(date);
-      if (isAiTriggered) {
-        const aiMessage: Message = { sender: 'ai', text: `Here is the Active Learning Journey for ${date}.`, historicalJourney: journey, journeyId: date };
-        setMessages(prev => [...prev, aiMessage]);
-      }
-    } catch (error) {
-      handleSendMessage(`Sorry, I couldn't find any questions for ${date}.`, true);
-    }
-  };
+  const filteredMessages = messages;
 
   const handleSendMessage = async (text: string, isAiMessage: boolean = false) => {
     if (!text.trim() || isAiLoading) return;
-    const currentJourneyId = activeJourneyId || extractJourneyIdFromQuestion(text, journeys);
+    const currentJourneyId = null;
     if (isAiMessage) {
       const aiInfoMessage: Message = { sender: 'ai', text, journeyId: currentJourneyId };
       setMessages(prev => [...prev, aiInfoMessage]);
@@ -226,12 +163,6 @@ const PdfViewerPage = () => {
       });
     } finally {
       setIsAiLoading(false);
-      const match = fullResponse.match(/\[FETCH_JOURNEY_FOR_DATE:(.*?)\]/);
-      if (match && match[1]) {
-        const date = match[1];
-        setMessages(prev => prev.slice(0, -1));
-        fetchAndStoreJourney(date, true);
-      }
     }
   };
 
@@ -239,14 +170,6 @@ const PdfViewerPage = () => {
     if (id) setLoading(true);
     API.get(`/api/pyqs/${id}`).then(res => setPyq(res.data)).catch(err => console.error(err)).finally(() => setLoading(false));
   }, [id]);
-
-  const handleLoadProgress = ({ loaded, total }: { loaded: number; total: number }) => setLoadProgress((loaded / total) * 100);
-  const onDocumentLoadSuccess = async (pdf: PDFDocumentProxy) => {
-    setLoadProgress(null);
-    setNumPages(pdf.numPages);
-    const firstPage = await pdf.getPage(1);
-    setUnscaledPageWidth(firstPage.getViewport({ scale: 1 }).width);
-  };
 
   const preventAutoHide = useCallback(() => {
     if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
@@ -354,25 +277,33 @@ const PdfViewerPage = () => {
           </div>
         </motion.header>
         <main className={`relative h-full flex flex-col bg-slate-100 transition-all duration-300 ${isHeaderVisible ? 'pt-10' : 'pt-0'}`}>
-          <Document file={pyq?.fileUrl} onLoadSuccess={onDocumentLoadSuccess} onLoadProgress={handleLoadProgress} onLoadError={console.error} loading={<PdfPageSkeleton />} className="flex-1 overflow-hidden">
-            {numPages > 0 && (<Virtuoso ref={virtuosoRef} overscan={overscanValue} totalCount={numPages} scrollerRef={(ref) => {
-              if (ref) {
-                (pdfContainerRef as React.MutableRefObject<HTMLDivElement | null>).current = ref as HTMLDivElement; (ref as HTMLElement).id = 'pdf-scroll-area';
-              }
-            }} className="custom-scrollbar" rangeChanged={range => setCurrentPage(range.startIndex + 1)} itemContent={index => (<div className="flex justify-center py-2 md:py-4"><div className="shadow-lg bg-white" style={{ width: 595 * scale, height: 842 * scale }}><Page pageNumber={index + 1} scale={scale} rotate={rotation} loading={<div style={{ width: 595 * scale, height: 842 * scale }} className="bg-slate-200 animate-pulse rounded-md" />} /></div></div>)} />)}
-          </Document>
+          <Suspense fallback={<PdfPageSkeleton />}>
+            <PdfDocumentViewport
+              fileUrl={pyq?.fileUrl}
+              scale={scale}
+              rotation={rotation}
+              numPages={numPages}
+              overscanValue={overscanValue}
+              virtuosoRef={virtuosoRef}
+              pdfContainerRef={pdfContainerRef}
+              setCurrentPage={setCurrentPage}
+              setNumPages={setNumPages}
+              setLoadProgress={setLoadProgress}
+              setUnscaledPageWidth={setUnscaledPageWidth}
+            />
+          </Suspense>
         </main>
-        <AnimatePresence>{isMobile && showCustomScrollbar && (<motion.div ref={trackRef} className="absolute top-0 right-0 h-full w-10 z-20 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}><motion.div drag="y" dragConstraints={trackRef} dragElastic={0} dragMomentum={false} onDragStart={() => setIsDragging(true)} onDragEnd={() => setIsDragging(false)} onDrag={(event, info) => { const container = pdfContainerRef.current; const track = trackRef.current; if (container && track) { const maxThumbY = track.clientHeight - THUMB_HEIGHT; const progress = info.offset.y / maxThumbY; const maxScrollTop = container.scrollHeight - container.clientHeight; container.scrollTop = progress * maxScrollTop; } }} style={{ y, height: THUMB_HEIGHT }} className="w-16 bg-slate-800/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-xs shadow-lg cursor-grab active:cursor-grabbing pointer-events-auto -ml-3">{currentPage} / {numPages}</motion.div></motion.div>)}</AnimatePresence>
+        <AnimatePresence>{isMobile && showCustomScrollbar && (<motion.div ref={trackRef} className="absolute top-0 right-0 h-full w-10 z-20 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}><motion.div drag="y" dragConstraints={trackRef} dragElastic={0} dragMomentum={false} onDragStart={() => setIsDragging(true)} onDragEnd={() => setIsDragging(false)} onDrag={(_event, info) => { const container = pdfContainerRef.current; const track = trackRef.current; if (container && track) { const maxThumbY = track.clientHeight - THUMB_HEIGHT; const progress = info.offset.y / maxThumbY; const maxScrollTop = container.scrollHeight - container.clientHeight; container.scrollTop = progress * maxScrollTop; } }} style={{ y, height: THUMB_HEIGHT }} className="w-16 bg-slate-800/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-xs shadow-lg cursor-grab active:cursor-grabbing pointer-events-auto -ml-3">{currentPage} / {numPages}</motion.div></motion.div>)}</AnimatePresence>
       </div>
       {isMobile ? (
         <Drawer.Root modal={false} open={activeSnapPoint !== null} onOpenChange={(open) => setActiveSnapPoint(open ? 1 : null)} snapPoints={snapPoints} activeSnapPoint={activeSnapPoint} setActiveSnapPoint={setActiveSnapPoint}>
           
           <div className="fixed bottom-6 right-6 z-20 flex items-center justify-center group">
-            <div className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
+            <div className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-300 opacity-30 transition-opacity duration-300 group-hover:opacity-50"></div>
             <button 
               onClick={handleOpenDrawer} 
-              className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg shadow-cyan-500/50 transition-transform duration-300 ease-out hover:scale-110 hover:shadow-cyan-400/80 focus:outline-none" 
-              title="Chat"
+              className="relative flex h-14 w-14 items-center justify-center rounded-full border border-cyan-100/25 bg-gradient-to-br from-cyan-300 via-sky-500 to-amber-200 text-slate-950 shadow-[0_18px_46px_rgba(34,211,238,0.36)] transition-transform duration-300 ease-out hover:scale-110 hover:shadow-[0_20px_58px_rgba(251,191,36,0.24)] focus:outline-none" 
+              title="Ask Sarathi"
             >
               <ChatBubbleBottomCenterTextIcon className="h-7 w-7 drop-shadow-md" />
             </button>
@@ -380,16 +311,24 @@ const PdfViewerPage = () => {
           {/* BUTTON END */}
 
           <Drawer.Portal>
-            <Drawer.Content className="fixed bottom-0 left-0 right-0 flex flex-col rounded-t-2xl bg-neutral-950/90 backdrop-blur-md z-40 border-t border-slate-700 h-full">
+            <Drawer.Content className="fixed bottom-0 left-0 right-0 z-40 flex h-full flex-col rounded-t-2xl border-t border-cyan-100/15 bg-[linear-gradient(145deg,rgba(2,6,23,0.94),rgba(15,23,42,0.86),rgba(8,47,73,0.62))] shadow-[0_-24px_70px_rgba(2,6,23,0.55)] backdrop-blur-2xl">
               <div className="mx-auto my-3 h-1.5 w-12 flex-shrink-0 rounded-full bg-slate-500" />
               <VisuallyHidden><Drawer.Title>AI Assistant Chat</Drawer.Title><Drawer.Description>Chat with the AI assistant to ask questions about the document.</Drawer.Description></VisuallyHidden>
-              {id && <ChatInterface documentId={id} isMobileLayout={true} messages={filteredMessages} isLoading={isAiLoading} onSendMessage={handleSendMessage} journeys={journeys} activeJourneyId={activeJourneyId} setActiveJourneyId={setActiveJourneyId} isCompleted={isCompleted} setIsCompleted={setIsCompleted} answeredIds={answeredIds} setAnsweredIds={setAnsweredIds} initialLoading={initialLoading} activeSnapPoint={activeSnapPoint} smallSnapPoint={smallSnapPoint} setScrollToIndex={setScrollToIndex} chatScrollRef={chatScrollRef} handleCloseDrawer={handleCloseDrawer} />}
+              {id && (
+                <Suspense fallback={<ChatPanelFallback />}>
+                  <ChatInterface documentId={id} isMobileLayout={true} messages={filteredMessages} isLoading={isAiLoading} onSendMessage={handleSendMessage} journeys={journeys} activeJourneyId={activeJourneyId} setActiveJourneyId={setActiveJourneyId} isCompleted={isCompleted} setIsCompleted={setIsCompleted} answeredIds={answeredIds} setAnsweredIds={setAnsweredIds} initialLoading={initialLoading} activeSnapPoint={activeSnapPoint} smallSnapPoint={smallSnapPoint} chatScrollRef={chatScrollRef} handleCloseDrawer={handleCloseDrawer} />
+                </Suspense>
+              )}
             </Drawer.Content>
           </Drawer.Portal>
         </Drawer.Root>
       ) : (
         <aside className="w-2/5 h-full bg-neutral-950">
-          {id && <ChatInterface documentId={id} isMobileLayout={false} messages={filteredMessages} isLoading={isAiLoading} onSendMessage={handleSendMessage} journeys={journeys} activeJourneyId={activeJourneyId} setActiveJourneyId={setActiveJourneyId} isCompleted={isCompleted} setIsCompleted={setIsCompleted} answeredIds={answeredIds} setAnsweredIds={setAnsweredIds} initialLoading={initialLoading} setScrollToIndex={setScrollToIndex} chatScrollRef={chatScrollRef} handleCloseDrawer={handleCloseDrawer} />}
+          {id && (
+            <Suspense fallback={<ChatPanelFallback />}>
+              <ChatInterface documentId={id} isMobileLayout={false} messages={filteredMessages} isLoading={isAiLoading} onSendMessage={handleSendMessage} journeys={journeys} activeJourneyId={activeJourneyId} setActiveJourneyId={setActiveJourneyId} isCompleted={isCompleted} setIsCompleted={setIsCompleted} answeredIds={answeredIds} setAnsweredIds={setAnsweredIds} initialLoading={initialLoading} chatScrollRef={chatScrollRef} handleCloseDrawer={handleCloseDrawer} />
+            </Suspense>
+          )}
         </aside>
       )}
     </div>

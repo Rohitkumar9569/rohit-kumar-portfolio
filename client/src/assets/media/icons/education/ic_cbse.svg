@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Cbse icon">
+
+  <defs>
+    <linearGradient id="education-0-main" x1="20" y1="14" x2="108" y2="114" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60a5fa"/>
+      <stop offset=".52" stop-color="#22c55e"/>
+      <stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <linearGradient id="education-0-warm" x1="24" y1="26" x2="104" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fef3c7"/>
+      <stop offset=".58" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <filter id="education-0-shadow" x="-24" y="-20" width="176" height="176" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="9" stdDeviation="8" flood-color="#0f172a" flood-opacity=".24"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="64" cy="104" rx="34" ry="7" fill="#0f172a" opacity=".16"/>
+  <path d="M35 109c9 5 49 5 58 0" fill="none" stroke="url(#education-0-main)" stroke-width="5.5" stroke-linecap="round" opacity=".78"/>
+
+        <g filter="url(#education-0-shadow)">
+          <path d="M31 34c0-5 4-9 9-9h22c7 0 12 4 12 10v59c0 2-2 4-4 4H40c-5 0-9-4-9-9V34z" fill="url(#education-0-main)"/>
+          <path d="M74 35c0-6 5-10 11-10h8c5 0 9 4 9 9v60c0 3-3 5-6 3l-11-6-11 6V35z" fill="#f8fafc" opacity=".92"/>
+          <path d="M43 46h23M43 57h20M43 68h16" stroke="#f8fafc" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+        </g>
+</svg>

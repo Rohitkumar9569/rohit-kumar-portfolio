@@ -1,5 +1,28 @@
-# Allow all crawlers to access all content
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin/login
+Disallow: /login
+Disallow: /app/library
+Disallow: /app/profile
+Disallow: /app/preferences
+Disallow: /app/onboarding
+Disallow: /app/contribute
+Disallow: /app/request
+Disallow: /app/pdf
+Disallow: /app/resource/
+Disallow: /app/paper/
+Disallow: /pyq/view/
+
+Allow: /app
+Allow: /app/catalog
+Allow: /app/search
+Allow: /app/ask
+Allow: /exams/
+Allow: /papers/
+Allow: /resources/
+Allow: /subjects/
 
 Sitemap: https://rohitkumar-portfolio.vercel.app/sitemap.xml

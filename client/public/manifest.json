@@ -1,11 +1,25 @@
 {
-  "name": "Rohit Kumar | Portfolio & Study Hub",
-  "short_name": "Rohit's Hub",
-  "start_url": ".",
+  "id": "/app",
+  "name": "Rohit Kumar Study Hub",
+  "short_name": "Rohit Hub",
+  "description": "A premium exam preparation workspace for UPSC, GATE, CBSE, State PCS, PYQs, notes, books, syllabus, search, saved resources, and practice material.",
+  "start_url": "/app",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0d1117",
-  "theme_color": "#0d1117",
-  "description": "The portfolio of Rohit Kumar, a full-stack developer and creator of the Study Hub.",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "lang": "en-IN",
+  "dir": "ltr",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f172a",
+  "categories": ["education", "productivity"],
+  "orientation": "any",
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 420
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -24,6 +38,45 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Study Hub premium exam workspace"
+    },
+    {
+      "src": "/maskable-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Study Hub mobile app"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Search Resources",
+      "short_name": "Search",
+      "description": "Search notes, PYQs, books, syllabus, and practice resources.",
+      "url": "/app/search",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Open Library",
+      "short_name": "Library",
+      "description": "Open saved and offline study resources.",
+      "url": "/app/library",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Open Papers",
+      "short_name": "Papers",
+      "description": "Open PYQs and previous papers.",
+      "url": "/app/papers",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }

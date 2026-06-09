@@ -1,0 +1,4 @@
+Contact: https://rohitkumar-portfolio.vercel.app/app/contribute
+Preferred-Languages: en, hi
+Canonical: https://rohitkumar-portfolio.vercel.app/security.txt
+Policy: https://rohitkumar-portfolio.vercel.app/
