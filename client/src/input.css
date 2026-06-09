@@ -1135,6 +1135,8 @@ to { color: transparent }
   overscroll-behavior-y: contain;
   overflow-x: clip !important;
   overflow-y: auto !important;
+  height: 100dvh;
+  max-height: 100dvh;
   -webkit-overflow-scrolling: touch;
 }
 
