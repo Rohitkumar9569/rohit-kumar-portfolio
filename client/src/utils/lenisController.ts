@@ -25,9 +25,15 @@ export const shouldPreventLenisScroll = (node: Element) => {
 
 export const isLenisSupported = (): boolean => {
   if (typeof window === 'undefined') return false;
+
+  const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches;
+  const hasTouchSupport = navigator.maxTouchPoints > 0;
+
+  if (hasCoarsePointer || hasTouchSupport) return false;
+
   // Reduced motion: accessibility ke liye skip
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
-  return true; 
+  return true;
 };
 
 export const createAppLenisOptions = (options = {}) => {
@@ -37,14 +43,11 @@ export const createAppLenisOptions = (options = {}) => {
       navigator.maxTouchPoints > 0);
 
   if (isTouch) {
-    // 📱 MOBILE PREMIUM CONFIG (Floating Glide)
     return {
       autoRaf: false,
-      prevent: shouldPreventLenisScroll, // Nested scroll hijacking rokne ke liye
-      lerp: 0.1,               // Glide hone ke baad page bohot smoothly rukega
-      smoothTouch: true,       // 🔥 Premium JS inertia ON
-      touchMultiplier: 2.5,    // 🔥 MAGIC FIX: Thoda sa swipe karne par freely aage jayega (No friction)
-      syncTouch: false,        // Native scroll ko hijack nahi karega
+      prevent: shouldPreventLenisScroll,
+      smoothTouch: false,
+      syncTouch: false,
       ...options,
     };
   }

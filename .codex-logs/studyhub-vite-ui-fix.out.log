@@ -408,3 +408,25 @@
 [2m3:34:27 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
 [2m3:35:16 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/sections/StudyHubCTA.tsx[22m
 [2m3:35:17 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:38:13 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:38:14 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:38:28 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:38:50 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:41:23 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:41:24 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:41:36 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [optimizer] bundling dependencies...
+[2m3:41:37 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mreact-icons/fi[32m[39m
+[2m3:41:41 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:42:13 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:42:14 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:42:31 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:44:03 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:44:03 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:45:40 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:46:07 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyPdfReaderFrame.tsx[22m
+[2m3:46:07 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:50:23 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m
+[2m3:51:52 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/utils/pwaInstallStore.ts[22m
+[2m3:51:52 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/study/StudyInstallCard.tsx[22m
+[2m3:55:15 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/PortfolioPage.tsx, /src/components/Navbar.tsx, /src/components/CommandPalette.tsx, /src/components/ArchitectCanvas.tsx, /src/components/study/StudyAppLayout.tsx, /src/App.tsx[22m
+[2m3:55:17 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/output.css[22m

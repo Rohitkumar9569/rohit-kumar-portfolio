@@ -2,7 +2,6 @@ import { type FormEvent, type TouchEvent as ReactTouchEvent, useCallback, useEff
 import * as Dialog from '@radix-ui/react-dialog';
 import { Virtuoso } from 'react-virtuoso';
 import { Document, Page, pdfjs } from 'react-pdf';
-import type { PDFDocumentProxy } from 'pdfjs-dist';
 import {
   ArrowLeftIcon,
   ArrowDownTrayIcon,
@@ -138,6 +137,7 @@ const StudyPdfReaderFrame = ({
   const [pageSize, setPageSize] = useState({ width: 595, height: 842 });
   const [hasError, setHasError] = useState(false);
   const [documentSource, setDocumentSource] = useState<string>(fileUrl);
+  const [isDocumentLoading, setIsDocumentLoading] = useState(false);
   const [isSavingOffline, setIsSavingOffline] = useState(false);
   const [isOfflineReady, setIsOfflineReady] = useState(false);
   const activeObjectUrlRef = useRef<string | null>(null);
@@ -173,6 +173,8 @@ const StudyPdfReaderFrame = ({
   const clampedVisibleLoadProgress = visibleLoadProgress === null
     ? null
     : Math.max(0, Math.min(100, visibleLoadProgress));
+  const progressBarPercent = clampedVisibleLoadProgress === null ? 12 : Math.max(8, clampedVisibleLoadProgress);
+  const showProgressBar = isPreparing || isDocumentLoading || (clampedVisibleLoadProgress !== null && clampedVisibleLoadProgress < 100);
   const isFullMode = readerMode === 'full';
   const isReadMode = readerMode === 'read';
   const modeButtonLabel = isFullMode ? 'Exit' : isReadMode ? 'Full' : 'Read';
@@ -402,6 +404,7 @@ const StudyPdfReaderFrame = ({
       revokeActiveObjectUrl();
       setDocumentSource(fileUrl);
       setIsOfflineReady(false);
+      setIsDocumentLoading(true);
       setLoadProgress(null);
       setHasError(false);
 
@@ -538,8 +541,9 @@ const StudyPdfReaderFrame = ({
     }
   };
 
-  const handleLoadSuccess = async (pdf: PDFDocumentProxy) => {
+  const handleLoadSuccess = async (pdf: any) => {
     clearProgressReset();
+    setIsDocumentLoading(false);
     setLoadProgress(100);
 
     const firstPage = await pdf.getPage(1);
@@ -589,6 +593,20 @@ const StudyPdfReaderFrame = ({
       ref={readerShellRef}
       className={['study-shell study-pdf-reader-shell relative flex h-full flex-col overflow-hidden text-slate-950 dark:text-white', isFullMode ? 'study-pdf-full-mode' : ''].join(' ')}
     >
+      {showProgressBar && (
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-[70]">
+          <div className="h-1.5 w-full bg-slate-200/80 dark:bg-white/10">
+            <div
+              className="h-full bg-gradient-to-r from-cyan-500 via-sky-500 to-cyan-600 transition-[width] duration-200"
+              style={{ width: `${progressBarPercent}%` }}
+            />
+          </div>
+          <div className="flex items-center justify-between px-3 pb-2 pt-2 text-[9px] font-black uppercase tracking-[0.24em] text-slate-700/90 dark:text-slate-300/90 sm:px-6">
+            <span>Loading PDF</span>
+            <span>{Math.round(progressBarPercent)}%</span>
+          </div>
+        </div>
+      )}
       {!isFullMode && (
       <header className="study-topbar absolute inset-x-0 top-0 z-30 bg-white/[0.68] px-2 pb-2 pt-[calc(0.55rem+env(safe-area-inset-top))] backdrop-blur-3xl transition duration-200 [backdrop-filter:saturate(1.35)_blur(24px)] dark:bg-[#050814]/[0.62] sm:px-3 sm:py-2 xl:px-5">
           <div className="study-top-blur-edge pointer-events-none absolute inset-x-0 bottom-[-3.25rem] h-14 bg-gradient-to-b from-white/[0.58] via-white/[0.24] to-transparent backdrop-blur-2xl opacity-100 [mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.76)_42%,transparent_100%)] dark:from-[#050814]/[0.68] dark:via-[#050814]/[0.22]" />
@@ -797,7 +815,7 @@ const StudyPdfReaderFrame = ({
       )}
 
       <div
-        className="study-reader-canvas min-h-0 flex-1"
+        className="study-reader-canvas relative min-h-0 flex-1"
         onTouchStart={handlePdfTouchStart}
         onTouchMove={handlePdfTouchMove}
         onTouchEnd={handlePdfTouchEnd}
@@ -832,6 +850,7 @@ const StudyPdfReaderFrame = ({
             onLoadProgress={handleLoadProgress}
             onLoadError={() => {
               clearProgressReset();
+              setIsDocumentLoading(false);
               setLoadProgress(null);
               setHasError(true);
             }}

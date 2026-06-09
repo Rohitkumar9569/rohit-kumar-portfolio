@@ -34,22 +34,6 @@ const StudyInstallCard = () => {
     }
   };
 
-  const openInstallGuide = () => {
-    if (typeof window === 'undefined') return;
-
-    const ua = window.navigator.userAgent.toLowerCase();
-    const isIOS = /iphone|ipad|ipod/.test(ua) || (window.navigator.platform.toLowerCase() === 'macintel' && window.navigator.maxTouchPoints > 1);
-    const isAndroid = /android/.test(ua);
-
-    const guideUrl = isIOS
-      ? 'https://support.apple.com/guide/iphone/install-apps-iph49e4f4df4/ios'
-      : isAndroid
-        ? 'https://support.google.com/chrome/answer/9658361'
-        : 'https://support.google.com/chrome/answer/9658361';
-
-    window.open(guideUrl, '_blank', 'noopener,noreferrer');
-  };
-
   const handleInstall = async () => {
     if (canInstall) {
       const installed = await installApp();
@@ -59,14 +43,7 @@ const StudyInstallCard = () => {
       }
     }
 
-    if (isAppleManualInstall) {
-      openInstallGuide();
-      return;
-    }
-
-    if (!canInstall) {
-      openInstallGuide();
-    }
+    dismissNotice();
   };
 
   if (isInstalled || isDismissed || !isVisible || (!canInstall && !isAppleManualInstall && !isSupported)) return null;
@@ -116,9 +93,7 @@ const StudyInstallCard = () => {
             ? 'Preparing...'
             : canInstall
               ? 'Download app'
-              : isAppleManualInstall
-                ? 'Add to Home'
-                : 'Install app'}
+              : 'Close'}
         </button>
       </div>
     </aside>

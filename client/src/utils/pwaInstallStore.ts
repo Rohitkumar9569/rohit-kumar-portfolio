@@ -13,12 +13,6 @@ const notifyListeners = () => {
 };
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('beforeinstallprompt', (event) => {
-    event.preventDefault();
-    deferredPrompt = event as BeforeInstallPromptEvent;
-    notifyListeners();
-  });
-
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
     notifyListeners();

@@ -139,7 +139,9 @@ body {
 body,
 #root {
     max-width: 100%;
+    min-height: 100%;
     overflow-x: clip;
+    overflow-y: auto;
   }
 
   html.study-app-scroll-root,
@@ -4765,8 +4767,10 @@ body.portfolio-nav-open {
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
     touch-action: pan-y;
-    overscroll-behavior-y: contain;
+    overscroll-behavior-y: auto;
     overflow-anchor: none;
+    overflow-y: auto;
+    overflow-x: hidden;
     scroll-behavior: auto;
   }
 
