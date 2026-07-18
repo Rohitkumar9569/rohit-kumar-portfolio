@@ -1211,7 +1211,7 @@ const TilePreview = ({
           src={thumbnailUrl}
           alt=""
           loading="lazy"
-          className="h-full w-full bg-white object-cover object-top transition duration-300 group-hover:scale-[1.025] dark:bg-slate-900"
+          className="h-full w-full bg-white object-cover object-top dark:bg-slate-900"
           onError={() => setPreviewFailed(true)}
         />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-950/55 via-slate-950/14 to-transparent" />
@@ -1249,14 +1249,14 @@ const TilePreview = ({
           alt=""
           loading="lazy"
           className={[
-            'study-icon-asset relative z-10 h-auto w-[74%] max-w-[9.4rem] object-contain drop-shadow-[0_22px_34px_rgba(15,23,42,0.22)] transition duration-300 group-hover:scale-105 sm:w-[72%] lg:w-[70%]',
+            'study-icon-asset relative z-10 h-auto w-[74%] max-w-[9.4rem] object-contain drop-shadow-[0_22px_34px_rgba(15,23,42,0.22)] sm:w-[72%] lg:w-[70%]',
             compact ? 'max-w-[7.25rem]' : 'max-w-[9rem]',
           ].join(' ')}
         />
       ) : (
         <Icon
           className={[
-            'relative z-10 h-auto w-[70%] max-w-[8.6rem] drop-shadow-[0_20px_32px_rgba(15,23,42,0.18)] transition duration-300 group-hover:scale-105',
+            'relative z-10 h-auto w-[70%] max-w-[8.6rem] drop-shadow-[0_20px_32px_rgba(15,23,42,0.18)]',
             compact ? 'max-w-[7.25rem]' : 'max-w-[9rem]',
             accentClass,
           ].join(' ')}

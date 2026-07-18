@@ -1517,6 +1517,7 @@ to { color: transparent }
     0 3px 8px rgb(var(--study-shadow) / 0.055),
     inset 0 1px 0 rgba(255, 255, 255, 0.42) !important;
   transform: none;
+  transition: none !important;
 }
 
 .dark .study-card-surface {
@@ -2744,9 +2745,10 @@ img.study-icon-asset {
 
 .study-shell:not(.study-portfolio-embed) .study-card-surface:hover {
   box-shadow:
-    0 20px 36px rgb(var(--study-shadow) / 0.105),
-    0 7px 14px rgb(var(--study-shadow) / 0.058),
-    inset 0 1px 0 rgba(255, 255, 255, 0.68) !important;
+    0 18px 30px rgb(var(--study-shadow) / 0.085),
+    0 5px 12px rgb(var(--study-shadow) / 0.052),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62) !important;
+  transform: none;
 }
 
 .study-shell:not(.study-portfolio-embed) .study-card-body,
@@ -2952,12 +2954,12 @@ img.study-icon-asset {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.34), transparent 40%),
     linear-gradient(180deg, rgb(var(--study-card) / 0.26), transparent 72%);
-  opacity: 0.68;
-  transition: opacity 180ms ease;
+  opacity: 0.92;
+  transition: none;
 }
 
 .study-shell .study-card-surface:hover::before {
-  opacity: 0.96;
+  opacity: 0.92;
 }
 
 .study-shell .study-card-surface > * {
