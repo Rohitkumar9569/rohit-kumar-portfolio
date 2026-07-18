@@ -2,7 +2,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { animateScroll as scroll } from 'react-scroll';
 import { useLocation } from 'react-router-dom';
 import Logo from './Logo';
-import { FaXTwitter } from 'react-icons/fa6';
+import { FaXTwitter, FaYoutube } from 'react-icons/fa6';
 
 const Footer = () => {
   const location = useLocation();
@@ -48,6 +48,9 @@ const Footer = () => {
           </a>
           <a href="https://www.linkedin.com/in/rohit-kumar-bba12b25b/" aria-label="LinkedIn Profile" target="_blank" rel="noopener noreferrer" className={socialLinkClasses}>
             <FaLinkedin size={24} />
+          </a>
+          <a href="https://www.youtube.com/@RohitKumarStudyHub" aria-label="YouTube Channel" target="_blank" rel="noopener noreferrer" className={socialLinkClasses}>
+            <FaYoutube size={24} />
           </a>
           <a href="https://x.com/RohitKumar7348" aria-label="Twitter Profile" target="_blank" rel="noopener noreferrer" className={socialLinkClasses}>
             <FaXTwitter size={24} />

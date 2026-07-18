@@ -52,6 +52,13 @@ const PortfolioPage = () => {
         <meta name="keywords" content="Rohit Kumar, Study Hub, UPSC PYQ, GATE CSE, GATE DA, CBSE notes, JEE resources, NEET resources, SSC CGL, State PCS, BPSC, UPPSC, RPSC, previous year papers, free study material" />
         <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
         <link rel="canonical" href={`${SITE_URL}/`} />
+        <link rel="me" href="https://www.youtube.com/@RohitKumarStudyHub" />
+        <link rel="me" href="https://www.linkedin.com/in/rohit-kumar-bba12b25b/" />
+        <link rel="me" href="https://github.com/Rohitkumar9569" />
+        <link rel="me" href="https://x.com/RohitKumar7348" />
+        <meta name="author" content="Rohit Kumar" />
+        <meta name="profile:username" content="RohitKumarStudyHub" />
+        <meta property="article:author" content="https://www.linkedin.com/in/rohit-kumar-bba12b25b/" />
 
         {/* --- Open Graph / Facebook Meta Tags --- */}
         <meta property="og:type" content="website" />
@@ -61,6 +68,10 @@ const PortfolioPage = () => {
         <meta property="og:image" content="https://res.cloudinary.com/dlcvljnnu/image/upload/v1759951140/profile-photo_dznr2x.webp" />
         <meta property="og:image:alt" content="Rohit Kumar Study Hub and portfolio" />
         <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:see_also" content="https://www.linkedin.com/in/rohit-kumar-bba12b25b/" />
+        <meta property="og:see_also" content="https://www.youtube.com/@RohitKumarStudyHub" />
+        <meta property="og:see_also" content="https://github.com/Rohitkumar9569" />
+        <meta property="og:see_also" content="https://x.com/RohitKumar7348" />
 
         {/* --- Twitter Card Meta Tags --- */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -68,6 +79,8 @@ const PortfolioPage = () => {
         <meta name="twitter:title" content="Rohit Kumar Study Hub | UPSC, GATE, CBSE, PYQs & Notes" />
         <meta name="twitter:description" content={SITE_DESCRIPTION} />
         <meta name="twitter:image" content="https://res.cloudinary.com/dlcvljnnu/image/upload/v1759951140/profile-photo_dznr2x.webp" />
+        <meta name="twitter:site" content="@RohitKumar7348" />
+        <meta name="twitter:creator" content="@RohitKumar7348" />
       </Helmet>
 
       <div className="w-full max-w-full min-w-0 overflow-x-clip">

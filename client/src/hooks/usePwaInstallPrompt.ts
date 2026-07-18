@@ -24,11 +24,18 @@ const isAppleMobileBrowser = () => {
   return isIOS && !isRunningStandalone();
 };
 
+const isDesktopChromeOrEdge = () => {
+  if (typeof window === 'undefined') return false;
+  const ua = window.navigator.userAgent.toLowerCase();
+  return /chrome|chromium|edg\//.test(ua) && !/mobile/.test(ua);
+};
+
 export const usePwaInstallPrompt = () => {
   const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setInstalled] = useState(isRunningStandalone);
   const [isPrompting, setPrompting] = useState(false);
   const [isAppleManualInstall, setAppleManualInstall] = useState(isAppleMobileBrowser);
+  const [isDesktopInstallHintVisible, setDesktopInstallHintVisible] = useState(isDesktopChromeOrEdge);
 
   useEffect(() => {
     const syncPromptState = () => {
@@ -39,6 +46,7 @@ export const usePwaInstallPrompt = () => {
       setInstalled(true);
       setPromptEvent(null);
       setAppleManualInstall(false);
+      setDesktopInstallHintVisible(false);
     };
 
     syncPromptState();
@@ -72,5 +80,7 @@ export const usePwaInstallPrompt = () => {
     isAppleManualInstall,
     isPrompting,
     isSupported: typeof window !== 'undefined' && 'serviceWorker' in navigator,
+    isDesktopInstallHintVisible,
+    showInstallHint: isAppleManualInstall || isDesktopInstallHintVisible,
   };
 };

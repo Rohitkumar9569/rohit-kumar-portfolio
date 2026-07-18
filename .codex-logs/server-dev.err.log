@@ -498,3 +498,125 @@ Error: listen EADDRINUSE: address already in use :::5001
   address: '::',
   port: 5001
 }
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (D:\MyBlueprintPortfolio\server\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\MyBlueprintPortfolio\server\src\index.ts:127:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Module.m._compile (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/routes/pyqs.ts(562,24): error TS2304: Cannot find name 'Readable'.
+
+    at createTSError (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14) {
+  diagnosticCodes: [ 2304 ]
+}
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (D:\MyBlueprintPortfolio\server\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\MyBlueprintPortfolio\server\src\index.ts:127:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Module.m._compile (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/routes/pyqs.ts(546,24): error TS2304: Cannot find name 'Readable'.
+src/routes/pyqs.ts(550,29): error TS7006: Parameter 'err' implicitly has an 'any' type.
+
+    at createTSError (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1617:30)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14) {
+  diagnosticCodes: [ 2304, 7006 ]
+}
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (D:\MyBlueprintPortfolio\server\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\MyBlueprintPortfolio\server\src\index.ts:127:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Module.m._compile (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (D:\MyBlueprintPortfolio\server\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\MyBlueprintPortfolio\server\src\index.ts:127:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Module.m._compile (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}
+Error: listen EADDRINUSE: address already in use :::5001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (D:\MyBlueprintPortfolio\server\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\MyBlueprintPortfolio\server\src\index.ts:127:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Module.m._compile (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1618:23)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (D:\MyBlueprintPortfolio\server\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5001
+}

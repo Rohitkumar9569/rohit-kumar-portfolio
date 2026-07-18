@@ -4,6 +4,7 @@ import { useTypewriter, Cursor } from 'react-simple-typewriter';
 import toast from 'react-hot-toast';
 import { HiOutlineArrowDownTray, HiCheckCircle } from 'react-icons/hi2';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaYoutube } from 'react-icons/fa6';
 
 import { brandLogos, photoAssets } from '../assets';
 
@@ -223,6 +224,9 @@ const About = () => {
                 </a>
                 <a href="https://www.linkedin.com/in/rohit-kumar-bba12b25b/" aria-label="LinkedIn Profile" target="_blank" rel="noopener noreferrer" className="text-gray-800 dark:text-white hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
                   <FaLinkedin size={32} />
+                </a>
+                <a href="https://www.youtube.com/@RohitKumarStudyHub" aria-label="YouTube Channel" target="_blank" rel="noopener noreferrer" className="text-gray-800 dark:text-white hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+                  <FaYoutube size={32} />
                 </a>
               </div>
             </div>

@@ -142,22 +142,13 @@ const StudyAppLayout = () => {
   }, []);
 
   const handleStudyShellTouchMove = useCallback((event: ReactTouchEvent<HTMLDivElement>) => {
+    // Don't prevent default - let native scrolling work
+    // Only track touch position for potential future use
     if (touchStartYRef.current === null) return;
 
     const currentY = event.touches[0]?.clientY ?? touchStartYRef.current;
-    const deltaY = touchStartYRef.current - currentY;
     touchStartYRef.current = currentY;
-
-    if (Math.abs(deltaY) < 1) return;
-
-    const target = event.currentTarget;
-    if (target.scrollHeight <= target.clientHeight) return;
-
-    event.preventDefault();
-    const nextScrollTop = target.scrollTop + deltaY;
-    const maxScrollTop = target.scrollHeight - target.clientHeight;
-
-    target.scrollTop = Math.min(Math.max(nextScrollTop, 0), Math.max(maxScrollTop, 0));
+    // Removed preventDefault() to allow native momentum scrolling on mobile
   }, []);
 
   const prewarmPrimaryTabs = useCallback(() => {
@@ -237,12 +228,12 @@ const StudyAppLayout = () => {
             dragControls={dragControls}
             dragDirectionLock
             dragElastic={0}
-            dragListener={false}
+            dragListener={isDesktopViewport}
             dragMomentum={false}
             dragConstraints={{ left: 0, right: 0 }}
             onPointerDown={handleRoutePointerDown}
             onDragEnd={handleRouteDragEnd}
-            style={{ touchAction: 'pan-y' }}
+            style={{ touchAction: 'pan-y pinch-zoom' }}
             transition={{ type: 'spring', stiffness: 560, damping: 46, mass: 0.72 }}
             className={['w-full max-w-full min-w-0 overflow-x-hidden will-change-transform', isChatRoute ? 'h-full' : 'min-h-full'].join(' ')}
           >
@@ -260,6 +251,7 @@ const StudyAppLayout = () => {
     outlet,
     outletKey,
     transitionDirection,
+    isDesktopViewport,
   ]);
 
   useEffect(() => {
@@ -520,6 +512,7 @@ const StudyAppLayout = () => {
           id="study-main-content"
           tabIndex={-1}
           className={['flex-1 min-h-0 min-w-0 overflow-y-auto overscroll-contain outline-none pr-0', mainClassName].join(' ')}
+          style={{ touchAction: 'pan-y pinch-zoom' }}
           onWheel={handleStudyShellWheel}
           onTouchStart={handleStudyShellTouchStart}
           onTouchMove={handleStudyShellTouchMove}

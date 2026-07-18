@@ -1843,47 +1843,101 @@ const StudySearchPage = () => {
         </div>
       )}
 
-      {displayedCards.length > 0 && (
-        <section className="study-panel-surface mx-auto mt-5 w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_12px_34px_rgba(15,23,42,0.09)] ring-1 ring-slate-950/[0.03] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[0_20px_48px_rgba(0,0,0,0.42)] dark:ring-white/5">
-          <div className="border-b border-slate-200 px-4 py-3 dark:border-slate-800">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h2 className="text-base font-black text-slate-950 dark:text-white">
-                  Results
-                </h2>
-                <p className="mt-1 text-xs font-bold text-slate-500 dark:text-slate-400">
-                  {visibleCardCount}/{answerCards.length}
-                </p>
+      <AnimatePresence mode="wait">
+        {isAiLoading && displayedCards.length === 0 && (
+          <motion.div
+            key="loading-results"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="mx-auto mt-5 w-full max-w-3xl rounded-2xl border border-slate-200/50 bg-white p-8 text-center dark:border-slate-800 dark:bg-slate-900"
+          >
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex items-center justify-center gap-2">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                  className="h-5 w-5 rounded-full border-2 border-slate-200 border-t-cyan-500 dark:border-slate-700 dark:border-t-cyan-400"
+                />
+                <span className="text-sm font-bold text-slate-600 dark:text-slate-300">Searching...</span>
               </div>
-              {hasMoreCards && (
-                <div className="flex shrink-0 items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const nextLimit = Math.min(cardDisplayLimit + CARD_PAGE_SIZE, answerCards.length);
-                      setCardDisplayLimit(nextLimit);
-                    }}
-                    className="rounded-xl bg-cyan-50 px-3 py-2 text-xs font-black text-cyan-800 transition hover:-translate-y-0.5 hover:bg-cyan-100 dark:bg-cyan-400/10 dark:text-cyan-200 dark:hover:bg-cyan-400/15"
-                  >
-                    More
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setCardDisplayLimit(answerCards.length)}
-                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-black text-slate-700 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-cyan-300/40 dark:hover:text-cyan-200"
-                  >
-                    All
-                  </button>
-                </div>
-              )}
+              <p className="text-xs text-slate-500 dark:text-slate-400">Finding the best results for you</p>
             </div>
-          </div>
+          </motion.div>
+        )}
 
-          <div className="grid gap-3 p-4 sm:grid-cols-2 2xl:grid-cols-3">
-            {displayedCards.map(renderAnswerCard)}
-          </div>
-        </section>
-      )}
+        {displayedCards.length > 0 && (
+          <motion.section
+            key="results-section"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+            className="study-panel-surface mx-auto mt-5 w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_12px_34px_rgba(15,23,42,0.09)] ring-1 ring-slate-950/[0.03] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[0_20px_48px_rgba(0,0,0,0.42)] dark:ring-white/5"
+          >
+            <div className="border-b border-slate-200 px-4 py-3 dark:border-slate-800">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h2 className="text-base font-black text-slate-950 dark:text-white">
+                    Results
+                  </h2>
+                  <motion.p
+                    key={`count-${visibleCardCount}-${answerCards.length}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                    className="mt-1 text-xs font-bold text-slate-500 dark:text-slate-400"
+                  >
+                    {visibleCardCount}/{answerCards.length}
+                  </motion.p>
+                </div>
+                {hasMoreCards && (
+                  <div className="flex shrink-0 items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const nextLimit = Math.min(cardDisplayLimit + CARD_PAGE_SIZE, answerCards.length);
+                        setCardDisplayLimit(nextLimit);
+                      }}
+                      className="rounded-xl bg-cyan-50 px-3 py-2 text-xs font-black text-cyan-800 transition hover:-translate-y-0.5 hover:bg-cyan-100 dark:bg-cyan-400/10 dark:text-cyan-200 dark:hover:bg-cyan-400/15"
+                    >
+                      More
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCardDisplayLimit(answerCards.length)}
+                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-black text-slate-700 transition hover:-translate-y-0.5 hover:border-cyan-200 hover:text-cyan-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-cyan-300/40 dark:hover:text-cyan-200"
+                    >
+                      All
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="grid gap-3 p-4 sm:grid-cols-2 2xl:grid-cols-3">
+              <AnimatePresence mode="popLayout">
+                {displayedCards.map((card, index) => (
+                  <motion.div
+                    key={card._id}
+                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: Math.min(index * 0.05, 0.15),
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    {renderAnswerCard(card)}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
 
       <div ref={messagesEndRef} />
       </div>

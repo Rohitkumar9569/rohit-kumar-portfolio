@@ -173,8 +173,16 @@ const StudyVoiceSettings = ({
                 step={0.01}
                 value={voiceRate}
                 onChange={(event) => onVoiceRateChange(Number(event.target.value))}
-                className="mt-3 h-2 w-full accent-cyan-600"
+                onInput={(event) => onVoiceRateChange(Number((event.target as HTMLInputElement).value))}
+                onPointerDown={(event) => event.stopPropagation()}
+                onPointerMove={(event) => event.stopPropagation()}
+                onPointerUp={(event) => event.stopPropagation()}
+                onTouchStart={(event) => event.stopPropagation()}
+                onTouchMove={(event) => event.stopPropagation()}
+                onTouchEnd={(event) => event.stopPropagation()}
+                className="mt-3 h-3 w-full cursor-pointer touch-pan-y rounded-full accent-cyan-600"
                 aria-label="Voice speed"
+                style={{ minWidth: 0, width: '100%', touchAction: 'pan-y' }}
               />
               <div className="mt-3 grid grid-cols-3 gap-1.5">
                 {ratePresets.map((preset) => (

@@ -757,31 +757,36 @@ const normalizeSearchText = (value = '') =>
     .replace(/\s+/g, ' ');
 
 const studySearchTokenAliases: Record<string, string[]> = {
-  math: ['mathematics', 'maths', 'ganit'],
-  maths: ['mathematics', 'math', 'ganit'],
-  mathematics: ['maths', 'math', 'ganit'],
-  ganit: ['mathematics', 'maths', 'math'],
-  bio: ['biology'],
+  math: ['mathematics', 'maths', 'ganit', 'arithmetic'],
+  maths: ['mathematics', 'math', 'ganit', 'arithmetic'],
+  mathematics: ['maths', 'math', 'ganit', 'arithmetic'],
+  ganit: ['mathematics', 'maths', 'math', 'arithmetic'],
+  arithmetic: ['math', 'mathematics', 'maths'],
+  bio: ['biology', 'botany', 'zoology'],
   biology: ['bio', 'botany', 'zoology'],
-  accounts: ['accountancy'],
-  accountancy: ['accounts', 'financial accounting'],
-  commerce: ['business studies', 'accountancy', 'economics'],
+  accounts: ['accountancy', 'ca'],
+  accountancy: ['accounts', 'financial accounting', 'ca'],
+  commerce: ['business studies', 'accountancy', 'economics', 'bs'],
   sst: ['social science', 'history', 'geography', 'political science', 'economics'],
-  social: ['social science'],
+  social: ['social science', 'sst'],
   science: ['physics', 'chemistry', 'biology'],
+  physics: ['phy', 'science'],
+  chemistry: ['chem', 'science'],
+  english: ['eng', 'language'],
+  hindi: ['hinglish'],
   book: ['books', 'textbook', 'textbooks', 'complete book', 'ncert'],
   books: ['book', 'textbook', 'textbooks', 'complete book', 'ncert'],
   textbook: ['book', 'books', 'ncert'],
   textbooks: ['book', 'books', 'ncert'],
-  ncert: ['ncert books', 'book', 'books', 'textbook', 'complete book'],
-  pyq: ['previous year papers', 'question paper', 'paper'],
-  pyqs: ['previous year papers', 'question paper', 'paper'],
-  paper: ['papers', 'pyq', 'question paper'],
-  papers: ['paper', 'pyq', 'question paper'],
-  notes: ['note', 'study material', 'material'],
-  note: ['notes', 'study material', 'material'],
-  material: ['study material', 'notes'],
-  materials: ['study material', 'notes'],
+  ncert: ['ncert books', 'book', 'books', 'textbook', 'complete book', 'class'],
+  pyq: ['previous year papers', 'question paper', 'paper', 'questions'],
+  pyqs: ['previous year papers', 'question paper', 'paper', 'questions'],
+  paper: ['papers', 'pyq', 'question paper', 'exam'],
+  papers: ['paper', 'pyq', 'question paper', 'exam'],
+  notes: ['note', 'study material', 'material', 'revision'],
+  note: ['notes', 'study material', 'material', 'revision'],
+  material: ['study material', 'notes', 'revision'],
+  materials: ['study material', 'notes', 'revision'],
   file: ['files', 'pdf', 'document'],
   files: ['file', 'pdf', 'document'],
   fules: ['files', 'file', 'pdf', 'document'],
@@ -791,6 +796,26 @@ const studySearchTokenAliases: Record<string, string[]> = {
   documents: ['document', 'file', 'files', 'pdf'],
   uppcs: ['uppsc', 'up pcs', 'uppsc pcs', 'uttar pradesh pcs'],
   uppsc: ['uppcs', 'up pcs', 'uppsc pcs', 'uttar pradesh pcs'],
+  // Competitive Exams
+  upsc: ['ias', 'ips', 'cse', 'csat', 'prelims', 'mains', 'general studies'],
+  csat: ['upsc', 'aptitude', 'reasoning', 'prelims'],
+  cse: ['upsc', 'ias', 'ips', 'pcs'],
+  ias: ['upsc', 'cse', 'ips'],
+  ips: ['upsc', 'cse', 'ias'],
+  gate: ['gate exam', 'engineering', 'competitive'],
+  jee: ['jee main', 'jee advanced', 'engineering', 'neet'],
+  neet: ['neet exam', 'medical', 'competitive', 'jee'],
+  // Union PSCs
+  nta: ['upsc', 'exam', 'competitive'],
+  psc: ['public service', 'state exam'],
+  // Specific exam keywords
+  prelims: ['upsc', 'preliminary', 'exam'],
+  mains: ['upsc', 'main exam'],
+  // Entrance exams
+  entrance: ['exam', 'test', 'admission'],
+  exam: ['entrance', 'test', 'paper', 'pyq'],
+  test: ['exam', 'entrance', 'paper'],
+  competitive: ['exam', 'test', 'upsc', 'gate', 'jee', 'neet'],
 };
 
 const studySearchIntentTokens = new Set([
@@ -1153,14 +1178,17 @@ const findRelevantStudyCards = async (question: string, limit = 80) => {
     };
   }
 
+  // Optimize: Fetch candidates with a reasonable limit for better performance
+  // Instead of loading all 5000 cards, we'll fetch a larger set but not all
   const candidates = await StudyCard.find({
     workspaceId: workspace._id,
     status: 'published',
     visibility: 'public',
   })
     .sort({ order: 1, name: 1 })
-    .limit(5000)
+    .limit(2000)  // Reduced from 5000 for better performance
     .lean();
+  
   const candidatesWithCounts = await withStudyCardChildCounts(candidates, workspace._id);
   const cardMap = new Map(candidatesWithCounts.map((card: any) => [card._id?.toString?.() || card._id, card]));
   const candidatesWithPaths = candidatesWithCounts.map((card: any) => ({
@@ -4538,9 +4566,10 @@ router.get('/cards/search', async (req, res) => {
     if (q) {
       const profile = createStudySearchProfile(q);
 
+      // Optimize: Limit initial fetch for better performance
       const candidates = await StudyCard.find(filter)
         .sort({ order: 1, name: 1 })
-        .limit(5000)
+        .limit(2000)  // Reduced from 5000
         .lean();
       const candidatesWithCounts = await withStudyCardChildCounts(candidates, workspace._id);
       const cardMap = new Map(candidatesWithCounts.map((card: any) => [card._id?.toString?.() || card._id, card]));

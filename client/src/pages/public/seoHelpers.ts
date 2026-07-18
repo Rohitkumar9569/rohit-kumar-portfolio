@@ -49,9 +49,11 @@ export const buildSiteJsonLd = () => ({
       '@type': 'Person',
       '@id': `${SITE_URL}/#person`,
       name: 'Rohit Kumar',
+      alternateName: ['Rohit Study Hub', 'RK Study Hub', 'Rohit Kumar Study Hub'],
       url: SITE_URL,
       image: ROHIT_PROFILE_IMAGE,
-      jobTitle: 'Full-Stack Developer',
+      jobTitle: 'Full-Stack Developer and Educator',
+      description: 'Rohit Kumar is the creator of Rohit Kumar Study Hub, sharing free study resources and portfolios for UPSC, GATE, CBSE, JEE, NEET, SSC, State PCS, and placement prep.',
       alumniOf: {
         '@type': 'CollegeOrUniversity',
         name: 'Gurukul Kangri Vishwavidyalaya',
@@ -59,6 +61,8 @@ export const buildSiteJsonLd = () => ({
       sameAs: [
         'https://github.com/Rohitkumar9569',
         'https://www.linkedin.com/in/rohit-kumar-bba12b25b/',
+        'https://www.youtube.com/@RohitKumarStudyHub',
+        'https://x.com/RohitKumar7348',
       ],
       knowsAbout: [
         'MERN Stack',
@@ -84,7 +88,11 @@ export const buildSiteJsonLd = () => ({
       logo: STUDY_HUB_OG_IMAGE,
       founder: { '@id': `${SITE_URL}/#person` },
       description: SITE_DESCRIPTION,
-      sameAs: ['https://github.com/Rohitkumar9569/rohit-kumar-portfolio'],
+      sameAs: [
+        'https://github.com/Rohitkumar9569/rohit-kumar-portfolio',
+        'https://www.linkedin.com/in/rohit-kumar-bba12b25b/',
+        'https://www.youtube.com/@RohitKumarStudyHub',
+      ],
     },
     {
       '@type': 'WebSite',

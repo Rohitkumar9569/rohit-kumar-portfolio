@@ -11,7 +11,15 @@ const INSTALL_NOTICE_DISMISS_KEY = 'study-hub-install-notice-dismissed';
 
 const StudyInstallCard = () => {
   const { theme } = useTheme();
-  const { canInstall, installApp, isAppleManualInstall, isInstalled, isPrompting, isSupported } = usePwaInstallPrompt();
+  const {
+    canInstall,
+    installApp,
+    isAppleManualInstall,
+    isInstalled,
+    isPrompting,
+    isSupported,
+    showInstallHint,
+  } = usePwaInstallPrompt();
   const [isVisible, setVisible] = useState(false);
   const [isDismissed, setDismissed] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -20,11 +28,11 @@ const StudyInstallCard = () => {
   const isDark = theme === 'dark';
 
   useEffect(() => {
-    if (isInstalled || isDismissed || (!canInstall && !isAppleManualInstall && !isSupported)) return undefined;
+    if (isInstalled || isDismissed || (!canInstall && !showInstallHint && !isSupported)) return undefined;
 
     const noticeTimer = window.setTimeout(() => setVisible(true), INSTALL_NOTICE_DELAY_MS);
     return () => window.clearTimeout(noticeTimer);
-  }, [canInstall, isAppleManualInstall, isDismissed, isInstalled, isSupported]);
+  }, [canInstall, isAppleManualInstall, isDismissed, isInstalled, isSupported, showInstallHint]);
 
   const dismissNotice = () => {
     setVisible(false);
@@ -43,13 +51,12 @@ const StudyInstallCard = () => {
       }
     }
 
-    if (typeof window !== 'undefined') {
-      window.location.assign('/app');
-    }
+    // If we're already on the app page, just dismiss the card
+    // Don't redirect/reload since we're already here
     dismissNotice();
   };
 
-  if (isInstalled || isDismissed || !isVisible || (!canInstall && !isAppleManualInstall && !isSupported)) return null;
+  if (isInstalled || isDismissed || !isVisible || (!canInstall && !showInstallHint && !isSupported)) return null;
 
   return (
     <aside
@@ -80,7 +87,7 @@ const StudyInstallCard = () => {
             Rohit Hub
           </p>
           <h2 className="mt-0.5 text-base font-black leading-tight">
-            Install app
+            {canInstall ? 'Install app' : showInstallHint ? 'Install from browser' : 'Install app'}
           </h2>
         </div>
       </div>
@@ -96,7 +103,9 @@ const StudyInstallCard = () => {
             ? 'Preparing...'
             : canInstall
               ? 'Download app'
-              : 'Open app'}
+              : showInstallHint
+                ? 'Open browser menu'
+                : 'Open app'}
         </button>
       </div>
     </aside>

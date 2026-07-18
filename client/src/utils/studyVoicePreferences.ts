@@ -198,7 +198,7 @@ export const getStoredStudyVoiceRate = (fallback = defaultStudyVoiceRate) => {
 
 export const saveStoredStudyVoiceRate = (rate: number) => {
   if (typeof window === 'undefined') return;
-  const nextRate = clampStudyVoiceRate(rate);
+  const nextRate = clampStudyVoiceRate(Number(rate));
   window.localStorage.setItem(STUDY_VOICE_RATE_STORAGE_KEY, String(nextRate));
   window.dispatchEvent(new CustomEvent(STUDY_VOICE_RATE_CHANGED_EVENT, { detail: nextRate }));
 };
