@@ -42,10 +42,10 @@ const studyHomeToneAccents: Record<StudyTone, { bar: string; text: string }> = {
 };
 
 export const studyHomeTileClassName =
-  'study-card-surface group relative flex h-40 w-full flex-col overflow-hidden rounded-[1.25rem] border border-white/70 bg-white p-2.5 shadow-[0_14px_32px_rgba(15,23,42,0.095)] ring-1 ring-slate-950/[0.035] transition duration-200 hover:-translate-y-1 hover:border-cyan-200 hover:shadow-[0_22px_48px_rgba(15,23,42,0.13)] focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:border-white/10 dark:bg-slate-900 dark:shadow-[0_18px_42px_rgba(0,0,0,0.38)] dark:ring-white/5 dark:hover:border-cyan-300/30 sm:h-[10.25rem] sm:p-3 lg:h-[10.5rem]';
+  'study-card-surface group relative flex h-40 w-full flex-col overflow-hidden rounded-[1.25rem] border border-white/70 bg-white p-2.5 shadow-[0_14px_32px_rgba(15,23,42,0.095)] ring-1 ring-slate-950/[0.035] focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:shadow-[0_18px_42px_rgba(0,0,0,0.38)] dark:ring-white/5 sm:h-[10.25rem] sm:p-3 lg:h-[10.5rem]';
 
 export const studyHomeFloatingActionClassName =
-  'study-save-action absolute right-2 top-2 z-20 inline-flex h-7 w-7 items-center justify-center rounded-lg border border-white/80 bg-white/85 text-slate-700 shadow-[0_10px_22px_rgba(15,23,42,0.16)] backdrop-blur-md transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 aria-pressed:border-cyan-200 aria-pressed:bg-cyan-50 aria-pressed:text-cyan-800 dark:border-white/10 dark:bg-slate-950/55 dark:text-slate-100 dark:hover:border-cyan-300/30 dark:hover:bg-cyan-400/15 dark:aria-pressed:border-cyan-300/35 dark:aria-pressed:bg-cyan-400/20 sm:right-2.5 sm:top-2.5 sm:h-8 sm:w-8';
+  'study-save-action absolute right-2 top-2 z-20 inline-flex h-7 w-7 items-center justify-center rounded-lg border border-white/80 bg-white/85 text-slate-700 shadow-[0_10px_22px_rgba(15,23,42,0.16)] backdrop-blur-md aria-pressed:border-cyan-200 aria-pressed:bg-cyan-50 aria-pressed:text-cyan-800 dark:border-white/10 dark:bg-slate-950/55 dark:text-slate-100 dark:hover:border-cyan-300/30 dark:hover:bg-cyan-400/15 dark:aria-pressed:border-cyan-300/35 dark:aria-pressed:bg-cyan-400/20 sm:right-2.5 sm:top-2.5 sm:h-8 sm:w-8';
 
 export const StudyHomeTileContent = ({
   icon: Icon,
@@ -78,17 +78,17 @@ export const StudyHomeTileContent = ({
         className="absolute left-2 top-2 z-20 max-w-[calc(100%-1rem)]"
       />
       <div className="flex flex-1 flex-col items-center justify-center pb-4 pt-2 text-center sm:pb-3">
-        <span className="relative flex h-[6rem] w-[6.35rem] items-center justify-center transition duration-300 group-hover:-translate-y-1 group-hover:scale-[1.03] sm:h-[6.25rem] sm:w-[6.65rem] lg:h-[6.45rem] lg:w-[6.85rem]">
+        <span className="relative flex h-[6rem] w-[6.35rem] items-center justify-center sm:h-[6.25rem] sm:w-[6.65rem] lg:h-[6.45rem] lg:w-[6.85rem]">
           {iconUrl ? (
             <img
               src={iconUrl}
               alt=""
               loading="lazy"
-              className="study-icon-asset study-tile-icon-asset relative z-10 h-[5.25rem] w-[5.25rem] object-contain transition duration-300 group-hover:scale-105 sm:h-[5.55rem] sm:w-[5.55rem] lg:h-[5.85rem] lg:w-[5.85rem]"
+              className="study-icon-asset study-tile-icon-asset relative z-10 h-[5.25rem] w-[5.25rem] object-contain sm:h-[5.55rem] sm:w-[5.55rem] lg:h-[5.85rem] lg:w-[5.85rem]"
             />
           ) : (
             <Icon
-              className="relative z-10 h-[3.9rem] w-[3.9rem] text-slate-700 transition duration-300 group-hover:scale-105 dark:text-slate-200 sm:h-[4.25rem] sm:w-[4.25rem] lg:h-[4.45rem] lg:w-[4.45rem]"
+              className="relative z-10 h-[3.9rem] w-[3.9rem] text-slate-700 dark:text-slate-200 sm:h-[4.25rem] sm:w-[4.25rem] lg:h-[4.45rem] lg:w-[4.45rem]"
               aria-hidden="true"
             />
           )}

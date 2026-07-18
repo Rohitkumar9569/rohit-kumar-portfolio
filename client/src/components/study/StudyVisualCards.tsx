@@ -1366,14 +1366,14 @@ const SimpleFolderTileContent = ({
     ? 'flex flex-1 flex-col items-center justify-center px-2.5 pb-4 pt-2 text-center sm:px-3 sm:pb-3 sm:pt-2'
     : 'flex flex-1 flex-col items-center justify-start px-3 pb-4 pt-7 text-center sm:px-4 sm:pb-4 sm:pt-8';
   const stageClassName = compact
-    ? 'study-card-icon-stage relative flex h-[6rem] w-full items-center justify-center transition duration-300 group-hover:-translate-y-1 group-hover:scale-[1.03] sm:h-[6.25rem] lg:h-[6.45rem]'
-    : 'study-card-icon-stage relative flex h-[7rem] w-full items-center justify-center transition duration-300 group-hover:-translate-y-0.5 group-hover:scale-[1.02] sm:h-[7.4rem] lg:h-[7.75rem]';
+    ? 'study-card-icon-stage relative flex h-[6rem] w-full items-center justify-center transition-transform duration-200 will-change-transform sm:h-[6.25rem] lg:h-[6.45rem]'
+    : 'study-card-icon-stage relative flex h-[7rem] w-full items-center justify-center transition-transform duration-200 will-change-transform sm:h-[7.4rem] lg:h-[7.75rem]';
   const imageClassName = compact
-    ? 'study-icon-asset study-tile-icon-asset study-stage-icon-asset relative z-10 h-[5.25rem] w-[5.25rem] object-contain transition duration-300 group-hover:scale-105 sm:h-[5.55rem] sm:w-[5.55rem] lg:h-[5.85rem] lg:w-[5.85rem]'
-    : 'study-icon-asset study-tile-icon-asset study-stage-icon-asset relative z-10 h-[6.8rem] w-[6.8rem] object-contain transition duration-300 group-hover:scale-105 sm:h-[7.15rem] sm:w-[7.15rem] lg:h-[7.5rem] lg:w-[7.5rem]';
+    ? 'study-icon-asset study-tile-icon-asset study-stage-icon-asset relative z-10 h-[5.25rem] w-[5.25rem] object-contain transition-transform duration-200 will-change-transform sm:h-[5.55rem] sm:w-[5.55rem] lg:h-[5.85rem] lg:w-[5.85rem]'
+    : 'study-icon-asset study-tile-icon-asset study-stage-icon-asset relative z-10 h-[6.8rem] w-[6.8rem] object-contain transition-transform duration-200 will-change-transform sm:h-[7.15rem] sm:w-[7.15rem] lg:h-[7.5rem] lg:w-[7.5rem]';
   const iconClassName = compact
-    ? 'relative z-10 h-[3.9rem] w-[3.9rem] text-slate-700 transition duration-300 group-hover:scale-105 dark:text-slate-200 sm:h-[4.25rem] sm:w-[4.25rem] lg:h-[4.45rem] lg:w-[4.45rem]'
-    : 'relative z-10 h-[5.7rem] w-[5.7rem] text-slate-700 transition duration-300 group-hover:scale-105 dark:text-slate-200 sm:h-[6.05rem] sm:w-[6.05rem] lg:h-[6.35rem] lg:w-[6.35rem]';
+    ? 'relative z-10 h-[3.9rem] w-[3.9rem] text-slate-700 transition-transform duration-200 will-change-transform dark:text-slate-200 sm:h-[4.25rem] sm:w-[4.25rem] lg:h-[4.45rem] lg:w-[4.45rem]'
+    : 'relative z-10 h-[5.7rem] w-[5.7rem] text-slate-700 transition-transform duration-200 will-change-transform dark:text-slate-200 sm:h-[6.05rem] sm:w-[6.05rem] lg:h-[6.35rem] lg:w-[6.35rem]';
 
   return (
     <>
@@ -1409,13 +1409,13 @@ const SimpleFolderTileContent = ({
 };
 
 const studyTileSurfaceClassName =
-  'study-card-surface group relative flex min-h-[292px] min-w-0 w-full max-w-full flex-col overflow-hidden rounded-lg border border-slate-200/90 shadow-[0_14px_34px_rgba(15,23,42,0.10)] ring-1 ring-slate-950/[0.035] transition duration-200 hover:-translate-y-0.5 hover:border-cyan-200/70 hover:shadow-[0_22px_48px_rgba(15,23,42,0.15)] focus:outline-none focus:ring-2 focus:ring-cyan-500/25 dark:border-white/10 dark:shadow-[0_20px_52px_rgba(0,0,0,0.46)] dark:ring-white/5 dark:hover:border-cyan-300/35 dark:hover:shadow-[0_24px_58px_rgba(8,145,178,0.18)] sm:min-h-[318px]';
+  'study-card-surface group relative flex min-h-[292px] min-w-0 w-full max-w-full flex-col overflow-hidden rounded-lg border border-slate-200/90 shadow-[0_14px_34px_rgba(15,23,42,0.10)] ring-1 ring-slate-950/[0.035] focus:outline-none focus:ring-0 dark:border-white/10 dark:shadow-[0_20px_52px_rgba(0,0,0,0.46)] dark:ring-white/5 sm:min-h-[318px]';
 
 const studyLinkTileSurfaceClassName =
-  'study-card-surface group relative flex min-h-[224px] min-w-0 w-full max-w-full flex-col overflow-hidden rounded-2xl border border-white/70 bg-white p-2 shadow-[0_10px_26px_rgba(15,23,42,0.09)] ring-1 ring-slate-950/[0.035] transition duration-200 hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-white hover:shadow-[0_16px_36px_rgba(15,23,42,0.12)] focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:border-white/10 dark:bg-slate-900 dark:shadow-[0_16px_36px_rgba(0,0,0,0.36)] dark:ring-white/5 dark:hover:border-cyan-300/30 dark:hover:bg-slate-900 sm:min-h-[232px] sm:p-2.5';
+  'study-card-surface group relative flex min-h-[224px] min-w-0 w-full max-w-full flex-col overflow-hidden rounded-2xl border border-white/70 bg-white p-2 shadow-[0_10px_26px_rgba(15,23,42,0.09)] ring-1 ring-slate-950/[0.035] focus:outline-none focus:ring-0 dark:border-white/10 dark:bg-slate-900 dark:shadow-[0_16px_36px_rgba(0,0,0,0.36)] dark:ring-white/5 sm:min-h-[232px] sm:p-2.5';
 
 const studyFloatingSaveClassName =
-  'study-save-action absolute !bottom-auto !left-auto right-2 top-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/80 bg-white/85 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.18)] backdrop-blur-md transition hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 aria-pressed:border-cyan-200 aria-pressed:bg-cyan-50 aria-pressed:text-cyan-800 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-slate-950/55 dark:text-slate-100 dark:shadow-[0_12px_26px_rgba(0,0,0,0.34)] dark:hover:border-cyan-300/30 dark:hover:bg-cyan-400/15 dark:aria-pressed:border-cyan-300/35 dark:aria-pressed:bg-cyan-400/20 dark:aria-pressed:text-cyan-100 sm:right-3 sm:top-3 sm:h-9 sm:w-9';
+  'study-save-action absolute !bottom-auto !left-auto right-2 top-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/80 bg-white/85 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.18)] backdrop-blur-md aria-pressed:border-cyan-200 aria-pressed:bg-cyan-50 aria-pressed:text-cyan-800 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-slate-950/55 dark:text-slate-100 dark:shadow-[0_12px_26px_rgba(0,0,0,0.34)] dark:aria-pressed:border-cyan-300/35 dark:aria-pressed:bg-cyan-400/20 dark:aria-pressed:text-cyan-100 sm:right-3 sm:top-3 sm:h-9 sm:w-9';
 
 export const StudyLinkTile = ({
   to,
@@ -1556,7 +1556,7 @@ export const StudyAnchorTile = ({
             to={readerHref}
             onFocus={warmReader}
             onPointerEnter={warmReader}
-            className="study-soft-action inline-flex min-h-9 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-cyan-200/70 bg-cyan-50 px-2 text-xs font-black text-cyan-700 shadow-[0_8px_20px_rgba(8,145,178,0.10)] transition hover:-translate-y-0.5 hover:bg-cyan-100 dark:border-cyan-300/20 dark:bg-cyan-400/10 dark:text-cyan-200 dark:hover:bg-cyan-400/20 sm:min-h-11 sm:text-sm"
+            className="study-soft-action inline-flex min-h-9 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-cyan-200/70 bg-cyan-50 px-2 text-xs font-black text-cyan-700 shadow-[0_8px_20px_rgba(8,145,178,0.10)] dark:border-cyan-300/20 dark:bg-cyan-400/10 dark:text-cyan-200 dark:hover:bg-cyan-400/20 sm:min-h-11 sm:text-sm"
           >
             <EyeIcon className="h-4 w-4" aria-hidden="true" />
             {readableActionLabel}
@@ -1567,7 +1567,7 @@ export const StudyAnchorTile = ({
           target="_blank"
           rel="noreferrer"
           download
-          className="study-primary-action inline-flex min-h-9 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-gradient-to-br from-slate-950 via-slate-800 to-cyan-950 px-2 text-xs font-black text-white shadow-[0_12px_28px_rgba(15,23,42,0.18)] transition hover:-translate-y-0.5 hover:from-slate-900 hover:to-cyan-900 dark:from-white dark:via-slate-100 dark:to-cyan-100 dark:text-slate-950 dark:hover:from-slate-100 sm:min-h-11 sm:text-sm"
+          className="study-primary-action inline-flex min-h-9 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-gradient-to-br from-slate-950 via-slate-800 to-cyan-950 px-2 text-xs font-black text-white shadow-[0_12px_28px_rgba(15,23,42,0.18)] dark:from-white dark:via-slate-100 dark:to-cyan-100 dark:text-slate-950 dark:hover:from-slate-100 sm:min-h-11 sm:text-sm"
         >
           <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
           <span className="hidden sm:inline">Download</span>
