@@ -2,6 +2,7 @@ import { memo, type FormEvent, type TouchEvent as ReactTouchEvent, useCallback, 
 import * as Dialog from '@radix-ui/react-dialog';
 import { Virtuoso } from 'react-virtuoso';
 import { Document, Page, pdfjs } from 'react-pdf';
+import PdfPageSkeleton from '@/components/viewer/PdfPageSkeleton';
 import {
   ArrowLeftIcon,
   ArrowDownTrayIcon,
@@ -343,12 +344,11 @@ const StudyPdfReaderFrame = ({
   const modeButtonTitle = isFullMode ? 'Exit full mode' : isReadMode ? 'Full PDF mode' : 'Read mode';
   const readerTopGap = isFullMode ? 0 : readerTopOffset;
 
-  const documentLoadingFallback = (
-    <div className="study-reader-canvas flex h-full items-center justify-center p-3 sm:p-6">
-      <div className="h-[70vh] w-full max-w-3xl animate-pulse rounded-2xl bg-[linear-gradient(135deg,rgba(255,255,255,0.16),rgba(255,255,255,0.05))] shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] dark:bg-[linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.035))] sm:rounded-3xl" />
-    </div>
-  );
-
+ const documentLoadingFallback = (
+  <div className="study-reader-canvas flex h-full w-full items-start justify-center overflow-y-auto">
+    <PdfPageSkeleton />
+  </div>
+);
   const pdfToneClassName = pdfToneClassNames[pdfTone];
 
   const virtuosoComponents = useMemo(() => ({
