@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import { Document, Page, pdfjs } from 'react-pdf';
 import PdfPageSkeleton from './PdfPageSkeleton';
@@ -7,6 +7,49 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
+const MemoizedViewportPage = memo(({
+  index,
+  scale,
+  rotation,
+  pageBaseWidth,
+  pageBaseHeight,
+  shouldRenderTextLayer,
+  pdfDevicePixelRatio,
+}: {
+  index: number;
+  scale: number;
+  rotation: number;
+  pageBaseWidth: number;
+  pageBaseHeight: number;
+  shouldRenderTextLayer: boolean;
+  pdfDevicePixelRatio: number;
+}) => (
+  <div className="flex justify-center py-2 md:py-4">
+    <div
+      className="bg-white shadow-lg"
+      style={{ width: pageBaseWidth * scale, height: pageBaseHeight * scale }}
+    >
+      <Page
+        pageNumber={index + 1}
+        className="study-pdf-selectable-page"
+        scale={scale}
+        rotate={rotation}
+        renderAnnotationLayer={false}
+        renderTextLayer={shouldRenderTextLayer}
+        devicePixelRatio={pdfDevicePixelRatio}
+        loading={
+          <div
+            style={{ width: pageBaseWidth * scale, height: pageBaseHeight * scale }}
+            className="animate-pulse rounded-md bg-slate-200"
+          />
+        }
+      />
+    </div>
+  </div>
+));
+
+MemoizedViewportPage.displayName = 'MemoizedViewportPage';
 
 interface PdfDocumentViewportProps {
   fileUrl?: string;
@@ -51,33 +94,29 @@ const PdfDocumentViewport = ({
   const pageHeight = pageBaseHeight * scale;
   const shouldRenderTextLayer = !isCoarsePointer && !isScrolling;
 
-  // 🔥 PERFORMANCE FIX: PDF loading optimization
   const pdfOptions = useMemo(() => ({
     cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
     cMapPacked: true,
-    disableAutoFetch: false, // 🚨 Streaming enable karne ke liye false rakhein
+    disableAutoFetch: false,
     disableStream: false,
     rangeChunkSize: 524288,
   }), []);
 
-  // 🔥 PERFORMANCE FIX: Mobile vs Desktop Config
   const virtuosoScrollConfig = useMemo(() => {
     if (isCoarsePointer) {
       return {
-        // Pre-render pages to avoid White Screen
-        overscan: { main: 1600, reverse: 1600 },
-        increaseViewportBy: { top: 1200, bottom: 1200 },
+        overscan: { main: 400, reverse: 200 },
+        increaseViewportBy: { top: 400, bottom: 800 },
         scrollSeekConfiguration: undefined,
       };
     }
     return {
-      overscan: { main: 2400, reverse: 2400 },
-      increaseViewportBy: { top: 1800, bottom: 1800 },
+      overscan: { main: 700, reverse: 350 },
+      increaseViewportBy: { top: 700, bottom: 1400 },
       scrollSeekConfiguration: undefined,
     };
   }, [isCoarsePointer]);
 
-  // 🔥 PERFORMANCE FIX: Resolution (1 for mobile to save CPU)
   const pdfDevicePixelRatio = useMemo(() => (isCoarsePointer ? 1 : 1.5), [isCoarsePointer]);
 
   const clearProgressReset = useCallback(() => {
@@ -180,28 +219,15 @@ const PdfDocumentViewport = ({
         className="study-scrollbar h-full overscroll-contain"
         rangeChanged={handleRangeChanged}
         itemContent={(index) => (
-          <div className="flex justify-center py-2 md:py-4">
-            <div
-              className="bg-white shadow-lg"
-              style={{ width: pageBaseWidth * scale, height: pageBaseHeight * scale }}
-            >
-              <Page
-                pageNumber={index + 1}
-                className="study-pdf-selectable-page"
-                scale={scale}
-                rotate={rotation}
-                renderAnnotationLayer={false}
-                renderTextLayer={shouldRenderTextLayer}
-                devicePixelRatio={pdfDevicePixelRatio}
-                loading={
-                  <div
-                    style={{ width: pageBaseWidth * scale, height: pageBaseHeight * scale }}
-                    className="animate-pulse rounded-md bg-slate-200"
-                  />
-                }
-              />
-            </div>
-          </div>
+          <MemoizedViewportPage
+            index={index}
+            scale={scale}
+            rotation={rotation}
+            pageBaseWidth={pageBaseWidth}
+            pageBaseHeight={pageBaseHeight}
+            shouldRenderTextLayer={shouldRenderTextLayer}
+            pdfDevicePixelRatio={pdfDevicePixelRatio}
+          />
         )}
       />
     </Document>

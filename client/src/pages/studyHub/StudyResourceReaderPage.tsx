@@ -5,11 +5,11 @@ import { useQuery } from '@tanstack/react-query';
 import {
   ArrowDownTrayIcon,
   ArrowLeftIcon,
-  ArrowTopRightOnSquareIcon,
   BookOpenIcon,
   CheckCircleIcon,
   DocumentTextIcon,
   LinkIcon,
+  ArrowTopRightOnSquareIcon,
   ShieldCheckIcon,
   TagIcon,
 } from '@heroicons/react/24/outline';
@@ -22,6 +22,7 @@ import {
   StudyPageHeader,
 } from '../../components/study/StudyPremium';
 import SyllabusBridgePanel from '../../components/study/SyllabusBridgePanel';
+import StudyPdfReaderFrame from '../../components/study/StudyPdfReaderFrame';
 import { fallbackResources } from '../../data/studyFallback';
 import { fetchStudyResource, fetchStudyResources, type StudyResource } from '../../studyHubApi';
 import {
@@ -38,7 +39,6 @@ import {
   isStudyResourceFileCached,
 } from '../../utils/studyOfflineCache';
 import { addRecentStudyResource } from '../../utils/studyActivity';
-import { getStudyPdfReaderHref } from '../../utils/studyPdfReader';
 
 const getReaderHref = (resource: StudyResource) => {
   return resource.type === 'pyq' ? `/app/paper/${resource.slug}` : `/app/resource/${resource.slug}`;
@@ -161,67 +161,52 @@ const StudyResourceReaderPage = () => {
         description={resource.summary || 'Focused reading surface with source metadata, offline controls, and related resources.'}
         actions={(
           <>
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-700 shadow-sm transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-cyan-400/10 dark:hover:text-cyan-100"
-          >
-            <ArrowLeftIcon className="h-4 w-4" aria-hidden="true" />
-            Back
-          </button>
-          <span className="inline-flex min-h-11 items-center rounded-2xl bg-emerald-50 px-4 text-sm font-black capitalize text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-700 shadow-sm transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-cyan-400/10 dark:hover:text-cyan-100"
+            >
+              <ArrowLeftIcon className="h-4 w-4" aria-hidden="true" />
+              Back
+            </button>
+            <span className="inline-flex min-h-11 items-center rounded-2xl bg-emerald-50 px-4 text-sm font-black capitalize text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300">
               {resource.language}
-          </span>
-          <span className="inline-flex min-h-11 items-center rounded-2xl bg-amber-50 px-4 text-sm font-black text-amber-700 dark:bg-amber-400/10 dark:text-amber-300">
+            </span>
+            <span className="inline-flex min-h-11 items-center rounded-2xl bg-amber-50 px-4 text-sm font-black text-amber-700 dark:bg-amber-400/10 dark:text-amber-300">
               {sourceLabel(resource)}
-          </span>
+            </span>
           </>
         )}
         aside={(
-        <div className="flex h-full shrink-0 flex-wrap content-start gap-2 rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/60">
-          <SaveResourceButton
-            resource={resource}
-            className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-          />
-          <StudyActionButton
-            type="button"
-            onClick={handleOfflineSave}
-            disabled={isCaching}
-          >
-            {isOfflineSaved ? (
-              <CheckCircleIcon className="h-4 w-4" aria-hidden="true" />
-            ) : (
-              <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
-            )}
-            {isCaching ? 'Saving...' : isOfflineSaved ? 'Offline ready' : 'Save offline'}
-          </StudyActionButton>
-        </div>
+          <div className="flex h-full shrink-0 flex-wrap content-start gap-2 rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/60">
+            <SaveResourceButton
+              resource={resource}
+              className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+            />
+            <StudyActionButton
+              type="button"
+              onClick={handleOfflineSave}
+              disabled={isCaching}
+            >
+              {isOfflineSaved ? (
+                <CheckCircleIcon className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
+              )}
+              {isCaching ? 'Saving...' : isOfflineSaved ? 'Offline ready' : 'Save offline'}
+            </StudyActionButton>
+          </div>
         )}
       />
 
       <section className="grid gap-5 xl:grid-cols-[1fr_340px]">
         <div className={[premiumSurfaceClassName, 'min-h-[68vh] overflow-hidden'].join(' ')}>
           {previewUrl && isPdf ? (
-            <div className="flex h-full min-h-[68vh] flex-col">
-              <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <DocumentTextIcon className="h-5 w-5 text-blue-700 dark:text-cyan-300" aria-hidden="true" />
-                  <span className="text-sm font-bold text-slate-950 dark:text-white">PDF preview</span>
-                </div>
-                <Link
-                  to={getStudyPdfReaderHref(previewUrl, resource.title, `${location.pathname}${location.search}`)}
-                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-sm font-bold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-                >
-                  Full screen
-                  <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
-                </Link>
-              </div>
-              <iframe
+            <div className="h-[78vh] overflow-hidden rounded-2xl">
+              <StudyPdfReaderFrame
                 title={resource.title}
-                src={previewUrl}
-                loading="eager"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="h-[72vh] w-full bg-slate-100 dark:bg-slate-950"
+                fileUrl={previewUrl}
+                downloadUrl={fileUrl || undefined}
               />
             </div>
           ) : hasRichContent ? (
@@ -272,7 +257,10 @@ const StudyResourceReaderPage = () => {
             </div>
             <div className="grid gap-3">
               {metaItemsFor(resource).map(([label, value]) => (
-                <div key={label} className="flex items-center justify-between gap-3 border-b border-slate-100 pb-2 last:border-b-0 last:pb-0 dark:border-slate-800">
+                <div
+                  key={label}
+                  className="flex items-center justify-between gap-3 border-b border-slate-100 pb-2 last:border-b-0 last:pb-0 dark:border-slate-800"
+                >
                   <span className="text-xs font-bold uppercase tracking-wide text-slate-500">{label}</span>
                   <span className="text-right text-sm font-bold capitalize text-slate-800 dark:text-slate-200">{value}</span>
                 </div>
