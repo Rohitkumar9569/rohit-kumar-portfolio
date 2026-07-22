@@ -86,30 +86,31 @@ const readStoredPdfTone = (): PdfToneMode => {
 
 const canUsePdfCacheStorage = () => typeof window !== 'undefined' && 'caches' in window;
 
+const readCachedPdfObjectUrl = async (url: string) => {
+  if (!canUsePdfCacheStorage()) return null;
+  try {
+    const cache = await window.caches.open('study-hub-pdf-cache-v1');
+    const match = await cache.match(url);
+    if (!match) return null;
+    const blob = await match.blob();
+    return window.URL.createObjectURL(blob);
+  } catch {
+    return null;
+  }
+};
+
 const cachePdfUrlForOffline = async (url: string) => {
   if (!canUsePdfCacheStorage()) throw new Error('Offline cache is not supported.');
   const cache = await window.caches.open('study-hub-pdf-cache-v1');
-  const response = await fetch(url, {
-    method: 'GET',
-    mode: 'cors',
-    headers: { Range: 'bytes=0-' },
-  });
-  if (!response.ok) throw new Error('PDF download failed.');
+  const existing = await cache.match(url);
+  if (existing) {
+    const blob = await existing.blob();
+    return { objectUrl: window.URL.createObjectURL(blob), sizeBytes: blob.size };
+  }
+  const response = await fetch(url, { method: 'GET', mode: 'no-cors' });
   await cache.put(url, response.clone());
   const blob = await response.blob();
-  return {
-    objectUrl: window.URL.createObjectURL(blob),
-    sizeBytes: Number(response.headers.get('content-length') || blob.size || 0),
-  };
-};
-
-const readCachedPdfObjectUrl = async (url: string) => {
-  if (!canUsePdfCacheStorage()) return null;
-  const cache = await window.caches.open('study-hub-pdf-cache-v1');
-  const match = await cache.match(url);
-  if (!match) return null;
-  const blob = await match.blob();
-  return window.URL.createObjectURL(blob);
+  return { objectUrl: window.URL.createObjectURL(blob), sizeBytes: blob.size };
 };
 
 const MemoizedPdfPage = memo(({
@@ -121,6 +122,7 @@ const MemoizedPdfPage = memo(({
   pdfDevicePixelRatio,
   pdfToneClassName,
   isFullMode,
+  isLastPage,
 }: {
   index: number;
   scale: number;
@@ -130,10 +132,11 @@ const MemoizedPdfPage = memo(({
   pdfDevicePixelRatio: number;
   pdfToneClassName: string;
   isFullMode: boolean;
+  isLastPage: boolean;
 }) => (
   <div
     className={[
-      'study-reader-canvas flex justify-center px-0',
+      'study-reader-canvas flex flex-col items-center px-0',
       isFullMode ? 'py-1 sm:px-2 sm:py-2' : 'py-2 sm:px-6 sm:py-4',
     ].join(' ')}
   >
@@ -141,6 +144,7 @@ const MemoizedPdfPage = memo(({
       className={[
         'study-reader-page-frame overflow-hidden rounded-lg sm:rounded-xl',
         pdfToneClassName,
+        isLastPage ? 'shadow-[0_0_0_2px_rgba(148,163,184,0.3)] dark:shadow-[0_0_0_2px_rgba(255,255,255,0.08)]' : '',
       ].join(' ')}
       style={{ width: pageWidth, height: pageHeight }}
     >
@@ -164,6 +168,98 @@ const MemoizedPdfPage = memo(({
 
 MemoizedPdfPage.displayName = 'MemoizedPdfPage';
 
+const DocumentEndFooter = () => (
+  <div className="flex flex-col items-center justify-center gap-3 pb-10 pt-6">
+    <div className="flex items-center gap-3">
+      <div className="h-px w-16 bg-gradient-to-r from-transparent to-slate-300 dark:to-slate-700" />
+      <div className="flex h-7 items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-3 dark:border-white/10 dark:bg-white/5">
+        <svg
+          className="h-3 w-3 text-slate-400 dark:text-slate-500"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          aria-hidden="true"
+        >
+          <path
+            fillRule="evenodd"
+            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <span className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+          End of document
+        </span>
+      </div>
+      <div className="h-px w-16 bg-gradient-to-l from-transparent to-slate-300 dark:to-slate-700" />
+    </div>
+  </div>
+);
+
+// ─── Page Number Display - Pure UI, no scroll side effects ──────────────────
+const PageNumberDisplay = memo(({
+  displayPage,
+  numPages,
+  onSubmit,
+}: {
+  displayPage: number;
+  numPages: number;
+  onSubmit: (page: number) => void;
+}) => {
+  const [inputValue, setInputValue] = useState(String(displayPage));
+  const inputRef = useRef<HTMLInputElement>(null);
+  const isUserEditingRef = useRef(false);
+
+  // Sync input when page changes externally (scroll), but only if user is not typing
+  useEffect(() => {
+    if (!isUserEditingRef.current) {
+      setInputValue(String(displayPage));
+    }
+  }, [displayPage]);
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const nextPage = Number(inputValue);
+    if (!Number.isInteger(nextPage) || nextPage < 1 || nextPage > numPages) {
+      setInputValue(String(displayPage));
+      isUserEditingRef.current = false;
+      return;
+    }
+    isUserEditingRef.current = false;
+    onSubmit(nextPage);
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="study-control-surface flex h-10 shrink-0 items-center gap-1.5 rounded-2xl bg-slate-100/80 px-2 shadow-sm dark:bg-white/5"
+    >
+      <input
+        ref={inputRef}
+        value={inputValue}
+        onChange={(e) => {
+          isUserEditingRef.current = true;
+          setInputValue(e.target.value);
+        }}
+        onFocus={(e) => {
+          isUserEditingRef.current = true;
+          e.target.select();
+        }}
+        onBlur={() => {
+          isUserEditingRef.current = false;
+          setInputValue(String(displayPage));
+        }}
+        inputMode="numeric"
+        className="h-7 w-9 rounded-lg border border-slate-200 bg-white text-center text-sm font-black text-slate-950 outline-none focus:border-cyan-500 dark:border-white/10 dark:bg-slate-950 dark:text-white dark:focus:border-cyan-400/70"
+        aria-label="Page number"
+      />
+      <span className="text-xs font-black text-slate-500 dark:text-slate-400">
+        /{numPages || '-'}
+      </span>
+    </form>
+  );
+});
+
+PageNumberDisplay.displayName = 'PageNumberDisplay';
+
 const StudyPdfReaderFrame = ({
   title,
   fileUrl,
@@ -173,8 +269,6 @@ const StudyPdfReaderFrame = ({
   preparingProgress = null,
 }: StudyPdfReaderFrameProps) => {
   const [numPages, setNumPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(() => readStoredPdfPage(fileUrl));
-  const [pageInput, setPageInput] = useState(() => String(readStoredPdfPage(fileUrl)));
   const [scale, setScale] = useState(1);
   const [widthMode, setWidthMode] = useState<ReaderWidthMode>('comfort');
   const [pdfTone, setPdfTone] = useState<PdfToneMode>(() => readStoredPdfTone());
@@ -183,22 +277,32 @@ const StudyPdfReaderFrame = ({
   const [loadProgress, setLoadProgress] = useState<number | null>(null);
   const [pageSize, setPageSize] = useState({ width: 595, height: 842 });
   const [hasError, setHasError] = useState(false);
+  const [corsBlocked, setCorsBlocked] = useState(false);
   const [documentSource, setDocumentSource] = useState<string>(fileUrl);
   const [isDocumentLoading, setIsDocumentLoading] = useState(false);
   const [isSavingOffline, setIsSavingOffline] = useState(false);
   const [isOfflineReady, setIsOfflineReady] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  // ─── Page tracking via refs only - NO state updates during scroll ──────────
+  // displayPage is only for UI rendering, updated via RAF to avoid layout thrash
+  const [displayPage, setDisplayPage] = useState(() => readStoredPdfPage(fileUrl));
+  const currentPageRef = useRef(readStoredPdfPage(fileUrl));
+  const pageDisplayRafRef = useRef<number | null>(null);
+  const pageWriteTimerRef = useRef<number | null>(null);
+  // ──────────────────────────────────────────────────────────────────────────
+
   const activeObjectUrlRef = useRef<string | null>(null);
   const virtuosoRef = useRef<any>(null);
   const scrollAreaRef = useRef<HTMLElement | null>(null);
   const readerShellRef = useRef<HTMLDivElement | null>(null);
   const progressResetRef = useRef<number | null>(null);
-  const pageUpdateTimerRef = useRef<number | null>(null);
   const scrollIdleTimerRef = useRef<number | null>(null);
   const scaleRef = useRef(scale);
   const pinchStateRef = useRef<{ distance: number; scale: number } | null>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const scrollDirectionRef = useRef<'down' | 'up'>('down');
   const lastScrollTopRef = useRef(0);
+  const numPagesRef = useRef(0);
+  const fileUrlRef = useRef(fileUrl);
 
   const isCoarsePointer = useMemo(
     () =>
@@ -210,6 +314,11 @@ const StudyPdfReaderFrame = ({
   const pageWidth = pageSize.width * scale;
   const pageHeight = pageSize.height * scale;
   const sourceUrl = downloadUrl || fileUrl;
+
+  const isFullMode = readerMode === 'full';
+  const isReadMode = readerMode === 'read';
+  const itemHeight = Math.round(pageHeight + (isFullMode ? 8 : 16));
+
   const documentFile = useMemo(() => ({ url: documentSource }), [documentSource]);
 
   const documentOptions = useMemo(() => ({
@@ -230,8 +339,6 @@ const StudyPdfReaderFrame = ({
   const progressBarPercent = clampedVisibleLoadProgress === null ? 0 : Math.max(2, clampedVisibleLoadProgress);
   const showProgressBar = isPreparing || isDocumentLoading || (clampedVisibleLoadProgress !== null && clampedVisibleLoadProgress < 100);
 
-  const isFullMode = readerMode === 'full';
-  const isReadMode = readerMode === 'read';
   const modeButtonLabel = isFullMode ? 'Exit' : isReadMode ? 'Full' : 'Read';
   const modeButtonTitle = isFullMode ? 'Exit full mode' : isReadMode ? 'Full PDF mode' : 'Read mode';
   const readerTopGap = isFullMode ? 0 : readerTopOffset;
@@ -246,6 +353,7 @@ const StudyPdfReaderFrame = ({
 
   const virtuosoComponents = useMemo(() => ({
     Header: () => <div style={{ height: readerTopGap }} aria-hidden="true" />,
+    Footer: () => <DocumentEndFooter />,
     ScrollSeekPlaceholder: ({ height }: { height: number }) => (
       <div className="study-reader-canvas flex justify-center px-0 py-2 sm:px-6 sm:py-4" style={{ height }}>
         <div
@@ -261,8 +369,8 @@ const StudyPdfReaderFrame = ({
   const virtuosoScrollConfig = useMemo(() => {
     if (isCoarsePointer) {
       return {
-        increaseViewportBy: { top: 1800, bottom: 1800 },
-        overscan: { main: 1800, reverse: 1800 },
+        increaseViewportBy: { top: 1600, bottom: 1600 },
+        overscan: { main: 1600, reverse: 1600 },
         scrollSeekConfiguration: {
           enter: (velocity: number) => Math.abs(velocity) > 1200,
           exit: (velocity: number) => Math.abs(velocity) < 200,
@@ -270,8 +378,8 @@ const StudyPdfReaderFrame = ({
       };
     }
     return {
-      increaseViewportBy: { top: 2000, bottom: 2000 },
-      overscan: { main: 2000, reverse: 2000 },
+      increaseViewportBy: { top: 1800, bottom: 1800 },
+      overscan: { main: 1800, reverse: 1800 },
       scrollSeekConfiguration: {
         enter: (velocity: number) => Math.abs(velocity) > 2500,
         exit: (velocity: number) => Math.abs(velocity) < 400,
@@ -333,9 +441,7 @@ const StudyPdfReaderFrame = ({
   };
 
   const handlePdfTouchEnd = (event: ReactTouchEvent<HTMLDivElement>) => {
-    if (event.touches.length < 2) {
-      pinchStateRef.current = null;
-    }
+    if (event.touches.length < 2) pinchStateRef.current = null;
   };
 
   const cycleWidthMode = () => {
@@ -427,26 +533,70 @@ const StudyPdfReaderFrame = ({
     scrollAreaRef.current = ref;
   }, []);
 
-  const handleRangeChanged = useCallback((range: { startIndex: number }) => {
+  // ─── Core: rangeChanged updates ONLY refs + RAF display, never causes scroll ─
+  const handleRangeChanged = useCallback((range: { startIndex: number; endIndex: number }) => {
     const nextPage = range.startIndex + 1;
-    if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
-    pageUpdateTimerRef.current = window.setTimeout(() => {
-      setCurrentPage(nextPage);
-      pageUpdateTimerRef.current = null;
-    }, isCoarsePointer ? 60 : 90);
-  }, [isCoarsePointer]);
 
-  useEffect(() => { setPageInput(String(currentPage)); }, [currentPage]);
+    // Already on this page - skip everything
+    if (nextPage === currentPageRef.current) return;
+
+    // Update ref immediately (sync, no render)
+    currentPageRef.current = nextPage;
+
+    // Cancel pending display update
+    if (pageDisplayRafRef.current !== null) {
+      cancelAnimationFrame(pageDisplayRafRef.current);
+    }
+
+    // Schedule display update in next paint - completely decoupled from scroll
+    pageDisplayRafRef.current = requestAnimationFrame(() => {
+      pageDisplayRafRef.current = null;
+      // This setDisplayPage triggers re-render of PageNumberDisplay only
+      // Virtuoso is NOT affected because it has no dependency on displayPage
+      setDisplayPage(nextPage);
+    });
+
+    // Debounced sessionStorage write - no render triggered
+    if (pageWriteTimerRef.current !== null) {
+      window.clearTimeout(pageWriteTimerRef.current);
+    }
+    pageWriteTimerRef.current = window.setTimeout(() => {
+      writeStoredPdfPage(fileUrlRef.current, nextPage);
+      pageWriteTimerRef.current = null;
+    }, 300);
+  }, []); // empty deps - this never changes, no stale closure issues
+
+  // ─── Explicit navigation from page input form ──────────────────────────────
+  const handlePageNavigate = useCallback((nextPage: number) => {
+    currentPageRef.current = nextPage;
+    setDisplayPage(nextPage);
+    writeStoredPdfPage(fileUrlRef.current, nextPage);
+    virtuosoRef.current?.scrollToIndex({
+      index: nextPage - 1,
+      align: 'start',
+      offset: -readerTopGap,
+      behavior: 'auto',
+    });
+  }, [readerTopGap]);
+
+  useEffect(() => {
+    fileUrlRef.current = fileUrl;
+  }, [fileUrl]);
+
+  useEffect(() => {
+    numPagesRef.current = numPages;
+  }, [numPages]);
 
   useEffect(() => {
     let isMounted = true;
-    const initializeDocumentSource = async () => {
+    const init = async () => {
       revokeActiveObjectUrl();
       setDocumentSource(fileUrl);
       setIsOfflineReady(false);
       setIsDocumentLoading(true);
       setLoadProgress(null);
       setHasError(false);
+      setCorsBlocked(false);
       try {
         const cachedObjectUrl = await readCachedPdfObjectUrl(sourceUrl);
         if (!isMounted) return;
@@ -462,17 +612,18 @@ const StudyPdfReaderFrame = ({
     };
     const storedPage = readStoredPdfPage(fileUrl);
     clearProgressReset();
-    setCurrentPage(storedPage);
-    setPageInput(String(storedPage));
+    currentPageRef.current = storedPage;
+    setDisplayPage(storedPage);
     setNumPages(0);
-    void initializeDocumentSource();
+    void init();
     return () => { isMounted = false; };
-  }, [clearProgressReset, fileUrl, revokeActiveObjectUrl]);
+  }, [clearProgressReset, fileUrl, revokeActiveObjectUrl, sourceUrl]);
 
   useEffect(() => () => {
     clearProgressReset();
     revokeActiveObjectUrl();
-    if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
+    if (pageDisplayRafRef.current !== null) cancelAnimationFrame(pageDisplayRafRef.current);
+    if (pageWriteTimerRef.current !== null) window.clearTimeout(pageWriteTimerRef.current);
     if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
   }, [clearProgressReset, revokeActiveObjectUrl]);
 
@@ -481,10 +632,7 @@ const StudyPdfReaderFrame = ({
     if (!target) return undefined;
 
     const handleScroll = () => {
-      const currentScrollTop = target.scrollTop;
-      scrollDirectionRef.current = currentScrollTop < lastScrollTopRef.current ? 'up' : 'down';
-      lastScrollTopRef.current = currentScrollTop;
-
+      lastScrollTopRef.current = target.scrollTop;
       setIsScrolling(true);
       if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
       scrollIdleTimerRef.current = window.setTimeout(() => {
@@ -501,11 +649,6 @@ const StudyPdfReaderFrame = ({
   }, [numPages]);
 
   useEffect(() => {
-    if (!numPages) return;
-    writeStoredPdfPage(fileUrl, Math.min(currentPage, numPages));
-  }, [currentPage, fileUrl, numPages]);
-
-  useEffect(() => {
     const target = scrollAreaRef.current;
     if (!target || typeof ResizeObserver === 'undefined') return undefined;
     const observer = new ResizeObserver(() => fitToWidth());
@@ -513,7 +656,9 @@ const StudyPdfReaderFrame = ({
     return () => observer.disconnect();
   }, [fitToWidth]);
 
-  useEffect(() => { if (numPages > 0) fitToWidth(); }, [fitToWidth, numPages]);
+  useEffect(() => {
+    if (numPages > 0) fitToWidth();
+  }, [fitToWidth, numPages]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -558,6 +703,8 @@ const StudyPdfReaderFrame = ({
       activeObjectUrlRef.current = cachedPdf.objectUrl;
       setDocumentSource(cachedPdf.objectUrl);
       setIsOfflineReady(true);
+      setHasError(false);
+      setCorsBlocked(false);
     } catch (error) {
       console.error('PDF offline save failed:', error);
     } finally {
@@ -569,13 +716,16 @@ const StudyPdfReaderFrame = ({
     clearProgressReset();
     setIsDocumentLoading(false);
     setLoadProgress(100);
+    setHasError(false);
+    setCorsBlocked(false);
     const firstPage = await pdf.getPage(1);
     const viewport = firstPage.getViewport({ scale: 1 });
     const storedPage = Math.min(readStoredPdfPage(fileUrl), pdf.numPages);
     setPageSize({ width: viewport.width, height: viewport.height });
     setNumPages(pdf.numPages);
-    setCurrentPage(storedPage);
-    setHasError(false);
+    numPagesRef.current = pdf.numPages;
+    currentPageRef.current = storedPage;
+    setDisplayPage(storedPage);
     if (typeof window !== 'undefined') {
       progressResetRef.current = window.setTimeout(() => {
         setLoadProgress(null);
@@ -595,21 +745,46 @@ const StudyPdfReaderFrame = ({
     });
   };
 
-  const handlePageSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const nextPage = Number(pageInput);
-    if (!Number.isInteger(nextPage) || nextPage < 1 || nextPage > numPages) {
-      setPageInput(String(currentPage));
-      return;
-    }
-    setCurrentPage(nextPage);
-    virtuosoRef.current?.scrollToIndex({
-      index: nextPage - 1,
-      align: 'start',
-      offset: -readerTopGap,
-      behavior: 'auto',
-    });
+  const handleLoadError = (error: Error) => {
+    clearProgressReset();
+    setIsDocumentLoading(false);
+    setLoadProgress(null);
+    const msg = error?.message?.toLowerCase() ?? '';
+    setCorsBlocked(msg.includes('cors') || msg.includes('fetch') || msg.includes('network'));
+    setHasError(true);
   };
+
+  const errorPanel = (
+    <div className="flex h-full items-center justify-center p-6 text-center">
+      <div className="study-panel-surface w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl shadow-slate-950/10 dark:bg-white/5 dark:shadow-2xl">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-500/10">
+          <ArrowDownTrayIcon className="h-7 w-7 text-red-600 dark:text-red-400" aria-hidden="true" />
+        </div>
+        <h3 className="text-lg font-black text-slate-950 dark:text-white">
+          {corsBlocked ? 'External PDF — Cannot Preview' : 'Preview could not load'}
+        </h3>
+        <p className="mt-2 text-sm font-semibold leading-6 text-slate-500 dark:text-slate-400">
+          {corsBlocked
+            ? 'This PDF is on an external server that blocks in-app loading. Open it directly in your browser.'
+            : 'Something went wrong loading this PDF. Try downloading it directly.'}
+        </p>
+        <div className="mt-5">
+          <a
+            href={sourceUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 text-sm font-black text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100"
+          >
+            <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
+            Open / Download PDF
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ─── Stable initial index - never recalculated after mount ────────────────
+  const initialIndexRef = useRef(Math.max(0, currentPageRef.current - 1));
 
   return (
     <div
@@ -634,23 +809,13 @@ const StudyPdfReaderFrame = ({
       {!isFullMode && (
         <header className="study-topbar absolute inset-x-0 top-0 z-30 bg-white/[0.68] px-2 pb-2 pt-[calc(0.55rem+env(safe-area-inset-top))] backdrop-blur-3xl transition duration-200 [backdrop-filter:saturate(1.35)_blur(24px)] dark:bg-[#050814]/[0.62] sm:px-3 sm:py-2 xl:px-5">
           <div className="study-top-blur-edge pointer-events-none absolute inset-x-0 bottom-[-3.25rem] h-14 bg-gradient-to-b from-white/[0.58] via-white/[0.24] to-transparent backdrop-blur-2xl opacity-100 [mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.76)_42%,transparent_100%)] dark:from-[#050814]/[0.68] dark:via-[#050814]/[0.22]" />
-
           <div className="flex min-h-11 min-w-0 flex-wrap items-center gap-2">
             {onClose ? (
-              <button
-                type="button"
-                onClick={handleClose}
-                className={closeButtonClassName}
-                aria-label="Back"
-              >
+              <button type="button" onClick={handleClose} className={closeButtonClassName} aria-label="Back">
                 <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
               </button>
             ) : (
-              <Dialog.Close
-                className={closeButtonClassName}
-                aria-label="Back"
-                onClick={() => { void handleClose(); }}
-              >
+              <Dialog.Close className={closeButtonClassName} aria-label="Back" onClick={() => { void handleClose(); }}>
                 <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
               </Dialog.Close>
             )}
@@ -670,9 +835,7 @@ const StudyPdfReaderFrame = ({
                   </span>
                 )}
               </div>
-              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">
-                PDF
-              </p>
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">PDF</p>
             </div>
 
             <div className="flex min-w-0 flex-1 items-center gap-2 sm:hidden">
@@ -688,43 +851,19 @@ const StudyPdfReaderFrame = ({
             </div>
 
             <div className="study-control-surface hidden h-10 shrink-0 items-center gap-1 rounded-2xl bg-slate-100/80 px-1.5 shadow-sm dark:bg-white/5 md:flex">
-              <button
-                type="button"
-                onClick={() => zoomBy(-0.1)}
-                className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
-                aria-label="Zoom out"
-                title="Zoom out"
-              >
+              <button type="button" onClick={() => zoomBy(-0.1)} className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white" aria-label="Zoom out" title="Zoom out">
                 <MinusIcon className="h-4 w-4" aria-hidden="true" />
               </button>
               <span className="w-12 text-center text-xs font-black tabular-nums text-slate-700 dark:text-slate-200">
                 {Math.round(scale * 100)}%
               </span>
-              <button
-                type="button"
-                onClick={() => zoomBy(0.1)}
-                className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
-                aria-label="Zoom in"
-                title="Zoom in"
-              >
+              <button type="button" onClick={() => zoomBy(0.1)} className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white" aria-label="Zoom in" title="Zoom in">
                 <PlusIcon className="h-4 w-4" aria-hidden="true" />
               </button>
-              <button
-                type="button"
-                onClick={() => fitToWidth()}
-                className="flex h-7 items-center justify-center rounded-xl px-2 text-xs font-black text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
-                aria-label="Fit to width"
-                title="Fit to width"
-              >
+              <button type="button" onClick={() => fitToWidth()} className="flex h-7 items-center justify-center rounded-xl px-2 text-xs font-black text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white" aria-label="Fit to width" title="Fit to width">
                 Fit
               </button>
-              <button
-                type="button"
-                onClick={cycleWidthMode}
-                className="flex h-7 items-center justify-center gap-1 rounded-xl bg-white px-2 text-xs font-black text-slate-800 shadow-sm transition hover:text-cyan-700 dark:bg-white/10 dark:text-slate-100 dark:hover:text-cyan-200"
-                aria-label="Change PDF width"
-                title="Change PDF width"
-              >
+              <button type="button" onClick={cycleWidthMode} className="flex h-7 items-center justify-center gap-1 rounded-xl bg-white px-2 text-xs font-black text-slate-800 shadow-sm transition hover:text-cyan-700 dark:bg-white/10 dark:text-slate-100 dark:hover:text-cyan-200" aria-label="Change PDF width" title="Change PDF width">
                 <ArrowsPointingOutIcon className="h-3.5 w-3.5" aria-hidden="true" />
                 {readerWidthModeLabels[widthMode]}
               </button>
@@ -757,36 +896,24 @@ const StudyPdfReaderFrame = ({
               <span className="hidden sm:inline">{pdfToneLabels[pdfTone]}</span>
             </button>
 
-            <form
-              onSubmit={handlePageSubmit}
-              className="study-control-surface flex h-10 shrink-0 items-center gap-1.5 rounded-2xl bg-slate-100/80 px-2 shadow-sm dark:bg-white/5"
-            >
-              <input
-                value={pageInput}
-                onChange={(event) => setPageInput(event.target.value)}
-                onFocus={(event) => event.target.select()}
-                inputMode="numeric"
-                className="h-7 w-9 rounded-lg border border-slate-200 bg-white text-center text-sm font-black text-slate-950 outline-none focus:border-cyan-500 dark:border-white/10 dark:bg-slate-950 dark:text-white dark:focus:border-cyan-400/70"
-                aria-label="Page number"
-              />
-              <span className="text-xs font-black text-slate-500 dark:text-slate-400">
-                /{numPages || '-'}
-              </span>
-            </form>
+            {/* ─── Page Number - isolated component, no scroll side effects ── */}
+            <PageNumberDisplay
+              displayPage={displayPage}
+              numPages={numPages}
+              onSubmit={handlePageNavigate}
+            />
 
-            <button
-              type="button"
-              onClick={handleSaveOffline}
-              disabled={isSavingOffline}
-              className="hidden h-10 shrink-0 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-3 text-xs font-black text-white shadow-sm transition hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100 md:inline-flex"
-              aria-label={isOfflineReady ? 'PDF saved for offline use' : isSavingOffline ? 'Saving PDF for offline use' : 'Save PDF for offline use'}
-              title={isOfflineReady ? 'Saved for offline use' : isSavingOffline ? 'Saving PDF...' : 'Save PDF for offline use'}
+            <a
+              href={sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              download
+              className="hidden h-10 shrink-0 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-3 text-xs font-black text-white shadow-sm transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100 md:inline-flex"
+              title="Download PDF"
             >
               <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
-              <span className="hidden lg:inline">
-                {isSavingOffline ? 'Saving…' : isOfflineReady ? 'Saved' : 'Save'}
-              </span>
-            </button>
+              <span className="hidden lg:inline">{isOfflineReady ? 'Saved' : 'Save'}</span>
+            </a>
 
             <div className="relative ml-auto flex-none self-start md:hidden">
               <button
@@ -803,61 +930,33 @@ const StudyPdfReaderFrame = ({
               {isMobileMenuOpen && (
                 <div className="study-control-surface absolute right-0 top-[calc(100%+0.55rem)] z-[60] w-52 max-w-[calc(100vw-1.25rem)] origin-top-right rounded-3xl border border-white/70 bg-white/[0.92] p-2 shadow-[0_20px_52px_rgba(15,23,42,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#101521]/[0.92] dark:shadow-[0_24px_64px_rgba(0,0,0,0.42)]">
                   <div className="grid grid-cols-3 gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => zoomBy(-0.1)}
-                      className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]"
-                      aria-label="Zoom out"
-                    >
+                    <button type="button" onClick={() => zoomBy(-0.1)} className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]" aria-label="Zoom out">
                       <MinusIcon className="h-4 w-4" aria-hidden="true" />
                     </button>
                     <span className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-xs font-black tabular-nums text-slate-700 dark:bg-white/[0.07] dark:text-slate-200">
                       {Math.round(scale * 100)}%
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => zoomBy(0.1)}
-                      className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]"
-                      aria-label="Zoom in"
-                    >
+                    <button type="button" onClick={() => zoomBy(0.1)} className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]" aria-label="Zoom in">
                       <PlusIcon className="h-4 w-4" aria-hidden="true" />
                     </button>
                   </div>
-
                   <div className="mt-2 grid gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => fitToWidth()}
-                      className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
-                    >
+                    <button type="button" onClick={() => fitToWidth()} className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]">
                       <span>Fit</span>
                       <span className="text-slate-400">{Math.round(scale * 100)}%</span>
                     </button>
-                    <button
-                      type="button"
-                      onClick={cycleWidthMode}
-                      className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
-                    >
+                    <button type="button" onClick={cycleWidthMode} className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]">
                       <span>Width</span>
                       <span className="text-cyan-700 dark:text-cyan-300">{readerWidthModeLabels[widthMode]}</span>
                     </button>
-                    <button
-                      type="button"
-                      onClick={cyclePdfTone}
-                      className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
-                    >
+                    <button type="button" onClick={cyclePdfTone} className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]">
                       <span>Tone</span>
                       <span className="text-cyan-700 dark:text-cyan-300">{pdfToneLabels[pdfTone]}</span>
                     </button>
-                    <button
-                      type="button"
-                      onClick={handleSaveOffline}
-                      disabled={isSavingOffline}
-                      className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 disabled:cursor-wait disabled:opacity-70 dark:text-slate-200 dark:hover:bg-white/[0.08]"
-                    >
-                      <span>{isSavingOffline ? 'Saving…' : isOfflineReady ? 'Saved offline' : 'Save offline'}</span>
+                    <a href={sourceUrl} target="_blank" rel="noreferrer" download className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]">
+                      <span>Download</span>
                       <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
-                    </button>
+                    </a>
                   </div>
                 </div>
               )}
@@ -877,35 +976,14 @@ const StudyPdfReaderFrame = ({
         {isPreparing ? (
           documentLoadingFallback
         ) : hasError ? (
-          <div className="flex h-full items-center justify-center p-6 text-center">
-            <div className="study-panel-surface max-w-md rounded-3xl bg-white p-6 shadow-2xl shadow-slate-950/10 dark:bg-white/5 dark:shadow-2xl">
-              <h3 className="text-lg font-black text-slate-950 dark:text-white">Preview could not load</h3>
-              <p className="mt-2 text-sm font-semibold leading-6 text-slate-500 dark:text-slate-400">
-                Download the PDF, or try opening it again.
-              </p>
-              <button
-                type="button"
-                onClick={handleSaveOffline}
-                disabled={isSavingOffline}
-                className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 text-sm font-black text-white transition hover:bg-slate-800 disabled:cursor-wait disabled:opacity-70 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100"
-              >
-                <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
-                {isSavingOffline ? 'Saving…' : isOfflineReady ? 'Saved offline' : 'Save offline'}
-              </button>
-            </div>
-          </div>
+          errorPanel
         ) : (
           <Document
             file={documentFile}
             options={documentOptions}
             onLoadSuccess={handleLoadSuccess}
             onLoadProgress={handleLoadProgress}
-            onLoadError={() => {
-              clearProgressReset();
-              setIsDocumentLoading(false);
-              setLoadProgress(null);
-              setHasError(true);
-            }}
+            onLoadError={handleLoadError}
             loading={documentLoadingFallback}
             className="study-reader-canvas h-full"
           >
@@ -913,10 +991,13 @@ const StudyPdfReaderFrame = ({
               ref={virtuosoRef}
               totalCount={numPages}
               initialItemCount={Math.min(numPages || 4, isCoarsePointer ? 2 : 4)}
-              defaultItemHeight={Math.round(pageHeight + (isFullMode ? 16 : 32))}
+              defaultItemHeight={itemHeight}
+              // ✅ fixedItemHeight removed - Virtuoso measures actual DOM height
+              // This prevents wrong startIndex reports that caused page skipping
               increaseViewportBy={virtuosoScrollConfig.increaseViewportBy}
               overscan={virtuosoScrollConfig.overscan}
-              initialTopMostItemIndex={Math.max(0, Math.min(currentPage, numPages || currentPage) - 1)}
+              // ✅ Static ref - never recalculates, never causes scroll jumps
+              initialTopMostItemIndex={initialIndexRef.current}
               components={virtuosoComponents}
               scrollSeekConfiguration={virtuosoScrollConfig.scrollSeekConfiguration}
               className="study-scrollbar study-reader-canvas h-full overscroll-contain"
@@ -932,6 +1013,7 @@ const StudyPdfReaderFrame = ({
                   pdfDevicePixelRatio={pdfDevicePixelRatio}
                   pdfToneClassName={pdfToneClassName}
                   isFullMode={isFullMode}
+                  isLastPage={numPages > 0 && index === numPages - 1}
                 />
               )}
             />
