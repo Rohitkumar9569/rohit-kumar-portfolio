@@ -10,9 +10,9 @@ const PdfPageSkeleton = memo(({ pageWidth, pageHeight }: PdfPageSkeletonProps) =
     if (typeof window === 'undefined') return { w: 900, h: 1180 };
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    // ✅ Wider default - fills container properly
     const w = pageWidth ?? Math.min(vw - 48, 1180);
-    const h = pageHeight ?? Math.min(w * 1.414, vh - 90);
+    // ✅ Full height — container ki poori vertical space use karo
+    const h = pageHeight ?? Math.max(w * 1.414, vh - 90);
     return { w, h };
   });
 
@@ -24,9 +24,9 @@ const PdfPageSkeleton = memo(({ pageWidth, pageHeight }: PdfPageSkeletonProps) =
     const update = () => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      // ✅ Take almost full width like real PDF page
       const w = vw < 640 ? vw - 16 : Math.min(vw - 48, 1180);
-      const h = Math.min(w * 1.414, vh - 90);
+      // ✅ Height = max(A4 ratio, container height) → always fills space
+      const h = Math.max(w * 1.414, vh - 90);
       setDimensions({ w, h });
     };
     update();
@@ -36,9 +36,9 @@ const PdfPageSkeleton = memo(({ pageWidth, pageHeight }: PdfPageSkeletonProps) =
 
   const { w, h } = dimensions;
   const p = Math.round(w * 0.075);
-  const lh = Math.max(11, Math.round(h * 0.014));
-  const lg = Math.max(9, Math.round(h * 0.011));
-  const bg = Math.max(18, Math.round(h * 0.028));
+  const lh = Math.max(11, Math.round(h * 0.012));
+  const lg = Math.max(9, Math.round(h * 0.0095));
+  const bg = Math.max(18, Math.round(h * 0.024));
 
   return (
     <div className="flex w-full justify-center px-2 py-2 md:px-6 md:py-4">
@@ -54,7 +54,7 @@ const PdfPageSkeleton = memo(({ pageWidth, pageHeight }: PdfPageSkeletonProps) =
         "
         style={{ width: w, height: h, maxWidth: '100%' }}
       >
-        {/* ── Subtle top glow (adapts to theme) ── */}
+        {/* Top glow */}
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-32 opacity-60"
           style={{
@@ -63,9 +63,9 @@ const PdfPageSkeleton = memo(({ pageWidth, pageHeight }: PdfPageSkeletonProps) =
           }}
         />
 
-        {/* ── Shimmer sweep - subtle, works in both themes ── */}
+        {/* Shimmer */}
         <div
-          className="pointer-events-none absolute inset-0 z-20 dark:opacity-100 opacity-70"
+          className="pointer-events-none absolute inset-0 z-20 opacity-70 dark:opacity-100"
           style={{
             background:
               'linear-gradient(105deg, transparent 32%, rgba(148,163,184,0.10) 50%, transparent 68%)',
@@ -88,7 +88,7 @@ const PdfPageSkeleton = memo(({ pageWidth, pageHeight }: PdfPageSkeletonProps) =
         `}</style>
 
         <div style={{ padding: p }}>
-          {/* ── Title section ── */}
+          {/* ── Title ── */}
           <div style={{ marginBottom: bg }}>
             <div
               className="ppsk-pulse rounded-md bg-slate-200/70 dark:bg-white/[0.09]"
@@ -120,7 +120,7 @@ const PdfPageSkeleton = memo(({ pageWidth, pageHeight }: PdfPageSkeletonProps) =
             ))}
           </div>
 
-          {/* ── Two-column paragraph ── */}
+          {/* ── Two columns ── */}
           <div className="flex gap-4" style={{ marginBottom: bg }}>
             {[[90, 94, 86, 92, 54], [93, 87, 95, 89, 48]].map((lines, ci) => (
               <div key={ci} style={{ flex: 1 }}>
@@ -140,11 +140,11 @@ const PdfPageSkeleton = memo(({ pageWidth, pageHeight }: PdfPageSkeletonProps) =
             ))}
           </div>
 
-          {/* ── Figure placeholder ── */}
+          {/* ── Figure ── */}
           <div
             className="ppsk-pulse relative mx-auto overflow-hidden rounded-xl border border-slate-200/50 bg-slate-100/50 dark:border-white/[0.06] dark:bg-white/[0.04]"
             style={{
-              height: Math.round(h * 0.16),
+              height: Math.round(h * 0.14),
               width: '68%',
               marginBottom: bg,
               animationDelay: '0.5s',
@@ -185,7 +185,7 @@ const PdfPageSkeleton = memo(({ pageWidth, pageHeight }: PdfPageSkeletonProps) =
             ))}
           </div>
 
-          {/* ── Pill tags ── */}
+          {/* ── Pills ── */}
           <div className="flex flex-wrap gap-2" style={{ marginBottom: bg }}>
             {[22, 30, 18, 26].map((pct, i) => (
               <div
@@ -200,22 +200,77 @@ const PdfPageSkeleton = memo(({ pageWidth, pageHeight }: PdfPageSkeletonProps) =
             ))}
           </div>
 
+          {/* ── Paragraph 3 (NEW — fills middle) ── */}
+          <div style={{ marginBottom: bg }}>
+            {[95, 89, 93, 87, 91, 84, 58].map((pct, i) => (
+              <div
+                key={i}
+                className="ppsk-pulse rounded-full bg-slate-200/60 dark:bg-white/[0.07]"
+                style={{
+                  height: lh,
+                  width: `${pct}%`,
+                  marginBottom: i < 6 ? lg : 0,
+                  animationDelay: `${i * 0.07 + 1}s`,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* ── Second figure / table block (NEW) ── */}
+          <div
+            className="ppsk-pulse relative mx-auto overflow-hidden rounded-xl border border-slate-200/50 bg-slate-100/40 dark:border-white/[0.06] dark:bg-white/[0.035]"
+            style={{
+              height: Math.round(h * 0.12),
+              width: '82%',
+              marginBottom: bg,
+              animationDelay: '1.3s',
+            }}
+          >
+            {/* Fake table rows */}
+            <div className="flex h-full flex-col justify-around p-3">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="flex gap-3">
+                  <div className="h-2 flex-1 rounded-full bg-slate-300/50 dark:bg-white/[0.09]" />
+                  <div className="h-2 flex-1 rounded-full bg-slate-300/40 dark:bg-white/[0.07]" />
+                  <div className="h-2 flex-1 rounded-full bg-slate-300/50 dark:bg-white/[0.09]" />
+                  <div className="h-2 flex-1 rounded-full bg-slate-300/40 dark:bg-white/[0.07]" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Paragraph 4 (NEW) ── */}
+          <div style={{ marginBottom: bg }}>
+            {[92, 96, 88, 94, 90, 46].map((pct, i) => (
+              <div
+                key={i}
+                className="ppsk-pulse rounded-full bg-slate-200/55 dark:bg-white/[0.06]"
+                style={{
+                  height: lh,
+                  width: `${pct}%`,
+                  marginBottom: i < 5 ? lg : 0,
+                  animationDelay: `${i * 0.08 + 1.6}s`,
+                }}
+              />
+            ))}
+          </div>
+
           {/* ── Footer lines ── */}
-          {[88, 74].map((pct, i) => (
+          {[88, 74, 62].map((pct, i) => (
             <div
               key={i}
               className="ppsk-pulse rounded-full bg-slate-200/50 dark:bg-white/[0.05]"
               style={{
                 height: lh,
                 width: `${pct}%`,
-                marginBottom: i < 1 ? lg : 0,
-                animationDelay: `${i * 0.1 + 1}s`,
+                marginBottom: i < 2 ? lg : 0,
+                animationDelay: `${i * 0.1 + 2}s`,
               }}
             />
           ))}
         </div>
 
-        {/* ── Page number footer ── */}
+        {/* Page number footer */}
         <div className="absolute inset-x-0 bottom-4 flex items-center justify-center">
           <div className="ppsk-pulse flex items-center gap-1.5 rounded-full bg-slate-100/60 px-3 py-1 dark:bg-white/[0.05]">
             <div className="rounded-full bg-slate-300/70 dark:bg-white/[0.15]" style={{ height: 6, width: 6 }} />
