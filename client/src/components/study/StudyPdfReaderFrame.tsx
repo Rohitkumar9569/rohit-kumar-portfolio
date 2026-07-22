@@ -1,4 +1,4 @@
-import { memo, type FormEvent, type TouchEvent as ReactTouchEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, type FormEvent, type TouchEvent as ReactTouchEvent, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Virtuoso } from 'react-virtuoso';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -45,6 +45,10 @@ const readerWidthModeMax: Record<ReaderWidthMode, number> = {
 };
 const readerTopOffset = 76;
 const pdfToneStorageKey = 'studyhub-pdf-tone';
+
+const NORMAL_MODE_VERTICAL_GAP = 24;
+const FULL_MODE_VERTICAL_GAP = 0;
+const NORMAL_MODE_HORIZONTAL_PADDING = 12;
 
 const pdfToneModes: PdfToneMode[] = ['auto', 'paper', 'night', 'warm'];
 const pdfToneLabels: Record<PdfToneMode, string> = {
@@ -114,6 +118,8 @@ const cachePdfUrlForOffline = async (url: string) => {
   return { objectUrl: window.URL.createObjectURL(blob), sizeBytes: blob.size };
 };
 
+// ✅ GPU acceleration hints added — translateZ(0) + willChange se canvas
+// rendering ka repaint cost kam hota hai, mobile pe scroll aur zoom fast lagta hai.
 const MemoizedPdfPage = memo(({
   index,
   scale,
@@ -124,6 +130,7 @@ const MemoizedPdfPage = memo(({
   pdfToneClassName,
   isFullMode,
   isLastPage,
+  verticalGap,
 }: {
   index: number;
   scale: number;
@@ -134,20 +141,33 @@ const MemoizedPdfPage = memo(({
   pdfToneClassName: string;
   isFullMode: boolean;
   isLastPage: boolean;
+  verticalGap: number;
 }) => (
   <div
-    className={[
-      'study-reader-canvas flex flex-col items-center px-0',
-      isFullMode ? 'py-1 sm:px-2 sm:py-2' : 'py-2 sm:px-6 sm:py-4',
-    ].join(' ')}
+    className="flex w-full flex-col items-center"
+    style={{
+      paddingTop: verticalGap / 2,
+      paddingBottom: verticalGap / 2,
+      paddingLeft: isFullMode ? 0 : NORMAL_MODE_HORIZONTAL_PADDING,
+      paddingRight: isFullMode ? 0 : NORMAL_MODE_HORIZONTAL_PADDING,
+    }}
   >
     <div
       className={[
-        'study-reader-page-frame overflow-hidden rounded-lg sm:rounded-xl',
+        'study-reader-page-frame overflow-hidden',
+        isFullMode ? '' : 'rounded-lg shadow-md sm:rounded-xl',
         pdfToneClassName,
-        isLastPage ? 'shadow-[0_0_0_2px_rgba(148,163,184,0.3)] dark:shadow-[0_0_0_2px_rgba(255,255,255,0.08)]' : '',
+        isLastPage && !isFullMode
+          ? 'shadow-[0_0_0_2px_rgba(148,163,184,0.3)] dark:shadow-[0_0_0_2px_rgba(255,255,255,0.08)]'
+          : '',
       ].join(' ')}
-      style={{ width: pageWidth, height: pageHeight }}
+      style={{
+        width: pageWidth,
+        height: pageHeight,
+        transform: 'translateZ(0)',
+        willChange: 'transform',
+        contain: 'layout paint size',
+      }}
     >
       <Page
         pageNumber={index + 1}
@@ -195,7 +215,6 @@ const DocumentEndFooter = () => (
   </div>
 );
 
-// ─── Page Number Display - Pure UI, no scroll side effects ──────────────────
 const PageNumberDisplay = memo(({
   displayPage,
   numPages,
@@ -209,7 +228,6 @@ const PageNumberDisplay = memo(({
   const inputRef = useRef<HTMLInputElement>(null);
   const isUserEditingRef = useRef(false);
 
-  // Sync input when page changes externally (scroll), but only if user is not typing
   useEffect(() => {
     if (!isUserEditingRef.current) {
       setInputValue(String(displayPage));
@@ -283,15 +301,15 @@ const StudyPdfReaderFrame = ({
   const [isDocumentLoading, setIsDocumentLoading] = useState(false);
   const [isSavingOffline, setIsSavingOffline] = useState(false);
   const [isOfflineReady, setIsOfflineReady] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const [scrollerVersion, setScrollerVersion] = useState(0);
 
-  // ─── Page tracking via refs only - NO state updates during scroll ──────────
-  // displayPage is only for UI rendering, updated via RAF to avoid layout thrash
+  const [, startTransition] = useTransition();
+
+  const isScrollingRef = useRef(false);
+
   const [displayPage, setDisplayPage] = useState(() => readStoredPdfPage(fileUrl));
   const currentPageRef = useRef(readStoredPdfPage(fileUrl));
-  const pageDisplayRafRef = useRef<number | null>(null);
   const pageWriteTimerRef = useRef<number | null>(null);
-  // ──────────────────────────────────────────────────────────────────────────
 
   const activeObjectUrlRef = useRef<string | null>(null);
   const virtuosoRef = useRef<any>(null);
@@ -299,11 +317,13 @@ const StudyPdfReaderFrame = ({
   const readerShellRef = useRef<HTMLDivElement | null>(null);
   const progressResetRef = useRef<number | null>(null);
   const scrollIdleTimerRef = useRef<number | null>(null);
+  const scrollRafRef = useRef<number | null>(null);
   const scaleRef = useRef(scale);
   const pinchStateRef = useRef<{ distance: number; scale: number } | null>(null);
   const lastScrollTopRef = useRef(0);
   const numPagesRef = useRef(0);
   const fileUrlRef = useRef(fileUrl);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
 
   const isCoarsePointer = useMemo(
     () =>
@@ -312,24 +332,41 @@ const StudyPdfReaderFrame = ({
     [],
   );
 
-  const pageWidth = pageSize.width * scale;
-  const pageHeight = pageSize.height * scale;
+  const pageWidth = Math.round(pageSize.width * scale);
+  const pageHeight = Math.round(pageSize.height * scale);
   const sourceUrl = downloadUrl || fileUrl;
 
   const isFullMode = readerMode === 'full';
   const isReadMode = readerMode === 'read';
-  const itemHeight = Math.round(pageHeight + (isFullMode ? 8 : 16));
+
+  const verticalGap = isFullMode ? FULL_MODE_VERTICAL_GAP : NORMAL_MODE_VERTICAL_GAP;
+  const itemHeight = Math.round(pageHeight + verticalGap);
+
+  // ✅ Zoom ke baad scroll ratio preserve — reverse scroll jerk khatam
+  useEffect(() => {
+    const el = scrollAreaRef.current;
+    if (!el) return;
+
+    const ratio =
+      el.scrollTop / Math.max(1, el.scrollHeight - el.clientHeight);
+
+    requestAnimationFrame(() => {
+      el.scrollTop = ratio * (el.scrollHeight - el.clientHeight);
+    });
+  }, [itemHeight]);
 
   const documentFile = useMemo(() => ({ url: documentSource }), [documentSource]);
 
+  // ✅ Mobile pe chhota rangeChunkSize — first page jaldi dikhta hai
+  // (kam data fetch hota hai initial render ke liye).
   const documentOptions = useMemo(() => ({
     cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
     cMapPacked: true,
     disableRange: false,
     disableAutoFetch: false,
     disableStream: false,
-    rangeChunkSize: 524288,
-  }), []);
+    rangeChunkSize: isCoarsePointer ? 262144 : 524288,
+  }), [isCoarsePointer]);
 
   const visibleLoadProgress = isPreparing
     ? Math.max(4, Math.min(98, Math.round(preparingProgress || 8)))
@@ -337,52 +374,71 @@ const StudyPdfReaderFrame = ({
   const clampedVisibleLoadProgress = visibleLoadProgress === null
     ? null
     : Math.max(0, Math.min(100, visibleLoadProgress));
-  const progressBarPercent = clampedVisibleLoadProgress === null ? 0 : Math.max(2, clampedVisibleLoadProgress);
-  const showProgressBar = isPreparing || isDocumentLoading || (clampedVisibleLoadProgress !== null && clampedVisibleLoadProgress < 100);
+  const progressBarPercent = clampedVisibleLoadProgress === null
+    ? 0
+    : Math.max(2, clampedVisibleLoadProgress);
+  const showProgressBar = isPreparing
+    || isDocumentLoading
+    || (clampedVisibleLoadProgress !== null && clampedVisibleLoadProgress < 100);
 
   const modeButtonLabel = isFullMode ? 'Exit' : isReadMode ? 'Full' : 'Read';
   const modeButtonTitle = isFullMode ? 'Exit full mode' : isReadMode ? 'Full PDF mode' : 'Read mode';
   const readerTopGap = isFullMode ? 0 : readerTopOffset;
 
- const documentLoadingFallback = (
-  <div className="study-reader-canvas flex h-full w-full items-start justify-center overflow-y-auto">
-    <PdfPageSkeleton />
-  </div>
-);
+  const documentLoadingFallback = (
+    <div className="study-reader-canvas flex h-full w-full items-start justify-center overflow-y-auto">
+      <PdfPageSkeleton />
+    </div>
+  );
+
   const pdfToneClassName = pdfToneClassNames[pdfTone];
+
+  const shouldRenderTextLayer = !isCoarsePointer;
 
   const virtuosoComponents = useMemo(() => ({
     Header: () => <div style={{ height: readerTopGap }} aria-hidden="true" />,
     Footer: () => <DocumentEndFooter />,
     ScrollSeekPlaceholder: ({ height }: { height: number }) => (
-      <div className="study-reader-canvas flex justify-center px-0 py-2 sm:px-6 sm:py-4" style={{ height }}>
+      <div
+        className="flex w-full justify-center"
+        style={{
+          height,
+          paddingTop: verticalGap / 2,
+          paddingBottom: verticalGap / 2,
+          paddingLeft: isFullMode ? 0 : NORMAL_MODE_HORIZONTAL_PADDING,
+          paddingRight: isFullMode ? 0 : NORMAL_MODE_HORIZONTAL_PADDING,
+        }}
+      >
         <div
-          className="study-reader-page-frame overflow-hidden rounded-lg bg-[linear-gradient(135deg,rgba(255,255,255,0.14),rgba(255,255,255,0.045))] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] dark:bg-[linear-gradient(135deg,rgba(255,255,255,0.09),rgba(255,255,255,0.025))] sm:rounded-xl"
-          style={{ width: pageWidth, maxWidth: '100%', height: Math.max(240, height - 32) }}
+          className={[
+            'overflow-hidden bg-[linear-gradient(135deg,rgba(255,255,255,0.14),rgba(255,255,255,0.045))] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] dark:bg-[linear-gradient(135deg,rgba(255,255,255,0.09),rgba(255,255,255,0.025))]',
+            isFullMode ? '' : 'rounded-lg sm:rounded-xl',
+          ].join(' ')}
+          style={{ width: pageWidth, maxWidth: '100%', height: Math.max(240, height - verticalGap) }}
         >
           <div className="h-full w-full bg-[linear-gradient(110deg,transparent_0%,rgba(255,255,255,0.10)_45%,transparent_70%)]" />
         </div>
       </div>
     ),
-  }), [pageWidth, readerTopGap]);
+  }), [pageWidth, readerTopGap, verticalGap, isFullMode]);
 
   const virtuosoScrollConfig = useMemo(() => {
     if (isCoarsePointer) {
       return {
-        increaseViewportBy: { top: 1600, bottom: 1600 },
-        overscan: { main: 1600, reverse: 1600 },
+        increaseViewportBy: { top: 2000, bottom: 2000 },
+        overscan: { main: 2000, reverse: 2000 },
         scrollSeekConfiguration: {
-          enter: (velocity: number) => Math.abs(velocity) > 1200,
-          exit: (velocity: number) => Math.abs(velocity) < 200,
+          enter: (velocity: number) => Math.abs(velocity) > 1000,
+          exit: (velocity: number) => Math.abs(velocity) < 100,
         },
       };
     }
     return {
-      increaseViewportBy: { top: 1800, bottom: 1800 },
-      overscan: { main: 1800, reverse: 1800 },
+      increaseViewportBy: { top: 1600, bottom: 1600 },
+      overscan: { main: 1600, reverse: 1600 },
       scrollSeekConfiguration: {
-        enter: (velocity: number) => Math.abs(velocity) > 2500,
-        exit: (velocity: number) => Math.abs(velocity) < 400,
+        enter: (velocity: number) => Math.abs(velocity) > 900,
+        exit: (velocity: number) => Math.abs(velocity) < 80,
       },
     };
   }, [isCoarsePointer]);
@@ -391,8 +447,6 @@ const StudyPdfReaderFrame = ({
     () => Math.min(window.devicePixelRatio || 1, isCoarsePointer ? 1 : 1.5),
     [isCoarsePointer],
   );
-
-  const shouldRenderTextLayer = !isCoarsePointer && !isScrolling;
 
   const closeButtonClassName =
     'study-control-surface inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/70 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition hover:bg-white hover:text-slate-950 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white dark:focus:ring-cyan-400/40';
@@ -414,10 +468,19 @@ const StudyPdfReaderFrame = ({
   const fitToWidth = useCallback((baseWidth = pageSize.width) => {
     const containerWidth = scrollAreaRef.current?.clientWidth || window.innerWidth;
     const isCompact = containerWidth < 640;
-    const usableWidth = Math.max(280, containerWidth - (isCompact ? 12 : 48));
-    const targetWidth = isCompact ? usableWidth : Math.min(usableWidth, readerWidthModeMax[widthMode]);
+
+    if (isFullMode) {
+      const usableWidth = Math.max(280, containerWidth);
+      setScale(clampScale(usableWidth / baseWidth));
+      return;
+    }
+
+    const usableWidth = Math.max(280, containerWidth - NORMAL_MODE_HORIZONTAL_PADDING * 2);
+    const targetWidth = isCompact
+      ? usableWidth
+      : Math.min(usableWidth, readerWidthModeMax[widthMode]);
     setScale(clampScale(targetWidth / baseWidth));
-  }, [pageSize.width, widthMode]);
+  }, [pageSize.width, widthMode, isFullMode]);
 
   const zoomBy = (delta: number) => {
     setScale((current) => clampScale(Number((current + delta).toFixed(2))));
@@ -427,7 +490,10 @@ const StudyPdfReaderFrame = ({
     if (event.touches.length !== 2) return;
     event.preventDefault();
     const [firstTouch, secondTouch] = Array.from(event.touches);
-    const distance = Math.hypot(firstTouch.clientX - secondTouch.clientX, firstTouch.clientY - secondTouch.clientY);
+    const distance = Math.hypot(
+      firstTouch.clientX - secondTouch.clientX,
+      firstTouch.clientY - secondTouch.clientY,
+    );
     pinchStateRef.current = { distance, scale: scaleRef.current };
   };
 
@@ -435,8 +501,13 @@ const StudyPdfReaderFrame = ({
     if (event.touches.length !== 2 || !pinchStateRef.current) return;
     event.preventDefault();
     const [firstTouch, secondTouch] = Array.from(event.touches);
-    const currentDistance = Math.hypot(firstTouch.clientX - secondTouch.clientX, firstTouch.clientY - secondTouch.clientY);
-    const nextScale = clampScale(pinchStateRef.current.scale * (currentDistance / pinchStateRef.current.distance));
+    const currentDistance = Math.hypot(
+      firstTouch.clientX - secondTouch.clientX,
+      firstTouch.clientY - secondTouch.clientY,
+    );
+    const nextScale = clampScale(
+      pinchStateRef.current.scale * (currentDistance / pinchStateRef.current.distance),
+    );
     setScale(Number(nextScale.toFixed(2)));
   };
 
@@ -492,7 +563,10 @@ const StudyPdfReaderFrame = ({
 
   const exitReaderMode = async () => {
     try {
-      if (typeof document !== 'undefined' && document.fullscreenElement === readerShellRef.current) {
+      if (
+        typeof document !== 'undefined'
+        && document.fullscreenElement === readerShellRef.current
+      ) {
         await document.exitFullscreen?.();
       }
     } catch {
@@ -530,43 +604,20 @@ const StudyPdfReaderFrame = ({
     ref.setAttribute('data-native-scroll', 'true');
     ref.setAttribute('data-pdf-scroller', 'true');
     ref.classList.add('study-scrollbar');
+    ref.style.width = '100%';
+    ref.style.maxWidth = '100%';
+    ref.style.overflowX = 'hidden';
+    ref.style.overflowY = 'auto';
+    ref.style.overscrollBehavior = 'none';
+    ref.style.boxSizing = 'border-box';
+    (ref.style as any).webkitOverflowScrolling = 'touch';
+    // ✅ GPU layer promotion for smoother scroll on mobile
+    ref.style.transform = 'translateZ(0)';
+    (ref.style as any).willChange = 'scroll-position';
     scrollAreaRef.current = ref;
+    setScrollerVersion((v) => v + 1);
   }, []);
 
-  // ─── Core: rangeChanged updates ONLY refs + RAF display, never causes scroll ─
-  const handleRangeChanged = useCallback((range: { startIndex: number; endIndex: number }) => {
-    const nextPage = range.startIndex + 1;
-
-    // Already on this page - skip everything
-    if (nextPage === currentPageRef.current) return;
-
-    // Update ref immediately (sync, no render)
-    currentPageRef.current = nextPage;
-
-    // Cancel pending display update
-    if (pageDisplayRafRef.current !== null) {
-      cancelAnimationFrame(pageDisplayRafRef.current);
-    }
-
-    // Schedule display update in next paint - completely decoupled from scroll
-    pageDisplayRafRef.current = requestAnimationFrame(() => {
-      pageDisplayRafRef.current = null;
-      // This setDisplayPage triggers re-render of PageNumberDisplay only
-      // Virtuoso is NOT affected because it has no dependency on displayPage
-      setDisplayPage(nextPage);
-    });
-
-    // Debounced sessionStorage write - no render triggered
-    if (pageWriteTimerRef.current !== null) {
-      window.clearTimeout(pageWriteTimerRef.current);
-    }
-    pageWriteTimerRef.current = window.setTimeout(() => {
-      writeStoredPdfPage(fileUrlRef.current, nextPage);
-      pageWriteTimerRef.current = null;
-    }, 300);
-  }, []); // empty deps - this never changes, no stale closure issues
-
-  // ─── Explicit navigation from page input form ──────────────────────────────
   const handlePageNavigate = useCallback((nextPage: number) => {
     currentPageRef.current = nextPage;
     setDisplayPage(nextPage);
@@ -622,31 +673,65 @@ const StudyPdfReaderFrame = ({
   useEffect(() => () => {
     clearProgressReset();
     revokeActiveObjectUrl();
-    if (pageDisplayRafRef.current !== null) cancelAnimationFrame(pageDisplayRafRef.current);
     if (pageWriteTimerRef.current !== null) window.clearTimeout(pageWriteTimerRef.current);
     if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
+    if (scrollRafRef.current !== null) cancelAnimationFrame(scrollRafRef.current);
   }, [clearProgressReset, revokeActiveObjectUrl]);
 
   useEffect(() => {
     const target = scrollAreaRef.current;
     if (!target) return undefined;
 
+    const computeAndSetPage = () => {
+      scrollRafRef.current = null;
+      if (!numPagesRef.current) return;
+      const scrollTop = target.scrollTop;
+      const adjustedScrollTop = Math.max(0, scrollTop - readerTopGap);
+      const approxIndex = Math.floor(adjustedScrollTop / Math.max(1, itemHeight));
+      const nextPage = Math.min(
+        numPagesRef.current,
+        Math.max(1, approxIndex + 1),
+      );
+
+      if (nextPage !== currentPageRef.current) {
+        currentPageRef.current = nextPage;
+
+        startTransition(() => {
+          setDisplayPage(nextPage);
+        });
+
+        if (pageWriteTimerRef.current !== null) {
+          window.clearTimeout(pageWriteTimerRef.current);
+        }
+        pageWriteTimerRef.current = window.setTimeout(() => {
+          writeStoredPdfPage(fileUrlRef.current, nextPage);
+          pageWriteTimerRef.current = null;
+        }, 300);
+      }
+    };
+
     const handleScroll = () => {
       lastScrollTopRef.current = target.scrollTop;
-      setIsScrolling(true);
+      isScrollingRef.current = true;
+
       if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
       scrollIdleTimerRef.current = window.setTimeout(() => {
-        setIsScrolling(false);
+        isScrollingRef.current = false;
         scrollIdleTimerRef.current = null;
       }, 150);
+
+      if (scrollRafRef.current === null) {
+        scrollRafRef.current = requestAnimationFrame(computeAndSetPage);
+      }
     };
 
     target.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       target.removeEventListener('scroll', handleScroll);
       if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
+      if (scrollRafRef.current !== null) cancelAnimationFrame(scrollRafRef.current);
     };
-  }, [numPages]);
+  }, [itemHeight, readerTopGap, scrollerVersion, startTransition]);
 
   useEffect(() => {
     const target = scrollAreaRef.current;
@@ -654,7 +739,7 @@ const StudyPdfReaderFrame = ({
     const observer = new ResizeObserver(() => fitToWidth());
     observer.observe(target);
     return () => observer.disconnect();
-  }, [fitToWidth]);
+  }, [fitToWidth, scrollerVersion]);
 
   useEffect(() => {
     if (numPages > 0) fitToWidth();
@@ -683,6 +768,22 @@ const StudyPdfReaderFrame = ({
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, [fitToWidth]);
+
+  // ✅ Mobile menu ke bahar click / tap karne se menu band ho jaye
+  useEffect(() => {
+    if (!isMobileMenuOpen) return undefined;
+    const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('touchstart', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('touchstart', handleOutsideClick);
+    };
+  }, [isMobileMenuOpen]);
 
   const handleLoadProgress = ({ loaded, total }: { loaded: number; total: number }) => {
     clearProgressReset();
@@ -783,7 +884,6 @@ const StudyPdfReaderFrame = ({
     </div>
   );
 
-  // ─── Stable initial index - never recalculated after mount ────────────────
   const initialIndexRef = useRef(Math.max(0, currentPageRef.current - 1));
 
   return (
@@ -815,7 +915,11 @@ const StudyPdfReaderFrame = ({
                 <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
               </button>
             ) : (
-              <Dialog.Close className={closeButtonClassName} aria-label="Back" onClick={() => { void handleClose(); }}>
+              <Dialog.Close
+                className={closeButtonClassName}
+                aria-label="Back"
+                onClick={() => { void handleClose(); }}
+              >
                 <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
               </Dialog.Close>
             )}
@@ -835,7 +939,9 @@ const StudyPdfReaderFrame = ({
                   </span>
                 )}
               </div>
-              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">PDF</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">
+                PDF
+              </p>
             </div>
 
             <div className="flex min-w-0 flex-1 items-center gap-2 sm:hidden">
@@ -851,19 +957,39 @@ const StudyPdfReaderFrame = ({
             </div>
 
             <div className="study-control-surface hidden h-10 shrink-0 items-center gap-1 rounded-2xl bg-slate-100/80 px-1.5 shadow-sm dark:bg-white/5 md:flex">
-              <button type="button" onClick={() => zoomBy(-0.1)} className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white" aria-label="Zoom out" title="Zoom out">
+              <button
+                type="button"
+                onClick={() => zoomBy(-0.1)}
+                className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+                aria-label="Zoom out"
+              >
                 <MinusIcon className="h-4 w-4" aria-hidden="true" />
               </button>
               <span className="w-12 text-center text-xs font-black tabular-nums text-slate-700 dark:text-slate-200">
                 {Math.round(scale * 100)}%
               </span>
-              <button type="button" onClick={() => zoomBy(0.1)} className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white" aria-label="Zoom in" title="Zoom in">
+              <button
+                type="button"
+                onClick={() => zoomBy(0.1)}
+                className="flex h-7 w-7 items-center justify-center rounded-xl text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+                aria-label="Zoom in"
+              >
                 <PlusIcon className="h-4 w-4" aria-hidden="true" />
               </button>
-              <button type="button" onClick={() => fitToWidth()} className="flex h-7 items-center justify-center rounded-xl px-2 text-xs font-black text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white" aria-label="Fit to width" title="Fit to width">
+              <button
+                type="button"
+                onClick={() => fitToWidth()}
+                className="flex h-7 items-center justify-center rounded-xl px-2 text-xs font-black text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+                aria-label="Fit to width"
+              >
                 Fit
               </button>
-              <button type="button" onClick={cycleWidthMode} className="flex h-7 items-center justify-center gap-1 rounded-xl bg-white px-2 text-xs font-black text-slate-800 shadow-sm transition hover:text-cyan-700 dark:bg-white/10 dark:text-slate-100 dark:hover:text-cyan-200" aria-label="Change PDF width" title="Change PDF width">
+              <button
+                type="button"
+                onClick={cycleWidthMode}
+                className="flex h-7 items-center justify-center gap-1 rounded-xl bg-white px-2 text-xs font-black text-slate-800 shadow-sm transition hover:text-cyan-700 dark:bg-white/10 dark:text-slate-100 dark:hover:text-cyan-200"
+                aria-label="Change PDF width"
+              >
                 <ArrowsPointingOutIcon className="h-3.5 w-3.5" aria-hidden="true" />
                 {readerWidthModeLabels[widthMode]}
               </button>
@@ -879,7 +1005,6 @@ const StudyPdfReaderFrame = ({
                   : 'bg-slate-100/80 text-slate-700 hover:bg-white hover:text-cyan-700 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-cyan-200',
               ].join(' ')}
               aria-label={modeButtonTitle}
-              title={modeButtonTitle}
             >
               {isReadMode && <ArrowsPointingOutIcon className="h-4 w-4" aria-hidden="true" />}
               <span>{modeButtonLabel}</span>
@@ -890,13 +1015,11 @@ const StudyPdfReaderFrame = ({
               onClick={cyclePdfTone}
               className="study-control-surface hidden h-10 shrink-0 items-center justify-center gap-1.5 rounded-2xl bg-slate-100/80 px-2.5 text-xs font-black text-slate-700 shadow-sm transition hover:bg-white hover:text-cyan-700 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-cyan-200 md:inline-flex"
               aria-label={`PDF tone: ${pdfToneLabels[pdfTone]}`}
-              title={`PDF tone: ${pdfToneLabels[pdfTone]}`}
             >
               <SwatchIcon className="h-4 w-4" aria-hidden="true" />
               <span className="hidden sm:inline">{pdfToneLabels[pdfTone]}</span>
             </button>
 
-            {/* ─── Page Number - isolated component, no scroll side effects ── */}
             <PageNumberDisplay
               displayPage={displayPage}
               numPages={numPages}
@@ -915,54 +1038,105 @@ const StudyPdfReaderFrame = ({
               <span className="hidden lg:inline">{isOfflineReady ? 'Saved' : 'Save'}</span>
             </a>
 
-            <div className="relative ml-auto flex-none self-start md:hidden">
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen((current) => !current)}
-                className="study-control-surface inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-100/80 text-slate-700 shadow-sm transition hover:bg-white hover:text-cyan-700 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-cyan-200"
-                aria-label="Reader options"
-                title="Reader options"
-                aria-expanded={isMobileMenuOpen}
-              >
-                <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
-              </button>
-
-              {isMobileMenuOpen && (
-                <div className="study-control-surface absolute right-0 top-[calc(100%+0.55rem)] z-[60] w-52 max-w-[calc(100vw-1.25rem)] origin-top-right rounded-3xl border border-white/70 bg-white/[0.92] p-2 shadow-[0_20px_52px_rgba(15,23,42,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#101521]/[0.92] dark:shadow-[0_24px_64px_rgba(0,0,0,0.42)]">
-                  <div className="grid grid-cols-3 gap-1.5">
-                    <button type="button" onClick={() => zoomBy(-0.1)} className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]" aria-label="Zoom out">
-                      <MinusIcon className="h-4 w-4" aria-hidden="true" />
-                    </button>
-                    <span className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-xs font-black tabular-nums text-slate-700 dark:bg-white/[0.07] dark:text-slate-200">
-                      {Math.round(scale * 100)}%
-                    </span>
-                    <button type="button" onClick={() => zoomBy(0.1)} className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]" aria-label="Zoom in">
-                      <PlusIcon className="h-4 w-4" aria-hidden="true" />
-                    </button>
-                  </div>
-                  <div className="mt-2 grid gap-1.5">
-                    <button type="button" onClick={() => fitToWidth()} className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]">
-                      <span>Fit</span>
-                      <span className="text-slate-400">{Math.round(scale * 100)}%</span>
-                    </button>
-                    <button type="button" onClick={cycleWidthMode} className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]">
-                      <span>Width</span>
-                      <span className="text-cyan-700 dark:text-cyan-300">{readerWidthModeLabels[widthMode]}</span>
-                    </button>
-                    <button type="button" onClick={cyclePdfTone} className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]">
-                      <span>Tone</span>
-                      <span className="text-cyan-700 dark:text-cyan-300">{pdfToneLabels[pdfTone]}</span>
-                    </button>
-                    <a href={sourceUrl} target="_blank" rel="noreferrer" download className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]">
-                      <span>Download</span>
-                      <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
+            {/* ✅ Mobile ellipsis button ab yaha se hata diya — ab fixed position wale
+                block me nikal diya hai taaki wo header ke flex-wrap se kabhi
+                affect na ho aur hamesha top-right corner pe fix rahe. */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((current) => !current)}
+              className="study-control-surface invisible ml-auto h-10 w-10 shrink-0 md:hidden"
+              tabIndex={-1}
+              aria-hidden="true"
+            >
+              <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
           </div>
         </header>
+      )}
+
+      {/* ✅ NAYA FIXED MOBILE MENU — hamesha screen ke top-right corner me chipka
+          rahega, header scroll/wrap se bilkul independent. */}
+      {!isFullMode && (
+        <div
+          ref={mobileMenuRef}
+          className="fixed right-3 top-[calc(0.6rem+env(safe-area-inset-top))] z-[95] md:hidden"
+        >
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((current) => !current)}
+            className="study-control-surface inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-100/90 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.18)] backdrop-blur-xl transition hover:bg-white hover:text-cyan-700 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/20 dark:hover:text-cyan-200"
+            aria-label="Reader options"
+            aria-expanded={isMobileMenuOpen}
+          >
+            <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+
+          {isMobileMenuOpen && (
+            <div className="study-control-surface absolute right-0 top-[calc(100%+0.55rem)] z-[95] w-52 max-w-[calc(100vw-1.25rem)] origin-top-right animate-[fadeInScale_0.15s_ease-out] rounded-3xl border border-white/70 bg-white/[0.96] p-2 shadow-[0_20px_52px_rgba(15,23,42,0.22)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#101521]/[0.96] dark:shadow-[0_24px_64px_rgba(0,0,0,0.48)]">
+              <div className="grid grid-cols-3 gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => zoomBy(-0.1)}
+                  className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]"
+                  aria-label="Zoom out"
+                >
+                  <MinusIcon className="h-4 w-4" aria-hidden="true" />
+                </button>
+                <span className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-xs font-black tabular-nums text-slate-700 dark:bg-white/[0.07] dark:text-slate-200">
+                  {Math.round(scale * 100)}%
+                </span>
+                <button
+                  type="button"
+                  onClick={() => zoomBy(0.1)}
+                  className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]"
+                  aria-label="Zoom in"
+                >
+                  <PlusIcon className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
+              <div className="mt-2 grid gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => fitToWidth()}
+                  className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                >
+                  <span>Fit</span>
+                  <span className="text-slate-400">{Math.round(scale * 100)}%</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={cycleWidthMode}
+                  className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                >
+                  <span>Width</span>
+                  <span className="text-cyan-700 dark:text-cyan-300">
+                    {readerWidthModeLabels[widthMode]}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={cyclePdfTone}
+                  className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                >
+                  <span>Tone</span>
+                  <span className="text-cyan-700 dark:text-cyan-300">
+                    {pdfToneLabels[pdfTone]}
+                  </span>
+                </button>
+                <a
+                  href={sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  download
+                  className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                >
+                  <span>Download</span>
+                  <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       <div
@@ -990,19 +1164,16 @@ const StudyPdfReaderFrame = ({
             <Virtuoso
               ref={virtuosoRef}
               totalCount={numPages}
-              initialItemCount={Math.min(numPages || 4, isCoarsePointer ? 2 : 4)}
-              defaultItemHeight={itemHeight}
-              // ✅ fixedItemHeight removed - Virtuoso measures actual DOM height
-              // This prevents wrong startIndex reports that caused page skipping
+              initialItemCount={Math.min(numPages || 4, isCoarsePointer ? 1 : 4)}
+              fixedItemHeight={itemHeight}
               increaseViewportBy={virtuosoScrollConfig.increaseViewportBy}
               overscan={virtuosoScrollConfig.overscan}
-              // ✅ Static ref - never recalculates, never causes scroll jumps
               initialTopMostItemIndex={initialIndexRef.current}
               components={virtuosoComponents}
               scrollSeekConfiguration={virtuosoScrollConfig.scrollSeekConfiguration}
-              className="study-scrollbar study-reader-canvas h-full overscroll-contain"
+              className="study-scrollbar study-reader-canvas h-full"
+              style={{ overscrollBehavior: 'none' }}
               scrollerRef={handleScrollerRef}
-              rangeChanged={handleRangeChanged}
               itemContent={(index) => (
                 <MemoizedPdfPage
                   index={index}
@@ -1014,6 +1185,7 @@ const StudyPdfReaderFrame = ({
                   pdfToneClassName={pdfToneClassName}
                   isFullMode={isFullMode}
                   isLastPage={numPages > 0 && index === numPages - 1}
+                  verticalGap={verticalGap}
                 />
               )}
             />

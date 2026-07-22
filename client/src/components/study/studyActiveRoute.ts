@@ -3,31 +3,60 @@ export const STUDY_TAB_ROUTE_STORAGE_KEY = 'studyhub-tab-routes';
 const STUDY_NAV_STORAGE_VERSION_KEY = 'studyhub-nav-storage-version';
 const STUDY_NAV_STORAGE_VERSION = '2026-05-30-owner-route-scope-v4';
 
-export type StudyPrimaryNavPath = '/app' | '/app/catalog' | '/app/ask' | '/app/library';
+export type StudyPrimaryNavPath =
+  | '/app'
+  | '/app/catalog'
+  | '/app/ask'
+  | '/app/library';
+
 export type StudyRouteState = {
   parentPath?: string;
   tabOwnerPath?: string;
   tabDirection?: number;
 } | null | undefined;
 
-const primaryPaths: StudyPrimaryNavPath[] = ['/app', '/app/catalog', '/app/ask', '/app/library'];
+const primaryPaths: StudyPrimaryNavPath[] = [
+  '/app',
+  '/app/catalog',
+  '/app/ask',
+  '/app/library',
+];
 
 const ensureNavStorageVersion = () => {
   if (typeof window === 'undefined') return;
 
-  const currentVersion = window.sessionStorage.getItem(STUDY_NAV_STORAGE_VERSION_KEY);
+  const currentVersion = window.sessionStorage.getItem(
+    STUDY_NAV_STORAGE_VERSION_KEY,
+  );
   if (currentVersion === STUDY_NAV_STORAGE_VERSION) return;
 
   window.sessionStorage.removeItem(STUDY_PARENT_ACTIVE_STORAGE_KEY);
   window.sessionStorage.removeItem(STUDY_TAB_ROUTE_STORAGE_KEY);
-  window.sessionStorage.setItem(STUDY_NAV_STORAGE_VERSION_KEY, STUDY_NAV_STORAGE_VERSION);
+  window.sessionStorage.setItem(
+    STUDY_NAV_STORAGE_VERSION_KEY,
+    STUDY_NAV_STORAGE_VERSION,
+  );
 };
 
 export const getPrimaryStudyNavPath = (pathname: string) => {
   if (pathname === '/app') return '/app';
-  if (pathname.startsWith('/app/catalog') || pathname.startsWith('/app/explore')) return '/app/catalog';
-  if (pathname.startsWith('/app/ask') || pathname.startsWith('/app/search')) return '/app/ask';
+  if (
+    pathname.startsWith('/app/catalog') ||
+    pathname.startsWith('/app/explore')
+  )
+    return '/app/catalog';
+  if (
+    pathname.startsWith('/app/ask') ||
+    pathname.startsWith('/app/search')
+  )
+    return '/app/ask';
   if (pathname.startsWith('/app/library')) return '/app/library';
+
+  // ✅ IMPORTANT FIX
+  if (pathname.startsWith('/app/my-pdfs')) {
+    return '/app/my-pdfs' as any;
+  }
+
   return null;
 };
 
@@ -43,9 +72,11 @@ export const readStoredPrimaryStudyNavPath = (fallback = '/app') => {
   if (typeof window === 'undefined') return fallback;
   ensureNavStorageVersion();
 
-  const storedPath = window.sessionStorage.getItem(STUDY_PARENT_ACTIVE_STORAGE_KEY);
+  const storedPath = window.sessionStorage.getItem(
+    STUDY_PARENT_ACTIVE_STORAGE_KEY,
+  );
   return primaryPaths.includes(storedPath as StudyPrimaryNavPath)
-    ? storedPath as StudyPrimaryNavPath
+    ? (storedPath as StudyPrimaryNavPath)
     : fallback;
 };
 
@@ -61,18 +92,27 @@ const readStoredTabRoutes = () => {
   ensureNavStorageVersion();
 
   try {
-    const rawValue = window.sessionStorage.getItem(STUDY_TAB_ROUTE_STORAGE_KEY);
+    const rawValue = window.sessionStorage.getItem(
+      STUDY_TAB_ROUTE_STORAGE_KEY,
+    );
     if (!rawValue) return {};
-    const parsed = JSON.parse(rawValue) as Partial<Record<StudyPrimaryNavPath, string>>;
+    const parsed = JSON.parse(
+      rawValue,
+    ) as Partial<Record<StudyPrimaryNavPath, string>>;
     return parsed || {};
   } catch {
     return {};
   }
 };
 
-const writeStoredTabRoutes = (routes: Partial<Record<StudyPrimaryNavPath, string>>) => {
+const writeStoredTabRoutes = (
+  routes: Partial<Record<StudyPrimaryNavPath, string>>,
+) => {
   if (typeof window === 'undefined') return;
-  window.sessionStorage.setItem(STUDY_TAB_ROUTE_STORAGE_KEY, JSON.stringify(routes));
+  window.sessionStorage.setItem(
+    STUDY_TAB_ROUTE_STORAGE_KEY,
+    JSON.stringify(routes),
+  );
 };
 
 export const readStoredStudyTabRoute = (path: string, fallback = path) => {
@@ -85,13 +125,17 @@ export const readStoredStudyTabRoute = (path: string, fallback = path) => {
 
   const storedPathname = storedRoute.split('?')[0];
   if (storedPathname === '/app/pdf') return fallback;
+
   const directOwnerPath = getPrimaryStudyNavPath(storedPathname);
   if (directOwnerPath && directOwnerPath !== path) return fallback;
 
   return storedRoute;
 };
 
-export const writeStoredStudyTabRoute = (path: string, route: string) => {
+export const writeStoredStudyTabRoute = (
+  path: string,
+  route: string,
+) => {
   if (!primaryPaths.includes(path as StudyPrimaryNavPath)) return;
   if (!route.startsWith('/app')) return;
   if (route.split('?')[0] === '/app/pdf') return;
@@ -106,7 +150,7 @@ export const writeStoredStudyTabRoute = (path: string, route: string) => {
 const getStateOwnerPath = (state: StudyRouteState) => {
   const ownerPath = state?.tabOwnerPath || state?.parentPath || '';
   return primaryPaths.includes(ownerPath as StudyPrimaryNavPath)
-    ? ownerPath as StudyPrimaryNavPath
+    ? (ownerPath as StudyPrimaryNavPath)
     : null;
 };
 
@@ -116,6 +160,12 @@ export const getStudyRouteOwnerPath = (
   state?: StudyRouteState,
 ) => {
   const directPrimaryPath = getPrimaryStudyNavPath(pathname);
+
+  // ✅ If My PDFs route — return it directly
+  if (pathname.startsWith('/app/my-pdfs')) {
+    return '/app/my-pdfs';
+  }
+
   if (directPrimaryPath) return directPrimaryPath;
 
   const stateOwnerPath = getStateOwnerPath(state);
@@ -125,12 +175,17 @@ export const getStudyRouteOwnerPath = (
 
   if (pathname.startsWith('/app/pdf')) {
     const parentPath = searchParams.get('parent');
-    const validParentPath = parentPath ? getPrimaryStudyNavPath(parentPath) : null;
+    const validParentPath = parentPath
+      ? getPrimaryStudyNavPath(parentPath)
+      : null;
     if (validParentPath) return validParentPath;
 
     const returnTo = searchParams.get('returnTo');
     const returnPathname = returnTo?.split('?')[0] || '';
-    return getPrimaryStudyNavPath(returnPathname) || readStoredPrimaryStudyNavPath('/app');
+    return (
+      getPrimaryStudyNavPath(returnPathname) ||
+      readStoredPrimaryStudyNavPath('/app')
+    );
   }
 
   if (
@@ -139,8 +194,12 @@ export const getStudyRouteOwnerPath = (
     pathname.startsWith('/app/paper')
   ) {
     const parentPath = searchParams.get('parent');
-    const validParentPath = parentPath ? getPrimaryStudyNavPath(parentPath) : null;
-    return validParentPath || readStoredPrimaryStudyNavPath('/app');
+    const validParentPath = parentPath
+      ? getPrimaryStudyNavPath(parentPath)
+      : null;
+    return (
+      validParentPath || readStoredPrimaryStudyNavPath('/app')
+    );
   }
 
   return null;

@@ -1,4 +1,7 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import { 
+  memo, useCallback, useEffect, useMemo, useRef,
+  type MutableRefObject 
+} from 'react';
 import { Virtuoso } from 'react-virtuoso';
 import { Document, Page, pdfjs } from 'react-pdf';
 import PdfPageSkeleton from './PdfPageSkeleton';
@@ -6,57 +9,58 @@ import PdfPageSkeleton from './PdfPageSkeleton';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+pdfjs.GlobalWorkerOptions.workerSrc =
+  `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
+const pageBaseWidth  = 595;
+const pageBaseHeight = 842;
+
+// ─── Page ──────────────────────────────────────────────────────────────────
 const MemoizedViewportPage = memo(({
   index,
   scale,
   rotation,
-  pageBaseWidth,
-  pageBaseHeight,
-  shouldRenderTextLayer,
   pdfDevicePixelRatio,
 }: {
   index: number;
   scale: number;
   rotation: number;
-  pageBaseWidth: number;
-  pageBaseHeight: number;
-  shouldRenderTextLayer: boolean;
   pdfDevicePixelRatio: number;
-}) => (
-  <div className="flex justify-center py-2 md:py-4">
-    <div
-      className="bg-white shadow-lg"
-      style={{ width: pageBaseWidth * scale, height: pageBaseHeight * scale }}
-    >
-      <Page
-        pageNumber={index + 1}
-        className="study-pdf-selectable-page"
-        scale={scale}
-        rotate={rotation}
-        renderAnnotationLayer={false}
-        renderTextLayer={shouldRenderTextLayer}
-        devicePixelRatio={pdfDevicePixelRatio}
-        loading={
-          <div
-            style={{ width: pageBaseWidth * scale, height: pageBaseHeight * scale }}
-            className="animate-pulse rounded-md bg-slate-200"
-          />
-        }
-      />
+}) => {
+  const width  = pageBaseWidth  * scale;
+  const height = pageBaseHeight * scale;
+
+  return (
+    <div className="flex justify-center py-2 md:py-4">
+      <div className="bg-white shadow-lg" style={{ width, height }}>
+        <Page
+          pageNumber={index + 1}
+          className="study-pdf-selectable-page"
+          scale={scale}
+          rotate={rotation}
+          renderAnnotationLayer={false}
+          renderTextLayer={false}          // always off — no re-render on scroll
+          devicePixelRatio={pdfDevicePixelRatio}
+          loading={
+            <div
+              style={{ width, height }}
+              className="animate-pulse rounded-md bg-slate-200"
+            />
+          }
+        />
+      </div>
     </div>
-  </div>
-));
+  );
+});
 
 MemoizedViewportPage.displayName = 'MemoizedViewportPage';
 
+// ─── Props ─────────────────────────────────────────────────────────────────
 interface PdfDocumentViewportProps {
   fileUrl?: string;
   scale: number;
   rotation: number;
   numPages: number;
-  overscanValue: number;
   virtuosoRef: MutableRefObject<any>;
   pdfContainerRef: MutableRefObject<HTMLDivElement | null>;
   setCurrentPage: (page: number) => void;
@@ -65,9 +69,7 @@ interface PdfDocumentViewportProps {
   setUnscaledPageWidth: (width: number | null) => void;
 }
 
-const pageBaseWidth = 595;
-const pageBaseHeight = 842;
-
+// ─── Main ──────────────────────────────────────────────────────────────────
 const PdfDocumentViewport = ({
   fileUrl,
   scale,
@@ -80,19 +82,22 @@ const PdfDocumentViewport = ({
   setLoadProgress,
   setUnscaledPageWidth,
 }: PdfDocumentViewportProps) => {
-  const progressResetRef = useRef<number | null>(null);
-  const pageUpdateTimerRef = useRef<number | null>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const progressResetRef    = useRef<number | null>(null);
+  // store setCurrentPage in ref so rangeChanged never needs to re-create
+  const setCurrentPageRef   = useRef(setCurrentPage);
+  const pageUpdateTimerRef  = useRef<number | null>(null);
+  const lastReportedPageRef = useRef(0);
 
-  const isCoarsePointer = useMemo(
-    () =>
-      typeof window !== 'undefined' &&
-      (window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0),
-    [],
-  );
+  // keep ref in sync without causing re-render
+  useEffect(() => { setCurrentPageRef.current = setCurrentPage; }, [setCurrentPage]);
 
-  const pageHeight = pageBaseHeight * scale;
-  const shouldRenderTextLayer = !isCoarsePointer && !isScrolling;
+  const isCoarsePointer = useMemo(() =>
+    typeof window !== 'undefined' &&
+    (window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0),
+  []);
+
+  const pdfDevicePixelRatio = isCoarsePointer ? 1 : 1.5;
+  const pageHeight          = pageBaseHeight * scale;
 
   const pdfOptions = useMemo(() => ({
     cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
@@ -102,89 +107,94 @@ const PdfDocumentViewport = ({
     rangeChunkSize: 524288,
   }), []);
 
-  const virtuosoScrollConfig = useMemo(() => {
-    if (isCoarsePointer) {
-      return {
-        overscan: { main: 400, reverse: 200 },
-        increaseViewportBy: { top: 400, bottom: 800 },
-        scrollSeekConfiguration: undefined,
-      };
-    }
-    return {
-      overscan: { main: 700, reverse: 350 },
-      increaseViewportBy: { top: 700, bottom: 1400 },
-      scrollSeekConfiguration: undefined,
-    };
-  }, [isCoarsePointer]);
-
-  const pdfDevicePixelRatio = useMemo(() => (isCoarsePointer ? 1 : 1.5), [isCoarsePointer]);
+  // cleanup
+  useEffect(() => () => {
+    if (progressResetRef.current  !== null) window.clearTimeout(progressResetRef.current);
+    if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
+  }, []);
 
   const clearProgressReset = useCallback(() => {
-    if (progressResetRef.current === null || typeof window === 'undefined') return;
+    if (progressResetRef.current === null) return;
     window.clearTimeout(progressResetRef.current);
     progressResetRef.current = null;
   }, []);
 
-  useEffect(() => () => {
-    clearProgressReset();
-    if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
-  }, [clearProgressReset]);
+  // ── rangeChanged: NO state, NO re-render ──────────────────────────────
+  // Uses refs only — Virtuoso will not cause any parent re-render
+  const handleRangeChanged = useCallback(
+    (range: { startIndex: number }) => {
+      const nextPage = range.startIndex + 1;
+      // skip if same page to avoid unnecessary timer churn
+      if (nextPage === lastReportedPageRef.current) return;
+      if (pageUpdateTimerRef.current !== null)
+        window.clearTimeout(pageUpdateTimerRef.current);
+      pageUpdateTimerRef.current = window.setTimeout(() => {
+        lastReportedPageRef.current = nextPage;
+        setCurrentPageRef.current(nextPage);   // call parent setter via ref
+        pageUpdateTimerRef.current = null;
+      }, 200);                                 // debounce: longer = fewer updates
+    },
+    [], // ← zero deps, never re-created
+  );
 
-  useEffect(() => {
-    const target = pdfContainerRef.current;
-    if (!target) return undefined;
+  const handleLoadProgress = useCallback(
+    ({ loaded, total }: { loaded: number; total: number }) => {
+      clearProgressReset();
+      setLoadProgress(total ? Math.min(99, Math.round((loaded / total) * 100)) : 6);
+    },
+    [clearProgressReset, setLoadProgress],
+  );
 
-    let scrollIdleTimer: number | null = null;
-    const handleScroll = () => {
-      setIsScrolling(true);
-      if (scrollIdleTimer !== null) window.clearTimeout(scrollIdleTimer);
-      scrollIdleTimer = window.setTimeout(() => setIsScrolling(false), 140);
-    };
-
-    target.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      target.removeEventListener('scroll', handleScroll);
-      if (scrollIdleTimer !== null) window.clearTimeout(scrollIdleTimer);
-    };
-  }, [numPages, pdfContainerRef]);
-
-  const handleRangeChanged = useCallback((range: { startIndex: number }) => {
-    const nextPage = range.startIndex + 1;
-    if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
-    pageUpdateTimerRef.current = window.setTimeout(() => {
-      setCurrentPage(nextPage);
-      pageUpdateTimerRef.current = null;
-    }, isCoarsePointer ? 60 : 90);
-  }, [isCoarsePointer, setCurrentPage]);
-
-  const handleLoadProgress = ({ loaded, total }: { loaded: number; total: number }) => {
-    clearProgressReset();
-    if (!total) {
-      setLoadProgress(6);
-      return;
-    }
-    setLoadProgress(Math.min(99, Math.round((loaded / total) * 100)));
-  };
-
-  const handleDocumentLoadSuccess = async (pdf: any) => {
-    clearProgressReset();
-    setLoadProgress(100);
-    setNumPages(pdf.numPages);
-    const firstPage = await pdf.getPage(1);
-    setUnscaledPageWidth(firstPage.getViewport({ scale: 1 }).width);
-    if (typeof window !== 'undefined') {
+  const handleDocumentLoadSuccess = useCallback(
+    async (pdf: any) => {
+      clearProgressReset();
+      setLoadProgress(100);
+      setNumPages(pdf.numPages);
+      const firstPage = await pdf.getPage(1);
+      setUnscaledPageWidth(firstPage.getViewport({ scale: 1 }).width);
       progressResetRef.current = window.setTimeout(() => {
         setLoadProgress(null);
         progressResetRef.current = null;
       }, 450);
-    }
-  };
+    },
+    [clearProgressReset, setLoadProgress, setNumPages, setUnscaledPageWidth],
+  );
 
-  const handleLoadError = (error: Error) => {
-    clearProgressReset();
-    setLoadProgress(null);
-    console.error(error);
-  };
+  const handleLoadError = useCallback(
+    (error: Error) => {
+      clearProgressReset();
+      setLoadProgress(null);
+      console.error('PDF load error:', error);
+    },
+    [clearProgressReset, setLoadProgress],
+  );
+
+  const scrollerRefCallback = useCallback(
+    (ref: HTMLElement | Window | null) => {
+      if (!ref || ref instanceof Window) return;
+      const el = ref as HTMLDivElement;
+      pdfContainerRef.current = el;
+      el.id = 'pdf-scroll-area';
+      el.setAttribute('data-pdf-scroller', 'true');
+      el.classList.add('study-scrollbar');
+      el.style.overflowY = 'auto';
+      el.style.overscrollBehavior = 'contain';
+    },
+    [pdfContainerRef],
+  );
+
+  // itemContent stable — only scale/rotation/dpr trigger re-render (intentional)
+  const itemContent = useCallback(
+    (index: number) => (
+      <MemoizedViewportPage
+        index={index}
+        scale={scale}
+        rotation={rotation}
+        pdfDevicePixelRatio={pdfDevicePixelRatio}
+      />
+    ),
+    [scale, rotation, pdfDevicePixelRatio],
+  );
 
   return (
     <Document
@@ -198,37 +208,16 @@ const PdfDocumentViewport = ({
     >
       <Virtuoso
         ref={virtuosoRef}
-        overscan={virtuosoScrollConfig.overscan}
-        increaseViewportBy={virtuosoScrollConfig.increaseViewportBy}
-        scrollSeekConfiguration={virtuosoScrollConfig.scrollSeekConfiguration}
+        overscan={isCoarsePointer ? 600 : 1000}
+        increaseViewportBy={isCoarsePointer
+          ? { top: 400,  bottom: 800  }
+          : { top: 700,  bottom: 1400 }}
         defaultItemHeight={Math.round(pageHeight + 16)}
         totalCount={numPages}
-        scrollerRef={(ref) => {
-          if (ref) {
-            pdfContainerRef.current = ref as HTMLDivElement;
-            const element = ref as HTMLElement;
-            element.id = 'pdf-scroll-area';
-            element.setAttribute('data-native-scroll', 'true');
-            element.setAttribute('data-pdf-scroller', 'true');
-            element.classList.add('study-scrollbar');
-            element.style.overflowY = 'auto';
-            element.style.overscrollBehavior = 'contain';
-            element.style.setProperty('-webkit-overflow-scrolling', 'touch');
-          }
-        }}
+        scrollerRef={scrollerRefCallback}
         className="study-scrollbar h-full overscroll-contain"
         rangeChanged={handleRangeChanged}
-        itemContent={(index) => (
-          <MemoizedViewportPage
-            index={index}
-            scale={scale}
-            rotation={rotation}
-            pageBaseWidth={pageBaseWidth}
-            pageBaseHeight={pageBaseHeight}
-            shouldRenderTextLayer={shouldRenderTextLayer}
-            pdfDevicePixelRatio={pdfDevicePixelRatio}
-          />
-        )}
+        itemContent={itemContent}
       />
     </Document>
   );

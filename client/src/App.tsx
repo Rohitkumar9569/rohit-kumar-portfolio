@@ -49,6 +49,7 @@ const StudyContributePage  = React.lazy(() => import('./pages/studyHub/StudyCont
 const StudyInstallCard     = React.lazy(() => import('./components/study/StudyInstallCard'));
 const StudyResourceReaderPage = React.lazy(() => import('./pages/studyHub/StudyResourceReaderPage'));
 const StudyPdfRoutePage    = React.lazy(() => import('./pages/studyHub/StudyPdfRoutePage'));
+const StudyMyPdfsPage      = React.lazy(() => import('./pages/studyHub/StudyMyPdfsPage'));
 const StudyPortfolioPage   = React.lazy(() => import('./pages/studyHub/StudyPortfolioPage'));
 const PublicExamPage       = React.lazy(() => import('./pages/public/PublicExamPage'));
 const PublicPaperPage      = React.lazy(() => import('./pages/public/PublicPaperPage'));
@@ -248,6 +249,7 @@ const AppContent = () => {
               <Route path="ask"             element={<StudySearchPage />} />
               <Route path="search"          element={<StudySearchPage />} />
               <Route path="library"         element={<StudyLibraryPage />} />
+              <Route path="my-pdfs"         element={<StudyMyPdfsPage />} />
               <Route path="workspace/:slug" element={<StudyWorkspacePage />} />
               <Route path="resource/:slug"  element={<StudyResourceReaderPage />} />
               <Route path="paper/:slug"     element={<StudyResourceReaderPage />} />

@@ -25,10 +25,13 @@ const StudyPdfRoutePage = () => {
   const fileUrl = searchParams.get('url') || '';
   const title = searchParams.get('title') || 'PDF document';
   const returnTo = searchParams.get('returnTo');
-  const isPdf = isStudyPdfUrl(fileUrl);
-  const isReadable = isStudyReadableDocumentUrl(fileUrl);
-  const isBookPackage = isStudyBookPackageUrl(fileUrl);
-  const displayUrl = getStudyPdfDisplayUrl(fileUrl);
+
+  const isLocalBlob = fileUrl.startsWith('blob:');
+  const isPdf = isLocalBlob || isStudyPdfUrl(fileUrl);
+  const isReadable = isLocalBlob || isStudyReadableDocumentUrl(fileUrl);
+  const isBookPackage = !isLocalBlob && isStudyBookPackageUrl(fileUrl);
+  const displayUrl = isLocalBlob ? fileUrl : getStudyPdfDisplayUrl(fileUrl);
+
   const [preflight, setPreflight] = useState<ReaderPreflightState>({
     ready: !isBookPackage,
     status: isBookPackage ? 'queued' : 'ready',
@@ -37,9 +40,9 @@ const StudyPdfRoutePage = () => {
   });
 
   useEffect(() => {
-    if (!fileUrl) return;
+    if (!fileUrl || isLocalBlob) return;
     addRecentStudyFileView({ name: title, url: fileUrl, mimeType: isPdf ? 'application/pdf' : 'application/octet-stream' }, title);
-  }, [fileUrl, isPdf, title]);
+  }, [fileUrl, isPdf, isLocalBlob, title]);
 
   useEffect(() => {
     if (!fileUrl || !isBookPackage) {
@@ -174,7 +177,7 @@ const StudyPdfRoutePage = () => {
       <StudyPdfReaderFrame
         title={title}
         fileUrl={displayUrl}
-        downloadUrl={fileUrl}
+        downloadUrl={isLocalBlob ? undefined : fileUrl}
         onClose={handleClose}
         isPreparing={shouldDeferReader}
         preparingProgress={preflight.percent}

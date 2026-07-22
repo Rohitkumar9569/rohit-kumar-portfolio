@@ -3,8 +3,10 @@ import {
   ArrowRightOnRectangleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  DocumentArrowUpIcon,
   WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline';
+import { DocumentArrowUpIcon as DocumentArrowUpIconSolid } from '@heroicons/react/24/solid';
 import { useAuth } from '../../context/AuthContext';
 import ThemeToggleButton from '../ThemeToggleButton';
 import {
@@ -52,11 +54,16 @@ interface StudySidebarProps {
 const StudySidebar = ({ isCollapsed, onToggleCollapsed }: StudySidebarProps) => {
   const { isAuthenticated, isAdmin, logout } = useAuth();
   const location = useLocation();
+
   const activePath = getStudyRouteOwnerPath(
     location.pathname,
     location.search,
     location.state as StudyRouteState,
   );
+
+  // ✅ FIX: activePath se derive karo, raw pathname se nahi
+  // activePath already PDF route ke liye sahi owner resolve karta hai (parent param se)
+  const isMyPdfsActive = activePath === '/app/my-pdfs';
 
   return (
     <aside
@@ -65,6 +72,7 @@ const StudySidebar = ({ isCollapsed, onToggleCollapsed }: StudySidebarProps) => 
         isCollapsed ? 'w-20 px-2' : 'w-64 px-3',
       ].join(' ')}
     >
+      {/* Logo */}
       <div className={['mb-5 flex items-center gap-2', isCollapsed ? 'justify-center' : 'justify-between px-2'].join(' ')}>
         <NavLink to="/app" className="study-logo-link flex items-center gap-3" aria-label="Study Hub home">
           <StudyHubLogo compact={isCollapsed} />
@@ -84,15 +92,19 @@ const StudySidebar = ({ isCollapsed, onToggleCollapsed }: StudySidebarProps) => 
         </button>
       </div>
 
+      {/* Study Hub Chip */}
       <div className={['study-sidebar-chip mb-4 rounded-2xl border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900', isCollapsed ? 'px-2 py-2 text-center' : 'px-3 py-2'].join(' ')}>
         <p className="truncate text-[11px] font-black uppercase tracking-wide text-slate-600 dark:text-cyan-100">
           {isCollapsed ? 'SH' : 'Study Hub'}
         </p>
       </div>
 
+      {/* Primary Navigation */}
       <nav className="space-y-1">
         {studyNavItems.map((item, index) => {
-          const isActive = activePath === item.to;
+          // ✅ My PDFs active hone par baaki primary tabs inactive rahenge
+          const isActive = !isMyPdfsActive && activePath === item.to;
+
           const targetPath = isActive ? item.to : readStoredStudyTabRoute(item.to, item.to);
           const currentIndex = getPrimaryStudyNavIndex(activePath);
           const targetIndex = getPrimaryStudyNavIndex(item.to);
@@ -122,33 +134,54 @@ const StudySidebar = ({ isCollapsed, onToggleCollapsed }: StudySidebarProps) => 
             </Link>
           );
         })}
+
+        {/* ✅ My PDFs — Library ke turant niche */}
+        <Link
+          to="/app/my-pdfs"
+          aria-current={isMyPdfsActive ? 'page' : undefined}
+          title="My PDFs (local only)"
+          className={[
+            'group flex w-full items-center rounded-xl py-2 text-sm font-semibold transition duration-200',
+            isCollapsed ? 'justify-center px-2' : 'gap-2.5 px-2.5',
+            isMyPdfsActive
+              ? 'study-nav-active -translate-y-0.5'
+              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white',
+          ].join(' ')}
+        >
+          <RaisedNavIcon
+            icon={DocumentArrowUpIcon}
+            activeIcon={DocumentArrowUpIconSolid}
+            isActive={isMyPdfsActive}
+          />
+          {!isCollapsed && <span className="study-nav-label">My PDFs</span>}
+        </Link>
       </nav>
 
+      {/* Drawer Items */}
       <div className="mt-5 space-y-1 pt-4">
-        {drawerItems.map((item) => {
-          return (
-            <NavLink
-              key={item.label}
-              to={item.to}
-              className={({ isActive }) =>
-                [
-                  'group flex w-full items-center rounded-xl py-2 text-sm font-medium transition duration-200',
-                  isCollapsed ? 'justify-center px-2' : 'justify-between px-2.5',
-                  isActive
-                    ? 'study-nav-active'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white',
-                ].join(' ')
-              }
-            >
-              {({ isActive }) => (
-                <span className={['flex items-center', isCollapsed ? 'justify-center' : 'gap-2.5'].join(' ')}>
-                  <RaisedNavIcon icon={item.icon} activeIcon={item.activeIcon} isActive={isActive} />
-                  {!isCollapsed && <span className="study-nav-label">{item.label}</span>}
-                </span>
-              )}
-            </NavLink>
-          );
-        })}
+        {drawerItems.map((item) => (
+          <NavLink
+            key={item.label}
+            to={item.to}
+            className={({ isActive }) =>
+              [
+                'group flex w-full items-center rounded-xl py-2 text-sm font-medium transition duration-200',
+                isCollapsed ? 'justify-center px-2' : 'justify-between px-2.5',
+                isActive
+                  ? 'study-nav-active'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white',
+              ].join(' ')
+            }
+          >
+            {({ isActive }) => (
+              <span className={['flex items-center', isCollapsed ? 'justify-center' : 'gap-2.5'].join(' ')}>
+                <RaisedNavIcon icon={item.icon} activeIcon={item.activeIcon} isActive={isActive} />
+                {!isCollapsed && <span className="study-nav-label">{item.label}</span>}
+              </span>
+            )}
+          </NavLink>
+        ))}
+
         {isAdmin && (
           <Link
             to="/admin"
@@ -164,11 +197,13 @@ const StudySidebar = ({ isCollapsed, onToggleCollapsed }: StudySidebarProps) => 
         )}
       </div>
 
+      {/* Bottom Section */}
       <div className="study-sidebar-chip mt-auto space-y-1.5 rounded-2xl border border-slate-200 p-2 dark:border-slate-800">
         <div className={['flex items-center text-sm text-slate-600 dark:text-slate-400', isCollapsed ? 'justify-center' : 'justify-between'].join(' ')}>
           {!isCollapsed && <span className="font-semibold">Theme</span>}
           <ThemeToggleButton />
         </div>
+
         {isAuthenticated ? (
           <button
             type="button"
