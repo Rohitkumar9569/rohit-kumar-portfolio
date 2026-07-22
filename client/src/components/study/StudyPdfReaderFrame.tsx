@@ -118,8 +118,7 @@ const cachePdfUrlForOffline = async (url: string) => {
   return { objectUrl: window.URL.createObjectURL(blob), sizeBytes: blob.size };
 };
 
-// ✅ GPU acceleration hints added — translateZ(0) + willChange se canvas
-// rendering ka repaint cost kam hota hai, mobile pe scroll aur zoom fast lagta hai.
+// ✅ Padding inline style se (px exact). GPU hints add kiye smooth scroll ke liye.
 const MemoizedPdfPage = memo(({
   index,
   scale,
@@ -342,7 +341,7 @@ const StudyPdfReaderFrame = ({
   const verticalGap = isFullMode ? FULL_MODE_VERTICAL_GAP : NORMAL_MODE_VERTICAL_GAP;
   const itemHeight = Math.round(pageHeight + verticalGap);
 
-  // ✅ Zoom ke baad scroll ratio preserve — reverse scroll jerk khatam
+  // ✅ Zoom ke baad scroll ratio preserve — reverse scroll jerk khatam.
   useEffect(() => {
     const el = scrollAreaRef.current;
     if (!el) return;
@@ -357,8 +356,6 @@ const StudyPdfReaderFrame = ({
 
   const documentFile = useMemo(() => ({ url: documentSource }), [documentSource]);
 
-  // ✅ Mobile pe chhota rangeChunkSize — first page jaldi dikhta hai
-  // (kam data fetch hota hai initial render ke liye).
   const documentOptions = useMemo(() => ({
     cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
     cMapPacked: true,
@@ -393,7 +390,9 @@ const StudyPdfReaderFrame = ({
 
   const pdfToneClassName = pdfToneClassNames[pdfTone];
 
-  const shouldRenderTextLayer = !isCoarsePointer;
+  // ✅ Text layer dono pe on rakha — selection/copy ke liye. Visual quality
+  // pe iska koi asar nahi (invisible overlay hai).
+  const shouldRenderTextLayer = true;
 
   const virtuosoComponents = useMemo(() => ({
     Header: () => <div style={{ height: readerTopGap }} aria-hidden="true" />,
@@ -422,11 +421,14 @@ const StudyPdfReaderFrame = ({
     ),
   }), [pageWidth, readerTopGap, verticalGap, isFullMode]);
 
+  // ✅ Quality-first tuning: DPR badhne se canvas heavy hota hai, isliye
+  // overscan thoda balance kiya hai taaki high-res pages ek saath zyada na
+  // render hon aur scroll smooth rahe.
   const virtuosoScrollConfig = useMemo(() => {
     if (isCoarsePointer) {
       return {
-        increaseViewportBy: { top: 2000, bottom: 2000 },
-        overscan: { main: 2000, reverse: 2000 },
+        increaseViewportBy: { top: 1200, bottom: 1200 },
+        overscan: { main: 1200, reverse: 1200 },
         scrollSeekConfiguration: {
           enter: (velocity: number) => Math.abs(velocity) > 1000,
           exit: (velocity: number) => Math.abs(velocity) < 100,
@@ -443,10 +445,18 @@ const StudyPdfReaderFrame = ({
     };
   }, [isCoarsePointer]);
 
-  const pdfDevicePixelRatio = useMemo(
-    () => Math.min(window.devicePixelRatio || 1, isCoarsePointer ? 1 : 1.5),
-    [isCoarsePointer],
-  );
+  // ✅ ✅ ✅ PREMIUM QUALITY FIX ✅ ✅ ✅
+  // Pehle mobile pe DPR forcefully 1 pe capped tha — isse text/lines blurry
+  // dikhte the. Ab native devicePixelRatio (jo Retina/AMOLED pe 2x-3x hota
+  // hai) use hota hai + thoda quality-boost multiplier, taaki PDF "100% se
+  // bhi sharp" dikhe. Ek upper safety-cap rakha hai taaki bahut purane/weak
+  // devices pe canvas itna bada na ho jaye ki crash/lag ho.
+  const pdfDevicePixelRatio = useMemo(() => {
+    const nativeDpr = typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1;
+    const qualityBoost = 1.15;
+    const maxDpr = isCoarsePointer ? 3 : 2.5;
+    return Math.min(nativeDpr * qualityBoost, maxDpr);
+  }, [isCoarsePointer]);
 
   const closeButtonClassName =
     'study-control-surface inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/70 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition hover:bg-white hover:text-slate-950 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white dark:focus:ring-cyan-400/40';
@@ -611,7 +621,6 @@ const StudyPdfReaderFrame = ({
     ref.style.overscrollBehavior = 'none';
     ref.style.boxSizing = 'border-box';
     (ref.style as any).webkitOverflowScrolling = 'touch';
-    // ✅ GPU layer promotion for smoother scroll on mobile
     ref.style.transform = 'translateZ(0)';
     (ref.style as any).willChange = 'scroll-position';
     scrollAreaRef.current = ref;
@@ -769,7 +778,7 @@ const StudyPdfReaderFrame = ({
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, [fitToWidth]);
 
-  // ✅ Mobile menu ke bahar click / tap karne se menu band ho jaye
+  // ✅ Mobile menu ke bahar click/tap karne se menu band ho jaye.
   useEffect(() => {
     if (!isMobileMenuOpen) return undefined;
     const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
@@ -1038,24 +1047,14 @@ const StudyPdfReaderFrame = ({
               <span className="hidden lg:inline">{isOfflineReady ? 'Saved' : 'Save'}</span>
             </a>
 
-            {/* ✅ Mobile ellipsis button ab yaha se hata diya — ab fixed position wale
-                block me nikal diya hai taaki wo header ke flex-wrap se kabhi
-                affect na ho aur hamesha top-right corner pe fix rahe. */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen((current) => !current)}
-              className="study-control-surface invisible ml-auto h-10 w-10 shrink-0 md:hidden"
-              tabIndex={-1}
-              aria-hidden="true"
-            >
-              <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
+            {/* ✅ Invisible spacer — asli mobile menu button ab niche fixed
+                block me hai, taaki header wrap se kabhi affect na ho. */}
+            <div className="invisible ml-auto h-10 w-10 shrink-0 md:hidden" aria-hidden="true" />
           </div>
         </header>
       )}
 
-      {/* ✅ NAYA FIXED MOBILE MENU — hamesha screen ke top-right corner me chipka
-          rahega, header scroll/wrap se bilkul independent. */}
+      {/* ✅ FIXED MOBILE MENU — hamesha top-right corner me chipka rahega */}
       {!isFullMode && (
         <div
           ref={mobileMenuRef}
@@ -1072,7 +1071,7 @@ const StudyPdfReaderFrame = ({
           </button>
 
           {isMobileMenuOpen && (
-            <div className="study-control-surface absolute right-0 top-[calc(100%+0.55rem)] z-[95] w-52 max-w-[calc(100vw-1.25rem)] origin-top-right animate-[fadeInScale_0.15s_ease-out] rounded-3xl border border-white/70 bg-white/[0.96] p-2 shadow-[0_20px_52px_rgba(15,23,42,0.22)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#101521]/[0.96] dark:shadow-[0_24px_64px_rgba(0,0,0,0.48)]">
+            <div className="study-control-surface absolute right-0 top-[calc(100%+0.55rem)] z-[95] w-52 max-w-[calc(100vw-1.25rem)] origin-top-right rounded-3xl border border-white/70 bg-white/[0.96] p-2 shadow-[0_20px_52px_rgba(15,23,42,0.22)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#101521]/[0.96] dark:shadow-[0_24px_64px_rgba(0,0,0,0.48)]">
               <div className="grid grid-cols-3 gap-1.5">
                 <button
                   type="button"
