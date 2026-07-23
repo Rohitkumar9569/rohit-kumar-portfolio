@@ -122,3 +122,10 @@ export const chatLimiter = createRateLimiter({
   max: 12,
   message: 'Too many AI chat requests. Please wait a moment and try again.',
 });
+
+export const pdfProxyLimiter = createRateLimiter({
+  keyPrefix: 'pdf-proxy',
+  windowMs: 60 * 1000,
+  max: 30,
+  message: 'Too many PDF requests. Please wait a moment and try again.',
+});

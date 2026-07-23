@@ -89,7 +89,8 @@ const readStoredPdfTone = (): PdfToneMode => {
   return storedTone && pdfToneModes.includes(storedTone) ? storedTone : 'auto';
 };
 
-const canUsePdfCacheStorage = () => typeof window !== 'undefined' && 'caches' in window;
+const canUsePdfCacheStorage = () =>
+  typeof window !== 'undefined' && 'caches' in window;
 
 const readCachedPdfObjectUrl = async (url: string) => {
   if (!canUsePdfCacheStorage()) return null;
@@ -118,7 +119,12 @@ const cachePdfUrlForOffline = async (url: string) => {
   return { objectUrl: window.URL.createObjectURL(blob), sizeBytes: blob.size };
 };
 
-// ✅ Padding inline style se (px exact). GPU hints add kiye smooth scroll ke liye.
+// ✅ Backend proxy URL — mobile ke liye top-level navigation ka target.
+// (X-Frame-Options / CORS wale external PDFs ko bhi apne server se stream
+// karke serve karta hai.)
+const buildPdfProxyUrl = (url: string) => `/api/pdf-proxy?url=${encodeURIComponent(url)}`;
+
+// ✅ MemoizedPdfPage — stable props, zoom pe remount nahi hoga
 const MemoizedPdfPage = memo(({
   index,
   scale,
@@ -302,6 +308,23 @@ const StudyPdfReaderFrame = ({
   const [isOfflineReady, setIsOfflineReady] = useState(false);
   const [scrollerVersion, setScrollerVersion] = useState(0);
 
+  // ✅ Mobile viewport detection — mobile pe hum embed nahi karte, seedha
+  // Chrome/Edge ke apne native PDF viewer pe top-level navigate karte hain.
+  // Wajah: iframe ke andar embed kiya hua PDF kabhi bhi 100% crisp pinch-zoom
+  // + native scroll nahi de sakta (browser gesture-routing limitation).
+  // Sirf top-level navigation (jaise seedha PDF URL address bar mein) se
+  // Chrome ka PDFium renderer full control leta hai — perfect zoom + scroll.
+  const [isMobileViewport, setIsMobileViewport] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 768px)').matches;
+  });
+
+  const hasRedirectedToNativeViewerRef = useRef(false);
+
+  // ✅ NEW: Stable item height — zoom pe change nahi hoga, Virtuoso remount nahi karega
+  const [stableItemHeight, setStableItemHeight] = useState(0);
+  const [stableVerticalGap, setStableVerticalGap] = useState(NORMAL_MODE_VERTICAL_GAP);
+
   const [, startTransition] = useTransition();
 
   const isScrollingRef = useRef(false);
@@ -324,10 +347,16 @@ const StudyPdfReaderFrame = ({
   const fileUrlRef = useRef(fileUrl);
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
 
+  // ✅ NEW: Scroll ratio ref — zoom ke baad position restore karne ke liye
+  const scrollRatioBeforeZoomRef = useRef(0);
+  const isZoomingRef = useRef(false);
+  const zoomRestoreRafRef = useRef<number | null>(null);
+
   const isCoarsePointer = useMemo(
     () =>
       typeof window !== 'undefined' &&
-      (window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0),
+      (window.matchMedia('(pointer: coarse)').matches ||
+        navigator.maxTouchPoints > 0),
     [],
   );
 
@@ -339,20 +368,69 @@ const StudyPdfReaderFrame = ({
   const isReadMode = readerMode === 'read';
 
   const verticalGap = isFullMode ? FULL_MODE_VERTICAL_GAP : NORMAL_MODE_VERTICAL_GAP;
+
+  // ✅ itemHeight — rendering ke liye actual use (zoom ke saath change hota hai)
   const itemHeight = Math.round(pageHeight + verticalGap);
 
-  // ✅ Zoom ke baad scroll ratio preserve — reverse scroll jerk khatam.
+  // ✅ stableItemHeight — Virtuoso ke liye (zoom pe NAHI badlega)
   useEffect(() => {
-    const el = scrollAreaRef.current;
-    if (!el) return;
+    if (pageHeight > 0) {
+      const newStableHeight = Math.round(pageHeight + verticalGap);
+      setStableItemHeight((prev) => {
+        if (prev === 0) return newStableHeight;
+        return prev;
+      });
+      setStableVerticalGap(verticalGap);
+    }
+  }, [pageHeight, verticalGap]);
 
-    const ratio =
-      el.scrollTop / Math.max(1, el.scrollHeight - el.clientHeight);
+  useEffect(() => {
+    setStableItemHeight(0);
+  }, [fileUrl]);
 
-    requestAnimationFrame(() => {
-      el.scrollTop = ratio * (el.scrollHeight - el.clientHeight);
-    });
-  }, [itemHeight]);
+  useEffect(() => {
+    setStableItemHeight(0);
+  }, [readerMode]);
+
+  // ✅ Viewport resize/orientation tracking — mobile <-> desktop switch
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const mql = window.matchMedia('(max-width: 768px)');
+    const handleChange = (event: MediaQueryListEvent) => setIsMobileViewport(event.matches);
+    if (mql.addEventListener) mql.addEventListener('change', handleChange);
+    else mql.addListener(handleChange);
+    return () => {
+      if (mql.removeEventListener) mql.removeEventListener('change', handleChange);
+      else mql.removeListener(handleChange);
+    };
+  }, []);
+
+  // ✅ File badalne par redirect flag reset karo (naya PDF khula toh dubara redirect ho)
+  useEffect(() => {
+    hasRedirectedToNativeViewerRef.current = false;
+  }, [fileUrl]);
+
+  const mobilePdfProxyUrl = useMemo(() => buildPdfProxyUrl(sourceUrl), [sourceUrl]);
+
+  // ✅ THE REAL FIX: mobile pe embed karne ki jagah seedha Chrome/Edge ke
+  // native PDF viewer pe top-level navigate karo. Isse:
+  //  - Scroll 100% native ho jata hai (koi iframe wrapper nahi)
+  //  - Pinch-zoom bilkul crisp/vector-sharp hota hai (koi "page zoom" blur nahi)
+  //  - Chrome/Edge ka apna progress bar dikhta hai
+  //  - Sirf ek hi navbar (Chrome ka) dikhega, koi double nahi
+  // Chhota sa delay isliye taaki apna branded splash ek pal ke liye dikhe,
+  // phir turant redirect ho jaye — abrupt blank flash na ho.
+  useEffect(() => {
+    if (!isMobileViewport || isPreparing || !sourceUrl) return undefined;
+    if (hasRedirectedToNativeViewerRef.current) return undefined;
+    hasRedirectedToNativeViewerRef.current = true;
+
+    const redirectTimer = window.setTimeout(() => {
+      window.location.href = mobilePdfProxyUrl;
+    }, 220);
+
+    return () => window.clearTimeout(redirectTimer);
+  }, [isMobileViewport, isPreparing, sourceUrl, mobilePdfProxyUrl]);
 
   const documentFile = useMemo(() => ({ url: documentSource }), [documentSource]);
 
@@ -362,24 +440,35 @@ const StudyPdfReaderFrame = ({
     disableRange: false,
     disableAutoFetch: false,
     disableStream: false,
-    rangeChunkSize: isCoarsePointer ? 262144 : 524288,
+    rangeChunkSize: isCoarsePointer ? 131072 : 524288,
   }), [isCoarsePointer]);
 
   const visibleLoadProgress = isPreparing
     ? Math.max(4, Math.min(98, Math.round(preparingProgress || 8)))
     : loadProgress;
-  const clampedVisibleLoadProgress = visibleLoadProgress === null
-    ? null
-    : Math.max(0, Math.min(100, visibleLoadProgress));
-  const progressBarPercent = clampedVisibleLoadProgress === null
-    ? 0
-    : Math.max(2, clampedVisibleLoadProgress);
-  const showProgressBar = isPreparing
-    || isDocumentLoading
-    || (clampedVisibleLoadProgress !== null && clampedVisibleLoadProgress < 100);
+  const clampedVisibleLoadProgress =
+    visibleLoadProgress === null
+      ? null
+      : Math.max(0, Math.min(100, visibleLoadProgress));
+  const progressBarPercent =
+    clampedVisibleLoadProgress === null
+      ? 0
+      : Math.max(2, clampedVisibleLoadProgress);
+  const showProgressBar =
+    isPreparing ||
+    isDocumentLoading ||
+    (clampedVisibleLoadProgress !== null && clampedVisibleLoadProgress < 100);
 
-  const modeButtonLabel = isFullMode ? 'Exit' : isReadMode ? 'Full' : 'Read';
-  const modeButtonTitle = isFullMode ? 'Exit full mode' : isReadMode ? 'Full PDF mode' : 'Read mode';
+  const modeButtonLabel = isFullMode
+    ? 'Exit'
+    : isReadMode
+      ? 'Full'
+      : 'Read';
+  const modeButtonTitle = isFullMode
+    ? 'Exit full mode'
+    : isReadMode
+      ? 'Full PDF mode'
+      : 'Read mode';
   const readerTopGap = isFullMode ? 0 : readerTopOffset;
 
   const documentLoadingFallback = (
@@ -389,9 +478,6 @@ const StudyPdfReaderFrame = ({
   );
 
   const pdfToneClassName = pdfToneClassNames[pdfTone];
-
-  // ✅ Text layer dono pe on rakha — selection/copy ke liye. Visual quality
-  // pe iska koi asar nahi (invisible overlay hai).
   const shouldRenderTextLayer = true;
 
   const virtuosoComponents = useMemo(() => ({
@@ -402,8 +488,8 @@ const StudyPdfReaderFrame = ({
         className="flex w-full justify-center"
         style={{
           height,
-          paddingTop: verticalGap / 2,
-          paddingBottom: verticalGap / 2,
+          paddingTop: stableVerticalGap / 2,
+          paddingBottom: stableVerticalGap / 2,
           paddingLeft: isFullMode ? 0 : NORMAL_MODE_HORIZONTAL_PADDING,
           paddingRight: isFullMode ? 0 : NORMAL_MODE_HORIZONTAL_PADDING,
         }}
@@ -413,22 +499,32 @@ const StudyPdfReaderFrame = ({
             'overflow-hidden bg-[linear-gradient(135deg,rgba(255,255,255,0.14),rgba(255,255,255,0.045))] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] dark:bg-[linear-gradient(135deg,rgba(255,255,255,0.09),rgba(255,255,255,0.025))]',
             isFullMode ? '' : 'rounded-lg sm:rounded-xl',
           ].join(' ')}
-          style={{ width: pageWidth, maxWidth: '100%', height: Math.max(240, height - verticalGap) }}
+          style={{
+            width: pageWidth,
+            maxWidth: '100%',
+            height: Math.max(240, height - stableVerticalGap),
+          }}
         >
           <div className="h-full w-full bg-[linear-gradient(110deg,transparent_0%,rgba(255,255,255,0.10)_45%,transparent_70%)]" />
         </div>
       </div>
     ),
-  }), [pageWidth, readerTopGap, verticalGap, isFullMode]);
+  }), [pageWidth, readerTopGap, stableVerticalGap, isFullMode]);
 
-  // ✅ Quality-first tuning: DPR badhne se canvas heavy hota hai, isliye
-  // overscan thoda balance kiya hai taaki high-res pages ek saath zyada na
-  // render hon aur scroll smooth rahe.
+  const pdfDevicePixelRatio = useMemo(() => {
+    const nativeDpr =
+      typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1;
+    if (isCoarsePointer) {
+      return Math.min(nativeDpr, 1.5);
+    }
+    return Math.min(nativeDpr * 1.15, 2);
+  }, [isCoarsePointer]);
+
   const virtuosoScrollConfig = useMemo(() => {
     if (isCoarsePointer) {
       return {
-        increaseViewportBy: { top: 1200, bottom: 1200 },
-        overscan: { main: 1200, reverse: 1200 },
+        increaseViewportBy: { top: 800, bottom: 800 },
+        overscan: { main: 800, reverse: 800 },
         scrollSeekConfiguration: {
           enter: (velocity: number) => Math.abs(velocity) > 1000,
           exit: (velocity: number) => Math.abs(velocity) < 100,
@@ -445,24 +541,14 @@ const StudyPdfReaderFrame = ({
     };
   }, [isCoarsePointer]);
 
-  // ✅ ✅ ✅ PREMIUM QUALITY FIX ✅ ✅ ✅
-  // Pehle mobile pe DPR forcefully 1 pe capped tha — isse text/lines blurry
-  // dikhte the. Ab native devicePixelRatio (jo Retina/AMOLED pe 2x-3x hota
-  // hai) use hota hai + thoda quality-boost multiplier, taaki PDF "100% se
-  // bhi sharp" dikhe. Ek upper safety-cap rakha hai taaki bahut purane/weak
-  // devices pe canvas itna bada na ho jaye ki crash/lag ho.
-  const pdfDevicePixelRatio = useMemo(() => {
-    const nativeDpr = typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1;
-    const qualityBoost = 1.15;
-    const maxDpr = isCoarsePointer ? 3 : 2.5;
-    return Math.min(nativeDpr * qualityBoost, maxDpr);
-  }, [isCoarsePointer]);
-
   const closeButtonClassName =
     'study-control-surface inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/70 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition hover:bg-white hover:text-slate-950 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white dark:focus:ring-cyan-400/40';
 
   const clearProgressReset = useCallback(() => {
-    if (progressResetRef.current === null || typeof window === 'undefined') return;
+    if (
+      progressResetRef.current === null ||
+      typeof window === 'undefined'
+    ) return;
     window.clearTimeout(progressResetRef.current);
     progressResetRef.current = null;
   }, []);
@@ -475,30 +561,49 @@ const StudyPdfReaderFrame = ({
     }
   }, []);
 
-  const fitToWidth = useCallback((baseWidth = pageSize.width) => {
-    const containerWidth = scrollAreaRef.current?.clientWidth || window.innerWidth;
-    const isCompact = containerWidth < 640;
+  const fitToWidth = useCallback(
+    (baseWidth = pageSize.width) => {
+      const containerWidth =
+        scrollAreaRef.current?.clientWidth || window.innerWidth;
+      const isCompact = containerWidth < 640;
 
-    if (isFullMode) {
-      const usableWidth = Math.max(280, containerWidth);
-      setScale(clampScale(usableWidth / baseWidth));
-      return;
-    }
+      if (isFullMode) {
+        const usableWidth = Math.max(280, containerWidth);
+        setScale(clampScale(usableWidth / baseWidth));
+        return;
+      }
 
-    const usableWidth = Math.max(280, containerWidth - NORMAL_MODE_HORIZONTAL_PADDING * 2);
-    const targetWidth = isCompact
-      ? usableWidth
-      : Math.min(usableWidth, readerWidthModeMax[widthMode]);
-    setScale(clampScale(targetWidth / baseWidth));
-  }, [pageSize.width, widthMode, isFullMode]);
+      const usableWidth = Math.max(
+        280,
+        containerWidth - NORMAL_MODE_HORIZONTAL_PADDING * 2,
+      );
+      const targetWidth = isCompact
+        ? usableWidth
+        : Math.min(usableWidth, readerWidthModeMax[widthMode]);
+      setScale(clampScale(targetWidth / baseWidth));
+    },
+    [pageSize.width, widthMode, isFullMode],
+  );
 
   const zoomBy = (delta: number) => {
+    const el = scrollAreaRef.current;
+    if (el) {
+      scrollRatioBeforeZoomRef.current =
+        el.scrollTop / Math.max(1, el.scrollHeight - el.clientHeight);
+      isZoomingRef.current = true;
+    }
     setScale((current) => clampScale(Number((current + delta).toFixed(2))));
   };
 
   const handlePdfTouchStart = (event: ReactTouchEvent<HTMLDivElement>) => {
     if (event.touches.length !== 2) return;
     event.preventDefault();
+    const el = scrollAreaRef.current;
+    if (el) {
+      scrollRatioBeforeZoomRef.current =
+        el.scrollTop / Math.max(1, el.scrollHeight - el.clientHeight);
+      isZoomingRef.current = true;
+    }
     const [firstTouch, secondTouch] = Array.from(event.touches);
     const distance = Math.hypot(
       firstTouch.clientX - secondTouch.clientX,
@@ -516,7 +621,8 @@ const StudyPdfReaderFrame = ({
       firstTouch.clientY - secondTouch.clientY,
     );
     const nextScale = clampScale(
-      pinchStateRef.current.scale * (currentDistance / pinchStateRef.current.distance),
+      pinchStateRef.current.scale *
+        (currentDistance / pinchStateRef.current.distance),
     );
     setScale(Number(nextScale.toFixed(2)));
   };
@@ -544,7 +650,10 @@ const StudyPdfReaderFrame = ({
     try {
       const shell = readerShellRef.current;
       setReaderMode('read');
-      if (shell?.requestFullscreen && document.fullscreenElement !== shell) {
+      if (
+        shell?.requestFullscreen &&
+        document.fullscreenElement !== shell
+      ) {
         await shell.requestFullscreen();
       }
       requestAnimationFrame(() => fitToWidth());
@@ -560,7 +669,10 @@ const StudyPdfReaderFrame = ({
       const shell = readerShellRef.current;
       setReaderMode('full');
       setWidthMode('wide');
-      if (shell?.requestFullscreen && document.fullscreenElement !== shell) {
+      if (
+        shell?.requestFullscreen &&
+        document.fullscreenElement !== shell
+      ) {
         await shell.requestFullscreen();
       }
       requestAnimationFrame(() => fitToWidth());
@@ -574,8 +686,8 @@ const StudyPdfReaderFrame = ({
   const exitReaderMode = async () => {
     try {
       if (
-        typeof document !== 'undefined'
-        && document.fullscreenElement === readerShellRef.current
+        typeof document !== 'undefined' &&
+        document.fullscreenElement === readerShellRef.current
       ) {
         await document.exitFullscreen?.();
       }
@@ -588,16 +700,49 @@ const StudyPdfReaderFrame = ({
   };
 
   const handleModeAction = () => {
-    if (readerMode === 'full') { void exitReaderMode(); return; }
-    if (readerMode === 'read') { void enterFullMode(); return; }
+    if (readerMode === 'full') {
+      void exitReaderMode();
+      return;
+    }
+    if (readerMode === 'read') {
+      void enterFullMode();
+      return;
+    }
     void enterReadMode();
   };
 
-  useEffect(() => { scaleRef.current = scale; }, [scale]);
+  useEffect(() => {
+    scaleRef.current = scale;
+  }, [scale]);
+
+  useEffect(() => {
+    if (!isZoomingRef.current) return;
+    const el = scrollAreaRef.current;
+    if (!el) return;
+
+    if (zoomRestoreRafRef.current !== null) {
+      cancelAnimationFrame(zoomRestoreRafRef.current);
+    }
+
+    zoomRestoreRafRef.current = requestAnimationFrame(() => {
+      zoomRestoreRafRef.current = requestAnimationFrame(() => {
+        if (!el) return;
+        const targetScrollTop =
+          scrollRatioBeforeZoomRef.current *
+          (el.scrollHeight - el.clientHeight);
+        el.scrollTop = targetScrollTop;
+        isZoomingRef.current = false;
+        zoomRestoreRafRef.current = null;
+      });
+    });
+  }, [scale]);
 
   const handleClose = async () => {
     try {
-      if (typeof document !== 'undefined' && document.fullscreenElement) {
+      if (
+        typeof document !== 'undefined' &&
+        document.fullscreenElement
+      ) {
         await document.exitFullscreen?.();
       }
     } catch {
@@ -608,36 +753,42 @@ const StudyPdfReaderFrame = ({
     onClose?.();
   };
 
-  const handleScrollerRef = useCallback((ref: HTMLElement | Window | null) => {
-    if (!(ref instanceof HTMLElement)) return;
-    ref.id = 'pdf-scroll-area';
-    ref.setAttribute('data-native-scroll', 'true');
-    ref.setAttribute('data-pdf-scroller', 'true');
-    ref.classList.add('study-scrollbar');
-    ref.style.width = '100%';
-    ref.style.maxWidth = '100%';
-    ref.style.overflowX = 'hidden';
-    ref.style.overflowY = 'auto';
-    ref.style.overscrollBehavior = 'none';
-    ref.style.boxSizing = 'border-box';
-    (ref.style as any).webkitOverflowScrolling = 'touch';
-    ref.style.transform = 'translateZ(0)';
-    (ref.style as any).willChange = 'scroll-position';
-    scrollAreaRef.current = ref;
-    setScrollerVersion((v) => v + 1);
-  }, []);
+  const handleScrollerRef = useCallback(
+    (ref: HTMLElement | Window | null) => {
+      if (!(ref instanceof HTMLElement)) return;
+      ref.id = 'pdf-scroll-area';
+      ref.setAttribute('data-native-scroll', 'true');
+      ref.setAttribute('data-pdf-scroller', 'true');
+      ref.classList.add('study-scrollbar');
+      ref.style.width = '100%';
+      ref.style.maxWidth = '100%';
+      ref.style.overflowX = 'hidden';
+      ref.style.overflowY = 'auto';
+      ref.style.overscrollBehavior = 'none';
+      ref.style.boxSizing = 'border-box';
+      (ref.style as any).webkitOverflowScrolling = 'touch';
+      ref.style.transform = 'translateZ(0)';
+      (ref.style as any).willChange = 'scroll-position';
+      scrollAreaRef.current = ref;
+      setScrollerVersion((v) => v + 1);
+    },
+    [],
+  );
 
-  const handlePageNavigate = useCallback((nextPage: number) => {
-    currentPageRef.current = nextPage;
-    setDisplayPage(nextPage);
-    writeStoredPdfPage(fileUrlRef.current, nextPage);
-    virtuosoRef.current?.scrollToIndex({
-      index: nextPage - 1,
-      align: 'start',
-      offset: -readerTopGap,
-      behavior: 'auto',
-    });
-  }, [readerTopGap]);
+  const handlePageNavigate = useCallback(
+    (nextPage: number) => {
+      currentPageRef.current = nextPage;
+      setDisplayPage(nextPage);
+      writeStoredPdfPage(fileUrlRef.current, nextPage);
+      virtuosoRef.current?.scrollToIndex({
+        index: nextPage - 1,
+        align: 'start',
+        offset: -readerTopGap,
+        behavior: 'auto',
+      });
+    },
+    [readerTopGap],
+  );
 
   useEffect(() => {
     fileUrlRef.current = fileUrl;
@@ -648,6 +799,13 @@ const StudyPdfReaderFrame = ({
   }, [numPages]);
 
   useEffect(() => {
+    // ✅ Mobile viewport pe react-pdf/pdf.js document load skip karte hain —
+    // wahan top-level redirect flow chalta hai (upar wala effect).
+    if (isMobileViewport) {
+      setIsDocumentLoading(false);
+      return undefined;
+    }
+
     let isMounted = true;
     const init = async () => {
       revokeActiveObjectUrl();
@@ -676,27 +834,42 @@ const StudyPdfReaderFrame = ({
     setDisplayPage(storedPage);
     setNumPages(0);
     void init();
-    return () => { isMounted = false; };
-  }, [clearProgressReset, fileUrl, revokeActiveObjectUrl, sourceUrl]);
+    return () => {
+      isMounted = false;
+    };
+  }, [clearProgressReset, fileUrl, revokeActiveObjectUrl, sourceUrl, isMobileViewport]);
 
-  useEffect(() => () => {
-    clearProgressReset();
-    revokeActiveObjectUrl();
-    if (pageWriteTimerRef.current !== null) window.clearTimeout(pageWriteTimerRef.current);
-    if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
-    if (scrollRafRef.current !== null) cancelAnimationFrame(scrollRafRef.current);
-  }, [clearProgressReset, revokeActiveObjectUrl]);
+  useEffect(
+    () => () => {
+      clearProgressReset();
+      revokeActiveObjectUrl();
+      if (pageWriteTimerRef.current !== null)
+        window.clearTimeout(pageWriteTimerRef.current);
+      if (scrollIdleTimerRef.current !== null)
+        window.clearTimeout(scrollIdleTimerRef.current);
+      if (scrollRafRef.current !== null)
+        cancelAnimationFrame(scrollRafRef.current);
+      if (zoomRestoreRafRef.current !== null)
+        cancelAnimationFrame(zoomRestoreRafRef.current);
+    },
+    [clearProgressReset, revokeActiveObjectUrl],
+  );
 
   useEffect(() => {
+    if (isMobileViewport) return undefined;
     const target = scrollAreaRef.current;
     if (!target) return undefined;
+
+    const effectiveItemHeight = stableItemHeight || itemHeight;
 
     const computeAndSetPage = () => {
       scrollRafRef.current = null;
       if (!numPagesRef.current) return;
       const scrollTop = target.scrollTop;
       const adjustedScrollTop = Math.max(0, scrollTop - readerTopGap);
-      const approxIndex = Math.floor(adjustedScrollTop / Math.max(1, itemHeight));
+      const approxIndex = Math.floor(
+        adjustedScrollTop / Math.max(1, effectiveItemHeight),
+      );
       const nextPage = Math.min(
         numPagesRef.current,
         Math.max(1, approxIndex + 1),
@@ -723,7 +896,8 @@ const StudyPdfReaderFrame = ({
       lastScrollTopRef.current = target.scrollTop;
       isScrollingRef.current = true;
 
-      if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
+      if (scrollIdleTimerRef.current !== null)
+        window.clearTimeout(scrollIdleTimerRef.current);
       scrollIdleTimerRef.current = window.setTimeout(() => {
         isScrollingRef.current = false;
         scrollIdleTimerRef.current = null;
@@ -737,22 +911,26 @@ const StudyPdfReaderFrame = ({
     target.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       target.removeEventListener('scroll', handleScroll);
-      if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
-      if (scrollRafRef.current !== null) cancelAnimationFrame(scrollRafRef.current);
+      if (scrollIdleTimerRef.current !== null)
+        window.clearTimeout(scrollIdleTimerRef.current);
+      if (scrollRafRef.current !== null)
+        cancelAnimationFrame(scrollRafRef.current);
     };
-  }, [itemHeight, readerTopGap, scrollerVersion, startTransition]);
+  }, [itemHeight, stableItemHeight, readerTopGap, scrollerVersion, startTransition, isMobileViewport]);
 
   useEffect(() => {
+    if (isMobileViewport) return undefined;
     const target = scrollAreaRef.current;
     if (!target || typeof ResizeObserver === 'undefined') return undefined;
     const observer = new ResizeObserver(() => fitToWidth());
     observer.observe(target);
     return () => observer.disconnect();
-  }, [fitToWidth, scrollerVersion]);
+  }, [fitToWidth, scrollerVersion, isMobileViewport]);
 
   useEffect(() => {
+    if (isMobileViewport) return;
     if (numPages > 0) fitToWidth();
-  }, [fitToWidth, numPages]);
+  }, [fitToWidth, numPages, isMobileViewport]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -764,25 +942,31 @@ const StudyPdfReaderFrame = ({
   }, [readerMode]);
 
   useEffect(() => {
+    if (isMobileViewport) return undefined;
     if (typeof document === 'undefined') return undefined;
     const handleFullscreenChange = () => {
-      const isCurrentReaderFullscreen = document.fullscreenElement === readerShellRef.current;
+      const isCurrentReaderFullscreen =
+        document.fullscreenElement === readerShellRef.current;
       setReaderMode((current) => {
-        if (isCurrentReaderFullscreen) return current === 'normal' ? 'read' : current;
+        if (isCurrentReaderFullscreen)
+          return current === 'normal' ? 'read' : current;
         return 'normal';
       });
       if (!isCurrentReaderFullscreen) setMobileMenuOpen(false);
       requestAnimationFrame(() => fitToWidth());
     };
     document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, [fitToWidth]);
+    return () =>
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, [fitToWidth, isMobileViewport]);
 
-  // ✅ Mobile menu ke bahar click/tap karne se menu band ho jaye.
   useEffect(() => {
     if (!isMobileMenuOpen) return undefined;
     const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node)
+      ) {
         setMobileMenuOpen(false);
       }
     };
@@ -794,7 +978,13 @@ const StudyPdfReaderFrame = ({
     };
   }, [isMobileMenuOpen]);
 
-  const handleLoadProgress = ({ loaded, total }: { loaded: number; total: number }) => {
+  const handleLoadProgress = ({
+    loaded,
+    total,
+  }: {
+    loaded: number;
+    total: number;
+  }) => {
     clearProgressReset();
     if (!total) {
       setLoadProgress((current) => current ?? 6);
@@ -860,7 +1050,11 @@ const StudyPdfReaderFrame = ({
     setIsDocumentLoading(false);
     setLoadProgress(null);
     const msg = error?.message?.toLowerCase() ?? '';
-    setCorsBlocked(msg.includes('cors') || msg.includes('fetch') || msg.includes('network'));
+    setCorsBlocked(
+      msg.includes('cors') ||
+        msg.includes('fetch') ||
+        msg.includes('network'),
+    );
     setHasError(true);
   };
 
@@ -868,10 +1062,15 @@ const StudyPdfReaderFrame = ({
     <div className="flex h-full items-center justify-center p-6 text-center">
       <div className="study-panel-surface w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl shadow-slate-950/10 dark:bg-white/5 dark:shadow-2xl">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-500/10">
-          <ArrowDownTrayIcon className="h-7 w-7 text-red-600 dark:text-red-400" aria-hidden="true" />
+          <ArrowDownTrayIcon
+            className="h-7 w-7 text-red-600 dark:text-red-400"
+            aria-hidden="true"
+          />
         </div>
         <h3 className="text-lg font-black text-slate-950 dark:text-white">
-          {corsBlocked ? 'External PDF — Cannot Preview' : 'Preview could not load'}
+          {corsBlocked
+            ? 'External PDF — Cannot Preview'
+            : 'Preview could not load'}
         </h3>
         <p className="mt-2 text-sm font-semibold leading-6 text-slate-500 dark:text-slate-400">
           {corsBlocked
@@ -895,6 +1094,59 @@ const StudyPdfReaderFrame = ({
 
   const initialIndexRef = useRef(Math.max(0, currentPageRef.current - 1));
 
+  const virtuosoItemHeight = stableItemHeight || itemHeight;
+
+  // ================================================================
+  // ✅ MOBILE VIEW: Sirf ek chhota branded "opening…" splash dikhta hai,
+  // phir turant Chrome/Edge ke native PDF viewer pe top-level navigate
+  // ho jata hai (upar wala redirect effect). Isse:
+  //  - Scroll 100% native/smooth
+  //  - Pinch-zoom perfectly crisp (vector re-render, koi blur nahi)
+  //  - Chrome/Edge ka apna progress bar
+  //  - Sirf ek hi navbar (Chrome ka)
+  // Desktop is se bilkul touch nahi hota — neeche wala existing flow same hai.
+  // ================================================================
+  if (isMobileViewport) {
+    return (
+      <div
+        ref={readerShellRef}
+        className="study-shell study-pdf-reader-shell relative flex h-full w-full flex-col items-center justify-center gap-4 overflow-hidden bg-white text-slate-950 dark:bg-[#050814] dark:text-white"
+      >
+        {onClose ? (
+          <button
+            type="button"
+            onClick={handleClose}
+            className="absolute left-3 top-[calc(0.75rem+env(safe-area-inset-top))] inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 shadow-sm transition hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/20"
+            aria-label="Back"
+          >
+            <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+        ) : (
+          <Dialog.Close
+            className="absolute left-3 top-[calc(0.75rem+env(safe-area-inset-top))] inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 shadow-sm transition hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/20"
+            aria-label="Back"
+            onClick={() => {
+              void handleClose();
+            }}
+          >
+            <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
+          </Dialog.Close>
+        )}
+
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-cyan-500/25 border-t-cyan-500" />
+        <p className="max-w-[80vw] truncate text-sm font-black text-slate-800 dark:text-slate-100">
+          {title}
+        </p>
+        <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">
+          Opening in your browser&apos;s PDF viewer…
+        </p>
+      </div>
+    );
+  }
+
+  // ================================================================
+  // ✅ DESKTOP VIEW: existing react-pdf + Virtuoso experience — untouched
+  // ================================================================
   return (
     <div
       ref={readerShellRef}
@@ -920,14 +1172,21 @@ const StudyPdfReaderFrame = ({
           <div className="study-top-blur-edge pointer-events-none absolute inset-x-0 bottom-[-3.25rem] h-14 bg-gradient-to-b from-white/[0.58] via-white/[0.24] to-transparent backdrop-blur-2xl opacity-100 [mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.76)_42%,transparent_100%)] dark:from-[#050814]/[0.68] dark:via-[#050814]/[0.22]" />
           <div className="flex min-h-11 min-w-0 flex-wrap items-center gap-2">
             {onClose ? (
-              <button type="button" onClick={handleClose} className={closeButtonClassName} aria-label="Back">
+              <button
+                type="button"
+                onClick={handleClose}
+                className={closeButtonClassName}
+                aria-label="Back"
+              >
                 <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
               </button>
             ) : (
               <Dialog.Close
                 className={closeButtonClassName}
                 aria-label="Back"
-                onClick={() => { void handleClose(); }}
+                onClick={() => {
+                  void handleClose();
+                }}
               >
                 <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
               </Dialog.Close>
@@ -999,7 +1258,10 @@ const StudyPdfReaderFrame = ({
                 className="flex h-7 items-center justify-center gap-1 rounded-xl bg-white px-2 text-xs font-black text-slate-800 shadow-sm transition hover:text-cyan-700 dark:bg-white/10 dark:text-slate-100 dark:hover:text-cyan-200"
                 aria-label="Change PDF width"
               >
-                <ArrowsPointingOutIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                <ArrowsPointingOutIcon
+                  className="h-3.5 w-3.5"
+                  aria-hidden="true"
+                />
                 {readerWidthModeLabels[widthMode]}
               </button>
             </div>
@@ -1015,7 +1277,12 @@ const StudyPdfReaderFrame = ({
               ].join(' ')}
               aria-label={modeButtonTitle}
             >
-              {isReadMode && <ArrowsPointingOutIcon className="h-4 w-4" aria-hidden="true" />}
+              {isReadMode && (
+                <ArrowsPointingOutIcon
+                  className="h-4 w-4"
+                  aria-hidden="true"
+                />
+              )}
               <span>{modeButtonLabel}</span>
             </button>
 
@@ -1044,17 +1311,19 @@ const StudyPdfReaderFrame = ({
               title="Download PDF"
             >
               <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
-              <span className="hidden lg:inline">{isOfflineReady ? 'Saved' : 'Save'}</span>
+              <span className="hidden lg:inline">
+                {isOfflineReady ? 'Saved' : 'Save'}
+              </span>
             </a>
 
-            {/* ✅ Invisible spacer — asli mobile menu button ab niche fixed
-                block me hai, taaki header wrap se kabhi affect na ho. */}
-            <div className="invisible ml-auto h-10 w-10 shrink-0 md:hidden" aria-hidden="true" />
+            <div
+              className="invisible ml-auto h-10 w-10 shrink-0 md:hidden"
+              aria-hidden="true"
+            />
           </div>
         </header>
       )}
 
-      {/* ✅ FIXED MOBILE MENU — hamesha top-right corner me chipka rahega */}
       {!isFullMode && (
         <div
           ref={mobileMenuRef}
@@ -1100,7 +1369,9 @@ const StudyPdfReaderFrame = ({
                   className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
                 >
                   <span>Fit</span>
-                  <span className="text-slate-400">{Math.round(scale * 100)}%</span>
+                  <span className="text-slate-400">
+                    {Math.round(scale * 100)}%
+                  </span>
                 </button>
                 <button
                   type="button"
@@ -1164,7 +1435,7 @@ const StudyPdfReaderFrame = ({
               ref={virtuosoRef}
               totalCount={numPages}
               initialItemCount={Math.min(numPages || 4, isCoarsePointer ? 1 : 4)}
-              fixedItemHeight={itemHeight}
+              fixedItemHeight={virtuosoItemHeight}
               increaseViewportBy={virtuosoScrollConfig.increaseViewportBy}
               overscan={virtuosoScrollConfig.overscan}
               initialTopMostItemIndex={initialIndexRef.current}

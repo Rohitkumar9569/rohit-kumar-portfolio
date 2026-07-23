@@ -15,6 +15,7 @@ import authRoutes from './routes/auth';
 import suggestionRoutes from './routes/suggestions';
 import studyRoutes from './routes/study';
 import { apiLimiter, securityHeaders } from './middleware/security';
+import pdfProxyRoute from './routes/pdfProxy';
 
 const MONGO_URI = process.env.MONGO_URI;
 if (!MONGO_URI) {
@@ -94,6 +95,7 @@ app.use('/api/subjects', subjectRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/suggestions', suggestionRoutes);
 app.use('/api/study', studyRoutes);
+app.use('/api/pdf-proxy', pdfProxyRoute);
 
 app.get('/api/health', (_req: Request, res: Response) => {
   res.status(200).json({
