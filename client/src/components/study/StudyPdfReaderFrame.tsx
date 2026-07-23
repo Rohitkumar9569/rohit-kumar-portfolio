@@ -62,6 +62,7 @@ const pdfToneClassNames: Record<PdfToneMode, string> = {
   paper: 'transition-[filter] duration-200 [filter:none]',
   night: 'transition-[filter] duration-200 [filter:invert(0.82)_hue-rotate(180deg)_brightness(1.02)_contrast(1.12)_saturate(0.52)_sepia(0.06)]',
   warm: 'transition-[filter] duration-200 [filter:sepia(0.18)_brightness(0.98)_contrast(1.02)] dark:[filter:sepia(0.12)_invert(0.80)_hue-rotate(180deg)_brightness(1.05)_contrast(1.08)_saturate(0.48)]',
+
 };
 
 const getPdfReaderStateKey = (fileUrl: string) => {
@@ -430,17 +431,23 @@ const StudyPdfReaderFrame = ({
 
   const pdfToneClassName = pdfToneClassNames[pdfTone];
   const shouldRenderTextLayer = true;
-  const mobileMenuPanelToneClass = useMemo(() => {
-    // ✅ Night tone => brown panel
-    if (pdfTone === 'night') {
-      return 'bg-[#fff4e7]/85 border-[#e7d2bd] text-slate-900 ' +
-        'dark:bg-[#2a1b13]/88 dark:border-[#5a3f2f] dark:text-[#f5eee6]';
-    }
 
-    // ✅ Other tones => neutral glass (no blue tint)
+  const isNightTone = pdfTone === 'night';
+
+  // Night palette (sirf night tone ke liye)
+  const nightPanel = 'bg-[#2a1b13]/92 border-[#5a3f2f] text-[#f5eee6]';
+  const nightTile = 'bg-[#3a2419]/55 text-[#f5eee6] hover:bg-[#4a2f22]/70';
+  const nightRow = 'text-[#f5eee6] hover:bg-[#3a2419]/35';
+  const nightValue = 'text-[#e8dccc]';
+
+  const mobileMenuPanelToneClass = useMemo(() => {
+    // ✅ Night tone => hamesha brown (dark: par depend nahi)
+    if (isNightTone) return nightPanel;
+
+    // ✅ Baaki tones => aapka existing neutral/glass
     return 'bg-white/55 border-slate-200/70 text-slate-900 ' +
       'dark:bg-black/25 dark:border-white/10 dark:text-white';
-  }, [pdfTone]);
+  }, [isNightTone]);
 
   const virtuosoComponents = useMemo(() => ({
     Header: () => <div style={{ height: readerTopGap }} aria-hidden="true" />,
@@ -1268,7 +1275,9 @@ const StudyPdfReaderFrame = ({
                       className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
                     >
                       <span>Mode</span>
-                      <span className="text-cyan-700 dark:text-cyan-300">{modeButtonLabel}</span>
+                      <span className={isNightTone ? nightValue : 'text-cyan-700 dark:text-cyan-300'}>
+                        {modeButtonLabel}
+                      </span>
                     </button>
                     <button
                       type="button"
@@ -1276,7 +1285,9 @@ const StudyPdfReaderFrame = ({
                       className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
                     >
                       <span>Fit</span>
-                      <span className="text-slate-400">{Math.round(scale * 100)}%</span>
+                      <span className={isNightTone ? nightValue : 'text-slate-400'}>
+                        {Math.round(scale * 100)}%
+                      </span>
                     </button>
                     <button
                       type="button"

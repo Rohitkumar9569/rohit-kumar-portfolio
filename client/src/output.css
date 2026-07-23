@@ -4331,6 +4331,11 @@ body.study-app-scroll-root {
   border-color: rgb(231 210 189 / var(--tw-border-opacity, 1));
 }
 
+.border-\[\#5a3f2f\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(90 63 47 / var(--tw-border-opacity, 1));
+}
+
 .border-l-slate-300 {
   --tw-border-opacity: 1;
   border-left-color: rgb(203 213 225 / var(--tw-border-opacity, 1));
@@ -5218,6 +5223,10 @@ body.study-app-scroll-root {
 
 .bg-\[\#fff4e7\]\/85 {
   background-color: rgb(255 244 231 / 0.85);
+}
+
+.bg-\[\#3a2419\]\/55 {
+  background-color: rgb(58 36 25 / 0.55);
 }
 
 .bg-opacity-50 {
@@ -6845,6 +6854,16 @@ body.study-app-scroll-root {
 
 .text-white\/\[0\.06\] {
   color: rgb(255 255 255 / 0.06);
+}
+
+.text-\[\#e8dccc\] {
+  --tw-text-opacity: 1;
+  color: rgb(232 220 204 / var(--tw-text-opacity, 1));
+}
+
+.text-\[\#f5eee6\] {
+  --tw-text-opacity: 1;
+  color: rgb(245 238 230 / var(--tw-text-opacity, 1));
 }
 
 .underline {
@@ -15123,6 +15142,14 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
 
 .hover\:bg-white\/\[0\.10\]:hover {
   background-color: rgb(255 255 255 / 0.10);
+}
+
+.hover\:bg-\[\#3a2419\]\/35:hover {
+  background-color: rgb(58 36 25 / 0.35);
+}
+
+.hover\:bg-\[\#4a2f22\]\/70:hover {
+  background-color: rgb(74 47 34 / 0.7);
 }
 
 .hover\:text-\[\#dfefff\]:hover {
