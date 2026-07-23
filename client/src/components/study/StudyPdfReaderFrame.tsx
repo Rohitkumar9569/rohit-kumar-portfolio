@@ -122,7 +122,11 @@ const cachePdfUrlForOffline = async (url: string) => {
 // ✅ Backend proxy URL — mobile ke liye top-level navigation ka target.
 // (X-Frame-Options / CORS wale external PDFs ko bhi apne server se stream
 // karke serve karta hai.)
-const buildPdfProxyUrl = (url: string) => `/api/pdf-proxy?url=${encodeURIComponent(url)}`;
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL || 'https://your-backend-domain.com';
+
+const buildPdfProxyUrl = (url: string) =>
+  `${API_BASE}/api/pdf-proxy?url=${encodeURIComponent(url)}`;
 
 // ✅ MemoizedPdfPage — stable props, zoom pe remount nahi hoga
 const MemoizedPdfPage = memo(({
