@@ -430,6 +430,17 @@ const StudyPdfReaderFrame = ({
 
   const pdfToneClassName = pdfToneClassNames[pdfTone];
   const shouldRenderTextLayer = true;
+  const mobileMenuPanelToneClass = useMemo(() => {
+    // ✅ Night tone => brown panel
+    if (pdfTone === 'night') {
+      return 'bg-[#fff4e7]/85 border-[#e7d2bd] text-slate-900 ' +
+        'dark:bg-[#2a1b13]/88 dark:border-[#5a3f2f] dark:text-[#f5eee6]';
+    }
+
+    // ✅ Other tones => neutral glass (no blue tint)
+    return 'bg-white/55 border-slate-200/70 text-slate-900 ' +
+      'dark:bg-black/25 dark:border-white/10 dark:text-white';
+  }, [pdfTone]);
 
   const virtuosoComponents = useMemo(() => ({
     Header: () => <div style={{ height: readerTopGap }} aria-hidden="true" />,
@@ -573,7 +584,7 @@ const StudyPdfReaderFrame = ({
     );
     const nextScale = clampScale(
       pinchStateRef.current.scale *
-        (currentDistance / pinchStateRef.current.distance),
+      (currentDistance / pinchStateRef.current.distance),
     );
     setScale(Number(nextScale.toFixed(2)));
   };
@@ -1082,9 +1093,12 @@ const StudyPdfReaderFrame = ({
       )}
 
       {!isFullMode && (
-        <header className="study-topbar absolute inset-x-0 top-0 z-30 bg-white/[0.68] px-2 pb-2 pt-[calc(0.55rem+env(safe-area-inset-top))] backdrop-blur-3xl transition duration-200 [backdrop-filter:saturate(1.35)_blur(24px)] dark:bg-[#050814]/[0.62] sm:px-3 sm:py-2 xl:px-5">
+        <header className="study-topbar absolute inset-x-0 top-0 z-30 bg-white/[0.68] px-3 pt-[calc(0.6rem+env(safe-area-inset-top))] pb-2 backdrop-blur-3xl [backdrop-filter:saturate(1.35)_blur(24px)] dark:bg-[#050814]/[0.62] sm:px-3 sm:py-2 xl:px-5">
           <div className="study-top-blur-edge pointer-events-none absolute inset-x-0 bottom-[-3.25rem] h-14 bg-gradient-to-b from-white/[0.58] via-white/[0.24] to-transparent backdrop-blur-2xl opacity-100 [mask-image:linear-gradient(to_bottom,black_0%,rgba(0,0,0,0.76)_42%,transparent_100%)] dark:from-[#050814]/[0.68] dark:via-[#050814]/[0.22]" />
-          <div className="flex min-h-11 min-w-0 flex-wrap items-center gap-2">
+
+          <div className="flex min-w-0 items-center gap-2">
+
+            {/* 1. Back button */}
             {onClose ? (
               <button
                 type="button"
@@ -1098,46 +1112,18 @@ const StudyPdfReaderFrame = ({
               <Dialog.Close
                 className={closeButtonClassName}
                 aria-label="Back"
-                onClick={() => {
-                  void handleClose();
-                }}
+                onClick={() => { void handleClose(); }}
               >
                 <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
               </Dialog.Close>
             )}
 
-            <div className="hidden min-w-0 flex-1 sm:block">
-              <div className="flex items-center gap-2.5">
-                <h2 className="truncate text-sm font-black tracking-tight text-slate-950 [text-shadow:none] dark:text-white sm:text-base">
-                  {title}
-                </h2>
-                {showProgressBar && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-500/10 px-2 py-0.5 text-[10px] font-black tabular-nums tracking-wide text-cyan-700 ring-1 ring-cyan-500/20 dark:bg-cyan-400/10 dark:text-cyan-300 dark:ring-cyan-400/20">
-                    <span className="relative flex h-1.5 w-1.5 shrink-0">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-500 opacity-75 dark:bg-cyan-400" />
-                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-600 dark:bg-cyan-400" />
-                    </span>
-                    {Math.round(progressBarPercent)}%
-                  </span>
-                )}
-              </div>
-              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700 dark:text-cyan-300">
-                PDF
-              </p>
-            </div>
+            {/* 2. Title — flex-1 fills middle space */}
+            <h2 className="min-w-0 flex-1 truncate text-sm font-black tracking-tight text-slate-950 dark:text-white">
+              {title}
+            </h2>
 
-            <div className="flex min-w-0 flex-1 items-center gap-2 sm:hidden">
-              {showProgressBar && (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-500/10 px-2 py-0.5 text-[10px] font-black tabular-nums tracking-wide text-cyan-700 ring-1 ring-cyan-500/20 dark:bg-cyan-400/10 dark:text-cyan-300 dark:ring-cyan-400/20">
-                  <span className="relative flex h-1.5 w-1.5 shrink-0">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-500 opacity-75 dark:bg-cyan-400" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-600 dark:bg-cyan-400" />
-                  </span>
-                  {Math.round(progressBarPercent)}%
-                </span>
-              )}
-            </div>
-
+            {/* Desktop-only controls (hidden on mobile) */}
             <div className="study-control-surface hidden h-10 shrink-0 items-center gap-1 rounded-2xl bg-slate-100/80 px-1.5 shadow-sm dark:bg-white/5 md:flex">
               <button
                 type="button"
@@ -1172,33 +1158,10 @@ const StudyPdfReaderFrame = ({
                 className="flex h-7 items-center justify-center gap-1 rounded-xl bg-white px-2 text-xs font-black text-slate-800 shadow-sm transition hover:text-cyan-700 dark:bg-white/10 dark:text-slate-100 dark:hover:text-cyan-200"
                 aria-label="Change PDF width"
               >
-                <ArrowsPointingOutIcon
-                  className="h-3.5 w-3.5"
-                  aria-hidden="true"
-                />
+                <ArrowsPointingOutIcon className="h-3.5 w-3.5" aria-hidden="true" />
                 {readerWidthModeLabels[widthMode]}
               </button>
             </div>
-
-            <button
-              type="button"
-              onClick={handleModeAction}
-              className={[
-                'study-control-surface inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-2xl px-3 text-xs font-black shadow-sm transition',
-                isReadMode
-                  ? 'bg-slate-950 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100'
-                  : 'bg-slate-100/80 text-slate-700 hover:bg-white hover:text-cyan-700 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-cyan-200',
-              ].join(' ')}
-              aria-label={modeButtonTitle}
-            >
-              {isReadMode && (
-                <ArrowsPointingOutIcon
-                  className="h-4 w-4"
-                  aria-hidden="true"
-                />
-              )}
-              <span>{modeButtonLabel}</span>
-            </button>
 
             <button
               type="button"
@@ -1210,118 +1173,151 @@ const StudyPdfReaderFrame = ({
               <span className="hidden sm:inline">{pdfToneLabels[pdfTone]}</span>
             </button>
 
-            <PageNumberDisplay
-              displayPage={displayPage}
-              numPages={numPages}
-              onSubmit={handlePageNavigate}
-            />
+            <div className="hidden md:block">
+              <PageNumberDisplay
+                displayPage={displayPage}
+                numPages={numPages}
+                onSubmit={handlePageNavigate}
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={handleModeAction}
+              className={[
+                'study-control-surface hidden h-10 shrink-0 items-center justify-center gap-1.5 rounded-2xl px-3 text-xs font-black shadow-sm transition md:inline-flex',
+                isReadMode
+                  ? 'bg-slate-950 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100'
+                  : 'bg-slate-100/80 text-slate-700 hover:bg-white hover:text-cyan-700 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-cyan-200',
+              ].join(' ')}
+              aria-label={modeButtonTitle}
+            >
+              {isReadMode && <ArrowsPointingOutIcon className="h-4 w-4" aria-hidden="true" />}
+              <span>{modeButtonLabel}</span>
+            </button>
 
             <a
               href={sourceUrl}
               target="_blank"
               rel="noreferrer"
-              download
               className="hidden h-10 shrink-0 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-3 text-xs font-black text-white shadow-sm transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-cyan-100 md:inline-flex"
-              title="Download PDF"
+              title="Open PDF in browser"
             >
               <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
-              <span className="hidden lg:inline">
-                {isOfflineReady ? 'Saved' : 'Save'}
-              </span>
+              <span className="hidden lg:inline">Open</span>
             </a>
 
-            <div
-              className="invisible ml-auto h-10 w-10 shrink-0 md:hidden"
-              aria-hidden="true"
-            />
+            {/* 3. Page number pill — mobile only, shrink-0 so it never wraps */}
+            <div className="shrink-0 md:hidden">
+              <PageNumberDisplay
+                displayPage={displayPage}
+                numPages={numPages}
+                onSubmit={handlePageNavigate}
+              />
+            </div>
+
+            {/* 4. Three-dot — mobile only, always last */}
+            <div ref={mobileMenuRef} className="relative shrink-0 md:hidden">
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen((c) => !c)}
+                className="study-control-surface inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100/90 text-slate-700 shadow-sm transition hover:bg-white hover:text-cyan-700 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/20 dark:hover:text-cyan-200"
+                aria-label="Reader options"
+                aria-expanded={isMobileMenuOpen}
+              >
+                <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+
+              {isMobileMenuOpen && (
+                <div
+                  className={[
+                    'absolute right-0 top-[calc(100%+0.5rem)] z-[95] w-56 origin-top-right rounded-3xl border p-2 backdrop-blur-2xl',
+                    'shadow-[0_20px_52px_rgba(15,23,42,0.22)] dark:shadow-[0_24px_64px_rgba(0,0,0,0.48)]',
+                    mobileMenuPanelToneClass,
+                  ].join(' ')}
+                >
+
+                  {/* Zoom */}
+                  <div className="grid grid-cols-3 gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => zoomBy(-0.1)}
+                      className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]"
+                      aria-label="Zoom out"
+                    >
+                      <MinusIcon className="h-4 w-4" aria-hidden="true" />
+                    </button>
+                    <span className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-xs font-black tabular-nums text-slate-700 dark:bg-white/[0.07] dark:text-slate-200">
+                      {Math.round(scale * 100)}%
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => zoomBy(0.1)}
+                      className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]"
+                      aria-label="Zoom in"
+                    >
+                      <PlusIcon className="h-4 w-4" aria-hidden="true" />
+                    </button>
+                  </div>
+
+                  {/* Options */}
+                  <div className="mt-1.5 grid gap-0.5">
+                    <button
+                      type="button"
+                      onClick={handleModeAction}
+                      className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                    >
+                      <span>Mode</span>
+                      <span className="text-cyan-700 dark:text-cyan-300">{modeButtonLabel}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => fitToWidth()}
+                      className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                    >
+                      <span>Fit</span>
+                      <span className="text-slate-400">{Math.round(scale * 100)}%</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cycleWidthMode}
+                      className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                    >
+                      <span>Width</span>
+                      <span className="text-cyan-700 dark:text-cyan-300">
+                        {readerWidthModeLabels[widthMode]}
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cyclePdfTone}
+                      className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                    >
+                      <span>Tone</span>
+                      <span className="text-cyan-700 dark:text-cyan-300">
+                        {pdfToneLabels[pdfTone]}
+                      </span>
+                    </button>
+                    <a
+                      href={sourceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
+                    >
+                      <span>Open in Browser</span>
+                      <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+
           </div>
         </header>
       )}
 
-      {!isFullMode && (
-        <div
-          ref={mobileMenuRef}
-          className="fixed right-3 top-[calc(0.6rem+env(safe-area-inset-top))] z-[95] md:hidden"
-        >
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen((current) => !current)}
-            className="study-control-surface inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-100/90 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.18)] backdrop-blur-xl transition hover:bg-white hover:text-cyan-700 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/20 dark:hover:text-cyan-200"
-            aria-label="Reader options"
-            aria-expanded={isMobileMenuOpen}
-          >
-            <EllipsisVerticalIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
 
-          {isMobileMenuOpen && (
-            <div className="study-control-surface absolute right-0 top-[calc(100%+0.55rem)] z-[95] w-52 max-w-[calc(100vw-1.25rem)] origin-top-right rounded-3xl border border-white/70 bg-white/[0.96] p-2 shadow-[0_20px_52px_rgba(15,23,42,0.22)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#101521]/[0.96] dark:shadow-[0_24px_64px_rgba(0,0,0,0.48)]">
-              <div className="grid grid-cols-3 gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => zoomBy(-0.1)}
-                  className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]"
-                  aria-label="Zoom out"
-                >
-                  <MinusIcon className="h-4 w-4" aria-hidden="true" />
-                </button>
-                <span className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-xs font-black tabular-nums text-slate-700 dark:bg-white/[0.07] dark:text-slate-200">
-                  {Math.round(scale * 100)}%
-                </span>
-                <button
-                  type="button"
-                  onClick={() => zoomBy(0.1)}
-                  className="flex h-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:bg-white/[0.07] dark:text-slate-200 dark:hover:bg-white/[0.12]"
-                  aria-label="Zoom in"
-                >
-                  <PlusIcon className="h-4 w-4" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="mt-2 grid gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => fitToWidth()}
-                  className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
-                >
-                  <span>Fit</span>
-                  <span className="text-slate-400">
-                    {Math.round(scale * 100)}%
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={cycleWidthMode}
-                  className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
-                >
-                  <span>Width</span>
-                  <span className="text-cyan-700 dark:text-cyan-300">
-                    {readerWidthModeLabels[widthMode]}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={cyclePdfTone}
-                  className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
-                >
-                  <span>Tone</span>
-                  <span className="text-cyan-700 dark:text-cyan-300">
-                    {pdfToneLabels[pdfTone]}
-                  </span>
-                </button>
-                <a
-                  href={sourceUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  download
-                  className="flex h-10 items-center justify-between rounded-2xl px-3 text-xs font-black text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-white/[0.08]"
-                >
-                  <span>Download</span>
-                  <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+
 
       <div
         className="study-reader-canvas relative min-h-0 flex-1"

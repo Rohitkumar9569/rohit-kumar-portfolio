@@ -4326,6 +4326,11 @@ body.study-app-scroll-root {
   border-color: rgb(255 255 255 / 0.12);
 }
 
+.border-\[\#e7d2bd\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(231 210 189 / var(--tw-border-opacity, 1));
+}
+
 .border-l-slate-300 {
   --tw-border-opacity: 1;
   border-left-color: rgb(203 213 225 / var(--tw-border-opacity, 1));
@@ -5211,6 +5216,10 @@ body.study-app-scroll-root {
   background-color: rgb(161 161 170 / 0.1);
 }
 
+.bg-\[\#fff4e7\]\/85 {
+  background-color: rgb(255 244 231 / 0.85);
+}
+
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
@@ -6078,8 +6087,8 @@ body.study-app-scroll-root {
   padding-top: 1.75rem;
 }
 
-.pt-\[calc\(0\.55rem\+env\(safe-area-inset-top\)\)\] {
-  padding-top: calc(0.55rem + env(safe-area-inset-top));
+.pt-\[calc\(0\.5rem\+env\(safe-area-inset-top\)\)\] {
+  padding-top: calc(0.5rem + env(safe-area-inset-top));
 }
 
 .pt-\[calc\(env\(safe-area-inset-top\)\+1\.25rem\)\] {
@@ -6096,6 +6105,14 @@ body.study-app-scroll-root {
 
 .pt-\[env\(safe-area-inset-top\)\] {
   padding-top: env(safe-area-inset-top);
+}
+
+.pt-\[calc\(0\.55rem\+env\(safe-area-inset-top\)\)\] {
+  padding-top: calc(0.55rem + env(safe-area-inset-top));
+}
+
+.pt-\[calc\(0\.6rem\+env\(safe-area-inset-top\)\)\] {
+  padding-top: calc(0.6rem + env(safe-area-inset-top));
 }
 
 .text-left {
@@ -16031,6 +16048,11 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
   border-color: rgb(255 255 255 / 0.10);
 }
 
+.dark\:border-\[\#5a3f2f\]:is(.dark *) {
+  --tw-border-opacity: 1;
+  border-color: rgb(90 63 47 / var(--tw-border-opacity, 1));
+}
+
 .dark\:border-t-cyan-400:is(.dark *) {
   --tw-border-opacity: 1;
   border-top-color: rgb(34 211 238 / var(--tw-border-opacity, 1));
@@ -16426,6 +16448,14 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
 
 .dark\:bg-white\/\[0\.18\]:is(.dark *) {
   background-color: rgb(255 255 255 / 0.18);
+}
+
+.dark\:bg-\[\#202124\]\/80:is(.dark *) {
+  background-color: rgb(32 33 36 / 0.8);
+}
+
+.dark\:bg-black\/25:is(.dark *) {
+  background-color: rgb(0 0 0 / 0.25);
 }
 
 .dark\:bg-\[linear-gradient\(135deg\2c rgba\(255\2c 255\2c 255\2c 0\.08\)\2c rgba\(255\2c 255\2c 255\2c 0\.025\)\)\]:is(.dark *) {
@@ -16834,6 +16864,11 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
 
 .dark\:text-white\/\[0\.14\]:is(.dark *) {
   color: rgb(255 255 255 / 0.14);
+}
+
+.dark\:text-\[\#f5eee6\]:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(245 238 230 / var(--tw-text-opacity, 1));
 }
 
 .dark\:shadow-2xl:is(.dark *) {
@@ -18317,6 +18352,10 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
 
   .md\:mb-0 {
     margin-bottom: 0px;
+  }
+
+  .md\:block {
+    display: block;
   }
 
   .md\:flex {
