@@ -119,11 +119,11 @@ const cachePdfUrlForOffline = async (url: string) => {
   return { objectUrl: window.URL.createObjectURL(blob), sizeBytes: blob.size };
 };
 
-// ✅ Backend proxy URL — mobile ke liye top-level navigation ka target.
-// (X-Frame-Options / CORS wale external PDFs ko bhi apne server se stream
-// karke serve karta hai.)
-const API_BASE =
-  import.meta.env.VITE_API_BASE_URL || 'https://your-backend-domain.com';
+// ✅ Apna backend proxy — sirf CORS-blocked / cross-origin PDFs ke liye
+// fallback ki tarah use hota hai. Ab isse top-level redirect NAHI kiya
+// jaata — hum apna khud ka Virtuoso-based custom reader hi mobile aur
+// desktop dono par use karte hain, taaki UI/UX consistent rahe.
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
 
 const buildPdfProxyUrl = (url: string) =>
   `${API_BASE}/api/pdf-proxy?url=${encodeURIComponent(url)}`;
@@ -312,19 +312,6 @@ const StudyPdfReaderFrame = ({
   const [isOfflineReady, setIsOfflineReady] = useState(false);
   const [scrollerVersion, setScrollerVersion] = useState(0);
 
-  // ✅ Mobile viewport detection — mobile pe hum embed nahi karte, seedha
-  // Chrome/Edge ke apne native PDF viewer pe top-level navigate karte hain.
-  // Wajah: iframe ke andar embed kiya hua PDF kabhi bhi 100% crisp pinch-zoom
-  // + native scroll nahi de sakta (browser gesture-routing limitation).
-  // Sirf top-level navigation (jaise seedha PDF URL address bar mein) se
-  // Chrome ka PDFium renderer full control leta hai — perfect zoom + scroll.
-  const [isMobileViewport, setIsMobileViewport] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia('(max-width: 768px)').matches;
-  });
-
-  const hasRedirectedToNativeViewerRef = useRef(false);
-
   // ✅ NEW: Stable item height — zoom pe change nahi hoga, Virtuoso remount nahi karega
   const [stableItemHeight, setStableItemHeight] = useState(0);
   const [stableVerticalGap, setStableVerticalGap] = useState(NORMAL_MODE_VERTICAL_GAP);
@@ -395,46 +382,6 @@ const StudyPdfReaderFrame = ({
   useEffect(() => {
     setStableItemHeight(0);
   }, [readerMode]);
-
-  // ✅ Viewport resize/orientation tracking — mobile <-> desktop switch
-  useEffect(() => {
-    if (typeof window === 'undefined') return undefined;
-    const mql = window.matchMedia('(max-width: 768px)');
-    const handleChange = (event: MediaQueryListEvent) => setIsMobileViewport(event.matches);
-    if (mql.addEventListener) mql.addEventListener('change', handleChange);
-    else mql.addListener(handleChange);
-    return () => {
-      if (mql.removeEventListener) mql.removeEventListener('change', handleChange);
-      else mql.removeListener(handleChange);
-    };
-  }, []);
-
-  // ✅ File badalne par redirect flag reset karo (naya PDF khula toh dubara redirect ho)
-  useEffect(() => {
-    hasRedirectedToNativeViewerRef.current = false;
-  }, [fileUrl]);
-
-  const mobilePdfProxyUrl = useMemo(() => buildPdfProxyUrl(sourceUrl), [sourceUrl]);
-
-  // ✅ THE REAL FIX: mobile pe embed karne ki jagah seedha Chrome/Edge ke
-  // native PDF viewer pe top-level navigate karo. Isse:
-  //  - Scroll 100% native ho jata hai (koi iframe wrapper nahi)
-  //  - Pinch-zoom bilkul crisp/vector-sharp hota hai (koi "page zoom" blur nahi)
-  //  - Chrome/Edge ka apna progress bar dikhta hai
-  //  - Sirf ek hi navbar (Chrome ka) dikhega, koi double nahi
-  // Chhota sa delay isliye taaki apna branded splash ek pal ke liye dikhe,
-  // phir turant redirect ho jaye — abrupt blank flash na ho.
-  useEffect(() => {
-    if (!isMobileViewport || isPreparing || !sourceUrl) return undefined;
-    if (hasRedirectedToNativeViewerRef.current) return undefined;
-    hasRedirectedToNativeViewerRef.current = true;
-
-    const redirectTimer = window.setTimeout(() => {
-      window.location.href = mobilePdfProxyUrl;
-    }, 220);
-
-    return () => window.clearTimeout(redirectTimer);
-  }, [isMobileViewport, isPreparing, sourceUrl, mobilePdfProxyUrl]);
 
   const documentFile = useMemo(() => ({ url: documentSource }), [documentSource]);
 
@@ -802,14 +749,12 @@ const StudyPdfReaderFrame = ({
     numPagesRef.current = numPages;
   }, [numPages]);
 
+  // ✅ Document init — ab mobile aur desktop dono ke liye SAME flow.
+  // Agar sourceUrl external/cross-origin hai, seedha try karo. Agar CORS
+  // block kare to handleLoadError automatically apne backend proxy
+  // (`/api/pdf-proxy`) par switch karke retry karega — koi top-level
+  // redirect nahi, koi native browser viewer nahi.
   useEffect(() => {
-    // ✅ Mobile viewport pe react-pdf/pdf.js document load skip karte hain —
-    // wahan top-level redirect flow chalta hai (upar wala effect).
-    if (isMobileViewport) {
-      setIsDocumentLoading(false);
-      return undefined;
-    }
-
     let isMounted = true;
     const init = async () => {
       revokeActiveObjectUrl();
@@ -841,7 +786,7 @@ const StudyPdfReaderFrame = ({
     return () => {
       isMounted = false;
     };
-  }, [clearProgressReset, fileUrl, revokeActiveObjectUrl, sourceUrl, isMobileViewport]);
+  }, [clearProgressReset, fileUrl, revokeActiveObjectUrl, sourceUrl]);
 
   useEffect(
     () => () => {
@@ -860,7 +805,6 @@ const StudyPdfReaderFrame = ({
   );
 
   useEffect(() => {
-    if (isMobileViewport) return undefined;
     const target = scrollAreaRef.current;
     if (!target) return undefined;
 
@@ -920,21 +864,19 @@ const StudyPdfReaderFrame = ({
       if (scrollRafRef.current !== null)
         cancelAnimationFrame(scrollRafRef.current);
     };
-  }, [itemHeight, stableItemHeight, readerTopGap, scrollerVersion, startTransition, isMobileViewport]);
+  }, [itemHeight, stableItemHeight, readerTopGap, scrollerVersion, startTransition]);
 
   useEffect(() => {
-    if (isMobileViewport) return undefined;
     const target = scrollAreaRef.current;
     if (!target || typeof ResizeObserver === 'undefined') return undefined;
     const observer = new ResizeObserver(() => fitToWidth());
     observer.observe(target);
     return () => observer.disconnect();
-  }, [fitToWidth, scrollerVersion, isMobileViewport]);
+  }, [fitToWidth, scrollerVersion]);
 
   useEffect(() => {
-    if (isMobileViewport) return;
     if (numPages > 0) fitToWidth();
-  }, [fitToWidth, numPages, isMobileViewport]);
+  }, [fitToWidth, numPages]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -946,7 +888,6 @@ const StudyPdfReaderFrame = ({
   }, [readerMode]);
 
   useEffect(() => {
-    if (isMobileViewport) return undefined;
     if (typeof document === 'undefined') return undefined;
     const handleFullscreenChange = () => {
       const isCurrentReaderFullscreen =
@@ -962,7 +903,7 @@ const StudyPdfReaderFrame = ({
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () =>
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, [fitToWidth, isMobileViewport]);
+  }, [fitToWidth]);
 
   useEffect(() => {
     if (!isMobileMenuOpen) return undefined;
@@ -1049,16 +990,31 @@ const StudyPdfReaderFrame = ({
     });
   };
 
+  // ✅ Automatic proxy fallback — agar direct URL CORS/network issue de,
+  // to apne backend proxy se retry karo. Koi redirect nahi, seamless
+  // in-app switch.
   const handleLoadError = (error: Error) => {
     clearProgressReset();
     setIsDocumentLoading(false);
     setLoadProgress(null);
     const msg = error?.message?.toLowerCase() ?? '';
-    setCorsBlocked(
+    const looksLikeCorsOrNetwork =
       msg.includes('cors') ||
-        msg.includes('fetch') ||
-        msg.includes('network'),
-    );
+      msg.includes('fetch') ||
+      msg.includes('network') ||
+      msg.includes('failed to load');
+
+    const isAlreadyUsingProxy = documentSource.includes('/api/pdf-proxy');
+
+    if (looksLikeCorsOrNetwork && !isAlreadyUsingProxy && API_BASE) {
+      setCorsBlocked(true);
+      setIsDocumentLoading(true);
+      setHasError(false);
+      setDocumentSource(buildPdfProxyUrl(sourceUrl));
+      return;
+    }
+
+    setCorsBlocked(looksLikeCorsOrNetwork);
     setHasError(true);
   };
 
@@ -1101,55 +1057,9 @@ const StudyPdfReaderFrame = ({
   const virtuosoItemHeight = stableItemHeight || itemHeight;
 
   // ================================================================
-  // ✅ MOBILE VIEW: Sirf ek chhota branded "opening…" splash dikhta hai,
-  // phir turant Chrome/Edge ke native PDF viewer pe top-level navigate
-  // ho jata hai (upar wala redirect effect). Isse:
-  //  - Scroll 100% native/smooth
-  //  - Pinch-zoom perfectly crisp (vector re-render, koi blur nahi)
-  //  - Chrome/Edge ka apna progress bar
-  //  - Sirf ek hi navbar (Chrome ka)
-  // Desktop is se bilkul touch nahi hota — neeche wala existing flow same hai.
-  // ================================================================
-  if (isMobileViewport) {
-    return (
-      <div
-        ref={readerShellRef}
-        className="study-shell study-pdf-reader-shell relative flex h-full w-full flex-col items-center justify-center gap-4 overflow-hidden bg-white text-slate-950 dark:bg-[#050814] dark:text-white"
-      >
-        {onClose ? (
-          <button
-            type="button"
-            onClick={handleClose}
-            className="absolute left-3 top-[calc(0.75rem+env(safe-area-inset-top))] inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 shadow-sm transition hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/20"
-            aria-label="Back"
-          >
-            <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
-        ) : (
-          <Dialog.Close
-            className="absolute left-3 top-[calc(0.75rem+env(safe-area-inset-top))] inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-slate-700 shadow-sm transition hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/20"
-            aria-label="Back"
-            onClick={() => {
-              void handleClose();
-            }}
-          >
-            <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
-          </Dialog.Close>
-        )}
-
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-cyan-500/25 border-t-cyan-500" />
-        <p className="max-w-[80vw] truncate text-sm font-black text-slate-800 dark:text-slate-100">
-          {title}
-        </p>
-        <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">
-          Opening in your browser&apos;s PDF viewer…
-        </p>
-      </div>
-    );
-  }
-
-  // ================================================================
-  // ✅ DESKTOP VIEW: existing react-pdf + Virtuoso experience — untouched
+  // ✅ SINGLE UNIFIED VIEW — mobile aur desktop dono is same flow ko
+  // use karte hain. Koi top-level redirect nahi, koi native browser
+  // viewer nahi — apna custom Virtuoso reader hi consistent UX deta hai.
   // ================================================================
   return (
     <div
