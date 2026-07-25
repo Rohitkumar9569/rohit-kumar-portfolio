@@ -126,7 +126,7 @@ const isHttpUrl = (value: string) => /^https?:\/\//i.test(value);
 // router.get('/pdf-proxy', ...) mounted at app.use('/api/study', studyRoutes)
 const buildPdfProxyUrl = (url: string) => {
   const apiBase = API_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '');
-  return `${apiBase}/api/study/pdf-proxy?url=${encodeURIComponent(url)}`;
+  return `${apiBase}/api/pdf-proxy?url=${encodeURIComponent(url)}`; // ✅ matches index.ts mount path
 };
 
 const MemoizedPdfPage = memo(({
@@ -994,42 +994,44 @@ const StudyPdfReaderFrame = ({
   // Stage 1 → apne canonical /api/study/pdf-proxy se try karo → fail?
   // Stage 2 → raw original URL directly try karo (last resort) → fail?
   // → tabhi error panel dikhao
-  const handleLoadError = (error: Error) => {
-    clearProgressReset();
-    const msg = error?.message?.toLowerCase() ?? '';
-    const looksLikeCorsOrNetwork =
-      msg.includes('cors') ||
-      msg.includes('fetch') ||
-      msg.includes('network') ||
-      msg.includes('failed to load') ||
-      msg.includes('failed to fetch');
+ const handleLoadError = (error: Error) => {
+  clearProgressReset();
+  const msg = error?.message?.toLowerCase() ?? '';
+  const isUsingProxy = documentSource.includes('/pdf-proxy');
 
-    if (looksLikeCorsOrNetwork) {
-      const isUsingProxy = documentSource.includes('/pdf-proxy');
+  if (!isUsingProxy && fallbackStageRef.current < 1 && isHttpUrl(sourceUrl)) {
+    fallbackStageRef.current = 1;
+    setCorsBlocked(true);
+    setIsDocumentLoading(true);
+    setHasError(false);
+    setDocumentSource(buildPdfProxyUrl(sourceUrl));
+    return;
+  }
 
-      if (!isUsingProxy && fallbackStageRef.current < 1 && isHttpUrl(sourceUrl)) {
-        fallbackStageRef.current = 1;
-        setCorsBlocked(true);
-        setIsDocumentLoading(true);
-        setHasError(false);
-        setDocumentSource(buildPdfProxyUrl(sourceUrl));
-        return;
-      }
+  const looksLikeCorsOrNetwork =
+    msg.includes('cors') ||
+    msg.includes('fetch') ||
+    msg.includes('network') ||
+    msg.includes('failed to load') ||
+    msg.includes('failed to fetch') ||
+    msg.includes('quic') ||
+    msg.includes('err_') ||
+    msg.includes('timeout') ||
+    msg.includes('aborted');
 
-      if (isUsingProxy && fallbackStageRef.current < 2 && isHttpUrl(sourceUrl)) {
-        fallbackStageRef.current = 2;
-        setIsDocumentLoading(true);
-        setHasError(false);
-        setDocumentSource(sourceUrl);
-        return;
-      }
-    }
+  if (isUsingProxy && looksLikeCorsOrNetwork && fallbackStageRef.current < 2 && isHttpUrl(sourceUrl)) {
+    fallbackStageRef.current = 2;
+    setIsDocumentLoading(true);
+    setHasError(false);
+    setDocumentSource(sourceUrl);
+    return;
+  }
 
-    setIsDocumentLoading(false);
-    setLoadProgress(null);
-    setCorsBlocked(looksLikeCorsOrNetwork);
-    setHasError(true);
-  };
+  setIsDocumentLoading(false);
+  setLoadProgress(null);
+  setCorsBlocked(looksLikeCorsOrNetwork);
+  setHasError(true);
+};
 
   const errorPanel = (
     <div className="flex h-full items-center justify-center p-6 text-center">
