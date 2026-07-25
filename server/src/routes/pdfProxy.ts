@@ -11,19 +11,112 @@ const router = Router();
 
 const ALLOWED_PROTOCOLS = ['http:', 'https:'];
 
-// ⚠️ Production me proper domain whitelist lagao — abhi sab allow hai.
-// Isse tumhara server ek open proxy ban sakta hai (SSRF risk).
+// ✅ Synced with study.ts's full whitelist — proxy ab har supported exam site handle karega
 const allowedHosts = new Set<string>([
+  'apsc.nic.in',
+  'aicte.gov.in',
+  'www.aicte.gov.in',
+  'amu.ac.in',
+  'www.amu.ac.in',
+  'api.amu.ac.in',
+  'annauniv.edu',
+  'www.annauniv.edu',
+  'bpsc.bih.nic.in',
+  'bhu.ac.in',
+  'www.bhu.ac.in',
+  'cac.annauniv.edu',
+  'www.ncert.nic.in',
+  'ncert.nic.in',
+  'cbseacademic.nic.in',
+  'www.cbseacademic.nic.in',
+  'du.ac.in',
+  'www.du.ac.in',
+  'exam.du.ac.in',
+  'qb.exam.du.ac.in',
+  'maths.du.ac.in',
+  'ebooks.inflibnet.ac.in',
+  'egyankosh.ac.in',
+  'www.egyankosh.ac.in',
+  'epgp.inflibnet.ac.in',
   'upsc.gov.in',
   'www.upsc.gov.in',
+  'gkv.ac.in',
+  'www.gkv.ac.in',
+  'gtu.ac.in',
+  'www.gtu.ac.in',
+  'old22.gtu.ac.in',
+  'kgcd.gkv.ac.in',
+  'ignou.ac.in',
+  'www.ignou.ac.in',
+  'webservices.ignou.ac.in',
+  'ipu.ac.in',
+  'www.ipu.ac.in',
+  'jmi.ac.in',
+  'www.jmi.ac.in',
+  'jnu.ac.in',
+  'www.jnu.ac.in',
+  'uppsc.up.nic.in',
+  'mppsc.mp.gov.in',
+  'rpsc.rajasthan.gov.in',
+  'mpsc.gov.in',
+  'mu.ac.in',
+  'www.mu.ac.in',
+  'old.mu.ac.in',
+  'tnpsc.gov.in',
+  'www.tnpsc.gov.in',
+  'kpsc.kar.nic.in',
+  'kpsc.karnataka.gov.in',
+  'psc.ap.gov.in',
+  'tspsc.gov.in',
+  'websitenew.tspsc.gov.in',
+  'psc.wb.gov.in',
+  'www.psc.wb.gov.in',
+  'wbpsc.gov.in',
+  'gpsc.gujarat.gov.in',
+  'hpsc.gov.in',
+  'jpsc.gov.in',
+  'psc.uk.gov.in',
+  'opsc.gov.in',
+  'www.opsc.gov.in',
+  'ppsc.gov.in',
+  'hppsc.hp.gov.in',
+  'jkpsc.nic.in',
+  'cgpsc.gov.in',
+  'psc.cg.gov.in',
+  'keralapsc.gov.in',
+  'goapsc.gov.in',
+  'mpsc.mizoram.gov.in',
+  'mpscmanipur.gov.in',
+  'npsc.nagaland.gov.in',
+  'spsc.sikkim.gov.in',
+  'tpsc.tripura.gov.in',
   'ssc.gov.in',
   'www.ssc.gov.in',
-  // ... apne poore whitelist se copy kar lo (jo study.ts me hai)
+  'neet.nta.nic.in',
+  'jeemain.nta.nic.in',
+  'nta.ac.in',
+  'www.nta.ac.in',
+  'nptel.ac.in',
+  'makautexam.net',
+  'www.makautexam.net',
+  'makautwb.ac.in',
+  'www.makautwb.ac.in',
+  'archive.nptel.ac.in',
+  'onlinecourses.nptel.ac.in',
+  'swayam.gov.in',
+  'www.swayam.gov.in',
+  'gate2024.iisc.ac.in',
+  'gate2025.iitr.ac.in',
+  'gate2026.iitg.ac.in',
+  'vtu.ac.in',
+  'www.vtu.ac.in',
+  'res.cloudinary.com',
 ]);
 
 const isHostAllowed = (hostname: string) => allowedHosts.has(hostname.toLowerCase());
 
-// Hosts jo Akamai/bot-protection ke peeche hain aur datacenter IP block karte hain
+// ✅ Sirf ye hosts Akamai/bot-protection ke peeche hain — inhi ke liye
+// Worker + disk-cache route istemal hoga. Baaki hosts direct/curl se try honge.
 const hostilePdfHosts = new Set(['upsc.gov.in', 'www.upsc.gov.in', 'ssc.gov.in', 'www.ssc.gov.in']);
 
 const CLOUDFLARE_PDF_WORKER = (process.env.CLOUDFLARE_PDF_WORKER_URL || '').replace(/\/+$/, '');
@@ -55,11 +148,10 @@ const looksLikePdfResponse = (contentType: string, pathname: string) =>
   contentType.toLowerCase().includes('application/pdf') || pathname.toLowerCase().endsWith('.pdf');
 
 // ──────────────────────────────────────────────────────────────
-// Disk cache: for hostile hosts, fetch the whole file ONCE via
-// the Cloudflare Worker, then serve every (including range)
-// request from local disk. This is what actually fixes Akamai's
-// burst/rate-limit throttling — pdf.js fires many range requests
-// per file open, and without this each one hit UPSC directly.
+// Disk cache: hostile hosts ke liye, poori file ek baar Worker
+// se fetch karo, phir har request (range requests included)
+// local disk se serve karo. Isi se Akamai ka burst/rate-limit
+// throttling actually fix hota hai.
 // ──────────────────────────────────────────────────────────────
 const pdfProxyCacheDir = path.resolve(process.cwd(), '.cache', 'pdf-proxy');
 const inFlightDownloads = new Map<string, Promise<string>>();
@@ -108,7 +200,7 @@ const fetchViaWorkerWithRetry = async (sourceUrl: string, maxAttempts = 3): Prom
       lastError = error;
       console.warn(`[pdf-proxy] Worker attempt ${attempt}/${maxAttempts} failed:`, (error as any)?.message);
       if (attempt < maxAttempts) {
-        // Exponential-ish backoff, gives Akamai's short rate-limit window time to reset
+        // Exponential-ish backoff — Akamai ka short rate-limit window reset hone deta hai
         await sleep(attempt * 2000);
       }
     }
@@ -183,7 +275,7 @@ const streamLocalFile = async (filePath: string, rangeHeader: string | undefined
   createReadStream(filePath).pipe(res);
 };
 
-// --- Optional curl-based attempt (sometimes bypasses simpler bot checks than fetch) ---
+// --- curl-based attempt (sometimes bypasses simpler bot checks than fetch) ---
 const curlBinary = process.platform === 'win32' ? 'curl.exe' : 'curl';
 
 const streamPdfWithCurl = (sourceUrl: string, rangeHeader: string | undefined, res: Response) =>
@@ -309,16 +401,21 @@ router.get('/', pdfProxyLimiter, async (req: Request, res: Response) => {
 
   const rangeHeader = typeof req.headers.range === 'string' ? req.headers.range : undefined;
 
-  // --- Path 1: hostile hosts → download once via Worker, cache to disk,
-  // serve all requests (including every pdf.js range request) from local cache.
-  // This is what actually stops UPSC's rate-limit throttling.
+  // --- Path 1: hostile hosts → Worker se ek baar download karo, disk cache karo,
+  // saari requests (har pdf.js range request bhi) local cache se serve karo.
   if (shouldRouteViaCloudflareWorker(parsedUrl.hostname)) {
     try {
       const filePath = await getOrDownloadCachedPdf(parsedUrl.toString());
       await streamLocalFile(filePath, rangeHeader, res);
       return;
     } catch (error: any) {
-      console.error('[pdf-proxy] Worker+cache path failed:', error?.message);
+      console.error('[pdf-proxy] Worker+cache path failed, trying curl as last resort:', error?.message);
+
+      // ✅ NEW: Agar Worker completely fail ho jaye (retries ke baad bhi),
+      // ek aakhri curl attempt karo direct source par, seedha 502 dene se pehle.
+      const curlOk = await streamPdfWithCurl(parsedUrl.toString(), rangeHeader, res);
+      if (curlOk) return;
+
       if (!res.headersSent) {
         return res.status(502).json({
           message: 'Source blocked or unreachable after retries. Try opening the original link directly.',
