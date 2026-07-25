@@ -1485,6 +1485,9 @@ const writeSsePayload = (res: any, payload: Record<string, unknown>) => {
 
 const curlBinary = process.platform === 'win32' ? 'curl.exe' : 'curl';
 
+
+
+
 const pdfProxyPassHeaders = [
   'content-length',
   'content-range',
@@ -1494,6 +1497,7 @@ const pdfProxyPassHeaders = [
 ];
 
 const getPdfProxyCurlArgs = (sourceUrl: string, rangeHeader: unknown, headOnly = false) => {
+  const browserHeaders = getRealisticBrowserHeaders(sourceUrl);
   const args = [
     ...(headOnly ? ['-I'] : []),
     '--location',
@@ -1501,11 +1505,19 @@ const getPdfProxyCurlArgs = (sourceUrl: string, rangeHeader: unknown, headOnly =
     '--show-error',
     '--max-time',
     headOnly ? '25' : '90',
-    '--header',
-    'Accept: application/pdf,*/*',
     '--user-agent',
-    'StudyHubPdfProxy/1.0',
+    browserHeaders['User-Agent'],
+    '--header',
+    `Accept: ${browserHeaders.Accept}`,
+    '--header',
+    `Accept-Language: ${browserHeaders['Accept-Language']}`,
+    '--header',
+    `Accept-Encoding: ${browserHeaders['Accept-Encoding']}`,
   ];
+
+  if (browserHeaders.Referer) {
+    args.push('--header', `Referer: ${browserHeaders.Referer}`);
+  }
 
   if (typeof rangeHeader === 'string') {
     args.push('--header', `Range: ${rangeHeader}`);
@@ -2210,6 +2222,46 @@ router.get('/pdf-preflight', async (req, res) => {
   });
 });
 
+// ✅ Realistic browser headers — Akamai/UPSC bot-detection bypass ke liye
+const getRealisticBrowserHeaders = (sourceUrl: string): Record<string, string> => {
+  let referer = '';
+  try {
+    referer = `${new URL(sourceUrl).origin}/`;
+  } catch {
+    referer = '';
+  }
+  return {
+    'User-Agent':
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+    Accept: 'application/pdf,*/*;q=0.9',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Accept-Encoding': 'identity',
+    ...(referer ? { Referer: referer } : {}),
+  };
+};
+
+// ✅ Cloudflare Worker — hostile CDN (Akamai/UPSC/SSC) sources ke liye
+const CLOUDFLARE_PDF_WORKER = (process.env.CLOUDFLARE_PDF_WORKER_URL || '').replace(/\/+$/, '');
+
+const hostilePdfHosts = new Set([
+  'upsc.gov.in',
+  'www.upsc.gov.in',
+  'ssc.gov.in',
+  'www.ssc.gov.in',
+]);
+
+const shouldRouteViaCloudflareWorker = (sourceUrl: string): boolean => {
+  if (!CLOUDFLARE_PDF_WORKER) return false;
+  try {
+    return hostilePdfHosts.has(new URL(sourceUrl).hostname.toLowerCase());
+  } catch {
+    return false;
+  }
+};
+
+const buildCloudflareWorkerUrl = (sourceUrl: string): string =>
+  `${CLOUDFLARE_PDF_WORKER}/?url=${encodeURIComponent(sourceUrl)}`;
+
 router.get('/pdf-proxy', async (req, res) => {
   const sourceUrl = safePdfProxyUrl(req.query.url);
   if (!sourceUrl) {
@@ -2219,6 +2271,7 @@ router.get('/pdf-proxy', async (req, res) => {
   const rangeHeader = req.headers.range;
   const headOnlyResponse = req.method === 'HEAD';
   const sourceHost = new URL(sourceUrl).hostname.toLowerCase();
+
   if (isJpscPostBackQuestionPaperUrl(sourceUrl)) {
     await streamJpscPostBackQuestionPaper(sourceUrl, res, headOnlyResponse);
     return;
@@ -2234,29 +2287,48 @@ router.get('/pdf-proxy', async (req, res) => {
       await streamPdfProxyWithCurl(sourceUrl, rangeHeader, res, headOnlyResponse);
       return;
     } catch {
-      // Some environments can fetch NCERT directly; fall through before giving up.
+      // fall through
     }
   }
 
+  const useWorker = shouldRouteViaCloudflareWorker(sourceUrl);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 45000);
 
   try {
-    const upstream = await fetch(sourceUrl, {
-      headers: {
-        Accept: 'application/pdf,*/*',
-        'User-Agent': 'StudyHubPdfProxy/1.0',
-        ...(typeof rangeHeader === 'string' ? { Range: rangeHeader } : {}),
-      },
+    const targetFetchUrl = useWorker ? buildCloudflareWorkerUrl(sourceUrl) : sourceUrl;
+    const fetchHeaders = useWorker
+      ? { ...(typeof rangeHeader === 'string' ? { Range: rangeHeader } : {}) }
+      : {
+          ...getRealisticBrowserHeaders(sourceUrl),
+          ...(typeof rangeHeader === 'string' ? { Range: rangeHeader } : {}),
+        };
+
+    const upstream = await fetch(targetFetchUrl, {
+      headers: fetchHeaders,
       redirect: 'follow',
       signal: controller.signal,
     });
 
+    console.log(
+      `[PDF Proxy] ${useWorker ? 'via CF Worker' : 'direct'} | ${sourceHost} → HTTP ${upstream.status}`
+    );
+
     const contentType = (upstream.headers.get('content-type') || '').toLowerCase();
     const sourcePath = new URL(sourceUrl).pathname.toLowerCase();
-    if (!upstream.ok || !upstream.body || (!contentType.includes('application/pdf') && !sourcePath.endsWith('.pdf'))) {
-      const status = upstream.status === 404 ? 404 : 502;
-      return res.status(status).json({ message: status === 404 ? 'PDF source was not found.' : 'PDF source did not return a PDF.' });
+    const looksLikePdf = contentType.includes('application/pdf') || sourcePath.endsWith('.pdf');
+
+    if (!upstream.ok || !upstream.body || !looksLikePdf) {
+      clearTimeout(timeout);
+      console.warn(`[PDF Proxy] Rejected response — status: ${upstream.status}, content-type: ${contentType}`);
+      return res.status(upstream.status === 404 ? 404 : 502).json({
+        message:
+          upstream.status === 404
+            ? 'PDF source was not found.'
+            : 'PDF source blocked this request. Try opening the original link directly.',
+        via: useWorker ? 'cloudflare-worker' : 'direct',
+        upstreamStatus: upstream.status,
+      });
     }
 
     pdfProxyPassHeaders.forEach((header) => {
@@ -2273,30 +2345,63 @@ router.get('/pdf-proxy', async (req, res) => {
     if (headOnlyResponse) {
       await upstream.body.cancel();
       res.end();
+      clearTimeout(timeout);
       return;
     }
 
     const pdfStream = Readable.fromWeb(upstream.body as Parameters<typeof Readable.fromWeb>[0]);
     pdfStream.on('error', () => {
-      if (!res.headersSent) {
-        res.status(502).json({ message: 'PDF stream failed.' });
-      } else {
-        res.end();
-      }
+      if (!res.headersSent) res.status(502).json({ message: 'PDF stream failed.' });
+      else res.end();
     });
     pdfStream.pipe(res);
-  } catch {
-    try {
-      await streamPdfProxyWithCurl(sourceUrl, rangeHeader, res, headOnlyResponse);
-      return;
-    } catch {
-      return res.status(502).json({ message: 'PDF source could not be loaded.' });
+  } catch (error: any) {
+    console.error('[PDF Proxy] fetch error:', error?.message);
+
+    // Last resort — try Cloudflare Worker via curl-style fetch even if direct failed
+    if (!useWorker && CLOUDFLARE_PDF_WORKER) {
+      try {
+        const workerUrl = buildCloudflareWorkerUrl(sourceUrl);
+        const workerUpstream = await fetch(workerUrl, {
+          headers: typeof rangeHeader === 'string' ? { Range: rangeHeader } : {},
+          redirect: 'follow',
+        });
+
+        const workerContentType = (workerUpstream.headers.get('content-type') || '').toLowerCase();
+        if (workerUpstream.ok && workerUpstream.body && workerContentType.includes('application/pdf')) {
+          console.log(`[PDF Proxy] Recovered via CF Worker fallback | ${sourceHost}`);
+          res.status(workerUpstream.status);
+          res.setHeader('Content-Type', 'application/pdf');
+          res.setHeader('Content-Disposition', 'inline');
+          res.setHeader('Cache-Control', 'public, max-age=86400');
+
+          if (headOnlyResponse) {
+            await workerUpstream.body.cancel();
+            res.end();
+            clearTimeout(timeout);
+            return;
+          }
+
+          const workerStream = Readable.fromWeb(workerUpstream.body as Parameters<typeof Readable.fromWeb>[0]);
+          workerStream.on('error', () => {
+            if (!res.headersSent) res.status(502).json({ message: 'PDF stream failed.' });
+            else res.end();
+          });
+          workerStream.pipe(res);
+          clearTimeout(timeout);
+          return;
+        }
+      } catch (workerError: any) {
+        console.error('[PDF Proxy] CF Worker fallback also failed:', workerError?.message);
+      }
     }
-  } finally {
+
     clearTimeout(timeout);
+    return res.status(502).json({
+      message: 'PDF source could not be loaded. Try opening the original link directly.',
+    });
   }
 });
-
 type UserLanguageStyle = 'english' | 'hindi' | 'hinglish';
 
 const normalizePreferredLanguageStyle = (value: string): UserLanguageStyle | null => {
