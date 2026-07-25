@@ -5,7 +5,8 @@ import {
 import { API_BASE_URL } from '../api';
 
 const isHttpUrl = (value: string) => /^https?:\/\//i.test(value);
-const isBrowserSafeUrl = (value: string) => /^(https?:|blob:|data:)/i.test(value);
+const isBrowserSafeUrl = (value: string) =>
+  /^(https?:|blob:|data:)/i.test(value);
 
 const getCurrentOrigin = () => {
   if (typeof window === 'undefined') return '';
@@ -14,7 +15,6 @@ const getCurrentOrigin = () => {
 
 const getApiOrigin = () => {
   if (!API_BASE_URL) return '';
-
   try {
     return new URL(API_BASE_URL, getCurrentOrigin()).origin;
   } catch {
@@ -36,7 +36,6 @@ export const isStudyBookPackageUrl = (fileUrl?: string, mimeType?: string) => {
   const isOfficialNcertCompleteBook =
     normalizedUrl.includes('ncert.nic.in/textbook/pdf/') &&
     /[a-z0-9]+dd\.zip$/i.test(normalizedUrl);
-
   return isZip && isOfficialNcertCompleteBook;
 };
 
@@ -51,6 +50,13 @@ export const getStudyAssetUrl = (fileUrl = '') => {
   return fileUrl;
 };
 
+/* -----------------------------------------------------------
+   ✅ SINGLE CANONICAL PROXY ENDPOINT
+   Har cross-origin PDF isi ek route se guzarta hai — koi
+   "direct trusted domain" bypass nahi, kyunki wo UPSC jaisi
+   Akamai/CORS-protected sites ke liye hamesha fail hota hai.
+----------------------------------------------------------- */
+
 export const getStudyPdfDisplayUrl = (fileUrl: string) => {
   if (!fileUrl || !isHttpUrl(fileUrl)) return fileUrl;
 
@@ -58,11 +64,19 @@ export const getStudyPdfDisplayUrl = (fileUrl: string) => {
     const parsed = new URL(fileUrl);
     const currentOrigin = getCurrentOrigin();
     const apiOrigin = getApiOrigin();
-    if (parsed.origin === currentOrigin || (apiOrigin && parsed.origin === apiOrigin)) return fileUrl;
+
+    // ✅ Same-origin (already uploaded/own backend/Cloudinary) → direct hi theek hai
+    if (
+      parsed.origin === currentOrigin ||
+      (apiOrigin && parsed.origin === apiOrigin)
+    ) {
+      return fileUrl;
+    }
   } catch {
     return fileUrl;
   }
 
+  // ✅ Baaki HAR external URL (UPSC included) → hamesha proxy
   const apiBase = API_BASE_URL || getCurrentOrigin();
   return `${apiBase}/api/study/pdf-proxy?url=${encodeURIComponent(fileUrl)}`;
 };
@@ -75,7 +89,12 @@ export const getStudyPdfPreflightUrl = (fileUrl: string) => {
 const warmedReaderDocuments = new Set<string>();
 
 export const warmStudyReadableDocument = (fileUrl?: string, mimeType?: string) => {
-  if (!fileUrl || !isStudyBookPackageUrl(fileUrl, mimeType) || warmedReaderDocuments.has(fileUrl)) return;
+  if (
+    !fileUrl ||
+    !isStudyBookPackageUrl(fileUrl, mimeType) ||
+    warmedReaderDocuments.has(fileUrl)
+  )
+    return;
   warmedReaderDocuments.add(fileUrl);
   void fetch(getStudyPdfPreflightUrl(fileUrl), {
     headers: { Accept: 'application/json' },
@@ -84,16 +103,21 @@ export const warmStudyReadableDocument = (fileUrl?: string, mimeType?: string) =
   });
 };
 
-export const getStudyPdfReaderHref = (fileUrl: string, title: string, returnTo?: string) => {
+export const getStudyPdfReaderHref = (
+  fileUrl: string,
+  title: string,
+  returnTo?: string,
+) => {
   const normalizedFileUrl = getStudyAssetUrl(fileUrl);
-  const params = new URLSearchParams({
-    url: normalizedFileUrl,
-    title,
-  });
+  const params = new URLSearchParams({ url: normalizedFileUrl, title });
 
   if (returnTo) {
     params.set('returnTo', returnTo);
-    params.set('parent', getPrimaryStudyNavPath(returnTo.split('?')[0]) || readStoredPrimaryStudyNavPath('/app'));
+    params.set(
+      'parent',
+      getPrimaryStudyNavPath(returnTo.split('?')[0]) ||
+        readStoredPrimaryStudyNavPath('/app'),
+    );
   } else {
     params.set('parent', readStoredPrimaryStudyNavPath('/app'));
   }

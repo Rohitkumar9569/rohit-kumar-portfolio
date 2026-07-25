@@ -12,6 +12,7 @@ import {
   PlusIcon,
   SwatchIcon,
 } from '@heroicons/react/24/outline';
+import { API_BASE_URL } from '../../api';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -62,7 +63,6 @@ const pdfToneClassNames: Record<PdfToneMode, string> = {
   paper: 'transition-[filter] duration-200 [filter:none]',
   night: 'transition-[filter] duration-200 [filter:invert(0.82)_hue-rotate(180deg)_brightness(1.02)_contrast(1.12)_saturate(0.52)_sepia(0.06)]',
   warm: 'transition-[filter] duration-200 [filter:sepia(0.18)_brightness(0.98)_contrast(1.02)] dark:[filter:sepia(0.12)_invert(0.80)_hue-rotate(180deg)_brightness(1.05)_contrast(1.08)_saturate(0.48)]',
-
 };
 
 const getPdfReaderStateKey = (fileUrl: string) => {
@@ -120,16 +120,15 @@ const cachePdfUrlForOffline = async (url: string) => {
   return { objectUrl: window.URL.createObjectURL(blob), sizeBytes: blob.size };
 };
 
-// ✅ Apna backend proxy — sirf CORS-blocked / cross-origin PDFs ke liye
-// fallback ki tarah use hota hai. Ab isse top-level redirect NAHI kiya
-// jaata — hum apna khud ka Virtuoso-based custom reader hi mobile aur
-// desktop dono par use karte hain, taaki UI/UX consistent rahe.
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+const isHttpUrl = (value: string) => /^https?:\/\//i.test(value);
 
-const buildPdfProxyUrl = (url: string) =>
-  `${API_BASE}/api/pdf-proxy?url=${encodeURIComponent(url)}`;
+// ✅ SINGLE canonical proxy — matches server/src/routes/study.ts's
+// router.get('/pdf-proxy', ...) mounted at app.use('/api/study', studyRoutes)
+const buildPdfProxyUrl = (url: string) => {
+  const apiBase = API_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '');
+  return `${apiBase}/api/study/pdf-proxy?url=${encodeURIComponent(url)}`;
+};
 
-// ✅ MemoizedPdfPage — stable props, zoom pe remount nahi hoga
 const MemoizedPdfPage = memo(({
   index,
   scale,
@@ -313,7 +312,6 @@ const StudyPdfReaderFrame = ({
   const [isOfflineReady, setIsOfflineReady] = useState(false);
   const [scrollerVersion, setScrollerVersion] = useState(0);
 
-  // ✅ NEW: Stable item height — zoom pe change nahi hoga, Virtuoso remount nahi karega
   const [stableItemHeight, setStableItemHeight] = useState(0);
   const [stableVerticalGap, setStableVerticalGap] = useState(NORMAL_MODE_VERTICAL_GAP);
 
@@ -339,7 +337,9 @@ const StudyPdfReaderFrame = ({
   const fileUrlRef = useRef(fileUrl);
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
 
-  // ✅ NEW: Scroll ratio ref — zoom ke baad position restore karne ke liye
+  // ✅ NEW: fallback chain state — 0 = as-received, 1 = tried proxy, 2 = tried raw direct
+  const fallbackStageRef = useRef<0 | 1 | 2>(0);
+
   const scrollRatioBeforeZoomRef = useRef(0);
   const isZoomingRef = useRef(false);
   const zoomRestoreRafRef = useRef<number | null>(null);
@@ -360,18 +360,12 @@ const StudyPdfReaderFrame = ({
   const isReadMode = readerMode === 'read';
 
   const verticalGap = isFullMode ? FULL_MODE_VERTICAL_GAP : NORMAL_MODE_VERTICAL_GAP;
-
-  // ✅ itemHeight — rendering ke liye actual use (zoom ke saath change hota hai)
   const itemHeight = Math.round(pageHeight + verticalGap);
 
-  // ✅ stableItemHeight — Virtuoso ke liye (zoom pe NAHI badlega)
   useEffect(() => {
     if (pageHeight > 0) {
       const newStableHeight = Math.round(pageHeight + verticalGap);
-      setStableItemHeight((prev) => {
-        if (prev === 0) return newStableHeight;
-        return prev;
-      });
+      setStableItemHeight((prev) => (prev === 0 ? newStableHeight : prev));
       setStableVerticalGap(verticalGap);
     }
   }, [pageHeight, verticalGap]);
@@ -386,13 +380,14 @@ const StudyPdfReaderFrame = ({
 
   const documentFile = useMemo(() => ({ url: documentSource }), [documentSource]);
 
+  // ✅ SPEED FIX: bade chunks = kam network round-trips = tez load
   const documentOptions = useMemo(() => ({
     cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
     cMapPacked: true,
     disableRange: false,
     disableAutoFetch: false,
     disableStream: false,
-    rangeChunkSize: isCoarsePointer ? 131072 : 524288,
+    rangeChunkSize: isCoarsePointer ? 1024 * 1024 : 2 * 1024 * 1024,
   }), [isCoarsePointer]);
 
   const visibleLoadProgress = isPreparing
@@ -434,17 +429,11 @@ const StudyPdfReaderFrame = ({
 
   const isNightTone = pdfTone === 'night';
 
-  // Night palette (sirf night tone ke liye)
   const nightPanel = 'bg-[#2a1b13]/92 border-[#5a3f2f] text-[#f5eee6]';
-  const nightTile = 'bg-[#3a2419]/55 text-[#f5eee6] hover:bg-[#4a2f22]/70';
-  const nightRow = 'text-[#f5eee6] hover:bg-[#3a2419]/35';
   const nightValue = 'text-[#e8dccc]';
 
   const mobileMenuPanelToneClass = useMemo(() => {
-    // ✅ Night tone => hamesha brown (dark: par depend nahi)
     if (isNightTone) return nightPanel;
-
-    // ✅ Baaki tones => aapka existing neutral/glass
     return 'bg-white/55 border-slate-200/70 text-slate-900 ' +
       'dark:bg-black/25 dark:border-white/10 dark:text-white';
   }, [isNightTone]);
@@ -514,10 +503,7 @@ const StudyPdfReaderFrame = ({
     'study-control-surface inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/70 text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition hover:bg-white hover:text-slate-950 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white dark:focus:ring-cyan-400/40';
 
   const clearProgressReset = useCallback(() => {
-    if (
-      progressResetRef.current === null ||
-      typeof window === 'undefined'
-    ) return;
+    if (progressResetRef.current === null || typeof window === 'undefined') return;
     window.clearTimeout(progressResetRef.current);
     progressResetRef.current = null;
   }, []);
@@ -619,10 +605,7 @@ const StudyPdfReaderFrame = ({
     try {
       const shell = readerShellRef.current;
       setReaderMode('read');
-      if (
-        shell?.requestFullscreen &&
-        document.fullscreenElement !== shell
-      ) {
+      if (shell?.requestFullscreen && document.fullscreenElement !== shell) {
         await shell.requestFullscreen();
       }
       requestAnimationFrame(() => fitToWidth());
@@ -638,10 +621,7 @@ const StudyPdfReaderFrame = ({
       const shell = readerShellRef.current;
       setReaderMode('full');
       setWidthMode('wide');
-      if (
-        shell?.requestFullscreen &&
-        document.fullscreenElement !== shell
-      ) {
+      if (shell?.requestFullscreen && document.fullscreenElement !== shell) {
         await shell.requestFullscreen();
       }
       requestAnimationFrame(() => fitToWidth());
@@ -708,10 +688,7 @@ const StudyPdfReaderFrame = ({
 
   const handleClose = async () => {
     try {
-      if (
-        typeof document !== 'undefined' &&
-        document.fullscreenElement
-      ) {
+      if (typeof document !== 'undefined' && document.fullscreenElement) {
         await document.exitFullscreen?.();
       }
     } catch {
@@ -761,17 +738,21 @@ const StudyPdfReaderFrame = ({
 
   useEffect(() => {
     fileUrlRef.current = fileUrl;
+    fallbackStageRef.current = 0; // ✅ naya fileUrl => fallback chain reset
   }, [fileUrl]);
 
   useEffect(() => {
     numPagesRef.current = numPages;
   }, [numPages]);
 
-  // ✅ Document init — ab mobile aur desktop dono ke liye SAME flow.
-  // Agar sourceUrl external/cross-origin hai, seedha try karo. Agar CORS
-  // block kare to handleLoadError automatically apne backend proxy
-  // (`/api/pdf-proxy`) par switch karke retry karega — koi top-level
-  // redirect nahi, koi native browser viewer nahi.
+  // ✅ WARMUP: Render free-tier "cold start" ka delay chhupane ke liye,
+  // PDF khulte hi background me ek halka ping bhej do — jab tak user
+  // UI dekh raha hai, server jaag chuka hoga.
+  useEffect(() => {
+    if (!fileUrl || !isHttpUrl(fileUrl)) return;
+    fetch(fileUrl, { method: 'HEAD', mode: 'no-cors' }).catch(() => {});
+  }, [fileUrl]);
+
   useEffect(() => {
     let isMounted = true;
     const init = async () => {
@@ -1008,30 +989,44 @@ const StudyPdfReaderFrame = ({
     });
   };
 
-  // ✅ Automatic proxy fallback — agar direct URL CORS/network issue de,
-  // to apne backend proxy se retry karo. Koi redirect nahi, seamless
-  // in-app switch.
+  // ✅ SMART 2-STAGE FALLBACK CHAIN:
+  // Stage 0 → jo bhi URL mila (usually already-proxied) → fail?
+  // Stage 1 → apne canonical /api/study/pdf-proxy se try karo → fail?
+  // Stage 2 → raw original URL directly try karo (last resort) → fail?
+  // → tabhi error panel dikhao
   const handleLoadError = (error: Error) => {
     clearProgressReset();
-    setIsDocumentLoading(false);
-    setLoadProgress(null);
     const msg = error?.message?.toLowerCase() ?? '';
     const looksLikeCorsOrNetwork =
       msg.includes('cors') ||
       msg.includes('fetch') ||
       msg.includes('network') ||
-      msg.includes('failed to load');
+      msg.includes('failed to load') ||
+      msg.includes('failed to fetch');
 
-    const isAlreadyUsingProxy = documentSource.includes('/api/pdf-proxy');
+    if (looksLikeCorsOrNetwork) {
+      const isUsingProxy = documentSource.includes('/pdf-proxy');
 
-    if (looksLikeCorsOrNetwork && !isAlreadyUsingProxy && API_BASE) {
-      setCorsBlocked(true);
-      setIsDocumentLoading(true);
-      setHasError(false);
-      setDocumentSource(buildPdfProxyUrl(sourceUrl));
-      return;
+      if (!isUsingProxy && fallbackStageRef.current < 1 && isHttpUrl(sourceUrl)) {
+        fallbackStageRef.current = 1;
+        setCorsBlocked(true);
+        setIsDocumentLoading(true);
+        setHasError(false);
+        setDocumentSource(buildPdfProxyUrl(sourceUrl));
+        return;
+      }
+
+      if (isUsingProxy && fallbackStageRef.current < 2 && isHttpUrl(sourceUrl)) {
+        fallbackStageRef.current = 2;
+        setIsDocumentLoading(true);
+        setHasError(false);
+        setDocumentSource(sourceUrl);
+        return;
+      }
     }
 
+    setIsDocumentLoading(false);
+    setLoadProgress(null);
     setCorsBlocked(looksLikeCorsOrNetwork);
     setHasError(true);
   };
@@ -1074,11 +1069,6 @@ const StudyPdfReaderFrame = ({
 
   const virtuosoItemHeight = stableItemHeight || itemHeight;
 
-  // ================================================================
-  // ✅ SINGLE UNIFIED VIEW — mobile aur desktop dono is same flow ko
-  // use karte hain. Koi top-level redirect nahi, koi native browser
-  // viewer nahi — apna custom Virtuoso reader hi consistent UX deta hai.
-  // ================================================================
   return (
     <div
       ref={readerShellRef}
@@ -1105,7 +1095,6 @@ const StudyPdfReaderFrame = ({
 
           <div className="flex min-w-0 items-center gap-2">
 
-            {/* 1. Back button */}
             {onClose ? (
               <button
                 type="button"
@@ -1125,12 +1114,23 @@ const StudyPdfReaderFrame = ({
               </Dialog.Close>
             )}
 
-            {/* 2. Title — flex-1 fills middle space */}
-            <h2 className="min-w-0 flex-1 truncate text-sm font-black tracking-tight text-slate-950 dark:text-white">
-              {title}
-            </h2>
+            {/* ✅ Title + Percentage Badge — dono ek hi flex row me,
+                mobile aur desktop dono par consistently dikhta hai */}
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <h2 className="min-w-0 flex-1 truncate text-sm font-black tracking-tight text-slate-950 dark:text-white">
+                {title}
+              </h2>
+              {showProgressBar && (
+                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-cyan-500/10 px-2 py-0.5 text-[10px] font-black tabular-nums tracking-wide text-cyan-700 ring-1 ring-cyan-500/20 dark:bg-cyan-400/10 dark:text-cyan-300 dark:ring-cyan-400/20">
+                  <span className="relative flex h-1.5 w-1.5 shrink-0">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-500 opacity-75 dark:bg-cyan-400" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-600 dark:bg-cyan-400" />
+                  </span>
+                  {Math.round(progressBarPercent)}%
+                </span>
+              )}
+            </div>
 
-            {/* Desktop-only controls (hidden on mobile) */}
             <div className="study-control-surface hidden h-10 shrink-0 items-center gap-1 rounded-2xl bg-slate-100/80 px-1.5 shadow-sm dark:bg-white/5 md:flex">
               <button
                 type="button"
@@ -1214,7 +1214,6 @@ const StudyPdfReaderFrame = ({
               <span className="hidden lg:inline">Open</span>
             </a>
 
-            {/* 3. Page number pill — mobile only, shrink-0 so it never wraps */}
             <div className="shrink-0 md:hidden">
               <PageNumberDisplay
                 displayPage={displayPage}
@@ -1223,7 +1222,6 @@ const StudyPdfReaderFrame = ({
               />
             </div>
 
-            {/* 4. Three-dot — mobile only, always last */}
             <div ref={mobileMenuRef} className="relative shrink-0 md:hidden">
               <button
                 type="button"
@@ -1243,8 +1241,6 @@ const StudyPdfReaderFrame = ({
                     mobileMenuPanelToneClass,
                   ].join(' ')}
                 >
-
-                  {/* Zoom */}
                   <div className="grid grid-cols-3 gap-1.5">
                     <button
                       type="button"
@@ -1267,7 +1263,6 @@ const StudyPdfReaderFrame = ({
                     </button>
                   </div>
 
-                  {/* Options */}
                   <div className="mt-1.5 grid gap-0.5">
                     <button
                       type="button"
@@ -1327,9 +1322,6 @@ const StudyPdfReaderFrame = ({
         </header>
       )}
 
-
-
-
       <div
         className="study-reader-canvas relative min-h-0 flex-1"
         onTouchStart={handlePdfTouchStart}
@@ -1355,7 +1347,7 @@ const StudyPdfReaderFrame = ({
             <Virtuoso
               ref={virtuosoRef}
               totalCount={numPages}
-              initialItemCount={Math.min(numPages || 4, isCoarsePointer ? 1 : 4)}
+              initialItemCount={Math.min(numPages || 1, 1)}
               fixedItemHeight={virtuosoItemHeight}
               increaseViewportBy={virtuosoScrollConfig.increaseViewportBy}
               overscan={virtuosoScrollConfig.overscan}
