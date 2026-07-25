@@ -1,9 +1,5 @@
 import { Router, Request, Response } from 'express';
 import { spawn } from 'node:child_process';
-import { createReadStream } from 'node:fs';
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import crypto from 'node:crypto';
 import { Readable } from 'node:stream';
 import { pdfProxyLimiter } from '../middleware/security';
 
@@ -53,135 +49,6 @@ const getRealisticBrowserHeaders = (sourceUrl: string): Record<string, string> =
 
 const looksLikePdfResponse = (contentType: string, pathname: string) =>
   contentType.toLowerCase().includes('application/pdf') || pathname.toLowerCase().endsWith('.pdf');
-
-// ──────────────────────────────────────────────────────────────
-// Disk cache: for hostile hosts, fetch the whole file ONCE via
-// the Cloudflare Worker, then serve every (including range)
-// request from local disk. This is what actually fixes Akamai's
-// burst/rate-limit throttling — pdf.js fires many range requests
-// per file open, and without this each one hit UPSC directly.
-// ──────────────────────────────────────────────────────────────
-const pdfProxyCacheDir = path.resolve(process.cwd(), '.cache', 'pdf-proxy');
-const inFlightDownloads = new Map<string, Promise<string>>();
-
-const getCachePath = (sourceUrl: string) => {
-  const hash = crypto.createHash('sha256').update(sourceUrl).digest('hex').slice(0, 40);
-  return path.join(pdfProxyCacheDir, `${hash}.pdf`);
-};
-
-const getCachedFilePath = async (sourceUrl: string): Promise<string | null> => {
-  const cachePath = getCachePath(sourceUrl);
-  try {
-    const stat = await fs.stat(cachePath);
-    if (stat.isFile() && stat.size > 0) return cachePath;
-  } catch {
-    // cache miss
-  }
-  return null;
-};
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const fetchViaWorkerWithRetry = async (sourceUrl: string, maxAttempts = 3): Promise<Buffer> => {
-  let lastError: any;
-
-  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 45000);
-
-    try {
-      const workerUrl = buildCloudflareWorkerUrl(sourceUrl);
-      const response = await fetch(workerUrl, { signal: controller.signal });
-      clearTimeout(timeoutId);
-
-      const contentType = response.headers.get('content-type') || '';
-      const isPdf = looksLikePdfResponse(contentType, new URL(sourceUrl).pathname);
-
-      if (!response.ok || !isPdf) {
-        throw new Error(`Worker returned status ${response.status}, content-type ${contentType}`);
-      }
-
-      const arrayBuffer = await response.arrayBuffer();
-      return Buffer.from(arrayBuffer);
-    } catch (error) {
-      clearTimeout(timeoutId);
-      lastError = error;
-      console.warn(`[pdf-proxy] Worker attempt ${attempt}/${maxAttempts} failed:`, (error as any)?.message);
-      if (attempt < maxAttempts) {
-        // Exponential-ish backoff, gives Akamai's short rate-limit window time to reset
-        await sleep(attempt * 2000);
-      }
-    }
-  }
-
-  throw lastError;
-};
-
-const downloadAndCache = async (sourceUrl: string): Promise<string> => {
-  const cachePath = getCachePath(sourceUrl);
-  await fs.mkdir(path.dirname(cachePath), { recursive: true });
-
-  const buffer = await fetchViaWorkerWithRetry(sourceUrl);
-
-  const tempPath = `${cachePath}.${process.pid}.${Date.now()}.tmp`;
-  await fs.writeFile(tempPath, buffer);
-  await fs.rename(tempPath, cachePath);
-  return cachePath;
-};
-
-const getOrDownloadCachedPdf = async (sourceUrl: string): Promise<string> => {
-  const existing = await getCachedFilePath(sourceUrl);
-  if (existing) return existing;
-
-  const inFlight = inFlightDownloads.get(sourceUrl);
-  if (inFlight) return inFlight;
-
-  const download = downloadAndCache(sourceUrl).finally(() => {
-    inFlightDownloads.delete(sourceUrl);
-  });
-  inFlightDownloads.set(sourceUrl, download);
-  return download;
-};
-
-const streamLocalFile = async (filePath: string, rangeHeader: string | undefined, res: Response) => {
-  const stat = await fs.stat(filePath);
-  const totalSize = stat.size;
-
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', 'inline');
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Accept-Ranges', 'bytes');
-  res.setHeader('Cache-Control', 'public, max-age=604800, stale-while-revalidate=2592000');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-
-  if (rangeHeader) {
-    const match = rangeHeader.match(/^bytes=(\d*)-(\d*)$/);
-    if (match) {
-      let start = match[1] ? Number(match[1]) : 0;
-      let end = match[2] ? Number(match[2]) : totalSize - 1;
-      if (!match[1] && match[2]) {
-        start = Math.max(totalSize - Number(match[2]), 0);
-        end = totalSize - 1;
-      }
-      if (Number.isFinite(start) && Number.isFinite(end) && start <= end && start < totalSize) {
-        end = Math.min(end, totalSize - 1);
-        res.status(206);
-        res.setHeader('Content-Range', `bytes ${start}-${end}/${totalSize}`);
-        res.setHeader('Content-Length', end - start + 1);
-        createReadStream(filePath, { start, end }).pipe(res);
-        return;
-      }
-    }
-    res.status(416);
-    res.setHeader('Content-Range', `bytes */${totalSize}`);
-    res.end();
-    return;
-  }
-
-  res.status(200);
-  res.setHeader('Content-Length', totalSize);
-  createReadStream(filePath).pipe(res);
-};
 
 // --- Optional curl-based attempt (sometimes bypasses simpler bot checks than fetch) ---
 const curlBinary = process.platform === 'win32' ? 'curl.exe' : 'curl';
@@ -308,27 +175,51 @@ router.get('/', pdfProxyLimiter, async (req: Request, res: Response) => {
   }
 
   const rangeHeader = typeof req.headers.range === 'string' ? req.headers.range : undefined;
+  const useWorker = shouldRouteViaCloudflareWorker(parsedUrl.hostname);
 
-  // --- Path 1: hostile hosts → download once via Worker, cache to disk,
-  // serve all requests (including every pdf.js range request) from local cache.
-  // This is what actually stops UPSC's rate-limit throttling.
-  if (shouldRouteViaCloudflareWorker(parsedUrl.hostname)) {
+  // --- Path 1: Cloudflare Worker (bypasses Akamai's datacenter-IP block) ---
+  if (useWorker) {
     try {
-      const filePath = await getOrDownloadCachedPdf(parsedUrl.toString());
-      await streamLocalFile(filePath, rangeHeader, res);
-      return;
-    } catch (error: any) {
-      console.error('[pdf-proxy] Worker+cache path failed:', error?.message);
-      if (!res.headersSent) {
-        return res.status(502).json({
-          message: 'Source blocked or unreachable after retries. Try opening the original link directly.',
+      const workerUrl = buildCloudflareWorkerUrl(parsedUrl.toString());
+      const workerUpstream = await fetch(workerUrl, {
+        headers: rangeHeader ? { Range: rangeHeader } : {},
+        redirect: 'follow',
+      });
+
+      const workerContentType = workerUpstream.headers.get('content-type') || '';
+      if (
+        workerUpstream.ok &&
+        workerUpstream.body &&
+        looksLikePdfResponse(workerContentType, parsedUrl.pathname)
+      ) {
+        const contentLength = workerUpstream.headers.get('content-length');
+        const contentRange = workerUpstream.headers.get('content-range');
+
+        res.status(workerUpstream.status === 206 ? 206 : 200);
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Accept-Ranges', 'bytes');
+        res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+        res.setHeader('Content-Disposition', 'inline');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        if (contentLength) res.setHeader('Content-Length', contentLength);
+        if (contentRange) res.setHeader('Content-Range', contentRange);
+
+        const pdfStream = Readable.fromWeb(workerUpstream.body as Parameters<typeof Readable.fromWeb>[0]);
+        pdfStream.on('error', () => {
+          if (!res.headersSent) res.status(502).json({ message: 'PDF stream failed.' });
+          else res.end();
         });
+        req.on('close', () => pdfStream.destroy());
+        pdfStream.pipe(res);
+        return;
       }
-      return;
+    } catch (workerError: any) {
+      console.warn('[pdf-proxy] Cloudflare Worker attempt failed:', workerError?.message);
     }
   }
 
-  // --- Path 2: direct fetch with realistic browser headers (non-hostile hosts) ---
+  // --- Path 2: direct fetch with realistic browser headers ---
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 20000);
 
