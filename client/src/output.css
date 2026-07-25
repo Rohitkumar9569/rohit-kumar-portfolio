@@ -1584,10 +1584,6 @@ body.study-app-scroll-root {
   visibility: visible;
 }
 
-.invisible {
-  visibility: hidden;
-}
-
 .static {
   position: static;
 }
@@ -1855,14 +1851,6 @@ body.study-app-scroll-root {
 
 .top-4 {
   top: 1rem;
-}
-
-.top-\[calc\(0\.6rem\+env\(safe-area-inset-top\)\)\] {
-  top: calc(0.6rem + env(safe-area-inset-top));
-}
-
-.top-\[calc\(100\%\+0\.55rem\)\] {
-  top: calc(100% + 0.55rem);
 }
 
 .top-\[calc\(100\%\+0\.5rem\)\] {
@@ -2707,10 +2695,6 @@ body.study-app-scroll-root {
   width: 0.25rem;
 }
 
-.w-1\.5 {
-  width: 0.375rem;
-}
-
 .w-1\/2 {
   width: 50%;
 }
@@ -2813,10 +2797,6 @@ body.study-app-scroll-root {
 
 .w-5\/6 {
   width: 83.333333%;
-}
-
-.w-52 {
-  width: 13rem;
 }
 
 .w-56 {
@@ -3168,10 +3148,6 @@ body.study-app-scroll-root {
 
 .max-w-\[calc\(100\%-6\.5rem\)\] {
   max-width: calc(100% - 6.5rem);
-}
-
-.max-w-\[calc\(100vw-1\.25rem\)\] {
-  max-width: calc(100vw - 1.25rem);
 }
 
 .max-w-\[min\(44rem\2c 92\%\)\] {
@@ -3966,6 +3942,11 @@ body.study-app-scroll-root {
   border-color: rgb(76 194 255 / 0.7);
 }
 
+.border-\[\#5a3f2f\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(90 63 47 / var(--tw-border-opacity, 1));
+}
+
 .border-amber-100\/15 {
   border-color: rgb(254 243 199 / 0.15);
 }
@@ -4326,16 +4307,6 @@ body.study-app-scroll-root {
   border-color: rgb(255 255 255 / 0.12);
 }
 
-.border-\[\#e7d2bd\] {
-  --tw-border-opacity: 1;
-  border-color: rgb(231 210 189 / var(--tw-border-opacity, 1));
-}
-
-.border-\[\#5a3f2f\] {
-  --tw-border-opacity: 1;
-  border-color: rgb(90 63 47 / var(--tw-border-opacity, 1));
-}
-
 .border-l-slate-300 {
   --tw-border-opacity: 1;
   border-left-color: rgb(203 213 225 / var(--tw-border-opacity, 1));
@@ -4460,6 +4431,10 @@ body.study-app-scroll-root {
 .bg-\[\#2a2a2a\] {
   --tw-bg-opacity: 1;
   background-color: rgb(42 42 42 / var(--tw-bg-opacity, 1));
+}
+
+.bg-\[\#3a2419\]\/55 {
+  background-color: rgb(58 36 25 / 0.55);
 }
 
 .bg-\[\#42351d\] {
@@ -5204,10 +5179,6 @@ body.study-app-scroll-root {
   background-color: rgb(255 255 255 / 0.68);
 }
 
-.bg-white\/\[0\.96\] {
-  background-color: rgb(255 255 255 / 0.96);
-}
-
 .bg-white\/\[0\.97\] {
   background-color: rgb(255 255 255 / 0.97);
 }
@@ -5219,14 +5190,6 @@ body.study-app-scroll-root {
 
 .bg-zinc-400\/10 {
   background-color: rgb(161 161 170 / 0.1);
-}
-
-.bg-\[\#fff4e7\]\/85 {
-  background-color: rgb(255 244 231 / 0.85);
-}
-
-.bg-\[\#3a2419\]\/55 {
-  background-color: rgb(58 36 25 / 0.55);
 }
 
 .bg-opacity-50 {
@@ -6096,8 +6059,8 @@ body.study-app-scroll-root {
   padding-top: 1.75rem;
 }
 
-.pt-\[calc\(0\.5rem\+env\(safe-area-inset-top\)\)\] {
-  padding-top: calc(0.5rem + env(safe-area-inset-top));
+.pt-\[calc\(0\.6rem\+env\(safe-area-inset-top\)\)\] {
+  padding-top: calc(0.6rem + env(safe-area-inset-top));
 }
 
 .pt-\[calc\(env\(safe-area-inset-top\)\+1\.25rem\)\] {
@@ -6114,14 +6077,6 @@ body.study-app-scroll-root {
 
 .pt-\[env\(safe-area-inset-top\)\] {
   padding-top: env(safe-area-inset-top);
-}
-
-.pt-\[calc\(0\.55rem\+env\(safe-area-inset-top\)\)\] {
-  padding-top: calc(0.55rem + env(safe-area-inset-top));
-}
-
-.pt-\[calc\(0\.6rem\+env\(safe-area-inset-top\)\)\] {
-  padding-top: calc(0.6rem + env(safe-area-inset-top));
 }
 
 .text-left {
@@ -6497,6 +6452,11 @@ body.study-app-scroll-root {
   color: rgb(216 221 216 / var(--tw-text-opacity, 1));
 }
 
+.text-\[\#e8dccc\] {
+  --tw-text-opacity: 1;
+  color: rgb(232 220 204 / var(--tw-text-opacity, 1));
+}
+
 .text-\[\#e8e8e8\] {
   --tw-text-opacity: 1;
   color: rgb(232 232 232 / var(--tw-text-opacity, 1));
@@ -6510,6 +6470,11 @@ body.study-app-scroll-root {
 .text-\[\#f3f3f3\] {
   --tw-text-opacity: 1;
   color: rgb(243 243 243 / var(--tw-text-opacity, 1));
+}
+
+.text-\[\#f5eee6\] {
+  --tw-text-opacity: 1;
+  color: rgb(245 238 230 / var(--tw-text-opacity, 1));
 }
 
 .text-\[\#ff7777\] {
@@ -6854,16 +6819,6 @@ body.study-app-scroll-root {
 
 .text-white\/\[0\.06\] {
   color: rgb(255 255 255 / 0.06);
-}
-
-.text-\[\#e8dccc\] {
-  --tw-text-opacity: 1;
-  color: rgb(232 220 204 / var(--tw-text-opacity, 1));
-}
-
-.text-\[\#f5eee6\] {
-  --tw-text-opacity: 1;
-  color: rgb(245 238 230 / var(--tw-text-opacity, 1));
 }
 
 .underline {
@@ -7826,10 +7781,6 @@ body.study-app-scroll-root {
   --tw-ring-color: rgb(103 232 249 / 0.7);
 }
 
-.ring-cyan-500\/20 {
-  --tw-ring-color: rgb(6 182 212 / 0.2);
-}
-
 .ring-emerald-200\/80 {
   --tw-ring-color: rgb(167 243 208 / 0.8);
 }
@@ -8198,10 +8149,6 @@ body.study-app-scroll-root {
 
 .\[outline\:0\] {
   outline: 0;
-}
-
-.\[text-shadow\:none\] {
-  text-shadow: none;
 }
 
 /* --- THEME VARIABLES UPDATED TO NEW "TECH" THEME --- */
@@ -14921,9 +14868,17 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
   background-color: rgb(37 42 37 / var(--tw-bg-opacity, 1));
 }
 
+.hover\:bg-\[\#3a2419\]\/35:hover {
+  background-color: rgb(58 36 25 / 0.35);
+}
+
 .hover\:bg-\[\#452329\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(69 35 41 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-\[\#4a2f22\]\/70:hover {
+  background-color: rgb(74 47 34 / 0.7);
 }
 
 .hover\:bg-\[\#8ddeff\]:hover {
@@ -15142,14 +15097,6 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
 
 .hover\:bg-white\/\[0\.10\]:hover {
   background-color: rgb(255 255 255 / 0.10);
-}
-
-.hover\:bg-\[\#3a2419\]\/35:hover {
-  background-color: rgb(58 36 25 / 0.35);
-}
-
-.hover\:bg-\[\#4a2f22\]\/70:hover {
-  background-color: rgb(74 47 34 / 0.7);
 }
 
 .hover\:text-\[\#dfefff\]:hover {
@@ -16075,11 +16022,6 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
   border-color: rgb(255 255 255 / 0.10);
 }
 
-.dark\:border-\[\#5a3f2f\]:is(.dark *) {
-  --tw-border-opacity: 1;
-  border-color: rgb(90 63 47 / var(--tw-border-opacity, 1));
-}
-
 .dark\:border-t-cyan-400:is(.dark *) {
   --tw-border-opacity: 1;
   border-top-color: rgb(34 211 238 / var(--tw-border-opacity, 1));
@@ -16129,10 +16071,6 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
   background-color: rgb(16 16 16 / var(--tw-bg-opacity, 1));
 }
 
-.dark\:bg-\[\#101521\]\/\[0\.96\]:is(.dark *) {
-  background-color: rgb(16 21 33 / 0.96);
-}
-
 .dark\:bg-\[\#10323a\]:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(16 50 58 / var(--tw-bg-opacity, 1));
@@ -16155,6 +16093,10 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
   background-color: hsl(var(--background));
 }
 
+.dark\:bg-black\/25:is(.dark *) {
+  background-color: rgb(0 0 0 / 0.25);
+}
+
 .dark\:bg-blue-400\/10:is(.dark *) {
   background-color: rgb(96 165 250 / 0.1);
 }
@@ -16171,11 +16113,6 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
 
 .dark\:bg-cyan-300\/10:is(.dark *) {
   background-color: rgb(103 232 249 / 0.1);
-}
-
-.dark\:bg-cyan-400:is(.dark *) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(34 211 238 / var(--tw-bg-opacity, 1));
 }
 
 .dark\:bg-cyan-400\/10:is(.dark *) {
@@ -16475,14 +16412,6 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
 
 .dark\:bg-white\/\[0\.18\]:is(.dark *) {
   background-color: rgb(255 255 255 / 0.18);
-}
-
-.dark\:bg-\[\#202124\]\/80:is(.dark *) {
-  background-color: rgb(32 33 36 / 0.8);
-}
-
-.dark\:bg-black\/25:is(.dark *) {
-  background-color: rgb(0 0 0 / 0.25);
 }
 
 .dark\:bg-\[linear-gradient\(135deg\2c rgba\(255\2c 255\2c 255\2c 0\.08\)\2c rgba\(255\2c 255\2c 255\2c 0\.025\)\)\]:is(.dark *) {
@@ -16893,11 +16822,6 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
   color: rgb(255 255 255 / 0.14);
 }
 
-.dark\:text-\[\#f5eee6\]:is(.dark *) {
-  --tw-text-opacity: 1;
-  color: rgb(245 238 230 / var(--tw-text-opacity, 1));
-}
-
 .dark\:shadow-2xl:is(.dark *) {
   --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
@@ -17269,10 +17193,6 @@ html:not(.dark) .study-shell:not(.study-portfolio-embed) .study-account-field-re
 
 .dark\:ring-cyan-300\/35:is(.dark *) {
   --tw-ring-color: rgb(103 232 249 / 0.35);
-}
-
-.dark\:ring-cyan-400\/20:is(.dark *) {
-  --tw-ring-color: rgb(34 211 238 / 0.2);
 }
 
 .dark\:ring-emerald-300\/20:is(.dark *) {
