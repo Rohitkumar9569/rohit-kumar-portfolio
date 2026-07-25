@@ -126,7 +126,7 @@ const isHttpUrl = (value: string) => /^https?:\/\//i.test(value);
 // router.get('/pdf-proxy', ...) mounted at app.use('/api/study', studyRoutes)
 const buildPdfProxyUrl = (url: string) => {
   const apiBase = API_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '');
-  return `${apiBase}/api/pdf-proxy?url=${encodeURIComponent(url)}`; // ✅ matches index.ts mount path
+  return `${apiBase}/api/pdf-proxy?url=${encodeURIComponent(url)}`;
 };
 
 const MemoizedPdfPage = memo(({

@@ -78,7 +78,7 @@ export const getStudyPdfDisplayUrl = (fileUrl: string) => {
 
   // ✅ Baaki HAR external URL (UPSC included) → hamesha proxy
   const apiBase = API_BASE_URL || getCurrentOrigin();
-  return `${apiBase}/api/study/pdf-proxy?url=${encodeURIComponent(fileUrl)}`;
+  return `${apiBase}/api/pdf-proxy?url=${encodeURIComponent(fileUrl)}`;
 };
 
 export const getStudyPdfPreflightUrl = (fileUrl: string) => {
