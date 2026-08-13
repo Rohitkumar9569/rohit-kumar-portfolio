@@ -161,9 +161,9 @@ const MemoizedPdfPage = memo(({
       paddingRight: isFullMode ? 0 : NORMAL_MODE_HORIZONTAL_PADDING,
     }}
   >
-    <div
+      <div
       className={[
-        'study-reader-page-frame overflow-hidden',
+        'study-reader-page-frame overflow-visible',
         isFullMode ? '' : 'rounded-lg shadow-md sm:rounded-xl',
         pdfToneClassName,
         isLastPage && !isFullMode
@@ -175,13 +175,12 @@ const MemoizedPdfPage = memo(({
         height: pageHeight,
         transform: 'translateZ(0)',
         willChange: 'transform',
-        contain: 'layout paint size',
       }}
     >
       <Page
         pageNumber={index + 1}
         className="study-pdf-selectable-page"
-        scale={scale}
+        width={pageWidth}
         renderAnnotationLayer={false}
         renderTextLayer={shouldRenderTextLayer}
         devicePixelRatio={pdfDevicePixelRatio}
@@ -711,6 +710,8 @@ const StudyPdfReaderFrame = ({
       ref.style.overflowX = 'hidden';
       ref.style.overflowY = 'auto';
       ref.style.overscrollBehavior = 'none';
+      // Prevent browser scroll anchoring which can jump when page images load
+      (ref.style as any).overflowAnchor = 'none';
       ref.style.boxSizing = 'border-box';
       (ref.style as any).webkitOverflowScrolling = 'touch';
       ref.style.transform = 'translateZ(0)';

@@ -70,14 +70,16 @@ const PdfViewerPage = () => {
   const isMobile = useIsMobile();
   const [scale, setScale] = useState(1.0);
   const [rotation, setRotation] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageInput, setPageInput] = useState("1");
+  const currentPageRef = useRef<number>(1);
+  const pageInputRef = useRef<HTMLInputElement | null>(null);
+  const thumbPageRef = useRef<HTMLSpanElement | null>(null);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const autoHideDisabled = useRef(false);
   const interactionTimeoutRef = useRef<number | null>(null);
   const [unscaledPageWidth, setUnscaledPageWidth] = useState<number | null>(null);
   const pdfContainerRef = useRef<HTMLDivElement>(null);
   const virtuosoRef = useRef<any>(null);
+  const pageDisplayTimerRef = useRef<number | null>(null);
   const [showCustomScrollbar, setShowCustomScrollbar] = useState(false);
   const scrollTimeoutRef = useRef<number | null>(null);
   const y = useMotionValue(0);
@@ -207,18 +209,19 @@ const PdfViewerPage = () => {
     }
   }, [unscaledPageWidth, fitWidth]);
 
-  useEffect(() => { setPageInput(String(currentPage)); }, [currentPage]);
+  // page input and current page are updated via refs to avoid frequent React re-renders
   const handleZoomIn = () => { preventAutoHide(); setScale(prev => prev + 0.1); };
   const handleZoomOut = () => { preventAutoHide(); setScale(prev => Math.max(0.2, prev - 0.1)); };
   const handleRotate = () => { preventAutoHide(); setRotation(prev => (prev + 90) % 360); };
   const handleGoToPage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     preventAutoHide();
-    const pageNum = parseInt(pageInput, 10);
+    const raw = pageInputRef.current?.value ?? '1';
+    const pageNum = parseInt(raw, 10);
     if (virtuosoRef.current && pageNum >= 1 && pageNum <= numPages) {
       virtuosoRef.current.scrollToIndex({ index: pageNum - 1, align: 'start', behavior: 'smooth' });
     } else {
-      setPageInput(String(currentPage));
+      if (pageInputRef.current) pageInputRef.current.value = String(currentPageRef.current);
     }
   };
 
@@ -259,6 +262,12 @@ const PdfViewerPage = () => {
     }
   }, [updateCustomScrollbarPosition]);
 
+  useEffect(() => {
+    return () => {
+      if (pageDisplayTimerRef.current !== null) window.clearTimeout(pageDisplayTimerRef.current);
+    };
+  }, []);
+
   if (loading) return <PdfViewerSkeleton />;
 
   return (
@@ -271,7 +280,7 @@ const PdfViewerPage = () => {
             <span className="font-bold text-cyan-400 text-sm sm:text-base ml-2">{pyq?.year}</span>
             <div className="flex items-center justify-center gap-1 sm:gap-2 text-white flex-grow">
               <form onSubmit={handleGoToPage} className="flex items-center gap-1">
-                <input type="number" value={pageInput} onChange={(e) => setPageInput(e.target.value)} onClick={preventAutoHide} onFocus={(e) => e.target.select()} className="w-10 text-center bg-slate-700 rounded border border-slate-600 focus:outline-none focus:ring-1 focus:ring-cyan-500 text-sm py-0.5" />
+                <input ref={pageInputRef} type="number" defaultValue={String(1)} onClick={preventAutoHide} onFocus={(e) => e.target.select()} className="w-10 text-center bg-slate-700 rounded border border-slate-600 focus:outline-none focus:ring-1 focus:ring-cyan-500 text-sm py-0.5" />
                 <span className="text-slate-400 text-sm">/ {numPages}</span>
               </form>
               <span className="h-5 w-px bg-slate-700 mx-1"></span>
@@ -299,14 +308,25 @@ const PdfViewerPage = () => {
               overscanValue={overscanValue}
               virtuosoRef={virtuosoRef}
               pdfContainerRef={pdfContainerRef}
-              setCurrentPage={setCurrentPage}
+              setCurrentPage={(page: number) => {
+                // immediate value in ref (no React re-render)
+                currentPageRef.current = page;
+                // debounce visible UI updates to avoid layout churn while scrolling
+                if (pageDisplayTimerRef.current !== null) window.clearTimeout(pageDisplayTimerRef.current);
+                pageDisplayTimerRef.current = window.setTimeout(() => {
+                  pageDisplayTimerRef.current = null;
+                  // update page input DOM and thumb DOM directly
+                  if (pageInputRef.current) pageInputRef.current.value = String(currentPageRef.current);
+                  if (thumbPageRef.current) thumbPageRef.current.textContent = String(currentPageRef.current);
+                }, 200);
+              }}
               setNumPages={setNumPages}
               setLoadProgress={setLoadProgress}
               setUnscaledPageWidth={setUnscaledPageWidth}
             />
           </Suspense>
         </main>
-        <AnimatePresence>{isMobile && showCustomScrollbar && (<motion.div ref={trackRef} className="absolute top-0 right-0 h-full w-10 z-20 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}><motion.div drag="y" dragConstraints={trackRef} dragElastic={0} dragMomentum={false} onDragStart={() => setIsDragging(true)} onDragEnd={() => setIsDragging(false)} onDrag={(_event, info) => { const container = pdfContainerRef.current; const track = trackRef.current; if (container && track) { const maxThumbY = track.clientHeight - THUMB_HEIGHT; const progress = info.offset.y / maxThumbY; const maxScrollTop = container.scrollHeight - container.clientHeight; container.scrollTop = progress * maxScrollTop; } }} style={{ y, height: THUMB_HEIGHT }} className="w-16 bg-slate-800/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-xs shadow-lg cursor-grab active:cursor-grabbing pointer-events-auto -ml-3">{currentPage} / {numPages}</motion.div></motion.div>)}</AnimatePresence>
+        <AnimatePresence>{isMobile && showCustomScrollbar && (<motion.div ref={trackRef} className="absolute top-0 right-0 h-full w-10 z-20 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}><motion.div drag="y" dragConstraints={trackRef} dragElastic={0} dragMomentum={false} onDragStart={() => setIsDragging(true)} onDragEnd={() => setIsDragging(false)} onDrag={(_event, info) => { const container = pdfContainerRef.current; const track = trackRef.current; if (container && track) { const maxThumbY = track.clientHeight - THUMB_HEIGHT; const progress = info.offset.y / maxThumbY; const maxScrollTop = container.scrollHeight - container.clientHeight; container.scrollTop = progress * maxScrollTop; } }} style={{ y, height: THUMB_HEIGHT }} className="w-16 bg-slate-800/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-xs shadow-lg cursor-grab active:cursor-grabbing pointer-events-auto -ml-3"><span ref={thumbPageRef}>1</span> / {numPages}</motion.div></motion.div>)}</AnimatePresence>
       </div>
       {isMobile ? (
         <Drawer.Root modal={false} open={activeSnapPoint !== null} onOpenChange={(open) => setActiveSnapPoint(open ? 1 : null)} snapPoints={snapPoints} activeSnapPoint={activeSnapPoint} setActiveSnapPoint={setActiveSnapPoint}>

@@ -27,19 +27,19 @@ const MemoizedViewportPage = memo(({
   rotation: number;
   pdfDevicePixelRatio: number;
 }) => {
-  const width  = pageBaseWidth  * scale;
-  const height = pageBaseHeight * scale;
+  const width  = Math.round(pageBaseWidth * scale);
+  const height = Math.round(pageBaseHeight * scale);
 
   return (
     <div className="flex justify-center py-2 md:py-4">
-      <div className="bg-white shadow-lg" style={{ width, height }}>
+      <div className="bg-white shadow-lg" style={{ width }}>
         <Page
           pageNumber={index + 1}
           className="study-pdf-selectable-page"
-          scale={scale}
+          width={width}
           rotate={rotation}
           renderAnnotationLayer={false}
-          renderTextLayer={false}          // always off — no re-render on scroll
+          renderTextLayer={false}
           devicePixelRatio={pdfDevicePixelRatio}
           loading={
             <div
@@ -87,6 +87,10 @@ const PdfDocumentViewport = ({
   const setCurrentPageRef   = useRef(setCurrentPage);
   const pageUpdateTimerRef  = useRef<number | null>(null);
   const lastReportedPageRef = useRef(0);
+  const isScrollingRef = useRef(false);
+  const scrollIdleTimerRef = useRef<number | null>(null);
+  const pendingPageRef = useRef<number | null>(null);
+  const scrollerElRef = useRef<HTMLElement | null>(null);
 
   // keep ref in sync without causing re-render
   useEffect(() => { setCurrentPageRef.current = setCurrentPage; }, [setCurrentPage]);
@@ -111,6 +115,11 @@ const PdfDocumentViewport = ({
   useEffect(() => () => {
     if (progressResetRef.current  !== null) window.clearTimeout(progressResetRef.current);
     if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
+    if (scrollIdleTimerRef.current !== null) window.clearTimeout(scrollIdleTimerRef.current);
+    if (scrollerElRef.current) {
+      scrollerElRef.current.removeEventListener('scroll', onPdfScrollerScroll as any);
+      scrollerElRef.current = null;
+    }
   }, []);
 
   const clearProgressReset = useCallback(() => {
@@ -119,20 +128,46 @@ const PdfDocumentViewport = ({
     progressResetRef.current = null;
   }, []);
 
+  const onPdfScrollerScroll = useCallback(() => {
+    isScrollingRef.current = true;
+    if (scrollIdleTimerRef.current !== null) {
+      window.clearTimeout(scrollIdleTimerRef.current);
+    }
+    scrollIdleTimerRef.current = window.setTimeout(() => {
+      scrollIdleTimerRef.current = null;
+      isScrollingRef.current = false;
+      const pending = pendingPageRef.current;
+      if (pending !== null && pending !== lastReportedPageRef.current) {
+        lastReportedPageRef.current = pending;
+        setCurrentPageRef.current(pending);
+        pendingPageRef.current = null;
+      }
+    }, 200);
+  }, []);
+
   // ── rangeChanged: NO state, NO re-render ──────────────────────────────
   // Uses refs only — Virtuoso will not cause any parent re-render
   const handleRangeChanged = useCallback(
     (range: { startIndex: number }) => {
       const nextPage = range.startIndex + 1;
-      // skip if same page to avoid unnecessary timer churn
-      if (nextPage === lastReportedPageRef.current) return;
-      if (pageUpdateTimerRef.current !== null)
-        window.clearTimeout(pageUpdateTimerRef.current);
+      // skip if same page to avoid unnecessary work
+      if (nextPage === lastReportedPageRef.current || pendingPageRef.current === nextPage) return;
+
+      // always store as pending; we'll apply after debounce or when scroll idle
+      pendingPageRef.current = nextPage;
+      if (pageUpdateTimerRef.current !== null) window.clearTimeout(pageUpdateTimerRef.current);
+
       pageUpdateTimerRef.current = window.setTimeout(() => {
-        lastReportedPageRef.current = nextPage;
-        setCurrentPageRef.current(nextPage);   // call parent setter via ref
         pageUpdateTimerRef.current = null;
-      }, 200);                                 // debounce: longer = fewer updates
+        // if user is actively scrolling, wait for scroll idle to apply
+        if (isScrollingRef.current) return;
+        const pending = pendingPageRef.current;
+        if (pending !== null && pending !== lastReportedPageRef.current) {
+          lastReportedPageRef.current = pending;
+          setCurrentPageRef.current(pending);
+          pendingPageRef.current = null;
+        }
+      }, 250);
     },
     [], // ← zero deps, never re-created
   );
@@ -179,6 +214,14 @@ const PdfDocumentViewport = ({
       el.classList.add('study-scrollbar');
       el.style.overflowY = 'auto';
       el.style.overscrollBehavior = 'contain';
+      // Prevent browser scroll anchoring which can jump when images/content load
+      // https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor
+      (el.style as any).overflowAnchor = 'none';
+      if (scrollerElRef.current && scrollerElRef.current !== el) {
+        scrollerElRef.current.removeEventListener('scroll', onPdfScrollerScroll as any);
+      }
+      scrollerElRef.current = el;
+      el.addEventListener('scroll', onPdfScrollerScroll, { passive: true });
     },
     [pdfContainerRef],
   );
@@ -204,7 +247,7 @@ const PdfDocumentViewport = ({
       onLoadProgress={handleLoadProgress}
       onLoadError={handleLoadError}
       loading={<PdfPageSkeleton />}
-      className="flex-1 overflow-hidden"
+      className="flex-1 overflow-visible"
     >
       <Virtuoso
         ref={virtuosoRef}
@@ -223,4 +266,4 @@ const PdfDocumentViewport = ({
   );
 };
 
-export default PdfDocumentViewport;
+export default memo(PdfDocumentViewport);
