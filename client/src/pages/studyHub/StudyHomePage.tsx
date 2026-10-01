@@ -48,6 +48,7 @@ import {
   writeStudyCardListCache,
 } from '../../utils/studyCardCache';
 import { dedupeStudyPremiumItems } from '../../utils/studyPremiumOrder';
+import { sortStudyHomeRootCards, STUDY_HOME_SECTION_LIMIT } from '../../utils/studyHomeOrder';
 import {
   StudyActionButton,
   StudyActionLink,
@@ -325,11 +326,11 @@ const StudyHomePage = () => {
   const rootCards = cardsByParentId.get('root') || [];
 
   const sortedRootCards = useMemo(
-    () => dedupeStudyPremiumItems(rootCards),
+    () => sortStudyHomeRootCards(rootCards),
     [rootCards]
   );
   const homeLibrarySections = useMemo(
-    () => sortedRootCards.slice(0, 6),
+    () => sortedRootCards.slice(0, STUDY_HOME_SECTION_LIMIT),
     [sortedRootCards]
   );
   const activeRecentItems = recentItems.slice(0, recentShelfLimit);
