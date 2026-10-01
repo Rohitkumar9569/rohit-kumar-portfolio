@@ -15,11 +15,35 @@ const isOfficialStudySource = (file: Pick<StudyCardFile, 'sourceName' | 'sourceT
   return ['official', 'upsc', 'cbse', 'ncert'].some((keyword) => sourceKey.includes(keyword));
 };
 
-const getCompactSourceLabel = (sourceName = '') => {
-  const sourceKey = normalizeKey(sourceName);
+const COACHING_LABELS: Array<{ match: string[]; label: string }> = [
+  { match: ['vision'], label: 'Vision IAS' },
+  { match: ['vajiram'], label: 'Vajiram' },
+  { match: ['forumias', 'forum ias'], label: 'ForumIAS' },
+  { match: ['nextias'], label: 'NextIAS' },
+  { match: ['drishti'], label: 'Drishti' },
+  { match: ['insights'], label: 'Insights' },
+  { match: ['made easy', 'madeeasy'], label: 'Made Easy' },
+  { match: ['ace academy'], label: 'ACE' },
+  { match: ['allen'], label: 'Allen' },
+  { match: ['resonance'], label: 'Resonance' },
+  { match: ['aakash'], label: 'Aakash' },
+  { match: ['physics wallah'], label: 'PW' },
+  { match: ['fiitjee'], label: 'FIITJEE' },
+  { match: ['adda247'], label: 'Adda247' },
+  { match: ['testbook'], label: 'Testbook' },
+  { match: ['oliveboard'], label: 'Oliveboard' },
+  { match: ['gradeup'], label: 'Gradeup' },
+];
+
+const getCompactSourceLabel = (sourceName = '', sourceType = '') => {
+  const sourceKey = normalizeKey(`${sourceType} ${sourceName}`);
+  if (sourceKey.includes('ncert')) return 'NCERT';
+  for (const entry of COACHING_LABELS) {
+    if (entry.match.some((token) => sourceKey.includes(token))) return entry.label;
+  }
   if (sourceKey.includes('upsc')) return 'UPSC Official';
   if (sourceKey.includes('cbse')) return 'CBSE Official';
-  if (sourceKey.includes('ncert')) return 'NCERT Official';
+  if (sourceType === 'platform' || sourceKey.includes('premium')) return 'Premium';
   return normalize(sourceName);
 };
 
@@ -62,7 +86,7 @@ export const getStudyFileDisplayTitle = (file: Pick<StudyCardFile, 'name' | 'sub
 
 export const getStudyFileSubtitle = (file: StudyFileDisplayInput) => {
   const subject = normalize(file.subject || '');
-  const source = isOfficialStudySource(file) ? getCompactSourceLabel(file.sourceName || '') : '';
+  const source = isOfficialStudySource(file) ? getCompactSourceLabel(file.sourceName || '', file.sourceType || '') : getCompactSourceLabel(file.sourceName || '', file.sourceType || '');
   const stage = normalize(file.stage || '');
   const year = typeof file.year === 'number' && Number.isFinite(file.year) ? String(file.year) : '';
   const part = getStudyFilePartLabel(file);
